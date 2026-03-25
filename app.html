@@ -494,16 +494,16 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     onAuthStateChanged
   } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
-  // ── ★ここをFirebaseコンソールの値に差し替える★ ──
+  // ── Firebase config ──
   const firebaseConfig = {
-    apiKey:            "YOUR_API_KEY",
-    authDomain:        "YOUR_PROJECT.firebaseapp.com",
-    projectId:         "YOUR_PROJECT_ID",
-    storageBucket:     "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId:             "YOUR_APP_ID"
+    apiKey:            "AIzaSyDKK_VzcumaMK9tvpt8-xsW_xXsQc-Eq7c",
+    authDomain:        "subly-app-8316d.firebaseapp.com",
+    projectId:         "subly-app-8316d",
+    storageBucket:     "subly-app-8316d.firebasestorage.app",
+    messagingSenderId: "405096733928",
+    appId:             "1:405096733928:web:9e2b0b1148ac348a563d5d",
+    measurementId:     "G-008PC9CGY9"
   };
-  // ─────────────────────────────────────────────
 
   // ダミーconfig検出（開発中はログインをスキップ）
   const isDummyConfig = firebaseConfig.apiKey === 'YOUR_API_KEY';
