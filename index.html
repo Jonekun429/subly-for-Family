@@ -777,10 +777,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   <button class="nb" id="nb-list" onclick="goto('list')">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>明細一覧
   </button>
-  <!-- Family追加：レポートタブ -->
-  <button class="nb" id="nb-report" onclick="goto('report')">
-    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>レポート
-  </button>
   <!-- PC サイドバーのみ表示 -->
   <button class="nb nb-settings" onclick="openSettings()">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>設定
@@ -1143,41 +1139,48 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <div class="ob-desc">各サブスクに満足度★をつけて管理。低評価のサブスクを解約すれば、毎月の固定費が減り、浮いたお金を貯金や投資に回せます。</div>
     </div>
 
-    <!-- ページ4: はじめる -->
-    <div class="ob-slide" style="width:25%">
-      <div class="ob-illust">
-        <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
-          <!-- 貯金箱風 -->
-          <ellipse cx="55" cy="60" rx="32" ry="26" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
-          <ellipse cx="55" cy="34" rx="14" ry="10" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-          <rect x="48" y="30" width="14" height="6" rx="3" fill="rgba(255,255,255,0.3)"/>
-          <!-- コイン投入スロット -->
-          <rect x="48" y="38" width="14" height="3" rx="1.5" fill="rgba(255,255,255,0.5)"/>
-          <!-- ¥マーク -->
-          <text x="55" y="68" text-anchor="middle" font-size="24" font-weight="900" fill="#fff" font-family="sans-serif">¥</text>
-          <!-- 足 -->
-          <rect x="40" y="84" width="8" height="10" rx="4" fill="rgba(255,255,255,0.4)"/>
-          <rect x="62" y="84" width="8" height="10" rx="4" fill="rgba(255,255,255,0.4)"/>
-        </svg>
-      </div>
-      <div class="ob-badge">完全無料・広告なし</div>
-      <div class="ob-ttl">登録は<em>30秒。</em><br>今日から家計を変えよう。</div>
-      <div class="ob-desc">完全無料・広告なし・個人情報不取得。まずサブスクを全部登録して、毎月いくら払っているか確認してみましょう。</div>
+    <!-- ページ4: Family グループ選択（3ルート） -->
+    <div class="ob-slide" style="width:25%;overflow-y:auto">
+      <div class="ob-badge">最後のステップ</div>
+      <div class="ob-ttl" style="font-size:20px;margin-bottom:16px">家族グループを<br><em>どうしますか？</em></div>
 
-      <!-- ホーム画面追加の案内 -->
-      <div style="margin-top:18px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:14px 16px;text-align:left;width:100%">
-        <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:10px;letter-spacing:.5px">ホーム画面に追加すると便利です</div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <div style="font-size:12px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:8px">
-            <span style="background:rgba(255,255,255,.2);border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">i</span>
-            iPhone：Safari → 共有ボタン → 「ホーム画面に追加」
+      <!-- ルート① 新規作成 -->
+      <div class="ob-route-card" id="ob-route-new" onclick="obSelectRoute('new')" style="background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.6);border-radius:14px;padding:14px 16px;margin-bottom:10px;cursor:pointer;text-align:left;transition:all .15s">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
           </div>
-          <div style="font-size:12px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:8px">
-            <span style="background:rgba(255,255,255,.2);border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">A</span>
-            Android：Chrome → ︙メニュー → 「ホーム画面に追加」
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:2px">新しく家族を作る</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.75)">招待リンクを共有して家族を招待</div>
           </div>
         </div>
-        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:8px">追加するとURLなしでワンタップで開けます</div>
+      </div>
+
+      <!-- ルート② Me移行 -->
+      <div class="ob-route-card" id="ob-route-import" onclick="obSelectRoute('import')" style="background:rgba(255,255,240,.15);border:2px solid rgba(255,255,180,.5);border-radius:14px;padding:14px 16px;margin-bottom:10px;cursor:pointer;text-align:left;transition:all .15s">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,180,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="rgba(255,255,200,.9)"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z"/></svg>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:2px">subly Me からデータを引き継ぐ</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.75)">Meで登録済みのサブスクをインポート</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ルート③ 招待参加 -->
+      <div class="ob-route-card" id="ob-route-join" onclick="obSelectRoute('join')" style="background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.3);border-radius:14px;padding:14px 16px;cursor:pointer;text-align:left;transition:all .15s">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+          </div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:2px">招待リンクから参加</div>
+            <div style="font-size:11px;color:rgba(255,255,255,.75)">家族から届いたリンクで合流</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1193,7 +1196,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
   <!-- ボタン -->
   <div class="ob-footer">
-    <button class="ob-btn-skip" id="ob-skip" onclick="gaEvent('onboarding_skip',{});closeOb()">スキップ</button>
+    <button class="ob-btn-skip" id="ob-skip" onclick="gaEvent('onboarding_skip',{});_obRoute='skip';closeOb();goto('dashboard')">スキップ</button>
     <button class="ob-btn-next" id="ob-next" onclick="obNext()">次へ</button>
   </div>
 
@@ -1530,69 +1533,47 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   </div>
 
 
-  <!-- ⑤ Family月次レポート（追加） -->
-  <div id="pg-report" class="page">
-    <!-- ヘッダー -->
-    <div id="report-header" style="background:var(--p);border-radius:0 0 20px 20px;padding:22px 18px 20px;margin:-16px -16px 14px;color:#fff;position:relative;overflow:hidden">
-      <div style="position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.1)"></div>
-      <div id="report-month-label" style="font-size:11px;letter-spacing:2px;opacity:.8;margin-bottom:4px;position:relative;z-index:1"></div>
-      <div id="report-family-label" style="font-size:19px;font-weight:800;line-height:1.2;margin-bottom:14px;position:relative;z-index:1"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;position:relative;z-index:1">
-        <div>
-          <div id="report-total" style="font-size:22px;font-weight:800;line-height:1">0</div>
-          <div style="font-size:10px;opacity:.7;margin-top:2px">月額合計</div>
-        </div>
-        <div style="border-left:1px solid rgba(255,255,255,.25);padding-left:12px">
-          <div id="report-count" style="font-size:22px;font-weight:800;line-height:1">0件</div>
-          <div style="font-size:10px;opacity:.7;margin-top:2px">登録中</div>
-        </div>
-        <div style="border-left:1px solid rgba(255,255,255,.25);padding-left:12px">
-          <div id="report-yearly" style="font-size:22px;font-weight:800;line-height:1">0</div>
-          <div style="font-size:10px;opacity:.7;margin-top:2px">年間換算</div>
-        </div>
-      </div>
-    </div>
-    <div style="background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:14px 16px;margin-bottom:10px">
-      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px">メンバー別内訳</div>
-      <div id="report-member-breakdown"></div>
-    </div>
-    <div style="background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:14px 16px;margin-bottom:10px">
-      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px">カテゴリ別内訳</div>
-      <div id="report-cat-breakdown"></div>
-    </div>
-    <div id="report-lowsat-section" style="background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:14px 16px;margin-bottom:10px;display:none">
-      <div style="font-size:13px;font-weight:700;color:var(--dn);margin-bottom:10px">見直し候補（満足度★1〜3）</div>
-      <div id="report-lowsat-list"></div>
-    </div>
-    <div style="background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:14px 16px;margin-bottom:10px">
-      <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:10px">今月の更新予定</div>
-      <div id="report-upcoming"></div>
-    </div>
-    <div id="report-sat-banner" style="background:var(--wbg);border:1.5px solid #e8d070;border-radius:var(--r);padding:13px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:10px" onclick="openSatPopupReport()">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="#d4960c"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-      <div style="flex:1">
-        <div style="font-size:13px;font-weight:600;color:#8a6a10">先月のサブスク、満足度を更新しませんか？</div>
-        <div style="font-size:11px;color:var(--ts);margin-top:1px">毎月の振り返りで不要なサブスクが見えてきます</div>
-      </div>
-    </div>
-  </div>
-
   <!-- ④ 明細 -->
   <div id="pg-list" class="page">
-    <!-- Family追加：メンバーフィルタータブ -->
-    <div id="member-filter-tabs" style="margin-bottom:10px;overflow-x:auto;white-space:nowrap;scrollbar-width:none;-webkit-overflow-scrolling:touch">
-      <div style="display:inline-flex;gap:6px;padding-bottom:2px">
-        <button id="mf-btn-all" onclick="setMemberFilter(null)"
-          style="padding:5px 13px;border-radius:20px;border:1.5px solid var(--p);background:var(--p);color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s">
-          すべて
-        </button>
-        <!-- メンバーボタンはrenderMemberFilterTabsで動的生成 -->
-        <div id="mf-member-btns" style="display:contents"></div>
-        <button id="mf-btn-shared" onclick="setMemberFilter('shared')"
-          style="padding:5px 13px;border-radius:20px;border:1.5px solid var(--bd);background:var(--card);color:var(--ts);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s">
-          🔗 共有
-        </button>
+
+    <!-- ══ サマリーカード（Family追加・折りたたみ式） ══ -->
+    <div id="list-summary-card" style="background:var(--p);border-radius:var(--r);padding:14px 16px;margin-bottom:10px;color:#fff;cursor:pointer;position:relative;overflow:hidden" onclick="toggleListSummary()">
+      <div style="position:absolute;top:-20px;right:-20px;width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.08)"></div>
+      <!-- 閉じた状態：1行サマリー -->
+      <div id="list-summary-closed" style="display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1">
+        <div style="display:flex;align-items:baseline;gap:6px">
+          <span id="ls-total-mo" style="font-size:22px;font-weight:800">¥0</span>
+          <span style="font-size:11px;opacity:.75">/月</span>
+          <span id="ls-count" style="font-size:12px;opacity:.75;margin-left:4px">0件</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:11px;opacity:.7">詳細を見る</span>
+          <svg id="ls-arrow" width="14" height="14" viewBox="0 0 24 24" fill="white" style="transition:transform .2s"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+        </div>
       </div>
+      <!-- 開いた状態：メンバー別内訳 -->
+      <div id="list-summary-open" style="display:none;position:relative;z-index:1">
+        <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:12px">
+          <span id="ls-total-mo2" style="font-size:24px;font-weight:800">¥0</span>
+          <span style="font-size:11px;opacity:.75">/月</span>
+          <span style="opacity:.5;margin:0 6px">|</span>
+          <span id="ls-total-yr" style="font-size:13px;font-weight:600;opacity:.85">年間 ¥0</span>
+          <span id="ls-count2" style="font-size:12px;opacity:.7;margin-left:4px">0件</span>
+        </div>
+        <div id="ls-member-breakdown" style="display:flex;flex-direction:column;gap:7px"></div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:11px;opacity:.7">▲ 閉じる</span>
+          <button onclick="event.stopPropagation();openSatPopupReport()"
+            style="font-size:11px;font-weight:700;background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.4);border-radius:20px;padding:4px 12px;cursor:pointer;font-family:inherit">
+            ⭐ 満足度を更新
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Family追加：メンバーフィルタータブ -->
+    <div id="member-filter-tabs" style="margin-bottom:10px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch">
+      <!-- タブはrenderMemberFilterTabsで全体生成 -->
     </div>
     <div class="list-ctrl">
       <select id="fl-cat" onchange="renderList()">
@@ -1696,9 +1677,10 @@ let subs = [];
 // ══ Family追加データ ══
 let familyName = '田中家';
 let familyMembers = [
-  { id: 'm1', name: 'パパ',  emoji: '👨', color: '#fde8d8' },
-  { id: 'm2', name: 'ママ',  emoji: '👩', color: '#deecd8' },
-  { id: 'm3', name: '子供',  emoji: '🧒', color: '#e8e4f8' },
+  { id: 'm1', name: 'パパ',     emoji: '👨', color: '#fde8d8' },
+  { id: 'm2', name: 'ママ',     emoji: '👩', color: '#deecd8' },
+  { id: 'm3', name: '子供',     emoji: '🧒', color: '#e8e4f8' },
+  { id: 'm4', name: 'ワンちゃん', emoji: '🐶', color: '#fdf4d8' },
 ];
 
 let myChart=null, editId=null, calYear, calMonth, calFilter='all';
@@ -2138,7 +2120,6 @@ function goto(page, filterCat=null){
   gaEvent('page_view', { page_title: pageNames[page] || page, filter_category: filterCat || 'none' });
 
   if(page==='dashboard') renderDashboard();
-  else if(page==='report') renderReport(); // Family追加
   else if(page==='list'){
     if(filterCat){
       const sel=document.getElementById('fl-cat');
@@ -2721,18 +2702,139 @@ function obGoto(n){
   slides.style.transform=`translateX(${-n*25}%)`;
   dots.forEach((d,i)=>d.classList.toggle('on',i===n));
   const isLast=(n===3);
-  if(nextBtn) nextBtn.textContent=isLast?'はじめる':'次へ';
+  // 最終ページは「次へ」ボタンを非表示（カード選択で進む）
+  if(nextBtn) {
+    nextBtn.style.display = isLast ? 'none' : '';
+    nextBtn.textContent = '次へ';
+  }
   if(skipBtn) skipBtn.style.display=isLast?'none':'';
 }
 function obNext(){
   if(_obPage<3){ obGoto(_obPage+1); }
-  else { closeOb(); }
 }
+
+// ルート選択
+let _obRoute = null;
+function obSelectRoute(route) {
+  _obRoute = route;
+  // カードのハイライト更新
+  ['new','import','join'].forEach(r => {
+    const card = document.getElementById('ob-route-' + r);
+    if (!card) return;
+    if (r === route) {
+      card.style.transform = 'scale(1.02)';
+      card.style.boxShadow = '0 4px 20px rgba(255,255,255,.3)';
+    } else {
+      card.style.transform = '';
+      card.style.boxShadow = '';
+      card.style.opacity = '0.6';
+    }
+  });
+  // 少し待ってから処理
+  setTimeout(() => obRouteAction(route), 300);
+}
+
+async function obRouteAction(route) {
+  await closeOb();
+  if (route === 'new') {
+    // ルート①：新規作成 → グループ名設定ダイアログ
+    showDialog({
+      icon: '🏡',
+      title: '家族グループを作成',
+      msg: `<div style="margin-bottom:12px;font-size:13px;color:var(--ts)">グループ名を設定してください</div>
+            <input id="dlg-group-name" type="text" value="${familyName}" maxlength="20"
+              style="width:100%;border:1.5px solid var(--bd);border-radius:8px;padding:9px 12px;font-size:14px;font-family:inherit;background:var(--bg);color:var(--tx);outline:none">`,
+      buttons: [
+        { label: 'キャンセル', cls: 'cancel' },
+        { label: '作成する', cls: 'ok', onClick: async () => {
+          const name = document.getElementById('dlg-group-name')?.value?.trim();
+          if (name) familyName = name;
+          await saveFamilyData();
+          renderFamilyArea();
+          showToast(`「${familyName}」を作成しました！招待リンクを共有してメンバーを招待しましょう`);
+          goto('dashboard');
+        }}
+      ]
+    });
+
+  } else if (route === 'import') {
+    // ルート②：Me移行 → 引き継ぎ確認ダイアログ
+    showDialog({
+      icon: '📥',
+      title: 'subly Me のデータを引き継ぐ',
+      msg: `<div style="font-size:13px;color:var(--ts);line-height:1.7">
+        subly Me でエクスポートしたCSVファイルを読み込んで、サブスクデータを引き継ぎます。<br><br>
+        <strong style="color:var(--tx)">手順：</strong><br>
+        ① subly Me → 設定 → CSVエクスポート<br>
+        ② このアプリでCSVを読み込む<br>
+        ③ 各サブスクに「誰のサブスク？」を割り当て
+      </div>`,
+      buttons: [
+        { label: 'スキップ（後で）', cls: 'cancel', onClick: () => {
+          goto('dashboard');
+          showToast('後からでも設定 → インポートで引き継ぎできます');
+        }},
+        { label: 'インポートへ', cls: 'ok', onClick: () => {
+          goto('dashboard');
+          setTimeout(() => showImportFromOB(), 200);
+        }}
+      ]
+    });
+
+  } else if (route === 'join') {
+    // ルート③：招待リンクから参加
+    showDialog({
+      icon: '🔗',
+      title: '招待リンクから参加',
+      msg: `<div style="font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:12px">
+        家族から届いた招待リンクを入力してください。
+      </div>
+      <input id="dlg-invite-code" type="text" placeholder="例：https://subly.app/family/invite/..." 
+        style="width:100%;border:1.5px solid var(--bd);border-radius:8px;padding:9px 12px;font-size:13px;font-family:inherit;background:var(--bg);color:var(--tx);outline:none">
+      <div id="dlg-invite-note" style="font-size:11px;color:var(--ts);margin-top:8px">
+        Firebase認証実装後に有効になります
+      </div>`,
+      buttons: [
+        { label: 'キャンセル', cls: 'cancel', onClick: () => goto('dashboard') },
+        { label: '参加する（仮）', cls: 'ok', onClick: () => {
+          // Firebase実装後に本実装
+          showToast('招待参加機能はFirebase Auth実装後に有効になります');
+          // Me移行確認も行う
+          setTimeout(() => showMeImportConfirmForJoin(), 400);
+        }}
+      ]
+    });
+  }
+}
+
+function showImportFromOB() {
+  // インポート画面相当の処理（設定画面のインポートを開く）
+  openSettings();
+  setTimeout(() => {
+    const importSection = document.getElementById('import-section');
+    if (importSection) importSection.scrollIntoView({ behavior: 'smooth' });
+  }, 300);
+  showToast('設定画面からCSVをインポートしてください');
+}
+
+function showMeImportConfirmForJoin() {
+  showDialog({
+    icon: '📱',
+    title: 'subly Me のデータを持ち込む？',
+    msg: `<div style="font-size:13px;color:var(--ts);line-height:1.7">
+      subly Me を使っていた場合、自分のサブスクデータをこのグループに持ち込めます。
+    </div>`,
+    buttons: [
+      { label: 'いいえ', cls: 'cancel', onClick: () => goto('dashboard') },
+      { label: 'はい、インポートする', cls: 'ok', onClick: () => showImportFromOB() }
+    ]
+  });
+}
+
 async function closeOb(){
   document.getElementById('ob-ov').classList.add('hidden');
   await Store.set('onboarded','1');
-  // GA: オンボーディング完了（新規ユーザーの定着率を計測）
-  gaEvent('onboarding_complete', { method: 'completed' });
+  gaEvent('onboarding_complete', { method: _obRoute || 'completed' });
 }
 
 async function resetAll(){
@@ -3019,46 +3121,49 @@ function clearSatFilter(){
 let currentMemberFilter = null;
 
 function renderMemberFilterTabs() {
-  const btnBox = document.getElementById('mf-member-btns');
-  if (!btnBox) return;
-  btnBox.innerHTML = familyMembers.map(m => `
-    <button id="mf-btn-${m.id}" onclick="setMemberFilter('${m.id}')"
-      style="padding:5px 13px;border-radius:20px;border:1.5px solid var(--bd);background:var(--card);color:var(--ts);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s">
-      ${m.emoji} ${m.name}
-    </button>`).join('');
-  updateMemberFilterTabStyles();
-}
+  const wrap = document.getElementById('member-filter-tabs');
+  if (!wrap) return;
 
-function updateMemberFilterTabStyles() {
-  // すべてのメンバーボタンのスタイルを更新
-  const allBtn = document.getElementById('mf-btn-all');
-  const sharedBtn = document.getElementById('mf-btn-shared');
-  const isAll = currentMemberFilter === null;
-  const isShared = currentMemberFilter === 'shared';
+  // すべてのタブをまとめて生成
+  const allActive = currentMemberFilter === null;
+  const sharedActive = currentMemberFilter === 'shared';
 
-  if (allBtn) {
-    allBtn.style.background = isAll ? 'var(--p)' : 'var(--card)';
-    allBtn.style.color = isAll ? '#fff' : 'var(--ts)';
-    allBtn.style.borderColor = isAll ? 'var(--p)' : 'var(--bd)';
-  }
-  if (sharedBtn) {
-    sharedBtn.style.background = isShared ? 'var(--p)' : 'var(--card)';
-    sharedBtn.style.color = isShared ? '#fff' : 'var(--ts)';
-    sharedBtn.style.borderColor = isShared ? 'var(--p)' : 'var(--bd)';
-  }
-  familyMembers.forEach(m => {
-    const btn = document.getElementById('mf-btn-' + m.id);
-    if (!btn) return;
+  const btnStyle = (active, color) => {
+    if (active) {
+      return `background:${color || 'var(--p)'};color:#fff;border-color:${color || 'var(--p)'};`;
+    }
+    return `background:var(--card);color:var(--ts);border-color:var(--bd);`;
+  };
+
+  const memberBtns = familyMembers.map(m => {
     const active = currentMemberFilter === m.id;
-    btn.style.background = active ? m.color : 'var(--card)';
-    btn.style.color = active ? 'var(--tx)' : 'var(--ts)';
-    btn.style.borderColor = active ? 'var(--border2,#ccc)' : 'var(--bd)';
-  });
+    const style = active
+      ? `background:${m.color};color:var(--tx);border-color:var(--border2,#bbb);font-weight:700;`
+      : `background:var(--card);color:var(--ts);border-color:var(--bd);`;
+    return `<button onclick="setMemberFilter('${m.id}')"
+      style="padding:5px 13px;border-radius:20px;border:1.5px solid;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s;flex-shrink:0;${style}">
+      ${m.emoji} ${m.name}
+    </button>`;
+  }).join('');
+
+  wrap.innerHTML = `
+    <div style="display:flex;gap:6px;padding-bottom:2px;overflow-x:auto;scrollbar-width:none;">
+      <button onclick="setMemberFilter(null)"
+        style="padding:5px 13px;border-radius:20px;border:1.5px solid;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s;flex-shrink:0;${btnStyle(allActive)}">
+        すべて
+      </button>
+      ${memberBtns}
+      <button onclick="setMemberFilter('shared')"
+        style="padding:5px 13px;border-radius:20px;border:1.5px solid;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s;flex-shrink:0;${btnStyle(sharedActive)}">
+        🔗 共有
+      </button>
+    </div>`;
 }
 
 function setMemberFilter(memberId) {
   currentMemberFilter = memberId;
-  updateMemberFilterTabStyles();
+  // タブを再生成（アクティブ状態込み）
+  renderMemberFilterTabs();
   renderMemberFilterBar();
   renderList();
 }
@@ -3391,6 +3496,8 @@ function updateFilterCounts(){
 function renderList(){
   // Family追加：タブを初期化（メンバーが変わっている可能性がある）
   renderMemberFilterTabs();
+  // サマリーカードを更新
+  renderListSummary();
 
   const cat=document.getElementById('fl-cat').value;
   const sort=document.getElementById('fl-sort').value;
@@ -4164,14 +4271,25 @@ async function init(){
   // Family版デモ：サブスクが空の場合はサンプルデータを注入
   if (subs.length === 0) {
     subs = [
-      {id:1001,name:'Netflix',cat:'動画・配信',price:1490,freq:'月額',date:'2026-04-05',memo:'',payment:'クレジットカード',member:'shared',sat:5,cancelUrl:'',paused:false},
-      {id:1002,name:'Spotify',cat:'音楽',price:980,freq:'月額',date:'2026-04-10',memo:'',payment:'クレジットカード',member:'m1',sat:5,cancelUrl:'',paused:false},
-      {id:1003,name:'スポーツジム',cat:'健康・フィットネス',price:8800,freq:'月額',date:'2026-04-01',memo:'',payment:'口座引落',member:'m1',sat:3,cancelUrl:'',paused:false},
-      {id:1004,name:'Amazon Prime',cat:'金融・年会費',price:5900,freq:'年額',date:'2026-09-01',memo:'',payment:'クレジットカード',member:'shared',sat:5,cancelUrl:'',paused:false},
-      {id:1005,name:'ヨガアプリ',cat:'健康・フィットネス',price:1280,freq:'月額',date:'2026-04-25',memo:'',payment:'Apple Pay',member:'m2',sat:4,cancelUrl:'',paused:false},
-      {id:1006,name:'Kindle Unlimited',cat:'電子書籍・雑誌',price:980,freq:'月額',date:'2026-04-15',memo:'',payment:'クレジットカード',member:'m2',sat:4,cancelUrl:'',paused:false},
-      {id:1007,name:'Nintendo Switch Online',cat:'ゲーム',price:300,freq:'月額',date:'2026-08-01',memo:'',payment:'クレジットカード',member:'m3',sat:5,cancelUrl:'',paused:false},
-      {id:1008,name:'英語学習アプリ',cat:'習い事',price:1200,freq:'月額',date:'2026-05-01',memo:'',payment:'Apple Pay',member:'m3',sat:3,cancelUrl:'',paused:false},
+      // 共有（家族全員）
+      {id:1001,name:'Netflix',         cat:'動画・配信',      price:1490, freq:'月額',date:'2026-04-05',memo:'ファミリープラン',payment:'クレジットカード',member:'shared',sat:5,cancelUrl:'',paused:false},
+      {id:1002,name:'Amazon Prime',    cat:'金融・年会費',    price:5900, freq:'年額', date:'2026-09-01',memo:'',             payment:'クレジットカード',member:'shared',sat:5,cancelUrl:'',paused:false},
+      {id:1003,name:'Disney+',         cat:'動画・配信',      price:990,  freq:'月額',date:'2026-04-20',memo:'',             payment:'クレジットカード',member:'shared',sat:4,cancelUrl:'',paused:false},
+      // パパ
+      {id:1004,name:'Spotify',         cat:'音楽',            price:980,  freq:'月額',date:'2026-04-10',memo:'',             payment:'クレジットカード',member:'m1',sat:5,cancelUrl:'',paused:false},
+      {id:1005,name:'スポーツジム',    cat:'健康・フィットネス',price:8800,freq:'月額',date:'2026-04-01',memo:'近所のジム',   payment:'口座引落',        member:'m1',sat:3,cancelUrl:'',paused:false},
+      {id:1006,name:'日経電子版',      cat:'電子書籍・雑誌',  price:4277, freq:'月額',date:'2026-04-28',memo:'仕事用',       payment:'クレジットカード',member:'m1',sat:3,cancelUrl:'',paused:false},
+      // ママ
+      {id:1007,name:'ヨガアプリ',      cat:'健康・フィットネス',price:1280,freq:'月額',date:'2026-04-25',memo:'',            payment:'Apple Pay',       member:'m2',sat:4,cancelUrl:'',paused:false},
+      {id:1008,name:'Kindle Unlimited',cat:'電子書籍・雑誌',  price:980,  freq:'月額',date:'2026-04-15',memo:'',            payment:'クレジットカード',member:'m2',sat:4,cancelUrl:'',paused:false},
+      {id:1009,name:'料理動画サービス',cat:'習い事',           price:500,  freq:'月額',date:'2026-05-10',memo:'',            payment:'Apple Pay',       member:'m2',sat:5,cancelUrl:'',paused:false},
+      // 子供
+      {id:1010,name:'Nintendo Switch Online',cat:'ゲーム',    price:300,  freq:'月額',date:'2026-08-01',memo:'',            payment:'クレジットカード',member:'m3',sat:5,cancelUrl:'',paused:false},
+      {id:1011,name:'英語学習アプリ',  cat:'習い事',           price:1200, freq:'月額',date:'2026-05-01',memo:'',            payment:'Apple Pay',       member:'m3',sat:3,cancelUrl:'',paused:false},
+      {id:1012,name:'マンガアプリ',    cat:'電子書籍・雑誌',  price:600,  freq:'月額',date:'2026-04-18',memo:'',            payment:'Google Pay',      member:'m3',sat:5,cancelUrl:'',paused:false},
+      // ワンちゃん
+      {id:1013,name:'アニコム損保 ペット保険',cat:'保険',     price:2570, freq:'月額',date:'2026-04-27',memo:'柴犬・むぎ',  payment:'口座引落',        member:'m4',sat:5,cancelUrl:'',paused:false},
+      {id:1014,name:'ペットフード定期便',cat:'その他',         price:3800, freq:'月額',date:'2026-04-08',memo:'',            payment:'クレジットカード',member:'m4',sat:4,cancelUrl:'',paused:false},
     ];
     await save();
     document.getElementById('how-to-box').style.display='none';
@@ -4202,24 +4320,35 @@ async function init(){
 ============================================================ */
 
 // ── 月次レポート描画 ──
-function renderReport() {
-  const now = new Date();
-  const monthNames = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-  const label = `${now.getFullYear()}年${monthNames[now.getMonth()]} 月次レポート`;
+// ── リスト画面のサマリーカード開閉 ──
+let _listSummaryOpen = false;
+function toggleListSummary() {
+  _listSummaryOpen = !_listSummaryOpen;
+  document.getElementById('list-summary-open').style.display = _listSummaryOpen ? 'block' : 'none';
+  document.getElementById('list-summary-closed').style.display = _listSummaryOpen ? 'none' : 'flex';
+  const arrow = document.getElementById('ls-arrow');
+  if (arrow) arrow.style.transform = _listSummaryOpen ? 'rotate(180deg)' : '';
+}
 
-  // ヘッダー
-  document.getElementById('report-month-label').textContent = label;
-  document.getElementById('report-family-label').innerHTML = `${familyName}の<br>固定費まとめ`;
-
+// ── サマリーカード描画（旧renderReport） ──
+function renderListSummary() {
   const active = subs.filter(s => !s.paused && s.freq !== '単発（買い切り）');
   const totalMo = active.reduce((sum, s) => sum + moFromSub(s), 0);
   const totalYr = active.reduce((sum, s) => sum + yrFromSub(s), 0);
 
-  document.getElementById('report-total').innerHTML = `<sup style="font-size:13px">¥</sup>${totalMo.toLocaleString()}`;
-  document.getElementById('report-count').textContent = `${active.length}件`;
-  document.getElementById('report-yearly').innerHTML = `<sup style="font-size:13px">¥</sup>${totalYr.toLocaleString()}`;
+  // 閉じた状態の数値
+  const moEl = document.getElementById('ls-total-mo');
+  const moEl2 = document.getElementById('ls-total-mo2');
+  const yrEl = document.getElementById('ls-total-yr');
+  const cntEl = document.getElementById('ls-count');
+  const cntEl2 = document.getElementById('ls-count2');
+  if (moEl) moEl.textContent = '¥' + totalMo.toLocaleString();
+  if (moEl2) moEl2.textContent = '¥' + totalMo.toLocaleString();
+  if (yrEl) yrEl.textContent = '年間 ¥' + totalYr.toLocaleString();
+  if (cntEl) cntEl.textContent = active.length + '件';
+  if (cntEl2) cntEl2.textContent = active.length + '件';
 
-  // ── メンバー別内訳 ──
+  // メンバー別内訳
   const memberTotals = {};
   let sharedTotal = 0;
   familyMembers.forEach(m => memberTotals[m.id] = { mo: 0, items: [] });
@@ -4237,121 +4366,33 @@ function renderReport() {
   const sharedPer = familyMembers.length > 0 ? Math.round(sharedTotal / familyMembers.length) : 0;
   const maxMo = Math.max(...familyMembers.map(m => (memberTotals[m.id]?.mo || 0) + sharedPer), 1);
 
-  const mbEl = document.getElementById('report-member-breakdown');
+  const mbEl = document.getElementById('ls-member-breakdown');
+  if (!mbEl || familyMembers.length === 0) return;
+
   mbEl.innerHTML = familyMembers.map(m => {
     const own = memberTotals[m.id]?.mo || 0;
     const total = own + sharedPer;
     const pct = Math.round((total / maxMo) * 100);
-    const ownItems = memberTotals[m.id]?.items || [];
     return `
-    <div style="margin-bottom:12px">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
-        <div style="width:28px;height:28px;border-radius:50%;background:${m.color};display:flex;align-items:center;justify-content:center;font-size:15px">${m.emoji}</div>
-        <div style="flex:1">
-          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px">
-            <span style="font-size:13px;font-weight:600;color:var(--tx)">${m.name}</span>
-            <span style="font-size:14px;font-weight:800;color:var(--tx)">¥${total.toLocaleString()}<span style="font-size:10px;font-weight:400;color:var(--ts)">/月</span></span>
-          </div>
-          <div style="height:6px;background:var(--bd);border-radius:3px;overflow:hidden">
-            <div style="height:100%;width:${pct}%;background:var(--p);border-radius:3px"></div>
-          </div>
-        </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="width:22px;height:22px;border-radius:50%;background:${m.color};display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0">${m.emoji}</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.85);width:32px;flex-shrink:0">${m.name}</div>
+      <div style="flex:1;height:5px;background:rgba(255,255,255,.2);border-radius:3px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:rgba(255,255,255,.75);border-radius:3px"></div>
       </div>
-      ${own > 0 ? `<div style="padding-left:36px;display:flex;flex-wrap:wrap;gap:4px">
-        ${ownItems.map(s => `<span style="font-size:11px;background:var(--pl);color:var(--p);border-radius:5px;padding:2px 7px">${s.name} ¥${moFromSub(s).toLocaleString()}</span>`).join('')}
-        ${sharedPer > 0 ? `<span style="font-size:11px;background:var(--bg);color:var(--ts);border-radius:5px;padding:2px 7px">共有分 ¥${sharedPer.toLocaleString()}</span>` : ''}
-      </div>` : sharedPer > 0 ? `<div style="padding-left:36px"><span style="font-size:11px;background:var(--bg);color:var(--ts);border-radius:5px;padding:2px 7px">共有分のみ ¥${sharedPer.toLocaleString()}</span></div>` : ''}
-    </div>`;
-  }).join('');
-
-  // ── カテゴリ別内訳 ──
-  const catTotals = {};
-  active.forEach(s => {
-    const key = s.cat || 'その他';
-    catTotals[key] = (catTotals[key] || 0) + moFromSub(s);
-  });
-  const sortedCats = Object.entries(catTotals).sort((a,b) => b[1]-a[1]);
-  const maxCat = sortedCats[0]?.[1] || 1;
-
-  const CAT_EMOJI = {
-    '動画・配信':'🎬','音楽':'🎵','電子書籍・雑誌':'📚','仕事・ツール':'💼',
-    'ゲーム':'🎮','健康・フィットネス':'💪','金融・年会費':'💳','習い事':'🎓',
-    '通信費':'📱','保険':'🛡️','ローン':'🏦','その他':'📦'
-  };
-  document.getElementById('report-cat-breakdown').innerHTML = sortedCats.map(([cat, mo]) => {
-    const info = catMap[cat] || catMap['その他'];
-    const emoji = CAT_EMOJI[cat] || '📦';
-    const pct = Math.round((mo / maxCat) * 100);
-    return `
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px">
-      <div style="width:26px;height:26px;border-radius:7px;background:${info?.color||'#ccc'}22;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">${emoji}</div>
-      <div style="flex:1;min-width:0">
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px">
-          <span style="color:var(--ts)">${cat}</span>
-          <span style="font-weight:700;color:var(--tx)">¥${mo.toLocaleString()}</span>
-        </div>
-        <div style="height:5px;background:var(--bd);border-radius:3px">
-          <div style="height:100%;width:${pct}%;background:${info?.color||'var(--p)'};border-radius:3px"></div>
-        </div>
+      <div style="font-size:12px;font-weight:700;color:#fff;min-width:60px;text-align:right">
+        ¥${total.toLocaleString()}
       </div>
     </div>`;
-  }).join('') || '<div style="font-size:13px;color:var(--ts);text-align:center;padding:12px 0">データがありません</div>';
-
-  // ── 満足度低いサブスク ──
-  const lowSat = active.filter(s => s.sat >= 1 && s.sat <= 3).sort((a,b) => a.sat - b.sat);
-  const lowSatSec = document.getElementById('report-lowsat-section');
-  if (lowSat.length > 0) {
-    lowSatSec.style.display = 'block';
-    document.getElementById('report-lowsat-list').innerHTML = lowSat.map(s => {
-      const stars = '★'.repeat(s.sat) + '☆'.repeat(5 - s.sat);
-      const m = familyMembers.find(m => m.id === s.member);
-      return `
-      <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd)">
-        <div style="flex:1">
-          <div style="font-size:13px;font-weight:600;color:var(--tx)">${s.name}</div>
-          <div style="font-size:11px;color:var(--ts);margin-top:1px">
-            ${m ? `${m.emoji} ${m.name} · ` : ''}¥${moFromSub(s).toLocaleString()}/月
-          </div>
-        </div>
-        <div style="font-size:13px;color:#d4960c">${stars}</div>
-        <button onclick="editSub(${s.id})" style="font-size:11px;background:var(--pl);color:var(--p);border:none;border-radius:6px;padding:4px 9px;cursor:pointer;font-family:inherit">編集</button>
-      </div>`;
-    }).join('');
-  } else {
-    lowSatSec.style.display = 'none';
-  }
-
-  // ── 今月の更新予定 ──
-  const thisMonth = now.getMonth();
-  const thisYear = now.getFullYear();
-  const upcoming = active.filter(s => {
-    const np = nextPayDate(s);
-    if (!np) return false;
-    return np.getFullYear() === thisYear && np.getMonth() === thisMonth;
-  }).sort((a,b) => new Date(nextPayDate(a)) - new Date(nextPayDate(b)));
-
-  document.getElementById('report-upcoming').innerHTML = upcoming.length > 0
-    ? upcoming.map(s => {
-        const np = nextPayDate(s);
-        const diff = Math.round((np - now) / 86400000);
-        const diffStr = diff < 0 ? '支払い済み' : diff === 0 ? '今日' : `あと${diff}日`;
-        const m = familyMembers.find(m => m.id === s.member);
-        return `
-        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd)">
-          <div style="flex:1">
-            <div style="font-size:13px;font-weight:600;color:var(--tx)">${s.name}</div>
-            <div style="font-size:11px;color:var(--ts);margin-top:1px">
-              ${np.getMonth()+1}/${np.getDate()} ${diff >= 0 && diff <= 7 ? `<span style="color:var(--dn);font-weight:700">${diffStr}</span>` : diffStr}
-              ${m ? ` · ${m.emoji} ${m.name}` : ''}
-            </div>
-          </div>
-          <div style="font-size:14px;font-weight:700;color:var(--p)">¥${moFromSub(s).toLocaleString()}</div>
-        </div>`;
-      }).join('')
-    : '<div style="font-size:13px;color:var(--ts);text-align:center;padding:12px 0">今月の更新予定はありません</div>';
+  }).join('') + (sharedTotal > 0 ? `
+    <div style="display:flex;align-items:center;gap:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,.2);margin-top:2px">
+      <div style="font-size:12px;width:22px;text-align:center;flex-shrink:0">🔗</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.7);flex:1">共有合計 ÷ ${familyMembers.length}人</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.85)">¥${sharedPer.toLocaleString()}/人</div>
+    </div>` : '');
 }
 
-// ── 満足度更新ポップアップ（レポート画面から） ──
+// ── 満足度更新ポップアップ（リスト画面から） ──
 // ── 満足度一括更新ポップアップ ──
 // 編集中の満足度を一時保存（id → sat）
 let satPopupDraft = {};
@@ -4460,9 +4501,8 @@ async function saveSatPopup() {
   await save();
   closeSatPopup();
   showToast(`⭐ ${updatedCount}件の満足度を更新しました`);
-  // レポートを再描画
-  renderReport();
-  // ダッシュボードも更新（満足度グラフ）
+  // サマリーとダッシュボードを再描画
+  renderListSummary();
   renderDashboard();
 }
 
@@ -4570,12 +4610,7 @@ function renderFamilyArea() {
 // ── メンバーでフィルター（リスト画面へ） ──
 function filterByMember(memberId) {
   currentMemberFilter = memberId;
-  goto('list');
-  // goto後にタブとバーを更新
-  setTimeout(() => {
-    renderMemberFilterTabs();
-    renderMemberFilterBar();
-  }, 50);
+  goto('list'); // renderList → renderMemberFilterTabs が内部で呼ばれる
 }
 
 // ── 家族設定モーダル ──
