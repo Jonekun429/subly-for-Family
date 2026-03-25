@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>subly Family — フロープロトタイプ</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ══ テーマトークン ══ */
+
+/* ライト（デフォルト） */
+:root, [data-theme="light"] {
+  --primary:       #5C8E84;
+  --primary-dark:  #3A6B60;
+  --primary-light: #E8F0ED;
+  --bg:            #F5F5F0;
+  --surface:       #FFFFFF;
+  --s2:            #F0F0EA;
+  --s3:            #E8E8E0;
+  --border:        #D8E0DC;
+  --border2:       #C0CCC8;
+  --text:          #2B3830;
+  --muted:         #6E847C;
+  --dim:           #A0B0A8;
+  --accent:        #5C8E84;
+  --acl:           #E8F0ED;
+  --green:         #5C8E84;
+  --greenl:        #E8F0ED;
+  --danger:        #C06060;
+  --dangerl:       #FAF0F0;
+  --body-bg:       #EAEAE4;
+  --r:16px; --rs:10px;
+}
+
+/* オーシャン */
+[data-theme="ocean"] {
+  --primary:       #4A90D0;
+  --primary-dark:  #2A6BAA;
+  --primary-light: #E8F0FA;
+  --bg:            #F0F5FA;
+  --surface:       #FFFFFF;
+  --s2:            #E8F2F8;
+  --s3:            #DDE8F0;
+  --border:        #D0DDE8;
+  --border2:       #B8CCE0;
+  --text:          #1E3350;
+  --muted:         #5A7A9A;
+  --dim:           #90A8C0;
+  --accent:        #4A90D0;
+  --acl:           #E8F0FA;
+  --green:         #4A90D0;
+  --greenl:        #E8F0FA;
+  --danger:        #D06070;
+  --dangerl:       #FAF0F2;
+  --body-bg:       #E0EAF4;
+}
+
+/* パステル */
+[data-theme="pastel"] {
+  --primary:       #E8A0BF;
+  --primary-dark:  #D4789E;
+  --primary-light: #FFF0F5;
+  --bg:            #F8F4F9;
+  --surface:       rgba(255,255,255,0.85);
+  --s2:            #F0E8F5;
+  --s3:            #E8E0F0;
+  --border:        #E8DDF0;
+  --border2:       #D8CCE8;
+  --text:          #4A3B5C;
+  --muted:         #8A7A9A;
+  --dim:           #B8AACA;
+  --accent:        #D4789E;
+  --acl:           #FFF0F5;
+  --green:         #D4789E;
+  --greenl:        #FFF0F5;
+  --danger:        #E08080;
+  --dangerl:       #FFF0F0;
+  --body-bg:       linear-gradient(180deg,#F0E8F5,#E8F0FA,#F5EDF0,#F8F4F9);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:#EAEAE4;
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;line-height:1.65;
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;
+  padding:32px 16px 60px;
+  transition: background 0.3s;
+}
+
+/* ── 上部: フローマップ ── */
+.flow-map {
+  width:100%;max-width:900px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:24px 28px;
+  margin-bottom:28px;
+  box-shadow:0 2px 16px rgba(0,0,0,0.08);
+  transition: background 0.3s, border-color 0.3s;
+}
+.flow-map-title {
+  font-size:11px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--dim);margin-bottom:16px;
+}
+.flow-nodes {
+  display:flex;align-items:center;flex-wrap:wrap;gap:0;
+}
+.flow-node {
+  display:flex;align-items:center;gap:0;
+}
+.fn-chip {
+  display:flex;align-items:center;gap:7px;
+  padding:8px 14px;border-radius:20px;
+  font-size:12px;font-weight:500;cursor:pointer;
+  transition:all 0.15s;border:1.5px solid var(--border);
+  background:var(--s2);color:var(--muted);
+  white-space:nowrap;
+}
+.fn-chip:hover{border-color:var(--border2);color:var(--text);}
+.fn-chip.active{
+  background:var(--acl);border-color:#e0a878;
+  color:var(--accent);
+}
+.fn-chip.visited{
+  background:var(--greenl);border-color:#a8d8b0;color:var(--green);
+}
+.fn-chip .chip-icon{font-size:15px;}
+.fn-arrow{
+  color:var(--dim);font-size:20px;padding:0 4px;flex-shrink:0;
+}
+.fn-arrow.branch{
+  color:var(--border2);font-size:14px;
+}
+
+/* branch group */
+.branch-group{
+  display:flex;flex-direction:column;gap:6px;
+  border:1px dashed var(--border);
+  border-radius:12px;padding:8px 10px;
+  background:#00000004;
+}
+.branch-label{
+  font-size:10px;color:var(--dim);letter-spacing:1px;
+  text-transform:uppercase;margin-bottom:2px;
+}
+
+/* ── フォン本体 ── */
+.phone-wrap {
+  display:flex;align-items:flex-start;gap:28px;
+  width:100%;max-width:900px;
+}
+.phone-frame {
+  width:390px;
+  min-height:700px;
+  background:var(--surface);
+  border-radius:40px;
+  box-shadow:0 0 0 8px #1a1208, 0 0 0 10px #2e1e0e, 0 12px 48px #0000004a;
+  position:relative;overflow:hidden;
+  flex-shrink:0;
+}
+.screen{
+  display:none;flex-direction:column;
+  min-height:700px;
+  animation:fadeIn 0.25s ease;
+}
+.screen.active{display:flex;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* statusbar */
+.statusbar{
+  display:flex;justify-content:space-between;
+  padding:14px 24px 6px;font-size:12px;font-weight:500;
+  color:var(--muted);background:var(--surface);
+  flex-shrink:0;
+}
+
+/* ── 右パネル ── */
+.side-panel{flex:1;min-width:0;}
+
+.panel-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);padding:20px;margin-bottom:14px;
+  box-shadow:0 2px 10px #00000008;
+}
+.panel-title{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:15px;letter-spacing:-0.3px;margin-bottom:4px;
+}
+.panel-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+
+/* breadcrumb */
+.breadcrumb{
+  display:flex;align-items:center;gap:6px;
+  font-size:12px;color:var(--muted);margin-bottom:12px;flex-wrap:wrap;
+}
+.bc-item{cursor:pointer;transition:color 0.1s;}
+.bc-item:hover{color:var(--accent);}
+.bc-item.current{color:var(--text);font-weight:500;}
+.bc-sep{color:var(--dim);}
+
+/* step list */
+.step-list{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+.step-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:10px 12px;border-radius:var(--rs);
+  background:var(--s2);border:1px solid var(--border);
+}
+.step-num{
+  width:22px;height:22px;border-radius:50%;
+  background:var(--accent);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px;
+}
+.step-text{font-size:12px;line-height:1.6;color:var(--muted);}
+.step-text strong{color:var(--text);}
+
+/* nav buttons */
+.nav-btns{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+.nav-btn{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 14px;border-radius:var(--rs);
+  background:var(--s2);border:1.5px solid var(--border);
+  cursor:pointer;transition:all 0.15s;font-size:13px;
+  color:var(--text);font-family:'DM Sans',sans-serif;width:100%;
+}
+.nav-btn:hover{border-color:var(--accent);background:var(--acl);}
+.nav-btn .nb-icon{font-size:18px;flex-shrink:0;}
+.nav-btn .nb-text{flex:1;text-align:left;}
+.nav-btn .nb-title{font-weight:500;font-size:13px;}
+.nav-btn .nb-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+.nav-btn .nb-arrow{color:var(--dim);font-size:16px;}
+
+/* ─────────────────────
+   SCREENS
+───────────────────── */
+/* 共通 */
+.screen-body{flex:1;padding:16px 20px 32px;overflow-y:auto;}
+.screen-body::-webkit-scrollbar{display:none;}
+
+.s-title{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:24px;letter-spacing:-0.8px;line-height:1.2;
+  margin-bottom:8px;
+}
+.s-sub{font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:20px;}
+
+/* header bar */
+.s-header{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 20px 8px;border-bottom:1px solid var(--border);
+  background:var(--surface);flex-shrink:0;
+}
+.back-btn{
+  width:32px;height:32px;border-radius:50%;
+  background:var(--s2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;cursor:pointer;flex-shrink:0;
+  transition:all 0.15s;
+}
+.back-btn:hover{background:var(--acl);border-color:#e0a878;}
+.s-header-title{font-weight:500;font-size:14px;flex:1;}
+
+/* buttons */
+.btn{
+  padding:13px 20px;border-radius:var(--rs);
+  font-size:14px;font-weight:600;cursor:pointer;border:none;
+  font-family:'DM Sans',sans-serif;transition:all 0.15s;
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+}
+.btn-full{width:100%;}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 2px 10px #c8643a28;}
+.btn-primary:hover{background:#b05030;}
+.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--border);}
+.btn-ghost:hover{border-color:var(--border2);color:var(--text);}
+.btn-green{background:var(--green);color:#fff;}
+
+/* cards */
+.card{
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:var(--r);padding:14px 16px;margin-bottom:12px;
+}
+
+/* toggle */
+.toggle{
+  position:relative;width:42px;height:23px;
+  border-radius:12px;background:var(--border2);
+  cursor:pointer;transition:background 0.2s;flex-shrink:0;
+}
+.toggle.on{background:var(--accent);}
+.toggle::after{
+  content:'';position:absolute;
+  width:17px;height:17px;border-radius:50%;
+  background:#fff;top:3px;left:3px;
+  transition:transform 0.2s;box-shadow:0 1px 3px #0003;
+}
+.toggle.on::after{transform:translateX(19px);}
+
+/* ── onboarding slides ── */
+.ob-slide{display:none;flex-direction:column;align-items:center;flex:1;padding:24px 20px 28px;}
+.ob-slide.active{display:flex;}
+.ob-dots{display:flex;gap:5px;margin-bottom:28px;}
+.ob-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);transition:all 0.2s;}
+.ob-dot.active{width:18px;background:var(--accent);border-radius:3px;}
+.ob-illo{font-size:72px;margin-bottom:24px;}
+.ob-tag{
+  display:inline-flex;align-items:center;gap:5px;
+  background:var(--acl);border:1px solid #e0b898;
+  color:var(--accent);border-radius:20px;
+  padding:3px 12px;font-size:11px;font-weight:600;margin-bottom:12px;
+}
+.ob-title{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:22px;letter-spacing:-0.5px;text-align:center;
+  line-height:1.25;margin-bottom:10px;
+}
+.ob-desc{font-size:13px;color:var(--muted);text-align:center;line-height:1.7;margin-bottom:24px;}
+.ob-features{width:100%;display:flex;flex-direction:column;gap:8px;margin-bottom:24px;}
+.ob-feat{
+  display:flex;align-items:center;gap:10px;
+  background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;
+}
+.ob-ficon{
+  width:30px;height:30px;border-radius:8px;
+  background:var(--acl);display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;
+}
+.ob-ftext{font-size:12px;font-weight:500;}
+.ob-fsub{font-size:10px;color:var(--muted);margin-top:1px;}
+
+.emoji-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
+  width:100%;margin-bottom:18px;
+}
+.emoji-cell{
+  aspect-ratio:1;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;cursor:pointer;
+  background:var(--s2);border:2px solid var(--border);transition:all 0.15s;
+}
+.emoji-cell:hover{border-color:var(--border2);}
+.emoji-cell.sel{border-color:var(--accent);background:var(--acl);transform:scale(1.05);}
+.name-input{
+  width:100%;background:var(--s2);border:1.5px solid var(--border);
+  border-radius:var(--rs);color:var(--text);
+  padding:11px 14px;font-size:14px;font-family:'DM Sans',sans-serif;
+  outline:none;transition:border-color 0.15s;margin-bottom:14px;
+}
+.name-input:focus{border-color:var(--accent);}
+.name-input::placeholder{color:var(--dim);}
+
+/* ── home ── */
+.hero-card{
+  background:var(--accent);color:#fff;
+  border-radius:18px;padding:20px;margin-bottom:14px;
+  position:relative;overflow:hidden;
+}
+.hero-card::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:#ffffff14;}
+.hc-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;opacity:0.75;margin-bottom:6px;position:relative;z-index:1;}
+.hc-total{font-family:'Fraunces',serif;font-weight:800;font-size:34px;letter-spacing:-1.5px;line-height:1;position:relative;z-index:1;}
+.hc-sub{font-size:12px;opacity:0.75;margin-top:4px;position:relative;z-index:1;}
+.hc-row{display:flex;gap:0;margin-top:16px;padding-top:16px;border-top:1px solid #ffffff20;position:relative;z-index:1;}
+.hc-stat{flex:1;text-align:center;}
+.hc-stat+.hc-stat{border-left:1px solid #ffffff20;}
+.hcs-val{font-family:'Fraunces',serif;font-weight:700;font-size:16px;}
+.hcs-label{font-size:10px;opacity:0.7;margin-top:2px;}
+
+.member-row{
+  display:flex;gap:-4px;margin-bottom:14px;
+  align-items:center;
+}
+.m-avatar{
+  width:36px;height:36px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;border:2.5px solid var(--surface);margin-left:-6px;
+  flex-shrink:0;
+}
+.m-avatar:first-child{margin-left:0;}
+.m-add{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--s2);border:2px dashed var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--dim);font-size:18px;margin-left:-6px;cursor:pointer;
+}
+.m-add:hover{background:var(--acl);border-color:var(--accent);color:var(--accent);}
+.m-text{margin-left:12px;font-size:12px;color:var(--muted);}
+
+.sub-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 0;border-bottom:1px solid var(--border);
+}
+.sub-item:last-child{border-bottom:none;}
+.si-icon{
+  width:34px;height:34px;border-radius:9px;
+  background:var(--s2);display:flex;align-items:center;
+  justify-content:center;font-size:16px;flex-shrink:0;
+}
+.si-name{flex:1;font-size:13px;font-weight:500;}
+.si-meta{font-size:11px;color:var(--muted);}
+.si-amt{font-family:'Fraunces',serif;font-weight:600;font-size:14px;}
+.si-soon{color:var(--accent);font-size:10px;font-weight:600;}
+
+/* tab bar */
+.tabbar{
+  display:flex;border-top:1px solid var(--border);
+  background:var(--surface);padding:10px 0 16px;flex-shrink:0;
+}
+.tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  gap:3px;cursor:pointer;color:var(--dim);font-size:10px;
+  transition:color 0.15s;
+}
+.tab.active{color:var(--accent);}
+.tab-icon{font-size:20px;line-height:1;}
+
+/* ── report ── */
+.report-header{
+  background:var(--accent);color:#fff;
+  padding:50px 20px 24px;position:relative;overflow:hidden;flex-shrink:0;
+}
+.report-header::before{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:#ffffff14;}
+.rh-month{font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:0.75;margin-bottom:5px;position:relative;z-index:1;}
+.rh-title{font-family:'Fraunces',serif;font-weight:800;font-size:22px;letter-spacing:-0.5px;line-height:1.2;margin-bottom:16px;position:relative;z-index:1;}
+.rh-stats{display:grid;grid-template-columns:1fr 1fr 1fr;position:relative;z-index:1;}
+.rhs{padding:0 10px;text-align:center;}
+.rhs:first-child{padding-left:0;text-align:left;}
+.rhs+.rhs{border-left:1px solid #ffffff24;}
+.rhs-val{font-family:'Fraunces',serif;font-weight:700;font-size:18px;}
+.rhs-label{font-size:10px;opacity:0.7;margin-top:2px;}
+
+.insight-item{
+  display:flex;align-items:flex-start;gap:10px;
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:10px;padding:11px 12px;margin-bottom:8px;
+}
+.insight-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.insight-text{font-size:12px;color:var(--muted);line-height:1.6;}
+.insight-text strong{color:var(--text);}
+
+/* ── notification ── */
+.notif-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:12px 0;border-bottom:1px solid var(--border);
+}
+.notif-item:last-child{border-bottom:none;}
+.notif-item.unread .ni-title{font-weight:600;}
+.ni-icon{
+  width:38px;height:38px;border-radius:11px;
+  background:var(--s2);display:flex;align-items:center;
+  justify-content:center;font-size:17px;flex-shrink:0;
+}
+.ni-body{flex:1;}
+.ni-title{font-size:13px;margin-bottom:2px;}
+.ni-text{font-size:11px;color:var(--muted);line-height:1.5;}
+.ni-time{font-size:10px;color:var(--dim);margin-top:3px;}
+.ni-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;margin-top:5px;}
+
+/* ── invite ── */
+.lc-url{
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:var(--rs);padding:10px 12px;
+  font-size:12px;color:var(--muted);word-break:break-all;
+  line-height:1.5;margin-bottom:10px;
+}
+.lc-url span{color:var(--accent);font-weight:500;}
+.share-item{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 0;border-bottom:1px solid var(--border);
+  cursor:pointer;transition:all 0.15s;
+}
+.share-item:last-child{border-bottom:none;}
+.share-item:hover .si-name{color:var(--accent);}
+.share-icon{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;flex-shrink:0;
+}
+
+/* ── フィルタータブ ── */
+.filter-tab {
+  padding:5px 12px; border-radius:20px;
+  background:var(--s2); border:1px solid var(--border);
+  font-size:11px; cursor:pointer; color:var(--muted);
+  font-family:'DM Sans',sans-serif; transition:all 0.15s;
+}
+.filter-tab:hover { border-color:var(--border2); }
+.filter-tab.active {
+  background:var(--acl); border-color:#e0b898;
+  color:var(--accent); font-weight:500;
+}
+
+/* 休止中の行 */
+.import-row.paused {
+  opacity:0.45;
+}
+.import-row.paused .si-name {
+  text-decoration: line-through;
+}
+.paused-badge {
+  font-size:10px; background:var(--s3);
+  color:var(--dim); border-radius:4px;
+  padding:1px 6px; margin-left:4px;
+}
+.import-row input[type=checkbox] {
+  width:16px; height:16px; cursor:pointer;
+  accent-color: var(--accent); flex-shrink:0;
+}
+
+/* ── フィルタータブ ── */
+.bulk-btn {
+.import-row {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 0; border-bottom:1px solid var(--border);
+}
+.owner-select {
+  cursor:pointer; flex-shrink:0;
+}
+.owner-chip {
+  padding:5px 11px; border-radius:20px;
+  font-size:12px; font-weight:500;
+  border:1.5px solid var(--border);
+  background:var(--s2); color:var(--text);
+  white-space:nowrap; transition:all 0.15s;
+  user-select:none;
+}
+.owner-chip:hover { border-color:var(--accent); background:var(--acl); }
+.owner-chip[data-idx="0"] { background:#fde8d8; border-color:#e8b8a0; color:#8a3010; }
+.owner-chip[data-idx="1"] { background:#deecd8; border-color:#a8d0a0; color:#2a6020; }
+.owner-chip[data-idx="2"] { background:#e8e4f8; border-color:#b8b0e8; color:#3a2888; }
+.owner-chip[data-idx="3"] { background:var(--acl); border-color:#e0b898; color:var(--accent); }
+
+.bulk-btn {
+  padding:7px 14px; border-radius:20px;
+  background:var(--s2); border:1px solid var(--border);
+  font-size:12px; cursor:pointer; color:var(--muted);
+  font-family:'DM Sans',sans-serif; transition:all 0.15s;
+}
+.bulk-btn:hover { border-color:var(--border2); color:var(--text); }
+
+/* ── テーマ切り替えUI ── */
+.theme-selector {
+  display:flex; gap:10px; align-items:center;
+  flex-wrap:wrap; margin-top:6px;
+}
+.theme-btn {
+  display:flex; flex-direction:column; align-items:center; gap:5px;
+  cursor:pointer; transition:transform 0.15s;
+}
+.theme-btn:hover { transform:scale(1.08); }
+.theme-circle {
+  width:32px; height:32px; border-radius:50%;
+  border:2.5px solid transparent;
+  transition:all 0.2s;
+  box-shadow:0 2px 6px rgba(0,0,0,0.12);
+}
+.theme-btn.active .theme-circle {
+  transform:scale(1.1);
+  box-shadow:0 3px 10px rgba(0,0,0,0.2);
+}
+.theme-label {
+  font-size:10px; color:var(--muted);
+  letter-spacing:0.5px;
+}
+.theme-btn.active .theme-label {
+  color:var(--primary); font-weight:600;
+}
+
+/* ── FAB ── */
+.fab {
+  position:absolute;
+  bottom:76px; right:16px;
+  width:52px; height:52px;
+  border-radius:50%;
+  background:var(--accent);
+  color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  box-shadow:0 4px 18px #c8643a50;
+  border:none;
+  font-size:22px;
+  transition:all 0.2s;
+  z-index:30;
+  animation:fabPop 0.3s cubic-bezier(.4,0,.2,1);
+}
+.fab:hover { transform:scale(1.1); box-shadow:0 6px 24px #c8643a60; }
+.fab:active { transform:scale(0.95); }
+@keyframes fabPop {
+  from { opacity:0; transform:scale(0.6); }
+  to   { opacity:1; transform:scale(1); }
+}
+/* FABを持つscreenはposition:relativeが必要 */
+.has-fab { position:relative; }
+
+/* ── 追加モーダル（ボトムシート） ── */
+.add-modal-overlay {
+  display:none;
+  position:absolute; inset:0;
+  background:#28200e60;
+  backdrop-filter:blur(3px);
+  z-index:50;
+  align-items:flex-end;
+  justify-content:center;
+}
+.add-modal-overlay.show { display:flex; }
+.add-sheet {
+  background:var(--surface);
+  border-radius:24px 24px 0 0;
+  padding:0 0 32px;
+  width:100%;
+  animation:sheetUp 0.28s cubic-bezier(.4,0,.2,1);
+  max-height:90%;
+  overflow-y:auto;
+}
+.add-sheet::-webkit-scrollbar{display:none;}
+@keyframes sheetUp {
+  from { transform:translateY(100%); opacity:0; }
+  to   { transform:translateY(0);    opacity:1; }
+}
+.sheet-handle {
+  width:36px; height:4px;
+  background:var(--border2);
+  border-radius:2px;
+  margin:14px auto 18px;
+}
+.sheet-title {
+  font-family:'Fraunces',serif; font-weight:800;
+  font-size:18px; letter-spacing:-0.5px;
+  padding:0 20px; margin-bottom:18px;
+}
+.sheet-body { padding:0 20px; }
+.form-group { margin-bottom:14px; }
+.form-label {
+  display:block; font-size:11px; color:var(--muted);
+  margin-bottom:5px; letter-spacing:0.5px;
+}
+.form-input, .form-select {
+  width:100%; background:var(--s2);
+  border:1.5px solid var(--border);
+  border-radius:var(--rs); color:var(--text);
+  padding:10px 13px; font-size:14px;
+  font-family:'DM Sans',sans-serif;
+  outline:none; transition:border-color 0.15s;
+  -webkit-appearance:none;
+}
+.form-input:focus, .form-select:focus { border-color:var(--accent); }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.shared-toggle-row {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 0; border-top:1px solid var(--border); margin-top:4px;
+}
+.stl { font-size:13px; font-weight:500; }
+.stl-sub { font-size:11px; color:var(--muted); margin-top:1px; }
+.sheet-actions {
+  display:flex; gap:10px; margin-top:16px;
+  padding-top:14px; border-top:1px solid var(--border);
+}
+.btn-sheet-cancel {
+  flex:1; padding:12px; border-radius:var(--rs);
+  background:transparent; color:var(--muted);
+  border:1.5px solid var(--border); font-size:14px;
+  cursor:pointer; font-family:'DM Sans',sans-serif;
+}
+.btn-sheet-save {
+  flex:2; padding:12px; border-radius:var(--rs);
+  background:var(--accent); color:#fff; font-size:14px;
+  font-weight:600; border:none; cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  box-shadow:0 2px 10px #c8643a28;
+}
+.btn-sheet-save:hover { background:#b05030; }
+
+/* ── toast ── */
+.toast{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+  background:#28200e;color:#f4efe6;
+  padding:10px 20px;border-radius:20px;
+  font-size:13px;z-index:9999;display:none;white-space:nowrap;
+  box-shadow:0 4px 20px #00000030;
+  animation:toastIn 0.2s ease;
+}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(6px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+</style>
+</head>
+<body>
+
+<!-- ── フローマップ ── -->
+<div class="flow-map">
+  <div class="flow-map-title">画面フロー — クリックで任意の画面へジャンプ</div>
+  <div class="flow-nodes">
+    <div class="flow-node">
+      <div class="fn-chip" id="chip-ob1" onclick="goTo('ob1')"><span class="chip-icon">🌱</span>ようこそ</div>
+      <div class="fn-arrow">→</div>
+      <div class="fn-chip" id="chip-ob2" onclick="goTo('ob2')"><span class="chip-icon">✨</span>機能紹介</div>
+      <div class="fn-arrow">→</div>
+      <div class="fn-chip" id="chip-ob3" onclick="goTo('ob3')"><span class="chip-icon">👤</span>プロフィール</div>
+      <div class="fn-arrow">→</div>
+      <div class="fn-chip" id="chip-ob4" onclick="goTo('ob4')"><span class="chip-icon">🏡</span>家族を作る</div>
+      <div class="fn-arrow">→</div>
+    </div>
+    <div class="flow-node">
+      <div class="branch-group" style="margin-right:0">
+        <div class="branch-label">ob4 の分岐</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <div class="fn-chip" id="chip-import" onclick="goTo('import')" style="border-color:#d4960c40;color:#8a6010">
+            <span class="chip-icon">📥</span>Meからインポート
+          </div>
+        </div>
+      </div>
+      <div class="fn-arrow">→</div>
+      <div class="fn-chip" id="chip-home" onclick="goTo('home')"><span class="chip-icon">🏠</span>ホーム</div>
+      <div class="fn-arrow">→</div>
+      <div class="branch-group">
+        <div class="branch-label">タブ遷移</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <div class="fn-chip" id="chip-report" onclick="goTo('report')"><span class="chip-icon">📊</span>月次レポート</div>
+          <div class="fn-chip" id="chip-notif" onclick="goTo('notif')"><span class="chip-icon">🔔</span>通知</div>
+          <div class="fn-chip" id="chip-invite" onclick="goTo('invite')"><span class="chip-icon">👥</span>招待リンク</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── メイン ── -->
+<div class="phone-wrap">
+
+  <!-- フォン -->
+  <div class="phone-frame">
+
+    <!-- ══ OB1: ようこそ ══ -->
+    <div class="screen active" id="screen-ob1">
+      <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="ob-slide active" style="display:flex">
+        <div class="ob-dots">
+          <div class="ob-dot active"></div><div class="ob-dot"></div>
+          <div class="ob-dot"></div><div class="ob-dot"></div>
+        </div>
+        <div class="ob-illo">🏠</div>
+        <div class="ob-tag">✦ subly Family</div>
+        <h1 class="ob-title">家族の固定費を<br>一緒に管理しよう</h1>
+        <p class="ob-desc">誰が何を払っているか、家族みんなで見える化。サブスクの重複や無駄をなくしましょう。</p>
+        <button class="btn btn-full btn-primary" onclick="goTo('ob2')">はじめる →</button>
+        <button class="btn btn-full btn-ghost" style="margin-top:10px" onclick="goTo('home')">スキップ</button>
+      </div>
+    </div>
+
+    <!-- ══ OB2: 機能紹介 ══ -->
+    <div class="screen" id="screen-ob2">
+      <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+      <div style="display:flex;flex-direction:column;flex:1;padding:20px 20px 28px;">
+        <div class="ob-dots" style="justify-content:center">
+          <div class="ob-dot"></div><div class="ob-dot active"></div>
+          <div class="ob-dot"></div><div class="ob-dot"></div>
+        </div>
+        <div class="ob-tag" style="align-self:flex-start">できること</div>
+        <h1 class="s-title" style="margin-bottom:16px">subly Family<br>でできること</h1>
+        <div class="ob-features">
+          <div class="ob-feat">
+            <div class="ob-ficon">👨‍👩‍👧</div>
+            <div><div class="ob-ftext">家族を招待して共同管理</div><div class="ob-fsub">最大5名。リンクを送るだけ</div></div>
+          </div>
+          <div class="ob-feat">
+            <div class="ob-ficon">🔗</div>
+            <div><div class="ob-ftext">共有サブスクの割り勘計算</div><div class="ob-fsub">Netflixを3人で割れば¥497/月</div></div>
+          </div>
+          <div class="ob-feat">
+            <div class="ob-ficon">📊</div>
+            <div><div class="ob-ftext">月次レポートを自動生成</div><div class="ob-fsub">先月比・節約額が一目でわかる</div></div>
+          </div>
+          <div class="ob-feat">
+            <div class="ob-ficon">🔔</div>
+            <div><div class="ob-ftext">更新アラート通知</div><div class="ob-fsub">3日前・7日前に自動でお知らせ</div></div>
+          </div>
+        </div>
+        <button class="btn btn-full btn-primary" onclick="goTo('ob3')">次へ →</button>
+      </div>
+    </div>
+
+    <!-- ══ OB3: プロフィール ══ -->
+    <div class="screen" id="screen-ob3">
+      <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+      <div style="display:flex;flex-direction:column;flex:1;padding:20px 20px 28px;">
+        <div class="ob-dots" style="justify-content:center">
+          <div class="ob-dot"></div><div class="ob-dot"></div>
+          <div class="ob-dot active"></div><div class="ob-dot"></div>
+        </div>
+        <div class="ob-tag" style="align-self:flex-start">プロフィール設定</div>
+        <h1 class="s-title" style="margin-bottom:6px">あなたの<br>ニックネームは？</h1>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:16px">家族に表示される名前です</p>
+        <input class="name-input" type="text" placeholder="例: パパ、ママ、太郎">
+        <p style="font-size:12px;color:var(--muted);margin-bottom:10px">アバター絵文字を選ぶ</p>
+        <div class="emoji-grid">
+          <div class="emoji-cell sel" onclick="selEmoji(this)">👨</div>
+          <div class="emoji-cell" onclick="selEmoji(this)">👩</div>
+          <div class="emoji-cell" onclick="selEmoji(this)">🧒</div>
+          <div class="emoji-cell" onclick="selEmoji(this)">👦</div>
+          <div class="emoji-cell" onclick="selEmoji(this)">👧</div>
+          <div class="emoji-cell" onclick="selEmoji(this)">👴</div>
+          <div class="emoji-cell" onclick="selEmoji(this)">👵</div>
+          <div class="emoji-cell" onclick="selEmoji(this)">🐶</div>
+        </div>
+        <button class="btn btn-full btn-primary" onclick="goTo('ob4')">次へ →</button>
+      </div>
+    </div>
+
+    <!-- ══ OB4: 家族を作る ══ -->
+    <div class="screen" id="screen-ob4">
+      <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+      <div style="display:flex;flex-direction:column;flex:1;padding:20px 20px 28px;align-items:center;">
+        <div class="ob-dots" style="justify-content:center">
+          <div class="ob-dot"></div><div class="ob-dot"></div>
+          <div class="ob-dot"></div><div class="ob-dot active"></div>
+        </div>
+        <div class="ob-illo" style="font-size:56px;margin-bottom:16px">🏡</div>
+        <div class="ob-tag">最後のステップ</div>
+        <h1 class="ob-title" style="margin-bottom:8px">家族グループを<br>どうしますか？</h1>
+        <p class="ob-desc">新しく作るか、既存のグループに参加するか選んでください</p>
+        <div style="width:100%;display:flex;flex-direction:column;gap:10px;">
+          <div class="card" style="cursor:pointer;border-color:var(--accent);background:var(--acl)" onclick="finishOB()">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="ob-ficon">🆕</div>
+              <div><div class="ob-ftext" style="color:var(--accent)">新しく家族を作る</div><div class="ob-fsub">家族名を設定して招待リンクを共有</div></div>
+            </div>
+          </div>
+          <div class="card" style="cursor:pointer" onclick="finishOB()">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="ob-ficon">🔗</div>
+              <div><div class="ob-ftext">招待リンクから参加</div><div class="ob-fsub">家族から送られたリンクを使う</div></div>
+            </div>
+          </div>
+          <div class="card" style="cursor:pointer;border-color:#d4960c40;background:#fefaed" onclick="goTo('import')">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="ob-ficon" style="background:#faedc8">📥</div>
+              <div>
+                <div class="ob-ftext" style="color:#8a6010">subly Me からインポート</div>
+                <div class="ob-fsub">個人版のサブスクデータを引き継ぐ</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ IMPORT: subly Me からインポート ══ -->
+    <div class="screen" id="screen-import">
+      <div class="s-header">
+        <div class="back-btn" onclick="goTo('ob4')">←</div>
+        <div class="s-header-title">subly Me からインポート</div>
+      </div>
+      <div class="screen-body">
+
+        <!-- Step indicator -->
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:16px">
+          <div style="display:flex;align-items:center;gap:5px;flex:1;padding:8px 10px;border-radius:var(--rs);background:var(--greenl);border:1px solid #a8d8b0">
+            <div style="width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">1</div>
+            <div style="font-size:11px;font-weight:500;color:var(--green)">CSVを選択</div>
+          </div>
+          <div style="color:var(--dim);font-size:12px">→</div>
+          <div style="display:flex;align-items:center;gap:5px;flex:1;padding:8px 10px;border-radius:var(--rs);background:var(--acl);border:1px solid #e0b898" id="step2-indicator">
+            <div style="width:18px;height:18px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">2</div>
+            <div style="font-size:11px;font-weight:500;color:var(--accent)">誰の？割り当て</div>
+          </div>
+          <div style="color:var(--dim);font-size:12px">→</div>
+          <div style="display:flex;align-items:center;gap:5px;flex:1;padding:8px 10px;border-radius:var(--rs);background:var(--s2);border:1px solid var(--border)">
+            <div style="width:18px;height:18px;border-radius:50%;background:var(--border2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">3</div>
+            <div style="font-size:11px;color:var(--muted)">完了</div>
+          </div>
+        </div>
+
+        <!-- CSV選択エリア（初期表示） -->
+        <div id="csv-select-area">
+          <div style="border:2px dashed var(--border2);border-radius:var(--r);padding:24px 16px;text-align:center;margin-bottom:14px;cursor:pointer;transition:all 0.15s;background:var(--s2)"
+               onclick="document.getElementById('csv-file-input').click()"
+               id="drop-zone">
+            <div style="font-size:36px;margin-bottom:10px">📂</div>
+            <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px">CSVファイルを選択</div>
+            <div style="font-size:11px;color:var(--muted)">subly Me の「設定 → エクスポート」で<br>出力したCSVファイルを選んでください</div>
+            <input type="file" id="csv-file-input" accept=".csv" style="display:none" onchange="handleCSVFile(this)">
+          </div>
+
+          <!-- デモ用：実データで試すボタン -->
+          <div style="text-align:center;margin-bottom:8px">
+            <div style="font-size:11px;color:var(--dim);margin-bottom:8px">— または —</div>
+            <button class="btn btn-ghost" style="font-size:12px;width:100%" onclick="loadDemoCSV()">
+              📋 サンプルデータで試す（実データ38件）
+            </button>
+          </div>
+        </div>
+
+        <!-- 読み込み済みリスト（CSV選択後に表示） -->
+        <div id="import-result-area" style="display:none">
+
+          <!-- サマリ -->
+          <div id="import-summary" style="background:#fefaed;border:1px solid #d4960c40;border-radius:var(--r);padding:12px 14px;margin-bottom:12px"></div>
+
+          <!-- フィルタータブ -->
+          <div style="display:flex;gap:6px;margin-bottom:10px" id="filter-tabs">
+            <button class="filter-tab active" onclick="filterImport('all',this)">すべて</button>
+            <button class="filter-tab" onclick="filterImport('active',this)">アクティブのみ</button>
+            <button class="filter-tab" onclick="filterImport('paused',this)">休止中</button>
+          </div>
+
+          <!-- 一括設定 -->
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+            <button class="bulk-btn" onclick="setAllOwner(0)">👨 全部パパ</button>
+            <button class="bulk-btn" onclick="setAllOwner(3)">👨‍👩‍👧 全部共有</button>
+            <button class="bulk-btn" onclick="resetOwners()">↩ リセット</button>
+            <button class="bulk-btn" onclick="uncheckPaused()">休止中を除外</button>
+          </div>
+
+          <!-- リスト -->
+          <div class="card" style="padding:0 14px;" id="import-list"></div>
+
+          <!-- インポートボタン -->
+          <div style="margin-top:14px;display:flex;gap:8px">
+            <button class="btn btn-ghost" style="flex:1" onclick="resetImport()">← やり直す</button>
+            <button class="btn btn-primary" style="flex:2" onclick="doImport()">✓ インポートする</button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ HOME ══ -->
+    <div class="screen has-fab" id="screen-home">
+      <div class="statusbar"><span>9:41</span><span>📶 🔋</span></div>
+      <div class="screen-body">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div>
+            <div style="font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase">田中家</div>
+            <div class="s-title" style="font-size:20px;margin-bottom:0">おはようございます👋</div>
+          </div>
+          <div style="font-size:22px;cursor:pointer" onclick="goTo('notif')">🔔</div>
+        </div>
+
+        <div class="hero-card">
+          <div class="hc-label">今月の合計</div>
+          <div class="hc-total">¥24,630</div>
+          <div class="hc-sub">11件のサブスク登録中</div>
+          <div class="hc-row">
+            <div class="hc-stat"><div class="hcs-val">¥295,560</div><div class="hcs-label">年間換算</div></div>
+            <div class="hc-stat"><div class="hcs-val">+¥1,200</div><div class="hcs-label">先月比</div></div>
+            <div class="hc-stat" style="cursor:pointer" onclick="goTo('notif')"><div class="hcs-val">3件</div><div class="hcs-label">更新間近</div></div>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div style="font-size:13px;font-weight:500">家族メンバー</div>
+          <div style="font-size:12px;color:var(--accent);cursor:pointer" onclick="goTo('invite')">招待する +</div>
+        </div>
+        <div class="member-row" style="margin-bottom:16px">
+          <div class="m-avatar" style="background:#fde8d8">👨</div>
+          <div class="m-avatar" style="background:#deecd8">👩</div>
+          <div class="m-avatar" style="background:#e8e4f8">🧒</div>
+          <div class="m-add" onclick="goTo('invite')">+</div>
+          <div class="m-text">3人が参加中</div>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div style="font-size:13px;font-weight:500">登録中のサブスク</div>
+          <div style="font-size:12px;color:var(--accent);cursor:pointer">すべて見る</div>
+        </div>
+        <div class="card" style="padding:0 14px;">
+          <div class="sub-item">
+            <div class="si-icon">🎬</div>
+            <div style="flex:1"><div class="si-name">Netflix</div><div class="si-meta">共有 · 👨👩🧒</div></div>
+            <div style="text-align:right"><div class="si-amt">¥1,490</div><div class="si-soon">4/5更新</div></div>
+          </div>
+          <div class="sub-item">
+            <div class="si-icon">🎵</div>
+            <div style="flex:1"><div class="si-name">Spotify</div><div class="si-meta">パパ</div></div>
+            <div class="si-amt">¥980</div>
+          </div>
+          <div class="sub-item">
+            <div class="si-icon">💪</div>
+            <div style="flex:1"><div class="si-name">スポーツジム</div><div class="si-meta">パパ · ★★☆☆☆</div></div>
+            <div class="si-amt">¥8,800</div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px;background:var(--acl);border:1px solid #e0b898;border-radius:12px;padding:12px 14px;cursor:pointer" onclick="goTo('report')">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="font-size:20px">📊</div>
+            <div style="flex:1">
+              <div style="font-size:13px;font-weight:500;color:var(--accent)">3月のレポートができました</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:1px">先月比 +¥1,200 · 詳細を見る →</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- FAB -->
+      <button class="fab" onclick="openAddModal('home')" title="サブスクを追加">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
+          <path d="M11 4v14M4 11h14"/>
+        </svg>
+      </button>
+      <div class="tabbar">
+        <div class="tab active" onclick="goTo('home')"><div class="tab-icon">⊞</div><span>ホーム</span></div>
+        <div class="tab" onclick="goTo('report')"><div class="tab-icon">📊</div><span>レポート</span></div>
+        <div class="tab" onclick="goTo('notif')"><div class="tab-icon">🔔</div><span>通知</span></div>
+        <div class="tab" onclick="goTo('invite')"><div class="tab-icon">👥</div><span>招待</span></div>
+      </div>
+      <!-- Add Modal -->
+      <div class="add-modal-overlay" id="add-modal-home" onclick="closeAddModal('home')">
+        <div class="add-sheet" onclick="event.stopPropagation()">
+          <div class="sheet-handle"></div>
+          <div class="sheet-title">サブスクを追加</div>
+          <div class="sheet-body">
+            <div class="form-group">
+              <label class="form-label">サービス名</label>
+              <input class="form-input" placeholder="例: Netflix, Spotify">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">月額（円）</label>
+                <input class="form-input" type="number" placeholder="1490">
+              </div>
+              <div class="form-group">
+                <label class="form-label">カテゴリ</label>
+                <select class="form-select">
+                  <option>🎬 動画</option><option>🎵 音楽</option>
+                  <option>🎮 ゲーム</option><option>📚 教育</option>
+                  <option>💪 健康</option><option>📦 その他</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">誰のサブスク？</label>
+                <select class="form-select">
+                  <option>👨 パパ</option><option>👩 ママ</option>
+                  <option>🧒 子供</option><option>👨‍👩‍👧 共有</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">次回更新日</label>
+                <input class="form-input" type="date">
+              </div>
+            </div>
+            <div class="shared-toggle-row">
+              <div>
+                <div class="stl">共有サブスク</div>
+                <div class="stl-sub">家族全員で使うサービス</div>
+              </div>
+              <div class="toggle" onclick="this.classList.toggle('on')"></div>
+            </div>
+            <div class="sheet-actions">
+              <button class="btn-sheet-cancel" onclick="closeAddModal('home')">キャンセル</button>
+              <button class="btn-sheet-save" onclick="saveAndClose('home')">追加する ✓</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ REPORT ══ -->
+    <div class="screen has-fab" id="screen-report">
+      <div class="report-header">
+        <div class="rh-month">2025年3月 月次レポート</div>
+        <div class="rh-title">田中家の<br>固定費まとめ</div>
+        <div class="rh-stats">
+          <div class="rhs"><div class="rhs-val">¥24,630</div><div class="rhs-label">月額合計</div></div>
+          <div class="rhs"><div class="rhs-val">+¥1,200</div><div class="rhs-label">先月比</div></div>
+          <div class="rhs"><div class="rhs-val">11件</div><div class="rhs-label">登録中</div></div>
+        </div>
+      </div>
+      <div class="screen-body">
+        <div style="font-size:13px;font-weight:500;margin-bottom:10px">💡 今月のインサイト</div>
+        <div class="insight-item"><div class="insight-icon">📈</div><div class="insight-text"><strong>先月より¥1,200増加。</strong>スポーツジムの月会費が値上がりしました。</div></div>
+        <div class="insight-item"><div class="insight-icon">⚠️</div><div class="insight-text"><strong>満足度が低いサブスクが2件。</strong>解約を検討してみては？</div></div>
+        <div class="insight-item"><div class="insight-icon">🎉</div><div class="insight-text"><strong>先月、Disney+を解約し¥990節約。</strong>年間¥11,880の削減に。</div></div>
+
+        <div style="font-size:13px;font-weight:500;margin:14px 0 10px">🔔 今月の更新予定</div>
+        <div class="card" style="padding:0 14px;">
+          <div class="sub-item">
+            <div class="si-icon">🎵</div>
+            <div style="flex:1"><div class="si-name">Spotify</div><div class="si-soon">4月5日 — あと12日</div></div>
+            <div class="si-amt" style="color:var(--accent)">¥1,480</div>
+          </div>
+          <div class="sub-item">
+            <div class="si-icon">📚</div>
+            <div style="flex:1"><div class="si-name">Kindle Unlimited</div><div class="si-soon">4月15日 — あと22日</div></div>
+            <div class="si-amt" style="color:var(--accent)">¥980</div>
+          </div>
+          <div class="sub-item">
+            <div class="si-icon">💼</div>
+            <div style="flex:1"><div class="si-name">Adobe CC</div><div class="si-meta">4月28日 — あと35日</div></div>
+            <div class="si-amt">¥6,248</div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px;cursor:pointer" onclick="goTo('invite')">
+          <button class="btn btn-full btn-primary">📤 レポートを家族に共有する</button>
+        </div>
+      </div>
+      <button class="fab" onclick="openAddModal('report')" title="サブスクを追加">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M11 4v14M4 11h14"/></svg>
+      </button>
+      <div class="tabbar">
+        <div class="tab" onclick="goTo('home')"><div class="tab-icon">⊞</div><span>ホーム</span></div>
+        <div class="tab active" onclick="goTo('report')"><div class="tab-icon">📊</div><span>レポート</span></div>
+        <div class="tab" onclick="goTo('notif')"><div class="tab-icon">🔔</div><span>通知</span></div>
+        <div class="tab" onclick="goTo('invite')"><div class="tab-icon">👥</div><span>招待</span></div>
+      </div>
+      <div class="add-modal-overlay" id="add-modal-report" onclick="closeAddModal('report')">
+        <div class="add-sheet" onclick="event.stopPropagation()">
+          <div class="sheet-handle"></div>
+          <div class="sheet-title">サブスクを追加</div>
+          <div class="sheet-body">
+            <div class="form-group"><label class="form-label">サービス名</label><input class="form-input" placeholder="例: Netflix, Spotify"></div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">月額（円）</label><input class="form-input" type="number" placeholder="1490"></div>
+              <div class="form-group"><label class="form-label">カテゴリ</label><select class="form-select"><option>🎬 動画</option><option>🎵 音楽</option><option>🎮 ゲーム</option><option>📚 教育</option><option>💪 健康</option><option>📦 その他</option></select></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">誰のサブスク？</label><select class="form-select"><option>👨 パパ</option><option>👩 ママ</option><option>🧒 子供</option><option>👨‍👩‍👧 共有</option></select></div>
+              <div class="form-group"><label class="form-label">次回更新日</label><input class="form-input" type="date"></div>
+            </div>
+            <div class="shared-toggle-row"><div><div class="stl">共有サブスク</div><div class="stl-sub">家族全員で使うサービス</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="sheet-actions">
+              <button class="btn-sheet-cancel" onclick="closeAddModal('report')">キャンセル</button>
+              <button class="btn-sheet-save" onclick="saveAndClose('report')">追加する ✓</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ NOTIF ══ -->
+    <div class="screen has-fab" id="screen-notif">
+      <div class="s-header">
+        <div class="back-btn" onclick="goTo('home')">←</div>
+        <div class="s-header-title">通知</div>
+        <div style="font-size:12px;color:var(--accent);cursor:pointer" onclick="clearNotifs()">すべて消去</div>
+      </div>
+      <div class="screen-body">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <div style="font-size:13px;font-weight:500">通知設定</div>
+        </div>
+        <div class="card" style="padding:0 14px;margin-bottom:16px">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)">
+            <div><div style="font-size:13px;font-weight:500">🔔 更新アラート</div><div style="font-size:11px;color:var(--muted)">3日前・7日前に通知</div></div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)">
+            <div><div style="font-size:13px;font-weight:500">📊 月次レポート</div><div style="font-size:11px;color:var(--muted)">毎月1日に通知</div></div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0">
+            <div><div style="font-size:13px;font-weight:500">👥 メンバー通知</div><div style="font-size:11px;color:var(--muted)">参加・追加時に通知</div></div>
+            <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+          </div>
+        </div>
+
+        <div style="font-size:13px;font-weight:500;margin-bottom:10px">通知履歴</div>
+        <div id="notif-list">
+          <div class="notif-item unread">
+            <div class="ni-icon" style="background:#fde8d8">🔔</div>
+            <div class="ni-body"><div class="ni-title">Spotifyが7日後に更新されます</div><div class="ni-text">¥1,480が4月5日に請求されます</div><div class="ni-time">2時間前</div></div>
+            <div class="ni-dot"></div>
+          </div>
+          <div class="notif-item unread">
+            <div class="ni-icon" style="background:#deecd8">📊</div>
+            <div class="ni-body"><div class="ni-title">2月のまとめができました</div><div class="ni-text">合計¥23,430。先月比 -¥990節約！</div><div class="ni-time">3日前</div></div>
+            <div class="ni-dot"></div>
+          </div>
+          <div class="notif-item">
+            <div class="ni-icon" style="background:#e8e4f8">👩</div>
+            <div class="ni-body"><div class="ni-title">ママが田中家に参加しました</div><div class="ni-text">メンバーが2人になりました</div><div class="ni-time">1週間前</div></div>
+          </div>
+        </div>
+      </div>
+      <button class="fab" onclick="openAddModal('notif')" title="サブスクを追加">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M11 4v14M4 11h14"/></svg>
+      </button>
+      <div class="tabbar">
+        <div class="tab" onclick="goTo('home')"><div class="tab-icon">⊞</div><span>ホーム</span></div>
+        <div class="tab" onclick="goTo('report')"><div class="tab-icon">📊</div><span>レポート</span></div>
+        <div class="tab active" onclick="goTo('notif')"><div class="tab-icon">🔔</div><span>通知</span></div>
+        <div class="tab" onclick="goTo('invite')"><div class="tab-icon">👥</div><span>招待</span></div>
+      </div>
+      <div class="add-modal-overlay" id="add-modal-notif" onclick="closeAddModal('notif')">
+        <div class="add-sheet" onclick="event.stopPropagation()">
+          <div class="sheet-handle"></div>
+          <div class="sheet-title">サブスクを追加</div>
+          <div class="sheet-body">
+            <div class="form-group"><label class="form-label">サービス名</label><input class="form-input" placeholder="例: Netflix, Spotify"></div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">月額（円）</label><input class="form-input" type="number" placeholder="1490"></div>
+              <div class="form-group"><label class="form-label">カテゴリ</label><select class="form-select"><option>🎬 動画</option><option>🎵 音楽</option><option>🎮 ゲーム</option><option>📚 教育</option><option>💪 健康</option><option>📦 その他</option></select></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">誰のサブスク？</label><select class="form-select"><option>👨 パパ</option><option>👩 ママ</option><option>🧒 子供</option><option>👨‍👩‍👧 共有</option></select></div>
+              <div class="form-group"><label class="form-label">次回更新日</label><input class="form-input" type="date"></div>
+            </div>
+            <div class="shared-toggle-row"><div><div class="stl">共有サブスク</div><div class="stl-sub">家族全員で使うサービス</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="sheet-actions">
+              <button class="btn-sheet-cancel" onclick="closeAddModal('notif')">キャンセル</button>
+              <button class="btn-sheet-save" onclick="saveAndClose('notif')">追加する ✓</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ INVITE ══ -->
+    <div class="screen has-fab" id="screen-invite">
+      <div class="s-header">
+        <div class="back-btn" onclick="goTo('home')">←</div>
+        <div class="s-header-title">家族を招待する</div>
+      </div>
+      <div class="screen-body">
+        <div style="display:flex;gap:-4px;margin-bottom:14px;align-items:center">
+          <div class="m-avatar" style="background:#fde8d8">👨</div>
+          <div class="m-avatar" style="background:#deecd8;margin-left:-6px">👩</div>
+          <div class="m-avatar" style="background:#e8e4f8;margin-left:-6px">🧒</div>
+          <div class="m-add" style="margin-left:-6px">+</div>
+          <div style="margin-left:12px;font-size:12px;color:var(--muted)">3人参加中 · あと2人追加可</div>
+        </div>
+
+        <div style="font-size:13px;font-weight:500;margin-bottom:8px">招待リンク</div>
+        <div class="lc-url">https://subly.app/<span>family/invite/</span>xk9a2m7pqr</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:5px">
+          <span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block"></span>
+          このリンクは <strong style="color:var(--text)">72時間</strong> 有効
+        </div>
+        <button class="btn btn-full btn-primary" id="copy-btn" onclick="copyLink()">🔗 リンクをコピー</button>
+
+        <div style="font-size:13px;font-weight:500;margin:16px 0 8px">アプリで共有</div>
+        <div class="card" style="padding:0 14px;">
+          <div class="share-item" onclick="toast('LINEで共有します...')">
+            <div class="share-icon" style="background:#06C755;font-size:20px">💬</div>
+            <div style="flex:1"><div class="si-name">LINEで送る</div><div class="si-meta">トークに貼り付け</div></div>
+            <div style="color:var(--dim)">›</div>
+          </div>
+          <div class="share-item" onclick="toast('メールアプリを開きます...')">
+            <div class="share-icon" style="background:var(--accent)">📧</div>
+            <div style="flex:1"><div class="si-name">メールで送る</div><div class="si-meta">メールアプリが開きます</div></div>
+            <div style="color:var(--dim)">›</div>
+          </div>
+          <div class="share-item" onclick="toast('共有メニューを開きます...')">
+            <div class="share-icon" style="background:#818cf8">⋯</div>
+            <div style="flex:1"><div class="si-name">その他のアプリ</div><div class="si-meta">共有メニューを開く</div></div>
+            <div style="color:var(--dim)">›</div>
+          </div>
+        </div>
+
+        <button class="btn btn-full btn-ghost" style="margin-top:10px;font-size:13px" onclick="regenLink()">🔄 新しいリンクを生成</button>
+      </div>
+      <button class="fab" onclick="openAddModal('invite')" title="サブスクを追加">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M11 4v14M4 11h14"/></svg>
+      </button>
+      <div class="tabbar">
+        <div class="tab" onclick="goTo('home')"><div class="tab-icon">⊞</div><span>ホーム</span></div>
+        <div class="tab" onclick="goTo('report')"><div class="tab-icon">📊</div><span>レポート</span></div>
+        <div class="tab" onclick="goTo('notif')"><div class="tab-icon">🔔</div><span>通知</span></div>
+        <div class="tab active" onclick="goTo('invite')"><div class="tab-icon">👥</div><span>招待</span></div>
+      </div>
+      <div class="add-modal-overlay" id="add-modal-invite" onclick="closeAddModal('invite')">
+        <div class="add-sheet" onclick="event.stopPropagation()">
+          <div class="sheet-handle"></div>
+          <div class="sheet-title">サブスクを追加</div>
+          <div class="sheet-body">
+            <div class="form-group"><label class="form-label">サービス名</label><input class="form-input" placeholder="例: Netflix, Spotify"></div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">月額（円）</label><input class="form-input" type="number" placeholder="1490"></div>
+              <div class="form-group"><label class="form-label">カテゴリ</label><select class="form-select"><option>🎬 動画</option><option>🎵 音楽</option><option>🎮 ゲーム</option><option>📚 教育</option><option>💪 健康</option><option>📦 その他</option></select></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">誰のサブスク？</label><select class="form-select"><option>👨 パパ</option><option>👩 ママ</option><option>🧒 子供</option><option>👨‍👩‍👧 共有</option></select></div>
+              <div class="form-group"><label class="form-label">次回更新日</label><input class="form-input" type="date"></div>
+            </div>
+            <div class="shared-toggle-row"><div><div class="stl">共有サブスク</div><div class="stl-sub">家族全員で使うサービス</div></div><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+            <div class="sheet-actions">
+              <button class="btn-sheet-cancel" onclick="closeAddModal('invite')">キャンセル</button>
+              <button class="btn-sheet-save" onclick="saveAndClose('invite')">追加する ✓</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /phone-frame -->
+
+  <!-- ── 右パネル ── -->
+  <div class="side-panel">
+
+    <!-- テーマ選択 -->
+    <div class="panel-card">
+      <div style="font-size:12px;font-weight:500;margin-bottom:12px;color:var(--muted)">🎨 テーマを選ぶ</div>
+      <div class="theme-selector">
+
+        <div class="theme-btn active" id="theme-btn-light" onclick="setTheme('light')">
+          <div class="theme-circle" style="background:#F5F5F0;border-color:#5C8E84"></div>
+          <div class="theme-label">ライト</div>
+        </div>
+
+        <div class="theme-btn" id="theme-btn-ocean" onclick="setTheme('ocean')">
+          <div class="theme-circle" style="background:#F0F5FA;border-color:#4A90D0"></div>
+          <div class="theme-label">オーシャン</div>
+        </div>
+
+        <div class="theme-btn" id="theme-btn-pastel" onclick="setTheme('pastel')">
+          <div class="theme-circle" style="background:linear-gradient(135deg,#F5E6F0,#E8F0FA,#FFF0F5);border-color:#E8A0BF"></div>
+          <div class="theme-label">パステル</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="panel-card">
+      <div class="panel-title" id="panel-title">🌱 ようこそ</div>
+      <div class="breadcrumb" id="breadcrumb">
+        <span class="bc-item current">現在地</span>
+      </div>
+      <div class="panel-desc" id="panel-desc">初回起動時に表示される最初の画面。「はじめる」で次のステップへ進みます。</div>
+    </div>
+
+    <div class="panel-card">
+      <div style="font-size:12px;font-weight:500;margin-bottom:10px;color:var(--muted)">▶ 次の画面へ進む</div>
+      <div class="nav-btns" id="next-btns"></div>
+    </div>
+
+  </div>
+
+</div><!-- /phone-wrap -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── テーマ切り替え ──
+const THEMES = {
+  light:  { bodyBg:'#EAEAE4' },
+  ocean:  { bodyBg:'#D8E8F0' },
+  pastel: { bodyBg:'linear-gradient(180deg,#F0E8F5,#E8F0FA,#F5EDF0,#F8F4F9) fixed' },
+};
+
+function setTheme(name) {
+  document.documentElement.setAttribute('data-theme', name);
+  document.body.style.background = THEMES[name].bodyBg;
+  document.querySelectorAll('.theme-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.id === 'theme-btn-' + name);
+  });
+  const frame = document.querySelector('.phone-frame');
+  if (name === 'pastel') {
+    frame.style.backdropFilter = 'blur(10px)';
+    frame.style.background = 'rgba(255,255,255,0.85)';
+  } else {
+    frame.style.backdropFilter = '';
+    frame.style.background = '';
+  }
+  localStorage.setItem('subly_theme', name);
+  const labels = {light:'ライト', ocean:'オーシャン', pastel:'パステル'};
+  toast('テーマ：' + labels[name]);
+}
+
+// 起動時に保存済みテーマを復元
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('subly_theme') || 'light';
+  setTheme(saved);
+});
+
+const SCREENS = {
+  ob1:    { title:'🌱 ようこそ',           desc:'初回起動の最初の画面。「はじめる」で機能紹介へ。', nexts:[{to:'ob2',label:'次へ：機能紹介',sub:'オンボーディング Step 2'}], bc:['オンボーディング','ようこそ'] },
+  ob2:    { title:'✨ 機能紹介',           desc:'4つの主要機能をカード形式で紹介します。', nexts:[{to:'ob3',label:'次へ：プロフィール設定',sub:'オンボーディング Step 3'}], bc:['オンボーディング','機能紹介'] },
+  ob3:    { title:'👤 プロフィール',       desc:'ニックネームと絵文字を設定します。', nexts:[{to:'ob4',label:'次へ：家族を作る',sub:'オンボーディング Step 4'}], bc:['オンボーディング','プロフィール設定'] },
+  ob4:    { title:'🏡 家族を作る',         desc:'3つのルートがあります。①新規作成 ②招待リンクから参加 ③subly Meからインポート', nexts:[{to:'home',label:'① 新規作成 → ホームへ',sub:'家族名を設定して開始'},{to:'home',label:'② 招待リンクから参加',sub:'既存グループに合流'},{to:'import',label:'③ subly Meからインポート',sub:'個人版データを引き継ぐ'}], bc:['オンボーディング','家族グループ選択'] },
+  import: { title:'📥 subly Me からインポート', desc:'subly Meのサブスクデータを受け取り、各サブスクに「誰の？」を割り当ててFamilyのDBに一括登録します。タップするたびに担当者が切り替わります。', nexts:[{to:'home',label:'インポート完了 → ホームへ',sub:'「インポートする」ボタンを押す'}], bc:['オンボーディング','Meからインポート'] },
+  home:   { title:'🏠 ホーム',             desc:'家族全体のサマリ・サブスク一覧・メンバー表示。右下の ＋ FABからいつでもサブスクを追加できます。', nexts:[{to:'report',label:'📊 月次レポートへ',sub:'タブ → レポート'},{to:'notif',label:'🔔 通知センターへ',sub:'タブ → 通知'},{to:'invite',label:'👥 招待リンクへ',sub:'タブ → 招待'}], bc:['アプリ','ホーム'] },
+  report: { title:'📊 月次レポート',       desc:'インサイト・更新予定・メンバー別負担額。右下の ＋ FABからサブスク追加も可能。', nexts:[{to:'home',label:'← ホームへ戻る',sub:'タブ → ホーム'},{to:'invite',label:'📤 レポートを共有する',sub:'「共有する」ボタンから招待画面へ'}], bc:['アプリ','レポート'] },
+  notif:  { title:'🔔 通知センター',       desc:'通知のON/OFF設定と通知履歴。右下の ＋ FABからサブスク追加も可能。', nexts:[{to:'home',label:'← ホームへ戻る',sub:'← 戻るボタン'}], bc:['アプリ','通知'] },
+  invite: { title:'👥 招待リンク',         desc:'招待リンクのコピー・LINE・メールで家族を招待。右下の ＋ FABからサブスク追加も可能。', nexts:[{to:'home',label:'← ホームへ戻る',sub:'← 戻るボタン'}], bc:['アプリ','招待リンク'] },
+};
+
+let current = 'ob1';
+const visited = new Set(['ob1']);
+
+function goTo(id) {
+  // 前の画面を非アクティブに
+  document.getElementById('screen-' + current)?.classList.remove('active');
+  document.getElementById('chip-' + current)?.classList.remove('active');
+
+  // 新しい画面をアクティブに
+  current = id;
+  visited.add(id);
+  document.getElementById('screen-' + id).classList.add('active');
+  document.getElementById('screen-' + id).scrollTop = 0;
+
+  // チップ更新
+  Object.keys(SCREENS).forEach(k => {
+    const chip = document.getElementById('chip-' + k);
+    if (!chip) return;
+    chip.classList.remove('active', 'visited');
+    if (k === id) chip.classList.add('active');
+    else if (visited.has(k)) chip.classList.add('visited');
+  });
+
+  // 右パネル更新
+  updatePanel(id);
+}
+
+function updatePanel(id) {
+  const s = SCREENS[id];
+  if (!s) return;
+
+  document.getElementById('panel-title').textContent = s.title;
+  document.getElementById('panel-desc').textContent  = s.desc;
+
+  // breadcrumb
+  const bc = document.getElementById('breadcrumb');
+  bc.innerHTML = s.bc.map((b, i) =>
+    i === s.bc.length - 1
+      ? `<span class="bc-item current">${b}</span>`
+      : `<span class="bc-item" onclick="void(0)">${b}</span><span class="bc-sep">›</span>`
+  ).join('');
+
+  // next buttons
+  const nb = document.getElementById('next-btns');
+  nb.innerHTML = s.nexts.map(n => `
+    <button class="nav-btn" onclick="goTo('${n.to}')">
+      <div class="nb-text">
+        <div class="nb-title">${n.label}</div>
+        <div class="nb-sub">${n.sub}</div>
+      </div>
+      <div class="nb-arrow">›</div>
+    </button>
+  `).join('');
+}
+
+// Init
+updatePanel('ob1');
+document.getElementById('chip-ob1').classList.add('active');
+
+// helpers
+function selEmoji(el) {
+  document.querySelectorAll('.emoji-cell').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function finishOB() {
+  toast('家族グループを作成しました 🎉');
+  setTimeout(() => goTo('home'), 700);
+}
+
+function clearNotifs() {
+  document.getElementById('notif-list').innerHTML =
+    '<div style="text-align:center;padding:28px;color:var(--dim);font-size:13px">通知はありません</div>';
+  toast('通知を消去しました');
+}
+
+function copyLink() {
+  navigator.clipboard.writeText('https://subly.app/family/invite/xk9a2m7pqr').catch(() => {});
+  const btn = document.getElementById('copy-btn');
+  btn.textContent = '✓ コピーしました！';
+  btn.style.background = 'var(--green)';
+  toast('招待リンクをコピーしました 🔗');
+  setTimeout(() => {
+    btn.textContent = '🔗 リンクをコピー';
+    btn.style.background = '';
+  }, 2500);
+}
+
+function regenLink() {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  const t = Array.from({length:10}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
+  document.querySelector('.lc-url').innerHTML = `https://subly.app/<span>family/invite/</span>${t}`;
+  toast('新しいリンクを生成しました ✓');
+}
+
+// ── CSV インポート ──
+
+// subly Me の実CSVデータ（サンプル）
+const DEMO_CSV = `ID,サービス名,カテゴリ,料金,頻度,更新日,メモ,満足度,休止
+1773614256266,"1Password: Password Manager","仕事・ツール",450,"月額",2026-04-03,"",4,0
+1773614331493,"Google AI Pro (2 TB)","仕事・ツール",2900,"月額",2026-03-27,"",3,1
+1773614407605,"ChatGPT Plus","仕事・ツール",3000,"月額",2026-03-17,"3/17で解約",2,1
+1773614538390,"LINE 月間プラン","仕事・ツール",650,"月額",2026-03-15,"",3,0
+1773614825389,"ポケモンHome","ゲーム",1950,"年額",2027-01-25,"",3,0
+1773614907726,"YouTube Premium Family","動画・配信",2900,"月額",2026-03-27,"",5,0
+1773615017075,"メシトラ","健康・フィットネス",4000,"年額",2026-09-24,"",3,1
+1773615081680,"YouTube Music ファミリー","音楽",1680,"月額",2026-01-02,"",5,0
+1773615437270,"リベシティ パンダ会員","習い事",5500,"月額",2026-01-01,"",5,0
+1773615556098,"チョコザップ","健康・フィットネス",3278,"月額",2026-03-10,"",3,1
+1773615939880,"MONOレギュラーBOX","趣味",320,"月額",2026-02-01,"",5,0
+1773616038255,"MONOラージBOX 4箱","趣味",2560,"月額",2026-02-01,"",5,0
+1773635801524,"マネーフォワード ME","仕事・ツール",980,"月額",2026-04-06,"",5,0
+1773635874819,"ディズニーカードクラブゴールド","金融・年会費",14100,"年額",2027-03-03,"",4,0
+1773636043032,"Adobe","仕事・ツール",3700,"月額",2026-03-16,"",3,0
+1773636073936,"Adobe","仕事・ツール",980,"月額",2026-03-15,"",3,0
+1773636545311,"DAIGO心理学","仕事・ツール",17596,"年額",2026-03-01,"",2,1
+1773636605378,"任天堂Eショップ","ゲーム",306,"月額",2026-03-05,"",3,0
+1773649017053,"Claude MAX 5x","仕事・ツール",15000,"月額",2026-03-01,"アプリ開発",5,0
+1773669907368,"スマホ代（楽天モバイル）","通信費",983,"月額",2026-01-27,"",2,0
+1773669949534,"スマホ代（日本通信SIM）","通信費",294,"月額",2025-01-28,"",3,0
+1773670016981,"スマホ代（UQモバイル）","通信費",1928,"月額",2026-01-31,"",3,0
+1773670061908,"スマホ代（UQモバイル）2","通信費",4293,"月額",2026-01-31,"",5,0
+1773670183641,"東京海上日動火災保険","保険",3740,"月額",2025-01-08,"",5,0
+1773701810863,"freeeスタンダードコース","仕事・ツール",26134,"年額",2026-03-04,"確定申告",5,0
+1773702532653,"JALゴールドカード","金融・年会費",14300,"年額",2026-03-10,"",4,0
+1773703620120,"楽天ブラックカード","金融・年会費",33000,"年額",2026-01-01,"",5,0
+1773736904570,"Amazon Prime","金融・年会費",5900,"年額",2026-02-09,"",5,0
+1773758454686,"ネット回線（楽天ブロードバンド）","通信費",5280,"月額",2026-02-09,"乗り換え検討",4,0
+1773790365808,"住宅ローン（ジャックス）","その他",62927,"月額",2024-11-25,"122,927円",4,0`;
+
+// カテゴリマッピング（仕様書 Section 3.1 準拠）
+const CAT_MAP = {
+  '動画・配信':       { label:'動画',   icon:'🎬' },
+  '音楽':            { label:'音楽',   icon:'🎵' },
+  '電子書籍・雑誌':   { label:'電子書籍', icon:'📚' },
+  '仕事・ツール':     { label:'仕事',   icon:'💼' },
+  'ゲーム':          { label:'ゲーム', icon:'🎮' },
+  '健康・フィットネス':{ label:'健康',   icon:'💪' },
+  '金融・年会費':     { label:'金融',   icon:'💳' },
+  '習い事':          { label:'習い事', icon:'🎓' },
+  '通信費':          { label:'通信',   icon:'📱' },
+  '保険':            { label:'保険',   icon:'🛡️' },
+  'ローン':          { label:'ローン', icon:'🏦' },
+  'その他':          { label:'その他', icon:'📦' },
+  '趣味':            { label:'趣味',   icon:'🎨' },
+  '宅配':            { label:'宅配',   icon:'📦' },
+  '':               { label:'その他', icon:'📦' },
+};
+
+let importedData   = [];   // パース済みデータ
+let currentFilter  = 'all';
+
+// CSVパース
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.replace(/"/g,'').trim());
+  return lines.slice(1).map(line => {
+    // CSV引用符を考慮したパース
+    const cols = [];
+    let cur = '', inQ = false;
+    for (let c of line) {
+      if (c === '"') { inQ = !inQ; }
+      else if (c === ',' && !inQ) { cols.push(cur); cur = ''; }
+      else cur += c;
+    }
+    cols.push(cur);
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = (cols[i] || '').trim());
+    return obj;
+  }).filter(r => r['サービス名']);
+}
+
+// 月額換算（仕様書 Section 2.2 準拠）
+function toMonthly(row) {
+  const amt  = parseInt(row['料金']) || 0;
+  const freq = row['頻度'] || '月額';
+  switch(freq) {
+    case '月額':          return amt;
+    case '2ヶ月':         return Math.round(amt / 2);
+    case '3ヶ月':         return Math.round(amt / 3);
+    case '6ヶ月':         return Math.round(amt / 6);
+    case '年額':          return Math.round(amt / 12);
+    case '単発（買い切り）': return 0; // 月額に含めない
+    default:              return amt;
+  }
+}
+
+// ファイル選択ハンドラ
+function handleCSVFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => processCSV(e.target.result);
+  reader.readAsText(file, 'UTF-8');
+}
+
+// デモデータ読み込み
+function loadDemoCSV() {
+  processCSV(DEMO_CSV);
+}
+
+function processCSV(text) {
+  importedData = parseCSV(text);
+  document.getElementById('csv-select-area').style.display = 'none';
+  document.getElementById('import-result-area').style.display = 'block';
+  currentFilter = 'all';
+  renderImportSummary();
+  renderImportList('all');
+}
+
+function renderImportSummary() {
+  const total   = importedData.length;
+  const active  = importedData.filter(r => r['休止'] === '0').length;
+  const paused  = total - active;
+  const monthly = importedData
+    .filter(r => r['休止'] === '0')
+    .reduce((s, r) => s + toMonthly(r), 0);
+
+  document.getElementById('import-summary').innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+      <div style="font-size:20px">📱</div>
+      <div style="font-size:13px;font-weight:500;color:#8a6010">
+        subly Me から ${total}件を読み込みました
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;font-size:12px">
+      <span style="color:var(--green)">✓ アクティブ ${active}件</span>
+      <span style="color:var(--dim)">⏸ 休止中 ${paused}件</span>
+      <span style="color:var(--accent);font-weight:600">月額換算 ¥${monthly.toLocaleString()}</span>
+    </div>
+  `;
+}
+
+function renderImportList(filter) {
+  currentFilter = filter;
+  const list = document.getElementById('import-list');
+  let rows = importedData;
+  if (filter === 'active') rows = rows.filter(r => r['休止'] === '0');
+  if (filter === 'paused') rows = rows.filter(r => r['休止'] === '1');
+
+  if (!rows.length) {
+    list.innerHTML = '<div style="padding:20px;text-align:center;color:var(--dim);font-size:13px">該当なし</div>';
+    return;
+  }
+
+  list.innerHTML = rows.map((row, i) => {
+    const isPaused  = row['休止'] === '1';
+    const cat       = CAT_MAP[row['カテゴリ']] || CAT_MAP[''];
+    const monthly   = toMonthly(row);
+    const isYearly  = ['年額','2ヶ月','3ヶ月','6ヶ月'].includes(row['頻度']);
+    const freqLabel = row['頻度'] !== '月額' ? row['頻度'] : '';
+    const isBuyout  = row['頻度'] === '単発（買い切り）';
+    const memo      = row['メモ'] ? `<span style="color:var(--dim)">💬 ${row['メモ']}</span>` : '';
+    const last      = i === rows.length - 1 ? 'border-bottom:none' : '';
+    const checked   = isPaused ? '' : 'checked';
+
+    return `
+    <div class="import-row ${isPaused ? 'paused' : ''}" data-id="${row['ID']}" style="${last}">
+      <input type="checkbox" ${checked} onchange="toggleRow(this)" title="${isPaused ? '休止中（チェックでインポートに含める）' : 'チェックを外すと除外'}">
+      <div style="font-size:18px;flex-shrink:0">${cat.icon}</div>
+      <div style="flex:1;min-width:0">
+        <div class="si-name" style="display:flex;align-items:center;gap:4px">
+          ${row['サービス名']}
+          ${isPaused ? '<span class="paused-badge">休止中</span>' : ''}
+          ${isBuyout ? '<span class="paused-badge" style="background:#e8f0ed;color:#3a6b60">買い切り</span>' : ''}
+          ${isYearly && !isBuyout ? `<span class="paused-badge" style="background:var(--acl);color:var(--accent)">${freqLabel}</span>` : ''}
+        </div>
+        <div class="si-meta">
+          ¥${monthly > 0 ? monthly.toLocaleString() + '/月' : '買い切り ¥' + parseInt(row['料金']).toLocaleString()} · ${cat.label}
+          ${memo}
+        </div>
+      </div>
+      <div class="owner-select" onclick="cycleOwner(this)">
+        <div class="owner-chip" data-idx="0">👨 パパ</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterImport(type, btn) {
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderImportList(type);
+}
+
+function toggleRow(checkbox) {
+  const row = checkbox.closest('.import-row');
+  if (checkbox.checked) {
+    row.classList.remove('paused');
+    row.querySelector('.si-name').style.textDecoration = '';
+  } else {
+    row.classList.add('paused');
+  }
+}
+
+function uncheckPaused() {
+  document.querySelectorAll('.import-row.paused input[type=checkbox]').forEach(cb => {
+    cb.checked = false;
+  });
+  toast('休止中をすべて除外しました');
+}
+
+function resetImport() {
+  importedData = [];
+  document.getElementById('csv-select-area').style.display = 'block';
+  document.getElementById('import-result-area').style.display = 'none';
+  document.getElementById('csv-file-input').value = '';
+}
+
+// ── インポート実行 ──
+function doImport() {
+  const checked = document.querySelectorAll('#import-list input[type=checkbox]:checked');
+  const total   = checked.length;
+  const counts  = {0:0,1:0,2:0,3:0};
+  checked.forEach(cb => {
+    const chip = cb.closest('.import-row').querySelector('.owner-chip');
+    if (chip) counts[chip.dataset.idx] = (counts[chip.dataset.idx]||0) + 1;
+  });
+  const summary = Object.entries(counts)
+    .filter(([,v]) => v > 0)
+    .map(([k,v]) => `${OWNERS[k].label} ${v}件`)
+    .join(' · ');
+  toast(`✓ ${total}件をインポートしました！ ${summary}`);
+  setTimeout(() => goTo('home'), 900);
+}
+
+// ── オーナー切り替え（既存） ──
+const OWNERS = [
+  { idx:0, label:'👨 パパ' },
+  { idx:1, label:'👩 ママ' },
+  { idx:2, label:'🧒 子供' },
+  { idx:3, label:'👨‍👩‍👧 共有' },
+];
+
+function cycleOwner(selectEl) {
+  const chip = selectEl.querySelector('.owner-chip');
+  const next = (parseInt(chip.dataset.idx) + 1) % OWNERS.length;
+  chip.dataset.idx = next;
+  chip.textContent = OWNERS[next].label;
+}
+
+function setAllOwner(idx) {
+  document.querySelectorAll('#import-list .owner-chip').forEach(chip => {
+    chip.dataset.idx = idx;
+    chip.textContent = OWNERS[idx].label;
+  });
+}
+
+function resetOwners() {
+  document.querySelectorAll('#import-list .owner-chip').forEach(chip => {
+    chip.dataset.idx = 0;
+    chip.textContent = OWNERS[0].label;
+  });
+}
+
+function openAddModal(screen) {
+  document.getElementById('add-modal-' + screen).classList.add('show');
+}
+function closeAddModal(screen) {
+  document.getElementById('add-modal-' + screen).classList.remove('show');
+}
+function saveAndClose(screen) {
+  closeAddModal(screen);
+  toast('サブスクを追加しました ✓');
+}
+
+let _tt;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.display = 'block';
+  clearTimeout(_tt);
+  _tt = setTimeout(() => el.style.display = 'none', 2400);
+}
+</script>
+</body>
+</html>
