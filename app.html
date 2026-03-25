@@ -717,12 +717,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <div><div class="hd-lbl">CSVインポート</div><div class="hd-sub">機種変更後のデータ引き継ぎ</div></div>
     </button>
 
-    <!-- 節約のヒント -->
-    <div class="hd-sec">節約のヒント</div>
-    <button class="hd-row" onclick="closeHdrop();setTimeout(openSavingHints,150)">
-      <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
-      <div><div class="hd-lbl">節約のヒント一覧</div><div class="hd-sub">解約引き留めキャンペーン情報</div></div>
-    </button>
 
     <!-- 設定 -->
     <div class="hd-sec">設定</div>
@@ -733,13 +727,9 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
     <!-- ヘルプ -->
     <div class="hd-sec">ヘルプ</div>
-    <button class="hd-row" onclick="closeHdrop();setTimeout(openGuide,150)">
-      <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg></div>
-      <div><div class="hd-lbl">機種変更ガイド</div><div class="hd-sub">引き継ぎ方法を確認</div></div>
-    </button>
     <button class="hd-row" onclick="closeHdrop();setTimeout(showOnboarding,150)">
       <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg></div>
-      <div><div class="hd-lbl">使い方を見る</div><div class="hd-sub">Sublyの基本的な使い方</div></div>
+      <div><div class="hd-lbl">使い方を見る</div><div class="hd-sub">sublyの基本的な使い方</div></div>
     </button>
 
     <!-- 友達に紹介 -->
@@ -870,11 +860,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
     <div class="s-sec">ヘルプ</div>
     <div class="s-grp">
-      <div class="s-row" onclick="openGuide()">
-        <div class="s-ico" style="background:#EEF2FF"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg></div>
-        <div class="s-body"><div class="s-title">機種変更ガイド</div><div class="s-sub">データの引き継ぎ方法を確認</div></div>
-        <span class="s-arr">›</span>
-      </div>
       <div class="s-row" onclick="showOnboarding()">
         <div class="s-ico" style="background:#F0FDF4"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg></div>
         <div class="s-body"><div class="s-title">使い方を見る</div><div class="s-sub">Sublyの基本的な使い方</div></div>
@@ -1021,47 +1006,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <div style="font-weight:700;margin-bottom:6px;color:var(--p)">8. プライバシーポリシーの変更</div>
         <p style="margin:0;color:var(--ts)">当方は、法令の変更や本アプリの機能追加等に伴い、必要に応じて本プライバシーポリシーを変更することがあります。変更後のプライバシーポリシーは、本ページに掲示された時点から効力を生じるものとします。</p>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- 機種変更ガイド -->
-<div class="overlay hidden" id="guide-ov" onclick="if(event.target===this)closeGuide()">
-  <div class="sheet">
-    <div class="sheet-hdr">
-      <span class="sheet-ttl"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg> 機種変更ガイド</span>
-      <button class="sheet-close" onclick="closeGuide()">✕</button>
-    </div>
-    <div class="guide-body">
-      <div class="guide-note" style="margin-bottom:20px">
-        <strong>Sublyのデータはお使いの端末に保存されています。</strong><br>
-        機種変更の前にCSVエクスポートでバックアップを取り、新しい端末でインポートしてください。
-      </div>
-      <p style="font-size:13px;font-weight:700;margin-bottom:14px"><svg width="14" height="14" viewBox="0 0 24 24" fill="#5C8E84"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg> 機種変更の手順</p>
-      <div class="guide-step">
-        <div class="guide-num">1</div>
-        <div><h4>旧端末でCSVエクスポート</h4><p>設定 → CSVエクスポートをタップして保存。ファイルはメール等で転送してください。</p></div>
-      </div>
-      <div class="guide-step">
-        <div class="guide-num">2</div>
-        <div><h4>新端末でsublyを開く</h4><p>新しい端末のブラウザで同じHTMLファイルを開きます。</p></div>
-      </div>
-      <div class="guide-step">
-        <div class="guide-num">3</div>
-        <div><h4>CSVインポート</h4><p>設定 → CSVインポートをタップして保存したCSVファイルを選択。</p></div>
-      </div>
-      <div class="guide-step">
-        <div class="guide-num">4</div>
-        <div><h4>データを確認</h4><p>ホームやカレンダーでデータが正しく読み込まれているか確認してください。</p></div>
-      </div>
-      <div class="guide-note">
-        <strong><svg width="14" height="14" viewBox="0 0 24 24" fill="#5C8E84"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg> ホーム画面に追加する方法：</strong><br>
-        iPhoneはSafariで開き「共有 → ホーム画面に追加」。<br>
-        Androidはメニューから「ホーム画面に追加」。
-      </div>
-    </div>
-    <div style="padding:0 16px 20px">
-      <button class="btn-submit" onclick="closeGuide();setTimeout(importCSVPicker,150)"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg> 今すぐインポート</button>
     </div>
   </div>
 </div>
@@ -2587,7 +2531,7 @@ function openSettings(){
   if (upgradeBtn) upgradeBtn.style.display = isPaidPlan() ? 'none' : 'block';
 }
 function closeSettings(){document.getElementById('settings-ov').classList.add('hidden')}
-function openGuide(){document.getElementById('guide-ov').classList.remove('hidden');setTimeout(()=>{document.getElementById('privacy-ov').classList.remove('hidden');},200)}
+
 function closePrivacy(){document.getElementById('privacy-ov').classList.add('hidden')}
 
 // ── シェア機能 ──────────────────────────────────────────
