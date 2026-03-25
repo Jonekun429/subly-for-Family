@@ -2552,6 +2552,7 @@ function openSettings(){
 }
 function closeSettings(){document.getElementById('settings-ov').classList.add('hidden')}
 
+function openPrivacy(){closeSettings();setTimeout(()=>{document.getElementById('privacy-ov').classList.remove('hidden');},200)}
 function closePrivacy(){document.getElementById('privacy-ov').classList.add('hidden')}
 
 // ── シェア機能 ──────────────────────────────────────────
@@ -4096,7 +4097,9 @@ function parseCSVLine(line){
    初期化（非同期：Capacitor Preferences対応）
 ============================================================ */
 async function init(){
+  console.log('[init] 開始');
   await loadFamilyData(); // Family追加
+  console.log('[init] loadFamilyData完了');
 
   // ── プランをロード（index.htmlからの遷移を優先） ──
   const planFromLogin = localStorage.getItem('currentPlan');
@@ -4170,10 +4173,13 @@ async function init(){
   }
 
   applyPlanUI(); // プランUIを適用
+  console.log('[init] applyPlanUI完了');
   if(!onboarded) showOnboarding();
   goto('dashboard');
+  console.log('[init] goto dashboard完了');
   updateFilterCounts();
   checkInviteParam(); // 招待パラメータを検出
+  console.log('[init] 完了');
 
   // ── リピーター追跡：起動回数・登録件数をユーザープロパティにセット ──
   const openCountRaw = await Store.get('appOpenCount');
