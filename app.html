@@ -21,10 +21,8 @@
   <meta name="theme-color" content="#5C8E84">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Subly">
+<meta name="apple-mobile-web-app-title" content="subly">
 <meta name="mobile-web-app-capable" content="yes">
-
-
 
 
 <style>
@@ -51,93 +49,6 @@
   --shl:  0 6px 20px rgba(0,0,0,.10);
 }
 
-/* ── オーシャン ── */
-.theme-ocean {
-  --p:    #4A90D0;
-  --pd:   #2A6BAA;
-  --pl:   #E8F0FA;
-  --bg:   #F0F5FA;
-  --card: #FFFFFF;
-  --tx:   #1E3350;
-  --ts:   #5A7A9A;
-  --bd:   #D0DDE8;
-  --dn:   #D06070;
-  --wbg:  #FDF8EE;
-  --wtx:  #8A7030;
-  --sh:   0 2px 10px rgba(0,40,80,.06);
-  --shl:  0 6px 20px rgba(0,40,80,.12);
-}
-
-/* ── パステル ── */
-.theme-pastel {
-  --p:    #E8A0BF;
-  --pd:   #D4789E;
-  --pl:   #FFF0F5;
-  --bg:   #F8F4F9;
-  --card: rgba(255,255,255,.85);
-  --tx:   #4A3B5C;
-  --ts:   #8A7A9A;
-  --bd:   #E8DDF0;
-  --dn:   #E08080;
-  --wbg:  #FFF8EE;
-  --wtx:  #B8864A;
-  --sh:   0 2px 10px rgba(180,140,200,.10);
-  --shl:  0 6px 20px rgba(180,140,200,.18);
-}
-.theme-pastel body {
-  background: linear-gradient(180deg,#F0E8F5,#E8F0FA,#F5EDF0,#F8F4F9) fixed;
-}
-
-/* ── ダーク ── */
-.theme-dark {
-  --p:    #6BA99F;
-  --pd:   #8EC8BE;
-  --pl:   #1E3230;
-  --bg:   #121816;
-  --card: #1E2622;
-  --tx:   #C8D8D2;
-  --ts:   #7A9A91;
-  --bd:   #2E3E3A;
-  --dn:   #D08080;
-  --wbg:  #2A2218;
-  --wtx:  #C89A60;
-  --sh:   0 2px 10px rgba(0,0,0,.20);
-  --shl:  0 6px 20px rgba(0,0,0,.40);
-}
-
-/* ── ナイト ── */
-.theme-night {
-  --p:    #5B8DEF;
-  --pd:   #8AB4FF;
-  --pl:   #1A2040;
-  --bg:   #0E1525;
-  --card: #161D30;
-  --tx:   #C8D4E8;
-  --ts:   #6880A8;
-  --bd:   #243050;
-  --dn:   #E07070;
-  --wbg:  #2A2218;
-  --wtx:  #D4A860;
-  --sh:   0 2px 10px rgba(0,0,30,.30);
-  --shl:  0 6px 20px rgba(0,0,30,.50);
-}
-
-/* ── パープル ── */
-.theme-purple {
-  --p:    #A78BFA;
-  --pd:   #C4B5FD;
-  --pl:   #1E1830;
-  --bg:   #120E1E;
-  --card: #1C1630;
-  --tx:   #D4CCE8;
-  --ts:   #7A6A9A;
-  --bd:   #2E2445;
-  --dn:   #D4A0D4;
-  --wbg:  #2A1828;
-  --wtx:  #C8A0D4;
-  --sh:   0 2px 10px rgba(20,0,40,.30);
-  --shl:  0 6px 20px rgba(20,0,40,.50);
-}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased;
   /* ナビ高さ + safe-area + 余白 */
@@ -522,13 +433,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .th-btn{padding:5px 10px;border-radius:8px;font-size:13px;font-weight:700;font-family:inherit;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
 .th-btn.on{background:var(--p);color:#fff;border-color:var(--p)}
 /* テーマ選択ボタン（プレビュー丸付き） */
-.hd-theme-btn,.s-theme-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 4px;border-radius:10px;border:1.5px solid transparent;background:rgba(255,255,255,.08);cursor:pointer;font-family:inherit;transition:all .15s;-webkit-tap-highlight-color:transparent}
-.hd-theme-btn span{font-size:11px;font-weight:600;color:rgba(255,255,255,.7);line-height:1}
-.s-theme-btn span{font-size:11px;font-weight:600;color:var(--ts);line-height:1}
-.hd-theme-btn.on{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.18)}
-.s-theme-btn.on{border-color:var(--p);background:var(--pl)}
-.s-theme-btn.on span{color:var(--p)}
-.hd-theme-dot,.s-theme-dot{width:32px;height:32px;border-radius:50%;flex-shrink:0}
 
 /* ── ガイドシート ── */
 .guide-body{padding:18px}
@@ -568,59 +472,16 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 @media(min-width:768px){.nb-settings{display:flex;margin-top:auto!important;border-top:1px solid var(--bd);padding-top:12px!important}}
 
 /* ── 登録促進ポップアップ ── */
-.nudge-ov{position:fixed;inset:0;z-index:9400;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .18s ease}
-.nudge-ov.hidden{display:none}
-.nudge{background:var(--card);border-radius:18px;padding:0;max-width:360px;width:100%;box-shadow:0 12px 40px rgba(0,0,0,.18);animation:fadeUp .22s ease;overflow:hidden}
-.nudge-hdr{background:linear-gradient(135deg,var(--p),var(--pd));padding:18px 20px 14px;position:relative}
-.nudge-hdr-ttl{font-size:16px;font-weight:800;color:#fff;line-height:1.4}
-.nudge-hdr-sub{font-size:12px;color:rgba(255,255,255,.7);margin-top:4px}
-.nudge-close{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff}
-.nudge-body{padding:16px 20px 20px}
-.nudge-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--bd);border-radius:12px;margin-bottom:8px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
-.nudge-item:last-child{margin-bottom:0}
-.nudge-item:hover{border-color:var(--p);background:var(--pl)}
-.nudge-item:active{transform:scale(.97)}
-.nudge-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.nudge-lbl{flex:1}
-.nudge-name{font-size:14px;font-weight:700;color:var(--tx)}
-.nudge-hint{font-size:11px;color:var(--ts);margin-top:2px}
-.nudge-arr{color:var(--p);font-size:16px;font-weight:700}
-.nudge-footer{padding:0 20px 16px;text-align:center}
-.nudge-skip{background:none;border:none;font-size:13px;color:var(--ts);cursor:pointer;font-family:inherit;padding:8px 16px}
+
 
 </style>
-
-
-
 
 
 <!-- ============================================================
      Google Analytics 4
      測定ID: G-8YLL4H8GYL  / ストリーム: GitHub Pages (subly)
 ============================================================ -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-8YLL4H8GYL"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){ dataLayer.push(arguments); }
-  gtag('js', new Date());
 
-  // ページビュー計測（セッション・デバイス種別・滞在時間はGAが自動取得）
-  gtag('config', 'G-8YLL4H8GYL', {
-    page_title: document.title,
-    send_page_view: false,  // SPAのため手動でpage_viewを送信
-    debug_mode: false
-  });
-
-  /**
-   * GAカスタムイベント送信ヘルパー
-   * @param {string} eventName  - GAイベント名（snake_case推奨）
-   * @param {Object} params     - 追加パラメータ
-   */
-  function gaEvent(eventName, params) {
-    if (typeof gtag !== 'function') return;
-    gtag('event', eventName, params || {});
-  }
-</script>
 <!-- ══ Firebase SDK ══ -->
 <!-- ★ 実装時にconfigの値を差し替えてください ★ -->
 <script type="module">
@@ -826,7 +687,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         </svg>
       </div>
       <div>
-        <div class="hdrop-app-name">Subly</div>
+        <div class="hdrop-app-name">subly</div>
         <div class="hdrop-app-sub">サブスク管理アプリ</div>
       </div>
     </div>
@@ -837,6 +698,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <div style="flex:1;min-width:0">
         <div id="drawer-user-name" style="font-size:14px;font-weight:700;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">---</div>
         <div id="drawer-user-email" style="font-size:11px;color:rgba(255,255,255,.6);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">---</div>
+        <!-- プランバッジ -->
+        <div id="drawer-plan-badge" style="display:inline-block;margin-top:4px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;background:rgba(255,255,255,.2);color:#fff">Free</div>
       </div>
       <button onclick="closeHdrop();setTimeout(()=>{showDialog({icon:'🚪',title:'ログアウト',msg:'ログアウトしますか？',buttons:[{label:'キャンセル',cls:'cancel'},{label:'ログアウト',cls:'danger',onClick:()=>firebaseSignOut()}]})},150)" style="font-size:11px;background:rgba(255,255,255,.15);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:5px 10px;cursor:pointer;font-family:inherit;flex-shrink:0">
         ログアウト
@@ -867,35 +730,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg></div>
       <div><div class="hd-lbl">更新日通知</div><div class="hd-sub" id="hd-notify-sub">タップして設定</div></div>
     </button>
-        <div style="padding:12px 20px">
-      <div class="hd-lbl" style="margin-bottom:10px">テーマ</div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px" id="hd-theme-grid">
-        <button class="hd-theme-btn" onclick="setTheme('light')"   id="hd-th-light"  data-theme="light">
-          <div class="hd-theme-dot" style="background:#F5F5F0;border:2px solid #5C8E84"></div>
-          <span>ライト</span>
-        </button>
-        <button class="hd-theme-btn" onclick="setTheme('ocean')"   id="hd-th-ocean"  data-theme="ocean">
-          <div class="hd-theme-dot" style="background:#F0F5FA;border:2px solid #4A90D0"></div>
-          <span>オーシャン</span>
-        </button>
-        <button class="hd-theme-btn" onclick="setTheme('pastel')"  id="hd-th-pastel" data-theme="pastel">
-          <div class="hd-theme-dot" style="background:linear-gradient(135deg,#F5E6F0,#E8F0FA,#FFF0F5);border:2px solid #E8A0BF"></div>
-          <span>パステル</span>
-        </button>
-        <button class="hd-theme-btn" onclick="setTheme('dark')"    id="hd-th-dark"   data-theme="dark">
-          <div class="hd-theme-dot" style="background:#121816;border:2px solid #6BA99F"></div>
-          <span>ダーク</span>
-        </button>
-        <button class="hd-theme-btn" onclick="setTheme('night')"   id="hd-th-night"  data-theme="night">
-          <div class="hd-theme-dot" style="background:#0E1525;border:2px solid #5B8DEF"></div>
-          <span>ナイト</span>
-        </button>
-        <button class="hd-theme-btn" onclick="setTheme('purple')"  id="hd-th-purple" data-theme="purple">
-          <div class="hd-theme-dot" style="background:#1A0E2E;border:2px solid #A78BFA"></div>
-          <span>パープル</span>
-        </button>
-      </div>
-    </div>
 
     <!-- ヘルプ -->
     <div class="hd-sec">ヘルプ</div>
@@ -948,7 +782,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
 <!-- ナビ -->
 <nav class="bnav">
-  <div class="sidebar-logo">Subly</div>
+  <div class="sidebar-logo">subly</div>
   <button class="nb on" id="nb-dashboard" onclick="goto('dashboard')">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L2 12h3v8h5v-5h4v5h5v-8h3L12 3z"/></svg>ホーム
   </button>
@@ -1021,41 +855,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
     </div>
 
-    <div class="s-sec">外観</div>
-    <div class="s-grp">
-      <div style="padding:14px 16px">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-          <div class="s-ico" style="background:#F0F0F8;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M10 2c-1.82 0-3.53.5-5 1.35C7.99 5.08 10 8.3 10 12s-2.01 6.92-5 8.65C6.47 21.5 8.18 22 10 22c5.52 0 10-4.48 10-10S15.52 2 10 2z"/></svg></div>
-          <div class="s-title">テーマ</div>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
-          <button class="s-theme-btn" onclick="setTheme('light')"  id="th-light"  data-theme="light">
-            <div class="s-theme-dot" style="background:#F5F5F0;border:2.5px solid #5C8E84"></div>
-            <span>ライト</span>
-          </button>
-          <button class="s-theme-btn" onclick="setTheme('ocean')"  id="th-ocean"  data-theme="ocean">
-            <div class="s-theme-dot" style="background:#F0F5FA;border:2.5px solid #4A90D0"></div>
-            <span>オーシャン</span>
-          </button>
-          <button class="s-theme-btn" onclick="setTheme('pastel')" id="th-pastel" data-theme="pastel">
-            <div class="s-theme-dot" style="background:linear-gradient(135deg,#F5E6F0,#E8F0FA,#FFF0F5);border:2.5px solid #E8A0BF"></div>
-            <span>パステル</span>
-          </button>
-          <button class="s-theme-btn" onclick="setTheme('dark')"   id="th-dark"   data-theme="dark">
-            <div class="s-theme-dot" style="background:#121816;border:2.5px solid #6BA99F"></div>
-            <span>ダーク</span>
-          </button>
-          <button class="s-theme-btn" onclick="setTheme('night')"  id="th-night"  data-theme="night">
-            <div class="s-theme-dot" style="background:#0E1525;border:2.5px solid #5B8DEF"></div>
-            <span>ナイト</span>
-          </button>
-          <button class="s-theme-btn" onclick="setTheme('purple')" id="th-purple" data-theme="purple">
-            <div class="s-theme-dot" style="background:#1A0E2E;border:2.5px solid #A78BFA"></div>
-            <span>パープル</span>
-          </button>
-        </div>
-      </div>
-    </div>
     <div class="s-sec">データ管理</div>
     <div class="s-grp">
       <div class="s-row" onclick="exportCSV()">
@@ -1109,22 +908,12 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
     <div id="settings-body" style="padding:0 18px 14px;display:none"></div>
     <div id="settings-static">
-    <div style="padding:4px 18px 22px;text-align:center;font-size:12px;color:var(--ts)">Subly v1.0</div>
+    <div style="padding:4px 18px 22px;text-align:center;font-size:12px;color:var(--ts)">subly v1.0</div>
     </div>
   </div>
 </div>
 
 <!-- 節約のヒントシート -->
-<div class="overlay hidden" id="saving-hints-ov" onclick="if(event.target===this)closeSavingHints()">
-  <div class="sheet">
-    <div class="sheet-hdr">
-      <span class="sheet-ttl">💰 節約のヒント</span>
-      <button class="sheet-close" onclick="closeSavingHints()">✕</button>
-    </div>
-    <div id="saving-hints-body" style="padding:16px 18px 24px"></div>
-  </div>
-</div>
-
 <!-- シェアシート -->
 <div class="overlay hidden" id="share-ov" onclick="if(event.target===this)closeShare()">
   <div class="sheet">
@@ -1179,7 +968,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
     <div style="padding:18px;font-size:13px;color:var(--tx);line-height:1.8">
       <p style="margin:0 0 4px;color:var(--ts);font-size:13px">制定日：2026年4月1日　最終更新日：2026年4月1日</p>
-      <p style="margin:0 0 18px;color:var(--ts);font-size:13px">本アプリケーション「Subly」における情報の取り扱いについて、Jone Lab（以下、「当方」といいます）は以下の通りプライバシーポリシーを定めます。</p>
+      <p style="margin:0 0 18px;color:var(--ts);font-size:13px">本アプリケーション「subly」における情報の取り扱いについて、Jone Lab（以下、「当方」といいます）は以下の通りプライバシーポリシーを定めます。</p>
 
       <div style="margin-bottom:18px">
         <div style="font-weight:700;margin-bottom:6px;color:var(--p)">1. 取得する情報および利用目的</div>
@@ -1255,7 +1044,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
       <div class="guide-step">
         <div class="guide-num">2</div>
-        <div><h4>新端末でSublyを開く</h4><p>新しい端末のブラウザで同じHTMLファイルを開きます。</p></div>
+        <div><h4>新端末でsublyを開く</h4><p>新しい端末のブラウザで同じHTMLファイルを開きます。</p></div>
       </div>
       <div class="guide-step">
         <div class="guide-num">3</div>
@@ -1409,7 +1198,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
   <!-- ボタン -->
   <div class="ob-footer">
-    <button class="ob-btn-skip" id="ob-skip" onclick="gaEvent('onboarding_skip',{});_obRoute='skip';closeOb();goto('dashboard')">スキップ</button>
+    <button class="ob-btn-skip" id="ob-skip" onclick="_obRoute='skip';closeOb();goto('dashboard')">スキップ</button>
     <button class="ob-btn-next" id="ob-next" onclick="obNext()">次へ</button>
   </div>
 
@@ -1418,61 +1207,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 <!-- メインコンテンツ -->
 
 <!-- 登録促進ポップアップ -->
-<div class="nudge-ov hidden" id="nudge-ov" onclick="if(event.target===this)closeNudge()">
-  <div class="nudge">
-    <div class="nudge-hdr">
-      <button class="nudge-close" onclick="closeNudge()">✕</button>
-      <div class="nudge-hdr-ttl">こちらは入れましたか？</div>
-      <div class="nudge-hdr-sub">サブスクと思ってなくても、毎月払っている固定費です</div>
-    </div>
-    <div class="nudge-body">
-      <div class="nudge-item" onclick="nudgeTap('スマホ代','通信費')">
-        <div class="nudge-ico" style="background:#2980B922">📱</div>
-        <div class="nudge-lbl">
-          <div class="nudge-name">スマホ代</div>
-          <div class="nudge-hint">ドコモ・au・ソフトバンク・格安SIMなど</div>
-        </div>
-        <span class="nudge-arr">›</span>
-      </div>
-      <div class="nudge-item" onclick="nudgeTap('ネット回線','通信費')">
-        <div class="nudge-ico" style="background:#4A7EC822">🌐</div>
-        <div class="nudge-lbl">
-          <div class="nudge-name">ネット回線</div>
-          <div class="nudge-hint">光回線・Wi-Fiなど</div>
-        </div>
-        <span class="nudge-arr">›</span>
-      </div>
-      <div class="nudge-item" onclick="nudgeTap('家賃','その他')">
-        <div class="nudge-ico" style="background:#E9A40022">🏠</div>
-        <div class="nudge-lbl">
-          <div class="nudge-name">家賃</div>
-          <div class="nudge-hint">毎月の家賃・管理費</div>
-        </div>
-        <span class="nudge-arr">›</span>
-      </div>
-      <div class="nudge-item" onclick="nudgeTap('住宅ローン','ローン')">
-        <div class="nudge-ico" style="background:#C0392B22">🏡</div>
-        <div class="nudge-lbl">
-          <div class="nudge-name">住宅ローン</div>
-          <div class="nudge-hint">月々の返済額</div>
-        </div>
-        <span class="nudge-arr">›</span>
-      </div>
-      <div class="nudge-item" onclick="nudgeTap('車のローン','ローン')">
-        <div class="nudge-ico" style="background:#8E44AD22">🚗</div>
-        <div class="nudge-lbl">
-          <div class="nudge-name">車のローン</div>
-          <div class="nudge-hint">カーローン・リース代</div>
-        </div>
-        <span class="nudge-arr">›</span>
-      </div>
-    </div>
-    <div class="nudge-footer">
-      <button class="nudge-skip" onclick="closeNudge()">あとで確認する</button>
-    </div>
-  </div>
-</div>
-
 <div class="wrap">
 
   <!-- ① ホーム -->
@@ -1914,9 +1648,6 @@ async function setPlan(plan) {
 }
 
 function applyPlanUI() {
-  // ── ナビのFamilyタブ表示制御 ──
-  // 家族エリア・メンバーフィルターはisFamilyPlan()で制御
-
   // ── アップグレードバナー（ホーム） ──
   const banner = document.getElementById('plan-upgrade-banner');
   if (banner) banner.style.display = isPaidPlan() ? 'none' : 'flex';
@@ -1929,13 +1660,44 @@ function applyPlanUI() {
     badge.style.color = isPaidPlan() ? '#2C7A5E' : '#666';
   }
 
-  // ── 家族エリアの表示 ──
+  // ── ドロワーのプランバッジ ──
+  const drawerBadge = document.getElementById('drawer-plan-badge');
+  if (drawerBadge) {
+    drawerBadge.textContent = PLAN_LABELS[currentPlan] || 'Free';
+    drawerBadge.style.background = isFamilyPlan()
+      ? 'rgba(100,220,160,.35)' : isPaidPlan()
+      ? 'rgba(255,255,255,.25)' : 'rgba(255,255,255,.15)';
+  }
+
+  // ── ドロワーのユーザー情報（localStorageから） ──
+  const userName  = localStorage.getItem('userName');
+  const userEmail = localStorage.getItem('userEmail');
+  const userPhoto = localStorage.getItem('userPhoto');
+  if (userName) {
+    const nameEl  = document.getElementById('drawer-user-name');
+    const emailEl = document.getElementById('drawer-user-email');
+    const iconEl  = document.getElementById('drawer-user-icon');
+    if (nameEl)  nameEl.textContent  = userName;
+    if (emailEl) emailEl.textContent = userEmail || '';
+    if (iconEl && userPhoto) {
+      iconEl.innerHTML = `<img src="${userPhoto}" style="width:36px;height:36px;border-radius:50%;object-fit:cover" onerror="this.style.display='none'">`;
+    }
+  }
+
+  // ── 家族エリアの表示（Familyのみ） ──
   const familyArea = document.getElementById('family-area');
   if (familyArea) familyArea.style.display = isFamilyPlan() ? 'block' : 'none';
 
-  // ── メンバーフィルタータブの表示 ──
+  // ── メンバーフィルタータブ（Familyのみ） ──
   const memberTabs = document.getElementById('member-filter-tabs');
   if (memberTabs) memberTabs.style.display = isFamilyPlan() ? 'block' : 'none';
+
+  // ── サマリーカードのメンバー内訳（Familyのみ） ──
+  const summaryCard = document.getElementById('list-summary-card');
+  if (summaryCard) {
+    const mbSection = document.getElementById('ls-member-breakdown');
+    if (mbSection) mbSection.closest('div[style*="rgba"]') && (mbSection.style.display = isFamilyPlan() ? 'flex' : 'none');
+  }
 }
 
 // ══ Family追加データ ══
@@ -2342,7 +2104,6 @@ function findCampaign(name) {
  * @param {string} serviceName - 実際のサービス名
  */
 function showSavingHint(campaign, serviceName) {
-  gaEvent('saving_hint_view', { service_name: serviceName, campaign_name: campaign.name });
   showDialog({
     icon: '💰',
     title: `${serviceName} を安くできるかも`,
@@ -2381,7 +2142,6 @@ function goto(page, filterCat=null){
 
   // GA: 仮想ページビュー（SPAのためpage_viewを手動送信）
   const pageNames = { dashboard:'ホーム', add:'追加', list:'明細', calendar:'カレンダー' };
-  gaEvent('page_view', { page_title: pageNames[page] || page, filter_category: filterCat || 'none' });
 
   if(page==='dashboard') renderDashboard();
   else if(page==='list'){
@@ -2440,7 +2200,6 @@ const NOTIFY_TIMINGS = [
 
 // 通知設定を開く
 async function openNotifySettings(){
-  gaEvent('notify_settings_open', {});
   const raw = await Store.get('notifyConfig2');
   const cfg = raw ? JSON.parse(raw) : { enabled: false, timings: [1, 3], hour: 9 };
 
@@ -2506,7 +2265,6 @@ async function _saveNotifyConfig2(){
 
   const cfg = { enabled, timings, hour };
   await Store.set('notifyConfig2', JSON.stringify(cfg));
-  gaEvent('notify_settings_saved', { enabled, timings: timings.join(','), hour });
 
   // ドロワーのサブテキスト更新
   const lbl = document.getElementById('hd-notify-sub');
@@ -2550,7 +2308,7 @@ async function _scheduleUpdateNotifications(cfg){
 
       const perm = await LN.requestPermissions();
       if(perm.display !== 'granted'){
-        showAlert('','通知を許可してください','設定アプリ → Subly → 通知をオンにしてください');
+        showAlert('','通知を許可してください','設定アプリ → subly → 通知をオンにしてください');
         return;
       }
 
@@ -2721,7 +2479,6 @@ function toggleHdrop(e){
   if(isOpen){ closeHdrop(); }
   else {
     drop.classList.add('open'); bg.classList.add('open');
-    gaEvent('drawer_open', {});
   }
 }
 function closeHdrop(){
@@ -2808,63 +2565,6 @@ function closeHdrop(){
 })();
 // 旧設定シート（PCサイドバーの設定ボタン用に残す）
 
-function openSavingHints(){
-  const body = document.getElementById('saving-hints-body');
-  body.innerHTML = '';
-
-  // 登録済みサブスクのうちキャンペーン対象
-  const matched = subs.filter(s => findCampaign(s.name));
-  if(matched.length){
-    const sec = document.createElement('div');
-    const lbl = document.createElement('div');
-    lbl.style.cssText = 'font-size:11px;font-weight:700;color:var(--ts);letter-spacing:1px;text-transform:uppercase;margin:0 0 10px';
-    lbl.textContent = '登録済みの対象サービス';
-    sec.appendChild(lbl);
-    matched.forEach((s, idx) => {
-      const c = findCampaign(s.name);
-      const row = document.createElement('div');
-      row.style.cssText = `display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:${idx<matched.length-1?'1px solid var(--bd)':'none'};gap:10px`;
-      row.innerHTML = `
-        <div style="flex:1;min-width:0">
-          <div style="font-size:14px;font-weight:700;color:var(--tx)">${s.name}</div>
-          <div style="font-size:12px;color:var(--p);font-weight:700;margin-top:2px">${c.discount}</div>
-        </div>
-        <button onclick="showSavingHint(findCampaign('${s.name.replace(/'/g,"\'")}'),'${s.name.replace(/'/g,"\'")}');event.stopPropagation()"
-          style="flex-shrink:0;background:var(--p);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer">
-          詳しく見る
-        </button>`;
-      sec.appendChild(row);
-    });
-    body.appendChild(sec);
-  }
-
-  // 全キャンペーン一覧
-  const allSec = document.createElement('div');
-  allSec.style.marginTop = matched.length ? '20px' : '0';
-  const lbl2 = document.createElement('div');
-  lbl2.style.cssText = 'font-size:11px;font-weight:700;color:var(--ts);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px';
-  lbl2.textContent = `対象サービス一覧（${campaignData.length}件）`;
-  allSec.appendChild(lbl2);
-
-  campaignData.forEach((c, i) => {
-    const row = document.createElement('div');
-    row.style.cssText = `display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:${i<campaignData.length-1?'1px solid var(--bd)':'none'};gap:10px`;
-    row.innerHTML = `
-      <div style="flex:1;min-width:0">
-        <div style="font-size:14px;font-weight:700;color:var(--tx)">${c.name}</div>
-        <div style="font-size:12px;color:var(--p);font-weight:700;margin-top:2px">${c.discount}</div>
-      </div>
-      <button onclick="showSavingHint(campaignData[${i}],'${c.name}')"
-        style="flex-shrink:0;background:var(--bg);color:var(--p);border:1.5px solid var(--p);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer">
-        詳細
-      </button>`;
-    allSec.appendChild(row);
-  });
-  body.appendChild(allSec);
-
-  document.getElementById('saving-hints-ov').classList.remove('hidden');
-}
-function closeSavingHints(){ document.getElementById('saving-hints-ov').classList.add('hidden'); }
 
 function openSettings(){
   document.getElementById('settings-ov').classList.remove('hidden');
@@ -2887,20 +2587,17 @@ function openSettings(){
   if (upgradeBtn) upgradeBtn.style.display = isPaidPlan() ? 'none' : 'block';
 }
 function closeSettings(){document.getElementById('settings-ov').classList.add('hidden')}
-function openGuide(){document.getElementById('guide-ov').classList.remove('hidden');gaEvent('guide_open',{})}
-function closeGuide(){document.getElementById('guide-ov').classList.add('hidden')}
-function openPrivacy(){closeSettings();setTimeout(()=>{document.getElementById('privacy-ov').classList.remove('hidden');gaEvent('privacy_open',{});},200)}
+function openGuide(){document.getElementById('guide-ov').classList.remove('hidden');setTimeout(()=>{document.getElementById('privacy-ov').classList.remove('hidden');},200)}
 function closePrivacy(){document.getElementById('privacy-ov').classList.add('hidden')}
 
 // ── シェア機能 ──────────────────────────────────────────
 const SUBLY_SHARE_URL = 'https://jonekun429.github.io/subly_lp/';
-const SUBLY_SHARE_TEXT = 'サブスクを無料で管理できるアプリ「Subly」を使ってみてください📱';
+const SUBLY_SHARE_TEXT = 'サブスクを無料で管理できるアプリ「subly」を使ってみてください📱';
 
 function openShare(){
   document.getElementById('share-ov').classList.remove('hidden');
   // QRコード生成（qrcode.jsを動的ロード）
   _generateQR();
-  gaEvent('share_open', {});
 }
 function closeShare(){ document.getElementById('share-ov').classList.add('hidden'); }
 
@@ -2935,7 +2632,6 @@ async function copyShareUrl(){
     btn.textContent = 'コピー済み ✓';
     btn.style.background = '#27AE60';
     setTimeout(()=>{ btn.textContent='コピー'; btn.style.background=''; }, 2000);
-    gaEvent('share_copy_url', {});
   } catch(e) {
     showToast('コピーできませんでした');
   }
@@ -2944,13 +2640,11 @@ async function copyShareUrl(){
 function shareToLine(){
   const url = `https://line.me/R/msg/text/?${encodeURIComponent(SUBLY_SHARE_TEXT + '\n' + SUBLY_SHARE_URL)}`;
   window.open(url, '_blank');
-  gaEvent('share_line', {});
 }
 
 function shareToX(){
   const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(SUBLY_SHARE_TEXT)}&url=${encodeURIComponent(SUBLY_SHARE_URL)}`;
   window.open(url, '_blank');
-  gaEvent('share_x', {});
 }
 
 async function nativeShare(){
@@ -2961,7 +2655,6 @@ async function nativeShare(){
         text: SUBLY_SHARE_TEXT,
         url: SUBLY_SHARE_URL
       });
-      gaEvent('share_native', {});
     } catch(e) {
       if(e.name !== 'AbortError') showToast('シェアできませんでした');
     }
@@ -3117,7 +2810,6 @@ function showMeImportConfirmForJoin() {
 async function closeOb(){
   document.getElementById('ob-ov').classList.add('hidden');
   await Store.set('onboarded','1');
-  gaEvent('onboarding_complete', { method: _obRoute || 'completed' });
 }
 
 async function resetAll(){
@@ -3179,7 +2871,6 @@ function setChartMode(mode){
   document.getElementById('chart-yr-btn').style.color      = mode==='year'  ? '#fff' : 'var(--ts)';
   document.getElementById('chart-ttl').textContent = mode==='month' ? 'カテゴリ別支出（月換算）' : 'カテゴリ別支出（年換算）';
   // GA: 月額/年額切り替え（ユーザーがどちらの視点を好むか）
-  gaEvent('chart_period_switch', { period: mode });
   renderDashboard();
 }
 
@@ -3255,7 +2946,6 @@ function drawChart(obj){
             _setCenterSelected(labels[i], data[i], total, colors[i]);
             _setLegendActive(i);
             // GA: チャートタップ（絞り込み操作）
-            gaEvent('chart_category_tap', { category: labels[i], amount: data[i], period: chartPeriod });
           },
           onHover(_,els){
             canvas.style.cursor=els.length?'pointer':'default';
@@ -3705,7 +3395,6 @@ function showCalDetail(y,m,d,evs){
   const DOW=['日','月','火','水','木','金','土'];
   const dow=new Date(y,m,d).getDay();
   const dayTotal=evs.reduce((a,sub)=>a+moFromSub(sub),0);
-  gaEvent('calendar_day_tap', { date: `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`, event_count: evs.length });
 
   // ボトムシートに内容を構築
   const sheet=document.getElementById('cal-sheet');
@@ -3786,7 +3475,7 @@ function renderList(){
   const cat=document.getElementById('fl-cat').value;
   const sort=document.getElementById('fl-sort').value;
   // GA: フィルター使用（'all'以外のカテゴリ選択のみ計測）
-  if(cat !== 'all') gaEvent('filter_used', { category: cat, sort: sort });
+  if(cat !== 'all')
   let list;
   if(cat==='休止中'){
     list=subs.filter(s=>s.paused);
@@ -3918,7 +3607,6 @@ function renderList(){
       document.querySelectorAll('.sub-actions.open').forEach(a=>a.classList.remove('open'));
       if(!isOpen){
         actions.classList.add('open');
-        gaEvent('detail_expand', { service_name: s.name, category: s.cat });
       }
     };
     wrapper.onclick=toggleActions;
@@ -4024,7 +3712,6 @@ function buildQItems(cat){
           opt.innerHTML=`<span class="plan-opt-lbl">${plan.label}</span><span class="plan-opt-prc">¥${plan.price.toLocaleString()} / ${item.freq}</span>`;
           opt.onclick=()=>{
             // GA: クイック追加タップ（何のサービスが人気か）
-            gaEvent('quick_add_tap', { service_name: item.name, category: cat, price: plan.price, freq: item.freq });
             fillForm({name:item.name,price:plan.price,freq:item.freq},cat);
             panel.classList.remove('open'); panel.innerHTML=''; panel.dataset.item='';
           };
@@ -4036,7 +3723,6 @@ function buildQItems(cat){
     }else{
       btn.onclick=()=>{
         // GA: クイック追加タップ（何のサービスが人気か）
-        gaEvent('quick_add_tap', { service_name: item.name, category: cat, price: item.price, freq: item.freq });
         fillForm({name:item.name,price:item.price,freq:item.freq},cat);
       };
     }
@@ -4129,13 +3815,11 @@ async function submitForm(){
     backToStep1();
     goto('dashboard');
     // GA: 編集・更新イベント
-    gaEvent('subscription_updated', { category: cat, price: price, freq: freq });
     showToast('更新しました');
   } else {
     subs.push({id:Date.now(),name,cat,price,freq,date,memo,payment,member,sat,cancelUrl,paused:false});
     await save();
     // GA: 新規登録イベント（カテゴリ別・金額・頻度を計測）
-    gaEvent('subscription_added', { category: cat, price: price, freq: freq, total_count: subs.length });
     // 初回登録後は手順バナーを非表示
     document.getElementById('how-to-box').style.display='none';
     // 登録完了 → 続けて追加 or ホームへ のダイアログ
@@ -4153,7 +3837,7 @@ async function submitForm(){
           resetForm();
           backToStep1();
           goto('dashboard');
-          setTimeout(()=>checkNudge(), 400);
+          
         }}
       ]
     });
@@ -4176,7 +3860,6 @@ function resetForm(){
 function editSub(id){
   const s=subs.find(x=>x.id===id);if(!s)return;
   editId=id;
-  gaEvent('edit_start', { service_name: s.name, category: s.cat });
   goto('add');
   setTimeout(()=>{
     // STEP2を表示
@@ -4226,7 +3909,6 @@ function openCancelUrl(){
 function searchCancelUrl(name, cat){
   const q=encodeURIComponent(name+' 解約');
   window.open('https://www.google.com/search?q='+q,'_blank');
-  gaEvent('search_cancel_url',{service_name:name, category:cat});
 }
 // 編集フォームの検索ボタン用
 function searchCancelUrlFromForm(){
@@ -4244,7 +3926,6 @@ async function togglePauseFromForm(){
   if(s.paused){ s.pausedDate = new Date().toISOString().slice(0,10); }
   else { delete s.pausedDate; }
   // GA: 休止/再開の利用（機能活用度を計測）
-  gaEvent('pause_toggle', { action: s.paused ? 'pause' : 'resume', category: s.cat });
   await save();
   // ボタンのラベルを更新
   const pauseBtn = document.getElementById('btn-pause-toggle');
@@ -4292,7 +3973,6 @@ async function delSub(id){
       {label:'削除する', cls:'danger', onClick: async ()=>{
         subs=subs.filter(s=>s.id!==id);
         // GA: 削除イベント
-        gaEvent('subscription_deleted', { service_name: name });
         await save(); renderList();
         showToast(`${name}を削除しました`);
       }}
@@ -4305,7 +3985,6 @@ async function delSub(id){
 ============================================================ */
 async function exportCSV(){
   // GA: CSVエクスポート（データを活用しているヘビーユーザーの計測）
-  gaEvent('csv_export', { count: subs.length });
   if(!subs.length){ showAlert('','データがありません','登録されたサブスクがありません'); return; }
   const BOM='\uFEFF';
   const header='ID,サービス名,カテゴリ,料金,頻度,更新日,メモ,満足度,休止';
@@ -4430,7 +4109,6 @@ function _processImportFile(file){
         {label:'キャンセル', cls:'cancel'},
         {label:'インポート', cls:'ok', onClick: async ()=>{
           subs=imported; await save(); closeSettings(); goto('dashboard');
-          gaEvent('csv_import', { count: imported.length });
           showToast(`${imported.length}件をインポートしました`);
         }}
       ]
@@ -4451,94 +4129,9 @@ function parseCSVLine(line){
 }
 
 /* ============================================================
-   テーマ（ライト / 自動 / ダーク）
-============================================================ */
-// 時間帯に応じてダーク/ライトを決定（18:00〜6:00はダーク）
-// 6テーマの定義
-const THEMES = {
-  light:  { cls: 'theme-light',  dark: false },
-  ocean:  { cls: 'theme-ocean',  dark: false },
-  pastel: { cls: 'theme-pastel', dark: false },
-  dark:   { cls: 'theme-dark',   dark: true  },
-  night:  { cls: 'theme-night',  dark: true  },
-  purple: { cls: 'theme-purple', dark: true  },
-};
-const THEME_KEYS = Object.keys(THEMES);
-
-function setTheme(mode){
-  const root = document.documentElement;
-  // 全テーマクラスを削除
-  THEME_KEYS.forEach(k => root.classList.remove('theme-'+k));
-  // 旧クラスも削除
-  root.classList.remove('light','dark');
-
-  const t = THEMES[mode] || THEMES.light;
-  root.classList.add(t.cls);
-
-  // ボタンのon状態を更新（設定シート・ドロワー両方）
-  THEME_KEYS.forEach(k => {
-    document.getElementById('th-'+k)?.classList.toggle('on', k===mode);
-    document.getElementById('hd-th-'+k)?.classList.toggle('on', k===mode);
-  });
-
-  Store.set('subly_theme', mode);
-  gaEvent('theme_change', { theme_name: mode });
-  if(window._themeTimer) clearInterval(window._themeTimer);
-
-}
-
-async function loadTheme(){
-  const saved = (await Store.get('subly_theme')) || 'light';
-  setTheme(THEME_KEYS.includes(saved) ? saved : 'light');
-}
-
- 
-/* ============================================================
-   登録促進ポップアップ（3件登録後に表示）
-============================================================ */
-async function checkNudge(){
-  const count = subs.length;
-  // 3件目 or 10件目のときだけチェック
-  if(count !== 3 && count !== 10) return;
-  const key = count === 3 ? 'nudgeDismissed3' : 'nudgeDismissed10';
-  const trigger = count === 3 ? '3rd_registration' : '10th_registration';
-  const dismissed = await Store.get(key);
-  if(dismissed) return;
-  // 固定費系がすでに登録済みなら表示しない
-  const hasFixed = subs.some(function(s){
-    return /スマホ|携帯|ネット|光回線|Wi-?Fi|家賃|住宅ローン|カーローン|車/.test(s.name);
-  });
-  if(hasFixed) return;
-  document.getElementById('nudge-ov').classList.remove('hidden');
-  gaEvent('nudge_shown', { trigger: trigger, total_count: count });
-}
-
-async function closeNudge(){
-  document.getElementById('nudge-ov').classList.add('hidden');
-  // 現在の件数に対応したキーをdismissed済みにする
-  const count = subs.length;
-  if(count <= 3) await Store.set('nudgeDismissed3', '1');
-  else await Store.set('nudgeDismissed10', '1');
-  gaEvent('nudge_dismissed', {});
-}
-
-function nudgeTap(name, cat){
-  closeNudge();
-  gaEvent('nudge_tap', { service_name: name, category: cat });
-  setTimeout(function(){
-    goto('add');
-    setTimeout(function(){
-      openManualForm({ name: name, price: 0, freq: '月額' }, cat);
-    }, 100);
-  }, 200);
-}
-
-
-/* ============================================================
    初期化（非同期：Capacitor Preferences対応）
 ============================================================ */
 async function init(){
-  await loadTheme();
   await loadFamilyData(); // Family追加
 
   // ── プランをロード（index.htmlからの遷移を優先） ──
@@ -4616,6 +4209,7 @@ async function init(){
   if(!onboarded) showOnboarding();
   goto('dashboard');
   updateFilterCounts();
+  checkInviteParam(); // 招待パラメータを検出
 
   // ── リピーター追跡：起動回数・登録件数をユーザープロパティにセット ──
   const openCountRaw = await Store.get('appOpenCount');
@@ -4638,7 +4232,128 @@ async function init(){
 ============================================================ */
 
 // ── 月次レポート描画 ──
-// ── プランアップグレードモーダル ──
+// ══ 招待リンク機能 ══
+
+let _currentInviteCode = null;
+let _currentInviteUrl  = null;
+
+function generateInviteCode() {
+  // UUID v4 風の簡易生成（本番はFirestoreで管理）
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  }).slice(0, 12).toUpperCase();
+}
+
+async function generateInviteLink() {
+  // Familyプランでなければ弾く
+  if (!isFamilyPlan()) {
+    showToast('招待リンクはFamilyプランでのみ発行できます');
+    return;
+  }
+
+  const code = generateInviteCode();
+  _currentInviteCode = code;
+
+  // 現在のURL（GitHub Pages）をベースに招待URLを生成
+  const baseUrl = window.location.origin + window.location.pathname.replace('app.html','') + 'index.html';
+  _currentInviteUrl = `${baseUrl}?invite=${code}&group=${encodeURIComponent(familyName)}`;
+
+  // 表示を更新
+  document.getElementById('invite-link-display').textContent = _currentInviteUrl;
+  document.getElementById('copy-invite-btn').style.display = 'block';
+  document.getElementById('share-invite-btn').style.display =
+    navigator.share ? 'block' : 'none';
+  document.getElementById('invite-expiry').style.display = 'block';
+
+  // localStorageに保存（Firebase実装後はFirestoreへ）
+  const expiry = Date.now() + 72 * 60 * 60 * 1000; // 72時間
+  localStorage.setItem('inviteCode', JSON.stringify({
+    code, familyId: familyName, expiry, createdAt: Date.now()
+  }));
+
+  showToast('招待リンクを生成しました');
+}
+
+function copyInviteLink() {
+  if (!_currentInviteUrl) return;
+  navigator.clipboard.writeText(_currentInviteUrl).then(() => {
+    showToast('リンクをコピーしました！LINEやメールで送ってください');
+    const btn = document.getElementById('copy-invite-btn');
+    btn.textContent = '✓ コピー済み';
+    setTimeout(() => { btn.textContent = 'コピー'; }, 2000);
+  }).catch(() => {
+    // フォールバック
+    const el = document.createElement('textarea');
+    el.value = _currentInviteUrl;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    showToast('コピーしました！');
+  });
+}
+
+async function shareInviteLink() {
+  if (!_currentInviteUrl || !navigator.share) return;
+  try {
+    await navigator.share({
+      title: `${familyName}のsublyに招待`,
+      text: `家族のサブスク管理アプリ「subly」に招待します。以下のリンクから参加してください。`,
+      url: _currentInviteUrl
+    });
+  } catch(e) { /* キャンセル等 */ }
+}
+
+// ── 起動時に招待パラメータを検出 ──
+function checkInviteParam() {
+  const params = new URLSearchParams(window.location.search);
+  const inviteCode = params.get('invite');
+  const groupName  = params.get('group');
+  if (!inviteCode) return;
+
+  // Familyプランでなければアップグレードを促す
+  if (!isFamilyPlan()) {
+    setTimeout(() => {
+      showDialog({
+        icon: '🔗',
+        title: `「${decodeURIComponent(groupName || 'グループ')}」に招待されています`,
+        msg: `グループに参加するには<strong>Familyプラン</strong>への加入が必要です。`,
+        buttons: [
+          { label: '後で', cls: 'cancel' },
+          { label: 'Familyプランに加入', cls: 'ok', onClick: () => openUpgradeModal() }
+        ]
+      });
+    }, 500);
+    return;
+  }
+
+  // Familyプラン済みなら参加確認
+  setTimeout(() => {
+    showDialog({
+      icon: '🔗',
+      title: `「${decodeURIComponent(groupName || 'グループ')}」に参加しますか？`,
+      msg: 'このグループのサブスクデータが共有されます。',
+      buttons: [
+        { label: 'キャンセル', cls: 'cancel' },
+        { label: '参加する', cls: 'ok', onClick: async () => {
+          // Firebase実装後：Firestoreのfamilies/{familyId}/membersに追加
+          // 今はlocalStorageに記録
+          localStorage.setItem('joinedGroup', decodeURIComponent(groupName || ''));
+          familyName = decodeURIComponent(groupName || familyName);
+          await saveFamilyData();
+          renderFamilyArea();
+          renderDashboard();
+          showToast(`「${familyName}」に参加しました！`);
+          // URLパラメータをクリア
+          window.history.replaceState({}, '', window.location.pathname);
+        }}
+      ]
+    });
+  }, 500);
+}
+
+
 function openUpgradeModal() {
   showDialog({
     icon: '',
@@ -5084,6 +4799,35 @@ if(document.readyState==='loading'){
     <div style="width:36px;height:4px;background:var(--bd);border-radius:2px;margin:14px auto 16px"></div>
     <div style="padding:0 18px">
       <div style="font-size:17px;font-weight:800;color:var(--tx);font-family:inherit;margin-bottom:16px">家族の設定</div>
+
+      <!-- ══ 招待リンク ══ -->
+      <div style="background:var(--pl);border:1.5px solid var(--p);border-radius:12px;padding:14px;margin-bottom:20px">
+        <div style="font-size:13px;font-weight:700;color:var(--p);margin-bottom:8px;display:flex;align-items:center;gap:6px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--p)"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+          招待リンク
+        </div>
+        <div style="font-size:12px;color:var(--ts);margin-bottom:10px;line-height:1.6">
+          このリンクを共有すると家族がグループに参加できます。<br>
+          参加にはFamilyプランへの加入が必要です。
+        </div>
+        <!-- 招待コード表示エリア -->
+        <div id="invite-link-display" style="background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:10px 12px;font-size:12px;font-family:monospace;color:var(--ts);word-break:break-all;margin-bottom:10px;min-height:36px;line-height:1.5">
+          リンクを生成してください
+        </div>
+        <div style="display:flex;gap:8px">
+          <button onclick="generateInviteLink()" style="flex:1;padding:10px;border-radius:8px;background:var(--p);color:#fff;border:none;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">
+            🔗 リンクを生成
+          </button>
+          <button id="copy-invite-btn" onclick="copyInviteLink()" style="display:none;padding:10px 14px;border-radius:8px;background:var(--card);color:var(--p);border:1.5px solid var(--p);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">
+            コピー
+          </button>
+          <button id="share-invite-btn" onclick="shareInviteLink()" style="display:none;padding:10px 14px;border-radius:8px;background:var(--card);color:var(--p);border:1.5px solid var(--p);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">
+            共有
+          </button>
+        </div>
+        <div id="invite-expiry" style="font-size:11px;color:var(--ts);margin-top:6px;display:none">⏱ 有効期限：72時間</div>
+      </div>
+
       <!-- グループ名 -->
       <div style="font-size:11px;color:var(--ts);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">グループ名</div>
       <input id="fs-family-name" type="text" maxlength="20"
