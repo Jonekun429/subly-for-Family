@@ -553,12 +553,32 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
   // Auth状態の監視
   if (!isDummyConfig && _auth) {
+    // index.htmlからの遷移はlocalStorageにユーザー情報がある → 即座に表示
+    const cachedUID = localStorage.getItem('userUID');
+    if (cachedUID) {
+      // キャッシュがあればすぐにアプリを表示（Firebase確認は並行して実行）
+      window._currentUser = {
+        uid: cachedUID,
+        displayName: localStorage.getItem('userName') || '',
+        email: localStorage.getItem('userEmail') || '',
+        photoURL: localStorage.getItem('userPhoto') || null
+      };
+      showApp();
+    }
+
     onAuthStateChanged(_auth, (user) => {
       window._currentUser = user;
       if (user) {
-        showApp();
+        // localStorageを最新情報で更新
+        localStorage.setItem('userUID', user.uid);
+        localStorage.setItem('userName', user.displayName || '');
+        localStorage.setItem('userEmail', user.email || '');
+        localStorage.setItem('userPhoto', user.photoURL || '');
+        if (!cachedUID) showApp();
       } else {
-        showLoginScreen();
+        // ログアウト済みならlocalStorageをクリアしてログイン画面へ
+        localStorage.removeItem('userUID');
+        if (!cachedUID) showLoginScreen();
       }
     });
   } else if (isDummyConfig) {
@@ -2532,6 +2552,7 @@ function openSettings(){
 }
 function closeSettings(){document.getElementById('settings-ov').classList.add('hidden')}
 
+function openPrivacy(){closeSettings();setTimeout(()=>{document.getElementById('privacy-ov').classList.remove('hidden');},200)}
 function closePrivacy(){document.getElementById('privacy-ov').classList.add('hidden')}
 
 // ── シェア機能 ──────────────────────────────────────────
@@ -4076,7 +4097,9 @@ function parseCSVLine(line){
    初期化（非同期：Capacitor Preferences対応）
 ============================================================ */
 async function init(){
+  console.log('[init] 開始');
   await loadFamilyData(); // Family追加
+  console.log('[init] loadFamilyData完了');
 
   // ── プランをロード（index.htmlからの遷移を優先） ──
   const planFromLogin = localStorage.getItem('currentPlan');
@@ -4150,10 +4173,13 @@ async function init(){
   }
 
   applyPlanUI(); // プランUIを適用
+  console.log('[init] applyPlanUI完了');
   if(!onboarded) showOnboarding();
   goto('dashboard');
+  console.log('[init] goto dashboard完了');
   updateFilterCounts();
   checkInviteParam(); // 招待パラメータを検出
+  console.log('[init] 完了');
 
   // ── リピーター追跡：起動回数・登録件数をユーザープロパティにセット ──
   const openCountRaw = await Store.get('appOpenCount');
@@ -4709,6 +4735,8 @@ function waitAndInit(n){
     setTimeout(()=>waitAndInit(n+1),50);
   }
 }
+// モジュールスコープから呼べるようにwindowに公開
+window.waitAndInit = waitAndInit;
 
 if(document.readyState==='loading'){
   document.addEventListener('DOMContentLoaded',waitAndInit);
