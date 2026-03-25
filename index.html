@@ -504,6 +504,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .overlay{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .18s ease}
 .overlay.hidden{display:none}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes sheetUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
 .sheet{background:var(--card);border-radius:18px 18px 0 0;max-height:90vh;overflow-y:auto;animation:fadeUp .24s ease;padding-bottom:env(safe-area-inset-bottom);width:100%;max-width:680px}
 .sheet-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 12px;border-bottom:1px solid var(--bd);position:sticky;top:0;background:var(--card);z-index:1}
 .sheet-ttl{font-size:15px;font-weight:700}
@@ -1578,6 +1579,22 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
   <!-- ④ 明細 -->
   <div id="pg-list" class="page">
+    <!-- Family追加：メンバーフィルタータブ -->
+    <div id="member-filter-tabs" style="margin-bottom:10px;overflow-x:auto;white-space:nowrap;scrollbar-width:none;-webkit-overflow-scrolling:touch">
+      <div style="display:inline-flex;gap:6px;padding-bottom:2px">
+        <button id="mf-btn-all" onclick="setMemberFilter(null)"
+          style="padding:5px 13px;border-radius:20px;border:1.5px solid var(--p);background:var(--p);color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s">
+          すべて
+        </button>
+        <!-- メンバーボタンはrenderMemberFilterTabsで動的生成 -->
+        <div id="mf-member-btns" style="display:contents"></div>
+        <button id="mf-btn-shared" onclick="setMemberFilter('shared')"
+          style="padding:5px 13px;border-radius:20px;border:1.5px solid var(--bd);background:var(--card);color:var(--ts);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s">
+          🔗 共有
+        </button>
+      </div>
+    </div>
+    <div class="list-ctrl">
       <select id="fl-cat" onchange="renderList()">
         <option value="all">すべてのカテゴリ</option>
         <option value="動画・配信">動画・配信</option>
@@ -1601,10 +1618,17 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <option value="sat">満足度順</option>
       </select>
     </div>
+    <!-- メンバーフィルター中バー（Family追加） -->
+    <div id="member-filter-bar" style="display:none;background:var(--pl);border:1.5px solid var(--p);border-radius:10px;padding:8px 14px;margin-bottom:10px;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;color:var(--p)">
+      <span id="member-filter-label">メンバーフィルター中</span>
+      <button onclick="setMemberFilter(null)" style="background:none;border:none;color:var(--ts);font-size:14px;cursor:pointer;font-weight:700;font-family:inherit;padding:0 4px">✕ 解除</button>
+    </div>
     <div id="sat-filter-bar" style="display:none;background:var(--pl);border:1.5px solid var(--p);border-radius:10px;padding:8px 14px;margin-bottom:10px;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;color:var(--p)">
       <span id="sat-filter-label">★フィルター中</span>
       <button onclick="clearSatFilter()" style="background:none;border:none;color:var(--ts);font-size:14px;cursor:pointer;font-weight:700;font-family:inherit;padding:0 4px">✕ 解除</button>
     </div>
+    <!-- 絞り込み結果サマリー（Family追加） -->
+    <div id="list-filter-summary" style="display:none;font-size:12px;color:var(--ts);margin-bottom:8px;text-align:right"></div>
     <div id="list-items"></div>
   </div>
 
@@ -2991,6 +3015,73 @@ function clearSatFilter(){
   renderList();
 }
 
+// Family追加：メンバーフィルター
+let currentMemberFilter = null;
+
+function renderMemberFilterTabs() {
+  const btnBox = document.getElementById('mf-member-btns');
+  if (!btnBox) return;
+  btnBox.innerHTML = familyMembers.map(m => `
+    <button id="mf-btn-${m.id}" onclick="setMemberFilter('${m.id}')"
+      style="padding:5px 13px;border-radius:20px;border:1.5px solid var(--bd);background:var(--card);color:var(--ts);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s">
+      ${m.emoji} ${m.name}
+    </button>`).join('');
+  updateMemberFilterTabStyles();
+}
+
+function updateMemberFilterTabStyles() {
+  // すべてのメンバーボタンのスタイルを更新
+  const allBtn = document.getElementById('mf-btn-all');
+  const sharedBtn = document.getElementById('mf-btn-shared');
+  const isAll = currentMemberFilter === null;
+  const isShared = currentMemberFilter === 'shared';
+
+  if (allBtn) {
+    allBtn.style.background = isAll ? 'var(--p)' : 'var(--card)';
+    allBtn.style.color = isAll ? '#fff' : 'var(--ts)';
+    allBtn.style.borderColor = isAll ? 'var(--p)' : 'var(--bd)';
+  }
+  if (sharedBtn) {
+    sharedBtn.style.background = isShared ? 'var(--p)' : 'var(--card)';
+    sharedBtn.style.color = isShared ? '#fff' : 'var(--ts)';
+    sharedBtn.style.borderColor = isShared ? 'var(--p)' : 'var(--bd)';
+  }
+  familyMembers.forEach(m => {
+    const btn = document.getElementById('mf-btn-' + m.id);
+    if (!btn) return;
+    const active = currentMemberFilter === m.id;
+    btn.style.background = active ? m.color : 'var(--card)';
+    btn.style.color = active ? 'var(--tx)' : 'var(--ts)';
+    btn.style.borderColor = active ? 'var(--border2,#ccc)' : 'var(--bd)';
+  });
+}
+
+function setMemberFilter(memberId) {
+  currentMemberFilter = memberId;
+  updateMemberFilterTabStyles();
+  renderMemberFilterBar();
+  renderList();
+}
+
+function clearMemberFilter() {
+  setMemberFilter(null);
+}
+
+function renderMemberFilterBar() {
+  const bar = document.getElementById('member-filter-bar');
+  if (!bar) return;
+  if (!currentMemberFilter) {
+    bar.style.display = 'none';
+    return;
+  }
+  bar.style.display = 'flex';
+  const m = familyMembers.find(m => m.id === currentMemberFilter);
+  const label = currentMemberFilter === 'shared'
+    ? '🔗 共有（家族全員）'
+    : m ? `${m.emoji} ${m.name}` : currentMemberFilter;
+  document.getElementById('member-filter-label').textContent = `${label} のサブスクを表示中`;
+}
+
 const _dismissedAlertCats = new Set();
 
 
@@ -3298,6 +3389,9 @@ function updateFilterCounts(){
 }
 
 function renderList(){
+  // Family追加：タブを初期化（メンバーが変わっている可能性がある）
+  renderMemberFilterTabs();
+
   const cat=document.getElementById('fl-cat').value;
   const sort=document.getElementById('fl-sort').value;
   // GA: フィルター使用（'all'以外のカテゴリ選択のみ計測）
@@ -3314,6 +3408,8 @@ function renderList(){
   }
   // 満足度フィルター（sat-bandタップ時）
   if(currentSatFilter!==null) list=list.filter(s=>s.sat===currentSatFilter);
+  // Family追加：メンバーフィルター
+  if(currentMemberFilter!==null) list=list.filter(s=>s.member===currentMemberFilter);
   if(sort==='price-d')list.sort((a,b)=>b.price-a.price);
   else if(sort==='price-a')list.sort((a,b)=>a.price-b.price);
   else if(sort==='sat')list.sort((a,b)=>(b.sat||0)-(a.sat||0));
@@ -3329,8 +3425,24 @@ function renderList(){
 
   const box=document.getElementById('list-items');
   box.innerHTML='';
+
+  // Family追加：絞り込み結果サマリー
+  const summaryEl = document.getElementById('list-filter-summary');
+  if (summaryEl) {
+    if (currentMemberFilter !== null) {
+      const filteredMo = list.filter(s=>!s.paused&&s.freq!=='単発（買い切り）').reduce((sum,s)=>sum+moFromSub(s),0);
+      const m = familyMembers.find(m=>m.id===currentMemberFilter);
+      const label = currentMemberFilter==='shared' ? '🔗 共有' : m ? `${m.emoji} ${m.name}` : '';
+      summaryEl.style.display = 'block';
+      summaryEl.textContent = `${label}：${list.length}件 · 月額 ¥${filteredMo.toLocaleString()}`;
+    } else {
+      summaryEl.style.display = 'none';
+    }
+  }
+
   if(!list.length){
-    box.innerHTML='<div class="empty">登録されているサブスクがありません<br>「追加」タブから登録してみましょう</div>';
+    const filterMsg = currentMemberFilter !== null ? 'このメンバーのサブスクはありません' : '登録されているサブスクがありません<br>「追加」タブから登録してみましょう';
+    box.innerHTML=`<div class="empty">${filterMsg}</div>`;
     return;
   }
   list.forEach(s=>{
@@ -3346,6 +3458,16 @@ function renderList(){
         </div>
         <div class="sub-meta">
           <span class="badge" style="background:${ci.color}">${s.cat}</span>
+          ${(()=>{
+            // Family追加：メンバーバッジ
+            if(!s.member) return '';
+            if(s.member==='shared'){
+              return `<span style="font-size:11px;font-weight:600;color:var(--p);background:var(--pl);border:1px solid var(--p);border-radius:5px;padding:2px 6px">🔗 共有</span>`;
+            }
+            const mem=familyMembers.find(m=>m.id===s.member);
+            if(!mem) return '';
+            return `<span style="font-size:11px;font-weight:600;color:var(--ts);background:${mem.color};border-radius:5px;padding:2px 6px">${mem.emoji} ${mem.name}</span>`;
+          })()}
           ${s.payment?`<span style="font-size:11px;font-weight:600;color:var(--ts);background:var(--bg);border:1px solid var(--bd);border-radius:5px;padding:2px 6px">${s.payment}</span>`:''}
           <span>${(()=>{
             if(s.freq==='単発（買い切り）') return '買い切り';
@@ -4230,10 +4352,118 @@ function renderReport() {
 }
 
 // ── 満足度更新ポップアップ（レポート画面から） ──
+// ── 満足度一括更新ポップアップ ──
+// 編集中の満足度を一時保存（id → sat）
+let satPopupDraft = {};
+
 function openSatPopupReport() {
-  // 既存の満足度UIに遷移（リスト画面でソート）
-  goto('list');
-  showToast('満足度の低いサブスクから見直してみましょう');
+  // アクティブなサブスクを取得
+  const targets = subs.filter(s => !s.paused && s.freq !== '単発（買い切り）');
+  if (targets.length === 0) {
+    showToast('登録中のサブスクがありません');
+    return;
+  }
+
+  // ドラフトを現在の値で初期化
+  satPopupDraft = {};
+  targets.forEach(s => { satPopupDraft[s.id] = s.sat || 0; });
+
+  // メンバー別にグルーピング
+  const groups = {};
+  // まずメンバーIDの順序を決める（メンバー定義順 → shared → null）
+  const order = [...familyMembers.map(m => m.id), 'shared', null];
+  order.forEach(mid => { groups[String(mid)] = []; });
+
+  targets.forEach(s => {
+    const key = String(s.member ?? null);
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(s);
+  });
+
+  // HTML生成
+  let html = '';
+  order.forEach(mid => {
+    const items = groups[String(mid)];
+    if (!items || items.length === 0) return;
+
+    // グループラベル
+    let groupLabel = '';
+    if (mid === 'shared') {
+      groupLabel = '🔗 共有（家族全員）';
+    } else if (mid === null) {
+      groupLabel = '👤 未割り当て';
+    } else {
+      const m = familyMembers.find(m => m.id === mid);
+      groupLabel = m ? `${m.emoji} ${m.name}` : mid;
+    }
+
+    html += `<div style="padding:8px 18px 4px;font-size:11px;font-weight:700;color:var(--ts);letter-spacing:.5px;background:var(--bg);text-transform:uppercase">${groupLabel}</div>`;
+
+    items.forEach(s => {
+      const curSat = satPopupDraft[s.id] || 0;
+      const stars = [1,2,3,4,5].map(v => {
+        const on = v <= curSat;
+        return `<button type="button" class="sat-star-btn${on?' on':''}" data-id="${s.id}" data-v="${v}"
+          style="font-size:22px;background:none;border:none;cursor:pointer;padding:1px;line-height:1;color:${on?'#F4C430':'var(--bd)'};transition:color .1s,transform .1s"
+          onclick="tapSatStar(this,${s.id},${v})">★</button>`;
+      }).join('');
+
+      const mo = moFromSub(s);
+      html += `
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 18px;border-bottom:1px solid var(--bd)" data-sat-row="${s.id}">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:600;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.name}</div>
+          <div style="font-size:11px;color:var(--ts);margin-top:1px">¥${mo.toLocaleString()}/月</div>
+        </div>
+        <div class="sat-stars-row" data-id="${s.id}" style="display:flex;gap:2px;flex-shrink:0">${stars}</div>
+      </div>`;
+    });
+  });
+
+  document.getElementById('sat-popup-list').innerHTML = html;
+  document.getElementById('sat-popup-overlay').style.display = 'flex';
+}
+
+function tapSatStar(btn, subId, val) {
+  // ドラフト更新
+  satPopupDraft[subId] = val;
+
+  // その行のスターを更新
+  const row = document.querySelector(`.sat-stars-row[data-id="${subId}"]`);
+  if (!row) return;
+  row.querySelectorAll('.sat-star-btn').forEach(b => {
+    const bv = parseInt(b.dataset.v);
+    const on = bv <= val;
+    b.classList.toggle('on', on);
+    b.style.color = on ? '#F4C430' : 'var(--bd)';
+  });
+  // 軽くバウンス
+  btn.style.transform = 'scale(1.3)';
+  setTimeout(() => { btn.style.transform = ''; }, 140);
+}
+
+function closeSatPopup() {
+  document.getElementById('sat-popup-overlay').style.display = 'none';
+  satPopupDraft = {};
+}
+
+async function saveSatPopup() {
+  let updatedCount = 0;
+  Object.entries(satPopupDraft).forEach(([idStr, sat]) => {
+    const id = parseInt(idStr);
+    const idx = subs.findIndex(s => s.id === id);
+    if (idx >= 0) {
+      subs[idx].sat = sat;
+      updatedCount++;
+    }
+  });
+  await save();
+  closeSatPopup();
+  showToast(`⭐ ${updatedCount}件の満足度を更新しました`);
+  // レポートを再描画
+  renderReport();
+  // ダッシュボードも更新（満足度グラフ）
+  renderDashboard();
 }
 
 // ── メンバーセレクトを動的更新 ──
@@ -4339,12 +4569,13 @@ function renderFamilyArea() {
 
 // ── メンバーでフィルター（リスト画面へ） ──
 function filterByMember(memberId) {
-  // TODO: リスト画面にメンバーフィルターを追加予定
-  // 今はtoastで通知
-  const m = familyMembers.find(x => x.id === memberId);
-  const label = m ? `${m.emoji} ${m.name}` : '共有';
-  showToast(`${label}のサブスクを表示します`);
+  currentMemberFilter = memberId;
   goto('list');
+  // goto後にタブとバーを更新
+  setTimeout(() => {
+    renderMemberFilterTabs();
+    renderMemberFilterBar();
+  }, 50);
 }
 
 // ── 家族設定モーダル ──
@@ -4412,6 +4643,26 @@ if(document.readyState==='loading'){
   waitAndInit();
 }
 </script>
+
+<!-- ══ 満足度一括更新ポップアップ（Family追加） ══ -->
+<div id="sat-popup-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:300;align-items:flex-end;justify-content:center" onclick="closeSatPopup()">
+  <div id="sat-popup-sheet" onclick="event.stopPropagation()" style="background:var(--card);border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:85vh;display:flex;flex-direction:column;animation:sheetUp .28s cubic-bezier(.4,0,.2,1)">
+    <!-- ハンドル -->
+    <div style="width:36px;height:4px;background:var(--bd);border-radius:2px;margin:14px auto 0;flex-shrink:0"></div>
+    <!-- ヘッダー -->
+    <div style="padding:14px 18px 10px;flex-shrink:0;border-bottom:1px solid var(--bd)">
+      <div style="font-size:17px;font-weight:800;color:var(--tx);margin-bottom:3px">⭐ 満足度を一括更新</div>
+      <div style="font-size:12px;color:var(--ts);line-height:1.6">先月使ったサブスクを振り返って★を更新してください。<br>★1〜3は「見直し候補」フラグになります。</div>
+    </div>
+    <!-- スクロールエリア -->
+    <div id="sat-popup-list" style="overflow-y:auto;flex:1;padding:0"></div>
+    <!-- フッター -->
+    <div style="padding:12px 18px 28px;flex-shrink:0;border-top:1px solid var(--bd);display:flex;gap:10px">
+      <button onclick="closeSatPopup()" style="flex:1;padding:12px;border-radius:10px;background:transparent;color:var(--ts);border:1.5px solid var(--bd);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">後で</button>
+      <button onclick="saveSatPopup()" style="flex:2;padding:12px;border-radius:10px;background:#d4960c;color:#fff;font-size:13px;font-weight:600;border:none;cursor:pointer;font-family:inherit">⭐ 保存する</button>
+    </div>
+  </div>
+</div>
 
 <!-- ══ 家族設定モーダル（Family追加） ══ -->
 <div id="family-settings-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(4px);z-index:200;align-items:flex-end;justify-content:center">
