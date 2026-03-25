@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>subly — ログイン</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --p:#2C7A5E;--pl:#E8F5EF;--tx:#1a1a1a;--ts:#6b7280;
+    --bg:#f8faf9;--card:#fff;--bd:#e5e7eb;--r:14px;
+    --sh:0 2px 12px rgba(0,0,0,.07)
+  }
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    background:var(--bg);color:var(--tx);min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+
+  #login-screen{width:100%;max-width:380px;text-align:center}
+  .logo{font-size:36px;font-weight:900;color:var(--p);letter-spacing:-1px;margin-bottom:4px}
+  .logo-sub{font-size:13px;color:var(--ts);margin-bottom:36px}
+  .login-card{background:var(--card);border-radius:20px;box-shadow:var(--sh);padding:32px 28px}
+  .login-title{font-size:20px;font-weight:700;margin-bottom:6px}
+  .login-desc{font-size:13px;color:var(--ts);line-height:1.6;margin-bottom:28px}
+
+  .btn-google{
+    display:flex;align-items:center;justify-content:center;gap:12px;
+    width:100%;padding:14px;border-radius:12px;
+    background:#fff;border:1.5px solid var(--bd);
+    font-size:15px;font-weight:600;color:var(--tx);
+    cursor:pointer;transition:all .15s;font-family:inherit
+  }
+  .btn-google:hover{border-color:#aaa;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+  .btn-google:disabled{opacity:.5;cursor:not-allowed}
+
+  .login-note{font-size:11px;color:var(--ts);margin-top:20px;line-height:1.6}
+  .login-note a{color:var(--p);text-decoration:none}
+
+  /* ローディング */
+  #loading-screen{display:none;text-align:center}
+  .spinner{width:36px;height:36px;border:3px solid var(--bd);border-top-color:var(--p);
+    border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ホーム画面 */
+  #home-screen{width:100%;max-width:420px;display:none}
+  .app-header{
+    background:var(--p);border-radius:var(--r);padding:20px;
+    color:#fff;margin-bottom:14px;position:relative;overflow:hidden
+  }
+  .app-header::after{content:'';position:absolute;top:-30px;right:-30px;
+    width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.08)}
+  .user-row{display:flex;align-items:center;gap:12px;margin-bottom:14px;position:relative;z-index:1}
+  .user-avatar{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.2);
+    border:2px solid rgba(255,255,255,.4);overflow:hidden;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center}
+  .user-avatar img{width:100%;height:100%;object-fit:cover}
+  .user-name{font-size:15px;font-weight:700}
+  .user-email{font-size:11px;opacity:.75;margin-top:1px}
+  .plan-pill{margin-left:auto;background:rgba(255,255,255,.2);
+    border:1px solid rgba(255,255,255,.4);
+    border-radius:20px;padding:4px 10px;font-size:11px;font-weight:700;white-space:nowrap}
+  .stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;
+    background:rgba(255,255,255,.2);border-radius:10px;overflow:hidden;position:relative;z-index:1}
+  .stat{background:rgba(0,0,0,.15);padding:10px;text-align:center}
+  .stat-val{font-size:18px;font-weight:800}
+  .stat-lbl{font-size:10px;opacity:.75;margin-top:1px}
+
+  .section-card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:16px;margin-bottom:12px}
+  .section-title{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+
+  .action-btn{
+    display:flex;align-items:center;gap:12px;width:100%;
+    padding:13px 14px;border-radius:10px;border:1.5px solid var(--bd);
+    background:var(--card);color:var(--tx);cursor:pointer;
+    font-size:14px;font-weight:600;font-family:inherit;text-align:left;
+    transition:all .15s;margin-bottom:8px
+  }
+  .action-btn:last-child{margin-bottom:0}
+  .action-btn:hover{border-color:var(--p);background:var(--pl)}
+  .action-btn.primary{background:var(--pl);border-color:var(--p)}
+  .action-btn .ico{width:36px;height:36px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .action-btn .lbl{flex:1}
+  .action-btn .sub{font-size:11px;color:var(--ts);font-weight:400;margin-top:2px}
+
+  .upgrade-banner{
+    background:var(--p);border-radius:var(--r);padding:14px;color:#fff;
+    display:flex;align-items:center;gap:12px;margin-bottom:12px;cursor:pointer
+  }
+  .upgrade-banner .txt{flex:1}
+  .upgrade-banner .ttl{font-size:13px;font-weight:700;margin-bottom:2px}
+  .upgrade-banner .dsc{font-size:11px;opacity:.8}
+
+  .logout-btn{width:100%;padding:12px;border-radius:10px;
+    background:transparent;border:1.5px solid var(--bd);
+    color:var(--ts);font-size:13px;font-weight:600;
+    cursor:pointer;font-family:inherit;margin-top:4px}
+
+  /* モーダル */
+  .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.5);
+    display:flex;align-items:flex-end;justify-content:center;
+    z-index:500;opacity:0;pointer-events:none;transition:opacity .2s}
+  .modal-ov.open{opacity:1;pointer-events:all}
+  .modal-sheet{background:var(--card);border-radius:20px 20px 0 0;
+    width:100%;max-width:420px;padding:24px 20px 40px;
+    transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1)}
+  .modal-ov.open .modal-sheet{transform:translateY(0)}
+  .modal-handle{width:36px;height:4px;background:var(--bd);border-radius:2px;margin:0 auto 20px}
+  .modal-title{font-size:17px;font-weight:800;margin-bottom:6px}
+  .modal-desc{font-size:13px;color:var(--ts);line-height:1.6;margin-bottom:20px}
+
+  .plan-option{border:2px solid var(--bd);border-radius:12px;padding:14px 16px;
+    margin-bottom:10px;cursor:pointer;transition:all .15s;
+    display:flex;align-items:center;gap:14px}
+  .plan-option.selected{border-color:var(--p);background:var(--pl)}
+  .plan-option .plan-name{font-size:15px;font-weight:700;color:var(--tx);margin-bottom:2px}
+  .plan-option .plan-price{font-size:13px;color:var(--p);font-weight:700}
+  .plan-option .plan-features{font-size:11px;color:var(--ts);margin-top:4px}
+  .plan-check{font-size:20px;color:var(--p)}
+
+  .btn-primary{width:100%;padding:14px;border-radius:12px;
+    background:var(--p);color:#fff;border:none;
+    font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:8px}
+  .btn-cancel{width:100%;padding:12px;border-radius:12px;
+    background:transparent;color:var(--ts);border:none;
+    font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:4px}
+
+  .csv-preview{background:#f0f4f2;border-radius:8px;padding:10px 12px;
+    font-size:11px;font-family:monospace;color:#2C7A5E;
+    line-height:1.8;margin-bottom:14px;overflow-x:auto;max-height:140px;overflow-y:auto;white-space:nowrap}
+
+  #toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:24px;
+    font-size:13px;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;
+    white-space:nowrap;z-index:9999}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  .error-msg{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;
+    padding:10px 14px;font-size:13px;color:#dc2626;margin-bottom:16px;display:none}
+</style>
+</head>
+<body>
+
+<!-- ── ログイン画面 ── -->
+<div id="login-screen">
+  <div class="logo">subly</div>
+  <div class="logo-sub">サブスク・固定費をかしこく管理</div>
+  <div class="login-card">
+    <div class="login-title">アカウント登録 / ログイン</div>
+    <div class="login-desc">登録することでデバイス間同期・バックアップ・CSVエクスポートが使えます</div>
+    <div class="error-msg" id="error-msg"></div>
+    <button class="btn-google" id="btn-google" onclick="signInWithGoogle()">
+      <svg width="20" height="20" viewBox="0 0 48 48">
+        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+      </svg>
+      Googleでログイン・新規登録
+    </button>
+    <div class="login-note">
+      ログインすることで<a href="#">利用規約</a>・<a href="#">プライバシーポリシー</a>に同意します
+    </div>
+  </div>
+</div>
+
+<!-- ── ローディング ── -->
+<div id="loading-screen">
+  <div class="spinner"></div>
+  <div style="font-size:14px;color:var(--ts)">ログイン中...</div>
+</div>
+
+<!-- ── ホーム画面（ログイン後） ── -->
+<div id="home-screen">
+  <div class="app-header">
+    <div class="user-row">
+      <div class="user-avatar" id="user-avatar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="rgba(255,255,255,.8)">
+          <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="user-name" id="user-name">-</div>
+        <div class="user-email" id="user-email">-</div>
+      </div>
+      <div class="plan-pill" id="plan-pill">Free</div>
+    </div>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-val" id="stat-mo">¥0</div><div class="stat-lbl">月額合計</div></div>
+      <div class="stat"><div class="stat-val" id="stat-count">0件</div><div class="stat-lbl">登録中</div></div>
+      <div class="stat"><div class="stat-val" id="stat-yr">¥0</div><div class="stat-lbl">年間換算</div></div>
+    </div>
+  </div>
+
+  <div class="upgrade-banner" id="upgrade-banner" onclick="openUpgradeModal()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="rgba(255,255,255,.9)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    <div class="txt">
+      <div class="ttl">subly Me / Family にアップグレード</div>
+      <div class="dsc">広告なし・無制限・1人か家族かを選ぶだけ</div>
+    </div>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,.8)"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--p)"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+      データ管理
+    </div>
+    <button class="action-btn primary" onclick="downloadCSV()">
+      <div class="ico" style="background:#dcfce7">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#16a34a"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z"/></svg>
+      </div>
+      <div class="lbl">CSVでデータをダウンロード<div class="sub">登録中のサブスクを全件エクスポート</div></div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--ts)"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </button>
+    <button class="action-btn" onclick="showToast('CSVインポートはメインアプリの設定画面から行えます')">
+      <div class="ico" style="background:#e0f2fe">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#0284c7"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
+      </div>
+      <div class="lbl">CSVからインポート<div class="sub">subly Free・他アプリからデータを取り込む</div></div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--ts)"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </button>
+  </div>
+
+  <div class="section-card">
+    <div class="section-title">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--p)"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+      アカウント
+    </div>
+    <button class="action-btn" onclick="openUpgradeModal()">
+      <div class="ico" style="background:var(--pl)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--p)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      </div>
+      <div class="lbl">現在のプラン：<span id="current-plan-label" style="color:var(--p);font-weight:700">Free</span><div class="sub">プランの変更・アップグレード</div></div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--ts)"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </button>
+    <button class="logout-btn" onclick="signOut()">ログアウト</button>
+  </div>
+</div>
+
+<!-- ── アップグレードモーダル ── -->
+<div class="modal-ov" id="upgrade-modal" onclick="if(event.target===this)closeUpgradeModal()">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">👤 何名で使いますか？</div>
+    <div class="modal-desc">人数によってプランが変わります。あとから変更できます。</div>
+    <div class="plan-option selected" id="plan-me" onclick="selectPlan('me')">
+      <div style="font-size:32px;line-height:1">👤</div>
+      <div style="flex:1">
+        <div class="plan-name">1名で使う — subly Me</div>
+        <div class="plan-price">¥XXX/年（準備中）</div>
+        <div class="plan-features">広告なし・件数無制限・バックアップ・CSV</div>
+      </div>
+      <div class="plan-check" id="check-me">✓</div>
+    </div>
+    <div class="plan-option" id="plan-family" onclick="selectPlan('family')">
+      <div style="font-size:32px;line-height:1">👨‍👩‍👧</div>
+      <div style="flex:1">
+        <div class="plan-name">2名以上 — subly Family</div>
+        <div class="plan-price">¥XXX/年（準備中）</div>
+        <div class="plan-features">Meの全機能＋家族共有・リアルタイム同期</div>
+      </div>
+      <div class="plan-check" id="check-family" style="visibility:hidden">✓</div>
+    </div>
+    <div style="font-size:11px;color:var(--ts);text-align:center;margin-top:8px">料金：¥XXX/年（Stripe決済 準備中）</div>
+    <button class="btn-primary" onclick="goToCheckout()">このプランで続ける（準備中）</button>
+    <button class="btn-cancel" onclick="closeUpgradeModal()">後で</button>
+  </div>
+</div>
+
+<!-- ── CSVモーダル ── -->
+<div class="modal-ov" id="csv-modal" onclick="if(event.target===this)closeCsvModal()">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title">CSVダウンロード</div>
+    <div class="modal-desc">登録中のサブスク <span id="csv-count">0</span>件をCSV形式でダウンロードします</div>
+    <div class="csv-preview" id="csv-preview"></div>
+    <button class="btn-primary" onclick="execDownloadCSV()">ダウンロードする</button>
+    <button class="btn-cancel" onclick="closeCsvModal()">キャンセル</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- ══════════════════════════════════════
+     Firebase SDK（compat版 CDN）
+══════════════════════════════════════ -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<script>
+// ══════════════════════════════════════
+//  Firebase 初期化
+// ══════════════════════════════════════
+const firebaseConfig = {
+  apiKey:            "AIzaSyDKK_VzcumaMK9tvpt8-xsW_xXsQc-Eq7c",
+  authDomain:        "subly-app-8316d.firebaseapp.com",
+  projectId:         "subly-app-8316d",
+  storageBucket:     "subly-app-8316d.firebasestorage.app",
+  messagingSenderId: "405096733928",
+  appId:             "1:405096733928:web:9e2b0b1148ac348a563d5d",
+  measurementId:     "G-008PC9CGY9"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db   = firebase.firestore();
+
+// ══════════════════════════════════════
+//  状態
+// ══════════════════════════════════════
+let currentUser = null;
+let currentPlan = 'free';
+let selectedPlan = 'me';
+let subs = [];
+
+function loadSubs() {
+  try { subs = JSON.parse(localStorage.getItem('subsData')) || []; }
+  catch(e) { subs = []; }
+}
+
+function moFromSub(s) {
+  if (s.freq === '単発（買い切り）') return 0;
+  const m = {'月額':1,'2ヶ月':2,'3ヶ月':3,'半年':6,'年額':12}[s.freq] || 1;
+  return Math.round(s.price / m);
+}
+
+// ══════════════════════════════════════
+//  認証
+// ══════════════════════════════════════
+function signInWithGoogle() {
+  const btn = document.getElementById('btn-google');
+  const errEl = document.getElementById('error-msg');
+  btn.disabled = true;
+  errEl.style.display = 'none';
+  showScreen('loading');
+
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider)
+    .catch(err => {
+      btn.disabled = false;
+      showScreen('login');
+      let msg = 'ログインに失敗しました';
+      if (err.code === 'auth/popup-blocked')  msg = 'ポップアップがブロックされました。ブラウザの設定を確認してください。';
+      if (err.code === 'auth/popup-closed-by-user') msg = 'ログインがキャンセルされました。';
+      if (err.code === 'auth/unauthorized-domain') msg = 'このドメインは許可されていません。Firebaseコンソールで設定してください。';
+      errEl.textContent = msg;
+      errEl.style.display = 'block';
+    });
+}
+
+function signOut() {
+  auth.signOut().then(() => {
+    currentUser = null;
+    showScreen('login');
+    showToast('ログアウトしました');
+  });
+}
+
+// ── Auth状態の監視（ページ読み込み時から常時） ──
+auth.onAuthStateChanged(async user => {
+  if (user) {
+    currentUser = user;
+    await saveUserToFirestore(user);
+    await loadPlanFromFirestore(user.uid);
+    loadSubs();
+    showHomeScreen(user);
+  } else {
+    showScreen('login');
+  }
+});
+
+// ══════════════════════════════════════
+//  Firestore
+// ══════════════════════════════════════
+async function saveUserToFirestore(user) {
+  try {
+    await db.collection('users').doc(user.uid).set({
+      displayName: user.displayName || '',
+      email:       user.email || '',
+      photoURL:    user.photoURL || '',
+      updatedAt:   firebase.firestore.FieldValue.serverTimestamp()
+    }, { merge: true });
+  } catch(e) { console.error('Firestore保存エラー:', e); }
+}
+
+async function loadPlanFromFirestore(uid) {
+  try {
+    const doc = await db.collection('users').doc(uid).get();
+    if (doc.exists && doc.data().plan) {
+      currentPlan = doc.data().plan;
+    }
+  } catch(e) { /* オフライン時などは無視 */ }
+}
+
+async function savePlanToFirestore(plan) {
+  if (!currentUser) return;
+  try {
+    await db.collection('users').doc(currentUser.uid).set(
+      { plan, updatedAt: firebase.firestore.FieldValue.serverTimestamp() },
+      { merge: true }
+    );
+  } catch(e) { console.error('プラン保存エラー:', e); }
+}
+
+// ══════════════════════════════════════
+//  画面管理
+// ══════════════════════════════════════
+function showScreen(name) {
+  document.getElementById('login-screen').style.display   = name === 'login'   ? 'block' : 'none';
+  document.getElementById('loading-screen').style.display = name === 'loading' ? 'block' : 'none';
+  document.getElementById('home-screen').style.display    = name === 'home'    ? 'block' : 'none';
+}
+
+function showHomeScreen(user) {
+  document.getElementById('user-name').textContent  = user.displayName || 'ユーザー';
+  document.getElementById('user-email').textContent = user.email || '';
+  if (user.photoURL) {
+    document.getElementById('user-avatar').innerHTML = `<img src="${user.photoURL}" alt="">`;
+  }
+  updatePlanUI();
+  updateStats();
+  showScreen('home');
+}
+
+function updatePlanUI() {
+  const labels = { free:'Free', me:'Me ⭐', family:'Family 👨‍👩‍👧' };
+  const lbl = labels[currentPlan] || 'Free';
+  document.getElementById('plan-pill').textContent          = lbl;
+  document.getElementById('current-plan-label').textContent = lbl;
+  document.getElementById('upgrade-banner').style.display =
+    currentPlan === 'free' ? 'flex' : 'none';
+}
+
+function updateStats() {
+  const active = subs.filter(s => !s.paused && s.freq !== '単発（買い切り）');
+  const mo = active.reduce((sum,s) => sum + moFromSub(s), 0);
+  const yr = mo * 12;
+  document.getElementById('stat-mo').textContent    = '¥' + mo.toLocaleString();
+  document.getElementById('stat-count').textContent = subs.length + '件';
+  document.getElementById('stat-yr').textContent    = '¥' + yr.toLocaleString();
+}
+
+// ══════════════════════════════════════
+//  プラン
+// ══════════════════════════════════════
+function openUpgradeModal()  { document.getElementById('upgrade-modal').classList.add('open'); }
+function closeUpgradeModal() { document.getElementById('upgrade-modal').classList.remove('open'); }
+
+function selectPlan(plan) {
+  selectedPlan = plan;
+  document.getElementById('plan-me').classList.toggle('selected', plan === 'me');
+  document.getElementById('plan-family').classList.toggle('selected', plan === 'family');
+  document.getElementById('check-me').style.visibility     = plan === 'me'     ? 'visible' : 'hidden';
+  document.getElementById('check-family').style.visibility = plan === 'family' ? 'visible' : 'hidden';
+}
+
+async function goToCheckout() {
+  closeUpgradeModal();
+  currentPlan = selectedPlan;
+  await savePlanToFirestore(selectedPlan);
+
+  // プランをlocalStorageにも保存（app.htmlで参照）
+  localStorage.setItem('currentPlan', selectedPlan);
+  localStorage.setItem('userUID', currentUser.uid);
+  localStorage.setItem('userName', currentUser.displayName || '');
+  localStorage.setItem('userEmail', currentUser.email || '');
+  localStorage.setItem('userPhoto', currentUser.photoURL || '');
+
+  // app.htmlへ遷移
+  window.location.href = 'app.html';
+}
+
+// ══════════════════════════════════════
+//  CSV
+// ══════════════════════════════════════
+function generateCSV() {
+  const header = ['サービス名','カテゴリ','金額','頻度','次回支払日','メンバー','満足度','支払い方法','メモ','解約URL','休止'];
+  const rows = subs.map(s => [
+    s.name||'', s.cat||'', s.price||0, s.freq||'', s.date||'',
+    s.member||'', s.sat||'', s.payment||'', s.memo||'', s.cancelUrl||'', s.paused?'1':'0'
+  ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(','));
+  return [header.join(','), ...rows].join('\n');
+}
+
+function downloadCSV() {
+  loadSubs();
+  const csv = generateCSV();
+  document.getElementById('csv-count').textContent = subs.length;
+  document.getElementById('csv-preview').textContent = csv.split('\n').slice(0,6).join('\n') + (subs.length > 5 ? '\n...' : '');
+  document.getElementById('csv-modal').classList.add('open');
+}
+
+function execDownloadCSV() {
+  const csv = '\uFEFF' + generateCSV();
+  const blob = new Blob([csv], { type:'text/csv;charset=utf-8' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  const d = new Date();
+  a.download = `subly_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+  closeCsvModal();
+  showToast(`${subs.length}件をダウンロードしました`);
+}
+
+function closeCsvModal() { document.getElementById('csv-modal').classList.remove('open'); }
+
+// ══════════════════════════════════════
+//  ユーティリティ
+// ══════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// 初期表示はonAuthStateChangedに任せる（ローディング表示）
+showScreen('loading');
+</script>
+</body>
+</html>
