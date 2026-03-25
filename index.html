@@ -621,12 +621,183 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     gtag('event', eventName, params || {});
   }
 </script>
+<!-- ══ Firebase SDK ══ -->
+<!-- ★ 実装時にconfigの値を差し替えてください ★ -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
+  } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+
+  // ── ★ここをFirebaseコンソールの値に差し替える★ ──
+  const firebaseConfig = {
+    apiKey:            "YOUR_API_KEY",
+    authDomain:        "YOUR_PROJECT.firebaseapp.com",
+    projectId:         "YOUR_PROJECT_ID",
+    storageBucket:     "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId:             "YOUR_APP_ID"
+  };
+  // ─────────────────────────────────────────────
+
+  // ダミーconfig検出（開発中はログインをスキップ）
+  const isDummyConfig = firebaseConfig.apiKey === 'YOUR_API_KEY';
+
+  let _firebaseApp, _auth;
+  if (!isDummyConfig) {
+    _firebaseApp = initializeApp(firebaseConfig);
+    _auth = getAuth(_firebaseApp);
+  }
+
+  // グローバルに公開
+  window._fbAuth = _auth || null;
+  window._fbIsDummy = isDummyConfig;
+
+  // Googleログイン
+  window.firebaseSignIn = async function() {
+    if (isDummyConfig) {
+      // デモ用：ダミーユーザーで直接ホームへ
+      window._currentUser = {
+        uid: 'demo_user',
+        displayName: 'デモユーザー',
+        email: 'demo@subly.app',
+        photoURL: null
+      };
+      showApp();
+      return;
+    }
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(_auth, provider);
+      window._currentUser = result.user;
+    } catch(e) {
+      console.error('ログインエラー:', e);
+      showToast('ログインに失敗しました');
+    }
+  };
+
+  // ログアウト
+  window.firebaseSignOut = async function() {
+    if (isDummyConfig) {
+      window._currentUser = null;
+      showLoginScreen();
+      return;
+    }
+    await signOut(_auth);
+  };
+
+  // Auth状態の監視
+  if (!isDummyConfig && _auth) {
+    onAuthStateChanged(_auth, (user) => {
+      window._currentUser = user;
+      if (user) {
+        showApp();
+      } else {
+        showLoginScreen();
+      }
+    });
+  } else if (isDummyConfig) {
+    // ダミー時はログイン画面を表示（スキップボタンで入れる）
+    document.addEventListener('DOMContentLoaded', () => {
+      showLoginScreen();
+    });
+  }
+
+  // ── ログイン状態に応じた画面切り替え ──
+  window.showApp = function() {
+    const loginPage = document.getElementById('pg-login');
+    const mainApp   = document.getElementById('main-app');
+    if (loginPage) loginPage.style.display = 'none';
+    if (mainApp)   mainApp.style.display   = 'block';
+    updateUserUI();
+    // メインアプリのinit
+    if (!window._appInited) {
+      window._appInited = true;
+      if (typeof waitAndInit === 'function') waitAndInit();
+    }
+  };
+
+  window.showLoginScreen = function() {
+    const loginPage = document.getElementById('pg-login');
+    const mainApp   = document.getElementById('main-app');
+    if (loginPage) loginPage.style.display = 'flex';
+    if (mainApp)   mainApp.style.display   = 'none';
+  };
+
+  // ── ユーザーUI更新 ──
+  window.updateUserUI = function() {
+    const user = window._currentUser;
+    if (!user) return;
+
+    // ヘッダーアバター
+    const avatarEl = document.getElementById('hdr-user-avatar');
+    if (avatarEl) {
+      if (user.photoURL) {
+        avatarEl.innerHTML = `<img src="${user.photoURL}" style="width:28px;height:28px;border-radius:50%;object-fit:cover">`;
+      } else {
+        const initial = (user.displayName || user.email || '?')[0].toUpperCase();
+        avatarEl.innerHTML = `<div style="width:28px;height:28px;border-radius:50%;background:var(--p);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700">${initial}</div>`;
+      }
+      avatarEl.style.display = 'flex';
+    }
+
+    // ドロワーのユーザー情報
+    const drawerNameEl  = document.getElementById('drawer-user-name');
+    const drawerEmailEl = document.getElementById('drawer-user-email');
+    if (drawerNameEl)  drawerNameEl.textContent  = user.displayName || 'ユーザー';
+    if (drawerEmailEl) drawerEmailEl.textContent = user.email || '';
+  };
+</script>
 </head>
 <body>
+
+<!-- ══ ログイン画面 ══ -->
+<div id="pg-login" style="display:none;position:fixed;inset:0;background:var(--p);flex-direction:column;align-items:center;justify-content:center;z-index:99999;padding:32px 24px">
+  <!-- ロゴ -->
+  <div style="margin-bottom:32px;text-align:center">
+    <div style="width:72px;height:72px;background:rgba(255,255,255,.2);border-radius:20px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+      <svg viewBox="0 0 512 512" width="44" height="44"><rect width="512" height="512" rx="110" fill="rgba(255,255,255,.3)"/><path d="M256 90 L380 138 L380 256 C380 330 326 390 256 415 C186 390 132 330 132 256 L132 138 Z" fill="rgba(255,255,255,0.4)" stroke="rgba(255,255,255,.7)" stroke-width="8"/><text x="256" y="310" text-anchor="middle" font-family="Arial,sans-serif" font-size="200" font-weight="900" fill="white" letter-spacing="-8">S</text></svg>
+    </div>
+    <div style="font-size:28px;font-weight:800;color:#fff;letter-spacing:-0.5px">subly Family</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.75);margin-top:4px">家族のサブスク・固定費を一緒に管理</div>
+  </div>
+
+  <!-- ログインカード -->
+  <div style="background:var(--card);border-radius:20px;padding:28px 24px;width:100%;max-width:360px;box-shadow:0 8px 32px rgba(0,0,0,.15)">
+    <div style="font-size:16px;font-weight:700;color:var(--tx);margin-bottom:6px">ログイン / アカウント作成</div>
+    <div style="font-size:13px;color:var(--ts);margin-bottom:20px;line-height:1.6">Googleアカウントで簡単にはじめられます。パスワード不要。</div>
+
+    <!-- Googleログインボタン -->
+    <button onclick="firebaseSignIn()" style="width:100%;padding:13px;border-radius:12px;background:#fff;color:#3c4043;border:1.5px solid #dadce0;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 1px 4px rgba(0,0,0,.1)">
+      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.29-8.16 2.29-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      Googleでログイン
+    </button>
+
+    <!-- デモ用スキップ（ダミーconfig時のみ表示） -->
+    <div id="login-demo-note" style="margin-top:14px;padding:10px 12px;background:var(--wbg,#fffbeb);border:1px solid #f0d060;border-radius:8px;font-size:11px;color:#8a6a10;line-height:1.6">
+      <strong>開発中（デモモード）：</strong>FirebaseのconfigをセットするとGoogleログインが有効になります。
+      <br>
+      <button onclick="window._currentUser={uid:'demo',displayName:'田中パパ',email:'papa@example.com',photoURL:null};showApp();" style="margin-top:8px;padding:6px 14px;border-radius:8px;background:var(--p);color:#fff;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">デモで入る →</button>
+    </div>
+  </div>
+
+  <div style="margin-top:20px;font-size:11px;color:rgba(255,255,255,.5);text-align:center">
+    ログインすることで<a href="#" style="color:rgba(255,255,255,.75)">利用規約</a>・<a href="#" style="color:rgba(255,255,255,.75)">プライバシーポリシー</a>に同意します
+  </div>
+</div>
+
+<!-- ══ メインアプリ（ログイン後に表示） ══ -->
+<div id="main-app" style="display:none">
 
 <!-- ヘッダー（スマホ） -->
 <header class="hdr">
   <span class="hdr-title">Subly</span>
+  <!-- ユーザーアバター（ログイン後に表示） -->
+  <div id="hdr-user-avatar" style="display:none;align-items:center;margin-right:4px;cursor:pointer" onclick="toggleHdrop(event)"></div>
   <button class="hdr-hamburger" id="hdr-hamburger" onclick="toggleHdrop(event)" aria-label="メニュー">
     <span></span><span></span><span></span>
   </button>
@@ -658,6 +829,18 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <div class="hdrop-app-name">Subly</div>
         <div class="hdrop-app-sub">サブスク管理アプリ</div>
       </div>
+    </div>
+
+    <!-- ユーザー情報（ログイン後に表示） -->
+    <div id="drawer-user-section" style="padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:12px">
+      <div id="drawer-user-icon" style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">👤</div>
+      <div style="flex:1;min-width:0">
+        <div id="drawer-user-name" style="font-size:14px;font-weight:700;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">---</div>
+        <div id="drawer-user-email" style="font-size:11px;color:rgba(255,255,255,.6);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">---</div>
+      </div>
+      <button onclick="closeHdrop();setTimeout(()=>{showDialog({icon:'🚪',title:'ログアウト',msg:'ログアウトしますか？',buttons:[{label:'キャンセル',cls:'cancel'},{label:'ログアウト',cls:'danger',onClick:()=>firebaseSignOut()}]})},150)" style="font-size:11px;background:rgba(255,255,255,.15);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:5px 10px;cursor:pointer;font-family:inherit;flex-shrink:0">
+        ログアウト
+      </button>
     </div>
 
     <!-- データ管理 -->
@@ -738,14 +921,15 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg></div>
       <div><div class="hd-lbl">機能リクエスト</div><div class="hd-sub">ご要望をお聞かせください</div></div>
     </button>
-    <button class="hd-row" onclick="closeHdrop();window.open('https://docs.google.com/forms/d/e/1FAIpQLSecie4ubn9sDlzdoQUWvzcEoK0O46dmQhghSr3VmLpsS-Coww/viewform?usp=publish-editor','_blank')">
-      <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
-      <div><div class="hd-lbl">お問い合わせ</div><div class="hd-sub">不具合・ご意見はこちら</div></div>
-    </button>
-    <button class="hd-row" onclick="closeHdrop();setTimeout(openPrivacy,150)">
-      <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/></svg></div>
-      <div><div class="hd-lbl">プライバシーポリシー</div><div class="hd-sub">データの取り扱いについて</div></div>
-    </button>
+
+    <!-- お問い合わせ・プライバシーポリシー（小さく目立たなく） -->
+    <div style="display:flex;justify-content:center;gap:16px;padding:10px 0 4px">
+      <a onclick="closeHdrop();window.open('https://docs.google.com/forms/d/e/1FAIpQLSecie4ubn9sDlzdoQUWvzcEoK0O46dmQhghSr3VmLpsS-Coww/viewform?usp=publish-editor','_blank')"
+        style="font-size:11px;color:rgba(255,255,255,.4);text-decoration:none;cursor:pointer">お問い合わせ</a>
+      <span style="font-size:11px;color:rgba(255,255,255,.2)">|</span>
+      <a onclick="closeHdrop();setTimeout(openPrivacy,150)"
+        style="font-size:11px;color:rgba(255,255,255,.4);text-decoration:none;cursor:pointer">プライバシーポリシー</a>
+    </div>
 
     <hr class="hd-div">
     <button class="hd-row" onclick="closeHdrop();setTimeout(resetAll,150)">
@@ -875,16 +1059,15 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <div class="s-body"><div class="s-title">機能リクエスト</div><div class="s-sub">ご要望をお聞かせください</div></div>
         <span class="s-arr">›</span>
       </div>
-      <div class="s-row" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSecie4ubn9sDlzdoQUWvzcEoK0O46dmQhghSr3VmLpsS-Coww/viewform?usp=publish-editor','_blank')">
-        <div class="s-ico" style="background:#FFF8EE"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
-        <div class="s-body"><div class="s-title">お問い合わせ</div><div class="s-sub">不具合・ご意見はこちら</div></div>
-        <span class="s-arr">›</span>
-      </div>
-      <div class="s-row" onclick="openPrivacy()">
-        <div class="s-ico" style="background:#F0FDF4"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/></svg></div>
-        <div class="s-body"><div class="s-title">プライバシーポリシー</div><div class="s-sub">データの取り扱いについて</div></div>
-        <span class="s-arr">›</span>
-      </div>
+    </div>
+
+    <!-- お問い合わせ・プライバシーポリシー（小さく目立たなく） -->
+    <div style="display:flex;justify-content:center;gap:20px;padding:16px 0 8px;margin-top:4px">
+      <a onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSecie4ubn9sDlzdoQUWvzcEoK0O46dmQhghSr3VmLpsS-Coww/viewform?usp=publish-editor','_blank')"
+        style="font-size:11px;color:var(--ts);text-decoration:none;cursor:pointer;opacity:.7">お問い合わせ</a>
+      <span style="font-size:11px;color:var(--bd)">|</span>
+      <a onclick="openPrivacy()"
+        style="font-size:11px;color:var(--ts);text-decoration:none;cursor:pointer;opacity:.7">プライバシーポリシー</a>
     </div>
     <div class="s-sec">データリセット</div>
     <div class="s-grp">
@@ -4723,6 +4906,8 @@ if(document.readyState==='loading'){
     </div>
   </div>
 </div>
+
+</div><!-- /main-app -->
 
 </body>
 </html>
