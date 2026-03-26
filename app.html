@@ -171,10 +171,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .sat-body{overflow:hidden;max-height:0;transition:max-height .3s ease}
 .sat-body.open{max-height:400px}
 .sat-row{display:flex;flex-direction:column;gap:5px;margin-top:10px}
-.sat-band{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:7px;cursor:pointer;transition:background .12s}
 .sat-band:hover{background:var(--bg)}
 .sat-stars{font-size:15px;flex-shrink:0;min-width:68px;letter-spacing:1px}
-.sat-bw{flex:1;background:var(--bg);border-radius:3px;height:7px;overflow:hidden}
 .sat-b{height:100%;border-radius:3px;transition:width .5s}
 .sat-info{min-width:80px;text-align:right}
 .sat-info .sa{font-size:15px;font-weight:700;color:var(--tx);white-space:nowrap;display:block}
@@ -230,7 +228,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .cal-day.today .cal-dn.sun,.cal-day.today .cal-dn.sat{color:#fff}
 /* 件数バッジ */
 .cal-badge{font-size:12px;font-weight:700;color:#fff;border-radius:5px;padding:2px 5px;display:inline-block;line-height:1.3}
-.cal-badge-more{font-size:12px;font-weight:700;color:var(--p);background:var(--pl);border-radius:3px;padding:1px 3px;display:inline-block}
 /* TimeTree風チップ */
 .cal-chip{
   font-size:clamp(8px,1.8vw,10px);
@@ -245,13 +242,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   line-height:1.4;
   border-left-width:2px;
   border-left-style:solid;
-}
-.cal-chip-more{
-  font-size:clamp(7px,1.5vw,9px);
-  font-weight:700;
-  color:var(--ts);
-  margin-top:2px;
-  line-height:1.3;
 }
 .cal-day-amt{
   font-size:clamp(7px,1.5vw,9px);
@@ -271,7 +261,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .cal-detail-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--bd);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .1s}
 .cal-detail-row:last-child{border-bottom:none}
 .cal-detail-row:active{background:var(--pl)}
-.cal-detail-bar{width:4px;border-radius:2px;align-self:stretch;flex-shrink:0}
 .cal-detail-icon{font-size:18px;flex-shrink:0}
 .cal-detail-body{flex:1;min-width:0}
 .cal-detail-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -279,20 +268,12 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .cal-detail-price{font-size:14px;font-weight:700;color:var(--p);white-space:nowrap}
 /* 空メッセージ */
 .cal-empty{text-align:center;padding:40px 16px;color:var(--ts);font-size:14px;line-height:2}
-.cal-alerts{margin-top:20px;display:flex;flex-direction:column;gap:7px}
 /* カレンダー明細モーダル（中央ポップアップ） */
 .cal-sheet-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;transition:opacity .2s}
 .cal-sheet-ov.open{opacity:1}
 .cal-sheet-ov.hidden{display:none}
 .cal-sheet-inner{width:100%;max-width:420px;background:var(--card);border-radius:16px;overflow:hidden;max-height:80vh;overflow-y:auto;transform:scale(.93) translateY(10px);transition:transform .22s cubic-bezier(.32,1,.23,1);box-shadow:0 20px 60px rgba(0,0,0,.25)}
 .cal-sheet-ov.open .cal-sheet-inner{transform:scale(1) translateY(0)}
-.cal-alert-item{background:var(--card);border-radius:10px;padding:11px 13px;display:flex;align-items:center;gap:11px;box-shadow:var(--sh);border-left:3px solid var(--dn);cursor:pointer}
-.cal-ai-icon{font-size:18px;flex-shrink:0}
-.cal-ai-body{flex:1}
-.cal-ai-name{font-size:14px;font-weight:700;margin-bottom:2px}
-.cal-ai-meta{font-size:13px;color:var(--ts);display:flex;gap:6px;flex-wrap:wrap}
-.cal-ai-price{font-size:14px;font-weight:700;color:var(--p);white-space:nowrap}
-
 /* ── 明細 ── */
 .list-ctrl{display:flex;gap:7px;margin-bottom:12px}
 .list-ctrl select{flex:1;padding:8px 10px;font-size:14px;font-family:inherit;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx);-webkit-appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%237E928C"><path d="M7 10l5 5 5-5z"/></svg>');background-repeat:no-repeat;background-position:right 7px center;padding-right:24px}
@@ -303,7 +284,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .sub-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
 .sub-body{flex:1;min-width:0}
 .sub-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.saving-badge{font-size:14px;cursor:pointer;display:inline-block;margin-left:4px;vertical-align:middle;transition:transform .15s;-webkit-tap-highlight-color:transparent}
 .saving-badge:hover,.saving-badge:active{transform:scale(1.3)}
 .pay-today{display:inline-block;margin-left:5px;background:#E53E3E;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;vertical-align:middle;letter-spacing:.3px}
 .pay-soon-3{display:inline-block;margin-left:5px;background:#DD6B20;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;vertical-align:middle;letter-spacing:.3px}
@@ -338,7 +318,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .q-btn:active{transform:scale(.97)}
 .q-name{font-size:15px;font-weight:700;color:var(--tx);display:block;margin-bottom:3px}
 .q-price{font-size:14px;color:var(--ts)}
-.q-plans-badge{font-size:12px;font-weight:700;background:var(--pl);color:var(--p);border-radius:3px;padding:1px 4px;margin-left:4px;vertical-align:middle}
 /* プランドロップダウン */
 .plan-dd{display:none;background:var(--card);border:1.5px solid var(--p);border-radius:9px;overflow:hidden;margin-top:0;box-shadow:0 4px 14px rgba(0,0,0,.10);width:100%}
 .plan-dd.open{display:block;animation:fadeUp .14s ease}
@@ -348,8 +327,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .plan-opt{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;cursor:pointer;border-bottom:1px solid var(--bd);transition:background .1s;-webkit-tap-highlight-color:transparent}
 .plan-opt:last-child{border-bottom:none}
 .plan-opt:active{background:var(--pl)}
-.plan-opt-lbl{font-size:14px;font-weight:500;color:var(--tx)}
-.plan-opt-prc{font-size:14px;font-weight:700;color:var(--p)}
 /* ── 手入力追加ボタン ── */
 .btn-manual-add{
   display:flex;align-items:center;justify-content:center;gap:9px;
@@ -553,39 +530,35 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
   // Auth状態の監視
   if (!isDummyConfig && _auth) {
-    // index.htmlからの遷移はlocalStorageにユーザー情報がある → 即座に表示
     const cachedUID = localStorage.getItem('userUID');
     if (cachedUID) {
-      // キャッシュがあればすぐにアプリを表示（Firebase確認は並行して実行）
+      // index.htmlからの遷移 → 即アプリ表示
       window._currentUser = {
         uid: cachedUID,
         displayName: localStorage.getItem('userName') || '',
         email: localStorage.getItem('userEmail') || '',
         photoURL: localStorage.getItem('userPhoto') || null
       };
-      showApp();
+      document.addEventListener('DOMContentLoaded', () => showApp());
     }
 
     onAuthStateChanged(_auth, (user) => {
       window._currentUser = user;
       if (user) {
-        // localStorageを最新情報で更新
         localStorage.setItem('userUID', user.uid);
         localStorage.setItem('userName', user.displayName || '');
         localStorage.setItem('userEmail', user.email || '');
         localStorage.setItem('userPhoto', user.photoURL || '');
         if (!cachedUID) showApp();
       } else {
-        // ログアウト済みならlocalStorageをクリアしてログイン画面へ
         localStorage.removeItem('userUID');
-        if (!cachedUID) showLoginScreen();
+        // ログイン機能未実装フェーズ：ログアウトしてもアプリをそのまま表示
+        if (!cachedUID) showApp();
       }
     });
-  } else if (isDummyConfig) {
-    // ダミー時はログイン画面を表示（スキップボタンで入れる）
-    document.addEventListener('DOMContentLoaded', () => {
-      showLoginScreen();
-    });
+  } else {
+    // Firebase未設定 or ダミー → 直接アプリを表示
+    document.addEventListener('DOMContentLoaded', () => showApp());
   }
 
   // ── ログイン状態に応じた画面切り替え ──
@@ -865,6 +838,23 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
     </div>
 
+    <!-- Family：グループ設定 -->
+    <div id="s-sec-family" style="display:none">
+      <div class="s-sec">家族グループ</div>
+      <div class="s-grp">
+        <div class="s-row" id="s-row-group-create" onclick="closeSettings();setTimeout(showOnboarding,200)">
+          <div class="s-ico" style="background:#E8F0ED"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg></div>
+          <div class="s-body"><div class="s-title">グループを作成する</div><div class="s-sub">家族を招待して共有管理</div></div>
+          <span class="s-arr">›</span>
+        </div>
+        <div class="s-row" id="s-row-group-settings" style="display:none" onclick="closeSettings();setTimeout(openFamilySettings,200)">
+          <div class="s-ico" style="background:#E8F0ED"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+          <div class="s-body"><div class="s-title" id="s-group-name-label">グループ設定</div><div class="s-sub">メンバー管理・招待リンク</div></div>
+          <span class="s-arr">›</span>
+        </div>
+      </div>
+    </div>
+
     <div class="s-sec">データ管理</div>
     <div class="s-grp">
       <div class="s-row" onclick="exportCSV()">
@@ -905,6 +895,16 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
     <div class="s-sec">データリセット</div>
     <div class="s-grp">
+      <div class="s-row" id="s-row-leave-family" style="display:none" onclick="leaveFamily()">
+        <div class="s-ico" style="background:#FEE2E2"><svg width="18" height="18" viewBox="0 0 24 24" fill="#C06060"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg></div>
+        <div class="s-body"><div class="s-title" style="color:var(--dn)">グループから脱退</div><div class="s-sub">Freeプランに戻ります</div></div>
+        <span class="s-arr">›</span>
+      </div>
+      <div class="s-row" id="s-row-cancel-plan" style="display:none" onclick="cancelPlan()">
+        <div class="s-ico" style="background:#FEF3C7"><svg width="18" height="18" viewBox="0 0 24 24" fill="#D97706"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div>
+        <div class="s-body"><div class="s-title" style="color:var(--yellow)">プランを解約</div><div class="s-sub">Freeプランに戻ります</div></div>
+        <span class="s-arr">›</span>
+      </div>
       <div class="s-row" onclick="resetAll()">
         <div class="s-ico" style="background:#FEE2E2"><svg width="18" height="18" viewBox="0 0 24 24" fill="#C06060"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></div>
         <div class="s-body"><div class="s-title" style="color:var(--dn)">全データを削除</div><div class="s-sub">この操作は元に戻せません</div></div>
@@ -1033,120 +1033,102 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 <!-- オンボーディング -->
 <div class="ob-overlay hidden" id="ob-ov">
 
-  <!-- スライドコンテナ（4ステップ） -->
-  <div class="ob-slides" id="ob-slides" style="width:400%">
+  <!-- スライドコンテナ（3ステップ） -->
+  <div class="ob-slides" id="ob-slides" style="width:300%">
 
-    <!-- ページ1: 問題提起 -->
-    <div class="ob-slide" style="width:25%">
+    <!-- ページ1: ようこそ -->
+    <div class="ob-slide" style="width:33.333%">
       <div class="ob-illust">
         <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
-          <!-- 水が漏れるバケツ -->
-          <rect x="28" y="30" width="54" height="48" rx="6" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
-          <!-- 水滴（漏れている） -->
-          <ellipse cx="55" cy="26" rx="8" ry="4" fill="rgba(255,255,255,0.4)"/>
-          <path d="M40 78 Q38 90 36 96" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round"/>
-          <path d="M55 78 Q55 92 55 98" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round"/>
-          <path d="M70 78 Q72 90 74 96" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round"/>
-          <!-- ¥マーク -->
-          <text x="55" y="62" text-anchor="middle" font-size="26" font-weight="800" fill="rgba(255,255,255,0.85)" font-family="sans-serif">¥</text>
-          <!-- 波線（水面） -->
-          <path d="M34 52 Q42 46 50 52 Q58 58 66 52 Q74 46 76 52" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none"/>
+          <!-- アプリアイコン風ロゴ -->
+          <rect x="15" y="15" width="80" height="80" rx="22" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+          <text x="55" y="52" text-anchor="middle" font-size="16" font-weight="800" fill="#fff" font-family="sans-serif">subly</text>
+          <path d="M30 65 Q55 55 80 65" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <circle cx="38" cy="72" r="5" fill="rgba(255,255,255,0.3)"/>
+          <circle cx="55" cy="76" r="5" fill="rgba(255,255,255,0.5)"/>
+          <circle cx="72" cy="72" r="5" fill="rgba(255,255,255,0.3)"/>
         </svg>
       </div>
-      <div class="ob-badge">知ってますか？</div>
-      <div class="ob-ttl">毎月、知らないうちに<br><em>お金が消えている。</em></div>
-      <div class="ob-desc">カード引き落としは「支払いの痛み」を感じにくく、使っていないサブスクに気づかず払い続けてしまいがちです。まず全部を「見える化」することが家計改善の第一歩です。</div>
+      <div id="ob-welcome-badge" class="ob-badge">ようこそ</div>
+      <div class="ob-ttl" id="ob-welcome-ttl">sublyへようこそ</div>
+      <div class="ob-desc" id="ob-welcome-desc">サブスクと固定費をかんたんに管理できるアプリです。まずは使い方をご紹介します。</div>
     </div>
 
-    <!-- ページ2: 見える化 -->
-    <div class="ob-slide" style="width:25%">
+    <!-- ページ2: できること -->
+    <div class="ob-slide" style="width:33.333%">
       <div class="ob-illust">
         <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
-          <!-- ラベル「1日あたり」 -->
-          <text x="55" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="rgba(255,255,255,0.6)" font-family="sans-serif">1日あたり</text>
-          <!-- カード -->
-          <rect x="18" y="26" width="74" height="36" rx="10" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
-          <text x="55" y="52" text-anchor="middle" font-size="22" font-weight="900" fill="#fff" font-family="sans-serif">約 ¥150</text>
-          <!-- 矢印 -->
-          <path d="M55 68 L55 76 M49 72 L55 78 L61 72" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <!-- 年間ラベル -->
-          <rect x="20" y="82" width="70" height="18" rx="9" fill="rgba(255,255,255,0.15)"/>
-          <text x="55" y="95" text-anchor="middle" font-size="10" font-weight="700" fill="#fff" font-family="sans-serif">年間 約 ¥54,750</text>
+          <!-- グラフ -->
+          <rect x="18" y="55" width="16" height="35" rx="4" fill="rgba(255,255,255,0.5)"/>
+          <rect x="40" y="38" width="16" height="52" rx="4" fill="rgba(255,255,255,0.75)"/>
+          <rect x="62" y="28" width="16" height="62" rx="4" fill="#fff"/>
+          <rect x="84" y="45" width="16" height="45" rx="4" fill="rgba(255,255,255,0.6)"/>
+          <!-- 折れ線 -->
+          <path d="M26 52 L48 35 L70 25 L92 42" stroke="rgba(255,255,255,0.9)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- ドット -->
+          <circle cx="26" cy="52" r="3.5" fill="#fff"/>
+          <circle cx="48" cy="35" r="3.5" fill="#fff"/>
+          <circle cx="70" cy="25" r="3.5" fill="#fff"/>
+          <circle cx="92" cy="42" r="3.5" fill="#fff"/>
         </svg>
       </div>
-      <div class="ob-badge">見える化</div>
-      <div class="ob-ttl">「1日いくら」で<br><em>本当の重さがわかる。</em></div>
-      <div class="ob-desc">月額・年額だけでなく「1日あたり何円」かを自動計算。小さく見えた金額が、実は年間で大きな出費になっていることに気づけます。</div>
+      <div class="ob-badge">できること</div>
+      <div class="ob-ttl">毎月の支払いを<br><em>まるごと見える化</em></div>
+      <div class="ob-desc" style="text-align:left;padding:0 4px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:18px">📊</span><span>月額・年額を自動でグラフ化</span></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:18px">📅</span><span>支払日をカレンダーで確認</span></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:18px">👨‍👩‍👧</span><span>家族のサブスクを一緒に管理</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">🔔</span><span>更新前日に通知でお知らせ</span></div>
+      </div>
     </div>
 
-    <!-- ページ3: 見直し -->
-    <div class="ob-slide" style="width:25%">
-      <div class="ob-illust">
-        <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
-          <!-- 天秤風 -->
-          <line x1="55" y1="22" x2="55" y2="55" stroke="rgba(255,255,255,0.6)" stroke-width="2.5"/>
-          <line x1="22" y1="42" x2="88" y2="42" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" stroke-linecap="round"/>
-          <!-- 左皿（必要） -->
-          <ellipse cx="28" cy="58" rx="16" ry="6" fill="rgba(255,255,255,0.25)" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
-          <line x1="22" y1="42" x2="22" y2="52" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
-          <line x1="34" y1="42" x2="34" y2="52" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
-          <text x="28" y="62" text-anchor="middle" font-size="9" font-weight="700" fill="#fff" font-family="sans-serif">必要</text>
-          <!-- 右皿（不要） -->
-          <ellipse cx="82" cy="62" rx="16" ry="6" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-          <line x1="76" y1="42" x2="76" y2="56" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-          <line x1="88" y1="42" x2="88" y2="56" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-          <text x="82" y="66" text-anchor="middle" font-size="9" font-weight="700" fill="rgba(255,255,255,0.5)" font-family="sans-serif">解約</text>
-          <!-- 星マーク -->
-          <text x="55" y="90" text-anchor="middle" font-size="22" font-family="sans-serif">⭐</text>
-        </svg>
+    <!-- ページ3: はじめよう（ルート選択） -->
+    <div class="ob-slide" style="width:33.333%">
+      <div style="margin-bottom:16px;text-align:center">
+        <div class="ob-badge" id="ob-start-badge">さあはじめよう</div>
+        <div class="ob-ttl" id="ob-start-ttl" style="font-size:20px">どのように使いますか？</div>
       </div>
-      <div class="ob-badge">見直し</div>
-      <div class="ob-ttl">満足度★で<br><em>いるもの・いらないものを仕分ける。</em></div>
-      <div class="ob-desc">各サブスクに満足度★をつけて管理。低評価のサブスクを解約すれば、毎月の固定費が減り、浮いたお金を貯金や投資に回せます。</div>
-    </div>
+      <div style="display:flex;flex-direction:column;gap:10px;padding:0 4px">
 
-    <!-- ページ4: Family グループ選択（3ルート） -->
-    <div class="ob-slide" style="width:25%;overflow-y:auto">
-      <div class="ob-badge">最後のステップ</div>
-      <div class="ob-ttl" style="font-size:20px;margin-bottom:16px">家族グループを<br><em>どうしますか？</em></div>
-
-      <!-- ルート① 新規作成 -->
-      <div class="ob-route-card" id="ob-route-new" onclick="obSelectRoute('new')" style="background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.6);border-radius:14px;padding:14px 16px;margin-bottom:10px;cursor:pointer;text-align:left;transition:all .15s">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
-          </div>
-          <div>
-            <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:2px">新しく家族を作る</div>
-            <div style="font-size:11px;color:rgba(255,255,255,.75)">招待リンクを共有して家族を招待</div>
+        <!-- ルート①：1人で使う -->
+        <div class="ob-route-card" id="ob-route-solo" onclick="obSelectRoute('solo')" style="background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.6);border-radius:14px;padding:14px 16px;cursor:pointer;text-align:left;transition:all .15s">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:2px">1人で使う</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.75)">自分のサブスクをシンプル管理</div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- ルート② Me移行 -->
-      <div class="ob-route-card" id="ob-route-import" onclick="obSelectRoute('import')" style="background:rgba(255,255,240,.15);border:2px solid rgba(255,255,180,.5);border-radius:14px;padding:14px 16px;margin-bottom:10px;cursor:pointer;text-align:left;transition:all .15s">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,180,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="rgba(255,255,200,.9)"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5z"/></svg>
-          </div>
-          <div>
-            <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:2px">subly Me からデータを引き継ぐ</div>
-            <div style="font-size:11px;color:rgba(255,255,255,.75)">Meで登録済みのサブスクをインポート</div>
+        <!-- ルート②：新しく家族グループを作る -->
+        <div class="ob-route-card" id="ob-route-new" onclick="obSelectRoute('new')" style="background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.4);border-radius:14px;padding:14px 16px;cursor:pointer;text-align:left;transition:all .15s">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:2px">家族グループを作る</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.75)">招待リンクを共有して家族と一緒に</div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- ルート③ 招待参加 -->
-      <div class="ob-route-card" id="ob-route-join" onclick="obSelectRoute('join')" style="background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.3);border-radius:14px;padding:14px 16px;cursor:pointer;text-align:left;transition:all .15s">
-        <div style="display:flex;align-items:center;gap:10px">
-          <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-          </div>
-          <div>
-            <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:2px">招待リンクから参加</div>
-            <div style="font-size:11px;color:rgba(255,255,255,.75)">家族から届いたリンクで合流</div>
+        <!-- ルート③：招待リンクから参加 -->
+        <div class="ob-route-card" id="ob-route-join" onclick="obSelectRoute('join')" style="background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.25);border-radius:14px;padding:14px 16px;cursor:pointer;text-align:left;transition:all .15s">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:2px">招待リンクから参加</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.75)">家族から届いたリンクで合流</div>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
 
@@ -1157,11 +1139,10 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     <div class="ob-dot on" onclick="obGoto(0)"></div>
     <div class="ob-dot" onclick="obGoto(1)"></div>
     <div class="ob-dot" onclick="obGoto(2)"></div>
-    <div class="ob-dot" onclick="obGoto(3)"></div>
   </div>
 
   <!-- ボタン -->
-  <div class="ob-footer">
+  <div class="ob-btns">
     <button class="ob-btn-skip" id="ob-skip" onclick="_obRoute='skip';closeOb();goto('dashboard')">スキップ</button>
     <button class="ob-btn-next" id="ob-next" onclick="obNext()">次へ</button>
   </div>
@@ -1187,7 +1168,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       style="display:flex;align-items:center;gap:12px;background:var(--p);border-radius:var(--r);padding:13px 14px;margin-bottom:10px;cursor:pointer;color:#fff">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="rgba(255,255,255,.9)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
       <div style="flex:1">
-        <div style="font-size:13px;font-weight:700;margin-bottom:2px">subly Me / Family にアップグレード</div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:2px">subly Family にアップグレード</div>
         <div style="font-size:11px;opacity:.8">広告なし・無制限・1人か家族かを選ぶだけ</div>
       </div>
       <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,.8)"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
@@ -1195,6 +1176,12 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
     <!-- ══ 家族メンバーエリア（Family追加） ══ -->
     <div id="family-area" style="background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:12px 14px;margin-bottom:10px;display:none">
+      <!-- グループ未作成 → 作成誘導 -->
+      <div id="family-create-cta" style="display:none;text-align:center;padding:8px 0 4px">
+        <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:4px">家族とサブスクを共有しよう</div>
+        <div style="font-size:11px;color:var(--ts);margin-bottom:10px">グループを作って招待リンクを送るだけ</div>
+        <button onclick="showOnboarding()" style="background:var(--p);color:#fff;border:none;border-radius:10px;padding:9px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">グループを作成する</button>
+      </div>
       <!-- グループ名 + 設定 -->
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
         <div style="display:flex;align-items:center;gap:6px">
@@ -1205,6 +1192,13 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
       <!-- メンバーアバター行 -->
       <div id="member-avatars" style="display:flex;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap"></div>
+      <!-- メンバー管理ボタン（family-areaから直接アクセス） -->
+      <div id="member-manage-row" style="display:flex;gap:8px;margin-bottom:6px">
+        <button onclick="openFamilySettings()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;border-radius:10px;background:var(--pl);border:1.5px dashed var(--p);font-size:12px;font-weight:600;color:var(--p);cursor:pointer;font-family:inherit">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--p)"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          メンバーを追加・管理
+        </button>
+      </div>
       <!-- メンバー別金額 -->
       <div id="member-breakdown" style="display:flex;flex-direction:column;gap:6px"></div>
     </div>
@@ -1597,13 +1591,13 @@ const Store = (function(){
 let subs = [];
 
 // ══ プラン管理（Free / Me / Family） ══
-let currentPlan = 'free'; // 'free' | 'me' | 'family'
-const PLAN_LIMITS = { free: 20, me: Infinity, family: Infinity };
-const PLAN_LABELS = { free: 'Free', me: 'Me ⭐', family: 'Family 👨‍👩‍👧' };
+let currentPlan = 'free'; // 'free' | 'family'
+const PLAN_LIMITS = { free: 20, family: Infinity };
+const PLAN_LABELS = { free: 'Free', family: 'Family 👨‍👩‍👧' };
 
 function getPlanLimit() { return PLAN_LIMITS[currentPlan] ?? 20; }
-function isFamilyPlan() { return currentPlan === 'family' || currentPlan === 'me'; }
-function isPaidPlan()   { return currentPlan === 'me' || currentPlan === 'family'; }
+function isFamilyPlan() { return currentPlan === 'family'; }
+function isPaidPlan()   { return currentPlan === 'family'; }
 
 async function setPlan(plan) {
   currentPlan = plan;
@@ -1620,8 +1614,8 @@ function applyPlanUI() {
   const badge = document.getElementById('settings-plan-badge');
   if (badge) {
     badge.textContent = PLAN_LABELS[currentPlan] || 'Free';
-    badge.style.background = isFamilyPlan() ? '#deecd8' : isPaidPlan() ? '#e8f5ef' : '#f1f1f1';
-    badge.style.color = isPaidPlan() ? '#2C7A5E' : '#666';
+    badge.style.background = isFamilyPlan() ? '#deecd8' : '#f1f1f1';
+    badge.style.color = isFamilyPlan() ? '#2C7A5E' : '#666';
   }
 
   // ── ドロワーのプランバッジ ──
@@ -1648,9 +1642,13 @@ function applyPlanUI() {
     }
   }
 
-  // ── 家族エリアの表示（Familyのみ） ──
+  // ── 家族エリアの表示（FamilyプランまたはFamily機能使用時） ──
   const familyArea = document.getElementById('family-area');
-  if (familyArea) familyArea.style.display = isFamilyPlan() ? 'block' : 'none';
+  if (familyArea) {
+    const showFamily = isFamilyPlan() || localStorage.getItem('joinedGroup');
+    familyArea.style.display = showFamily ? 'block' : 'none';
+    if (showFamily) renderFamilyArea();
+  }
 
   // ── メンバーフィルタータブ（Familyのみ） ──
   const memberTabs = document.getElementById('member-filter-tabs');
@@ -1662,16 +1660,31 @@ function applyPlanUI() {
     const mbSection = document.getElementById('ls-member-breakdown');
     if (mbSection) mbSection.closest('div[style*="rgba"]') && (mbSection.style.display = isFamilyPlan() ? 'flex' : 'none');
   }
+
+  // ── 退会・脱退ボタン（設定画面） ──
+  const rowLeave  = document.getElementById('s-row-leave-family');
+  const rowCancel = document.getElementById('s-row-cancel-plan');
+  const joinedGroup = localStorage.getItem('joinedGroup');
+  if (rowLeave)  rowLeave.style.display  = (isFamilyPlan() && joinedGroup) ? 'flex' : 'none';
+  if (rowCancel) rowCancel.style.display = isPaidPlan() ? 'flex' : 'none';
+
+  // ── 設定画面のグループセクション ──
+  const sFamilySec     = document.getElementById('s-sec-family');
+  const sRowCreate     = document.getElementById('s-row-group-create');
+  const sRowSettings   = document.getElementById('s-row-group-settings');
+  const sGroupNameLbl  = document.getElementById('s-group-name-label');
+  if (sFamilySec) sFamilySec.style.display = isFamilyPlan() ? 'block' : 'none';
+  if (isFamilyPlan()) {
+    const hasMembers = familyMembers.length > 0;
+    if (sRowCreate)   sRowCreate.style.display   = hasMembers ? 'none' : 'flex';
+    if (sRowSettings) sRowSettings.style.display = hasMembers ? 'flex' : 'none';
+    if (sGroupNameLbl) sGroupNameLbl.textContent  = familyName || 'グループ設定';
+  }
 }
 
 // ══ Family追加データ ══
-let familyName = '田中家';
-let familyMembers = [
-  { id: 'm1', name: 'パパ',     emoji: '👨', color: '#fde8d8' },
-  { id: 'm2', name: 'ママ',     emoji: '👩', color: '#deecd8' },
-  { id: 'm3', name: '子供',     emoji: '🧒', color: '#e8e4f8' },
-  { id: 'm4', name: 'ワンちゃん', emoji: '🐶', color: '#fdf4d8' },
-];
+let familyName = '';
+let familyMembers = [];
 
 let myChart=null, editId=null, calYear, calMonth, calFilter='all';
 let inclOt = false;
@@ -2629,7 +2642,27 @@ async function nativeShare(){
 }
 function showOnboarding(){
   closeSettings();
-  obGoto(0); // 必ず最初のページから
+  // Pro/Familyプランからの呼び出し時はメッセージを変える
+  const badge  = document.getElementById('ob-welcome-badge');
+  const ttl    = document.getElementById('ob-welcome-ttl');
+  const desc   = document.getElementById('ob-welcome-desc');
+  const sBadge = document.getElementById('ob-start-badge');
+  const sTtl   = document.getElementById('ob-start-ttl');
+  if (isPaidPlan()) {
+    const planLabel = 'Family';
+    if (badge)  badge.textContent  = planLabel + ' プラン';
+    if (ttl)    ttl.innerHTML      = 'ご利用ありがとうございます！';
+    if (desc)   desc.textContent   = 'subly ' + planLabel + ' プランへのお申し込みありがとうございます。まずグループの設定をして、家族と一緒に使い始めましょう。';
+    if (sBadge) sBadge.textContent = 'さあはじめよう';
+    if (sTtl)   sTtl.textContent   = 'どのように使いますか？';
+  } else {
+    if (badge)  badge.textContent  = 'ようこそ';
+    if (ttl)    ttl.innerHTML      = 'sublyへようこそ';
+    if (desc)   desc.textContent   = 'サブスクと固定費をかんたんに管理できるアプリです。まずは使い方をご紹介します。';
+    if (sBadge) sBadge.textContent = 'さあはじめよう';
+    if (sTtl)   sTtl.textContent   = 'どのように使いますか？';
+  }
+  obGoto(0);
   document.getElementById('ob-ov').classList.remove('hidden');
 }
 let _obPage=0;
@@ -2640,9 +2673,9 @@ function obGoto(n){
   const nextBtn=document.getElementById('ob-next');
   const skipBtn=document.getElementById('ob-skip');
   if(!slides) return;
-  slides.style.transform=`translateX(${-n*25}%)`;
+  slides.style.transform=`translateX(${-n*33.333}%)`;
   dots.forEach((d,i)=>d.classList.toggle('on',i===n));
-  const isLast=(n===3);
+  const isLast=(n===2);
   // 最終ページは「次へ」ボタンを非表示（カード選択で進む）
   if(nextBtn) {
     nextBtn.style.display = isLast ? 'none' : '';
@@ -2651,7 +2684,7 @@ function obGoto(n){
   if(skipBtn) skipBtn.style.display=isLast?'none':'';
 }
 function obNext(){
-  if(_obPage<3){ obGoto(_obPage+1); }
+  if(_obPage<2){ obGoto(_obPage+1); }
 }
 
 // ルート選択
@@ -2659,7 +2692,7 @@ let _obRoute = null;
 function obSelectRoute(route) {
   _obRoute = route;
   // カードのハイライト更新
-  ['new','import','join'].forEach(r => {
+  ['solo','new','join'].forEach(r => {
     const card = document.getElementById('ob-route-' + r);
     if (!card) return;
     if (r === route) {
@@ -2677,8 +2710,13 @@ function obSelectRoute(route) {
 
 async function obRouteAction(route) {
   await closeOb();
-  if (route === 'new') {
-    // ルート①：新規作成 → グループ名設定ダイアログ
+  if (route === 'solo') {
+    // ルート①：1人で使う → そのままホームへ
+    showToast('sublyへようこそ！サブスクを登録してみましょう');
+    goto('dashboard');
+
+  } else if (route === 'new') {
+    // ルート②：新規作成 → グループ名設定ダイアログ
     showDialog({
       icon: '🏡',
       title: '家族グループを作成',
@@ -2690,10 +2728,41 @@ async function obRouteAction(route) {
         { label: '作成する', cls: 'ok', onClick: async () => {
           const name = document.getElementById('dlg-group-name')?.value?.trim();
           if (name) familyName = name;
+          // 自分をメンバーとして追加（まだいなければ）
+          if (familyMembers.length === 0) {
+            const myName = localStorage.getItem('userName') || 'オーナー';
+            familyMembers.push({ id: 'm1', name: myName, emoji: '👤', color: '#E8F0ED' });
+          }
           await saveFamilyData();
+          await setPlan('family');
           renderFamilyArea();
-          showToast(`「${familyName}」を作成しました！招待リンクを共有してメンバーを招待しましょう`);
+          applyPlanUI();
           goto('dashboard');
+          // Freeで登録済みデータがあればCSV引継ぎを提案
+          setTimeout(() => {
+            if (subs.length > 0) {
+              showDialog({
+                icon: '📋',
+                title: 'データをグループに持ち込む',
+                msg: `<div style="font-size:13px;color:var(--ts);line-height:1.7">
+                  現在 <strong style="color:var(--tx)">${subs.length}件</strong> のサブスクが登録されています。<br>
+                  このままグループで共有できます。<br><br>
+                  各サブスクに「誰のサブスク？」を設定すると、メンバー別に管理できます。
+                </div>`,
+                buttons: [
+                  { label: 'あとで設定', cls: 'cancel', onClick: () => {
+                    showToast('「' + familyName + '」を作成しました！');
+                  }},
+                  { label: 'メンバー割当へ', cls: 'ok', onClick: () => {
+                    goto('list');
+                    showToast('サブスクをタップしてメンバーを設定してください');
+                  }}
+                ]
+              });
+            } else {
+              showToast('「' + familyName + '」を作成しました！招待リンクを共有してメンバーを招待しましょう');
+            }
+          }, 400);
         }}
       ]
     });
@@ -2702,11 +2771,11 @@ async function obRouteAction(route) {
     // ルート②：Me移行 → 引き継ぎ確認ダイアログ
     showDialog({
       icon: '📥',
-      title: 'subly Me のデータを引き継ぐ',
+      title: 'Freeプランのデータを引き継ぐ',
       msg: `<div style="font-size:13px;color:var(--ts);line-height:1.7">
-        subly Me でエクスポートしたCSVファイルを読み込んで、サブスクデータを引き継ぎます。<br><br>
+        Freeプランでエクスポートしたデータを読み込んで、サブスクデータを引き継ぎます。<br><br>
         <strong style="color:var(--tx)">手順：</strong><br>
-        ① subly Me → 設定 → CSVエクスポート<br>
+        ① 設定 → CSVエクスポートでデータを保存<br>
         ② このアプリでCSVを読み込む<br>
         ③ 各サブスクに「誰のサブスク？」を割り当て
       </div>`,
@@ -2733,15 +2802,53 @@ async function obRouteAction(route) {
       <input id="dlg-invite-code" type="text" placeholder="例：https://subly.app/family/invite/..." 
         style="width:100%;border:1.5px solid var(--bd);border-radius:8px;padding:9px 12px;font-size:13px;font-family:inherit;background:var(--bg);color:var(--tx);outline:none">
       <div id="dlg-invite-note" style="font-size:11px;color:var(--ts);margin-top:8px">
-        Firebase認証実装後に有効になります
+        招待コードを入力してください
       </div>`,
       buttons: [
         { label: 'キャンセル', cls: 'cancel', onClick: () => goto('dashboard') },
-        { label: '参加する（仮）', cls: 'ok', onClick: () => {
-          // Firebase実装後に本実装
-          showToast('招待参加機能はFirebase Auth実装後に有効になります');
-          // Me移行確認も行う
-          setTimeout(() => showMeImportConfirmForJoin(), 400);
+        { label: '参加する', cls: 'ok', onClick: () => {
+          const input = document.getElementById('dlg-invite-code');
+          const val = (input ? input.value : '').trim();
+          if (!val) {
+            const note = document.getElementById('dlg-invite-note');
+            if (note) { note.textContent = '招待コードまたはURLを入力してください'; note.style.color = 'var(--dn)'; }
+            return;
+          }
+          // URLから招待コードを抽出
+          let code = val;
+          try { const u = new URL(val); const c = u.searchParams.get('invite') || u.pathname.split('/').pop(); if (c) code = c; } catch(e) {}
+          // 保存済みの招待コードと照合
+          const saved = localStorage.getItem('inviteCode');
+          if (saved) {
+            try {
+              const data = JSON.parse(saved);
+              if (data.code === code && Date.now() < data.expiry) {
+                const groupName = data.groupName || '家族グループ';
+                localStorage.setItem('joinedGroup', groupName);
+                setPlan('family');
+                closeDialog();
+                showToast('「' + groupName + '」に参加しました！');
+                goto('dashboard');
+                setTimeout(() => showMeImportConfirmForJoin(), 600);
+                return;
+              } else if (Date.now() >= data.expiry) {
+                showToast('招待リンクの有効期限が切れています'); return;
+              }
+            } catch(e) {}
+          }
+          // URLパラメータで確認
+          const urlCode = new URLSearchParams(window.location.search).get('invite');
+          if (urlCode && urlCode === code) {
+            const groupName = decodeURIComponent(new URLSearchParams(window.location.search).get('group') || '家族グループ');
+            localStorage.setItem('joinedGroup', groupName);
+            setPlan('family');
+            closeDialog();
+            showToast('「' + groupName + '」に参加しました！');
+            goto('dashboard');
+            setTimeout(() => showMeImportConfirmForJoin(), 600);
+          } else {
+            showToast('招待コードが正しくありません');
+          }
         }}
       ]
     });
@@ -2761,9 +2868,9 @@ function showImportFromOB() {
 function showMeImportConfirmForJoin() {
   showDialog({
     icon: '📱',
-    title: 'subly Me のデータを持ち込む？',
+    title: 'データをグループに持ち込む？',
     msg: `<div style="font-size:13px;color:var(--ts);line-height:1.7">
-      subly Me を使っていた場合、自分のサブスクデータをこのグループに持ち込めます。
+      これまで登録したサブスクデータをグループに持ち込めます。
     </div>`,
     buttons: [
       { label: 'いいえ', cls: 'cancel', onClick: () => goto('dashboard') },
@@ -2787,6 +2894,53 @@ async function resetAll(){
       {label:'削除する', cls:'danger', onClick: async ()=>{
         subs=[]; await save(); closeSettings(); goto('dashboard');
         showToast('データを削除しました');
+      }}
+    ]
+  });
+}
+
+/* ============================================================
+   退会・プラン変更
+============================================================ */
+// Familyグループから脱退（Free降格）
+function leaveFamily() {
+  const groupName = localStorage.getItem('joinedGroup') || '家族グループ';
+  showDialog({
+    icon: '🚪',
+    title: 'グループから脱退',
+    msg: `「${groupName}」から脱退しますか？<br><span style="font-size:12px;color:var(--ts)">脱退するとFreeプランに戻ります。自分のサブスクデータは残ります。</span>`,
+    buttons: [
+      { label: 'キャンセル', cls: 'cancel' },
+      { label: '脱退する', cls: 'danger', onClick: async () => {
+        localStorage.removeItem('joinedGroup');
+        localStorage.removeItem('inviteCode');
+        await setPlan('free');
+        closeSettings();
+        showToast('グループから脱退しました');
+        goto('dashboard');
+      }}
+    ]
+  });
+}
+
+// Pro/Familyを解約してFreeに戻す
+function cancelPlan() {
+  const planName = currentPlan === 'family' ? 'Family' : 'Pro';
+  showDialog({
+    icon: '⚠️',
+    title: `${planName}プランを解約`,
+    msg: `${planName}プランを解約してFreeプランに戻りますか？<br><span style="font-size:12px;color:var(--ts)">登録件数が20件を超えている場合、古いデータは非表示になります。</span>`,
+    buttons: [
+      { label: 'キャンセル', cls: 'cancel' },
+      { label: '解約する', cls: 'danger', onClick: async () => {
+        if (currentPlan === 'family') {
+          localStorage.removeItem('joinedGroup');
+          localStorage.removeItem('inviteCode');
+        }
+        await setPlan('free');
+        closeSettings();
+        showToast('Freeプランに戻しました');
+        goto('dashboard');
       }}
     ]
   });
@@ -3092,10 +3246,10 @@ function renderMemberFilterTabs() {
         すべて
       </button>
       ${memberBtns}
-      <button onclick="setMemberFilter('shared')"
+      ${familyMembers.length >= 2 ? `<button onclick="setMemberFilter('shared')"
         style="padding:5px 13px;border-radius:20px;border:1.5px solid;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s;flex-shrink:0;${btnStyle(sharedActive)}">
         🔗 共有
-      </button>
+      </button>` : ''}
     </div>`;
 }
 
@@ -3439,8 +3593,6 @@ function renderList(){
 
   const cat=document.getElementById('fl-cat').value;
   const sort=document.getElementById('fl-sort').value;
-  // GA: フィルター使用（'all'以外のカテゴリ選択のみ計測）
-  if(cat !== 'all')
   let list;
   if(cat==='休止中'){
     list=subs.filter(s=>s.paused);
@@ -3756,7 +3908,7 @@ async function submitForm(){
       showDialog({
         icon:'🔒',
         title:`Free プランの上限（${getPlanLimit()}件）に達しました`,
-        msg:'subly Me または Family にアップグレードすると無制限に登録できます。',
+        msg:'subly Family にアップグレードすると登録件数無制限・家族共有が使えます。',
         buttons:[
           {label:'後で', cls:'cancel'},
           {label:'アップグレード', cls:'ok', onClick: openUpgradeModal}
@@ -4097,9 +4249,7 @@ function parseCSVLine(line){
    初期化（非同期：Capacitor Preferences対応）
 ============================================================ */
 async function init(){
-  console.log('[init] 開始');
   await loadFamilyData(); // Family追加
-  console.log('[init] loadFamilyData完了');
 
   // ── プランをロード（index.htmlからの遷移を優先） ──
   const planFromLogin = localStorage.getItem('currentPlan');
@@ -4145,244 +4295,48 @@ async function init(){
       : 'オフ';
   }
 
-  // Family版デモ：サブスクが空の場合はサンプルデータを注入
-  if (subs.length === 0) {
-    subs = [
-      // 共有（家族全員）
-      {id:1001,name:'Netflix',         cat:'動画・配信',      price:1490, freq:'月額',date:'2026-04-05',memo:'ファミリープラン',payment:'クレジットカード',member:'shared',sat:5,cancelUrl:'',paused:false},
-      {id:1002,name:'Amazon Prime',    cat:'金融・年会費',    price:5900, freq:'年額', date:'2026-09-01',memo:'',             payment:'クレジットカード',member:'shared',sat:5,cancelUrl:'',paused:false},
-      {id:1003,name:'Disney+',         cat:'動画・配信',      price:990,  freq:'月額',date:'2026-04-20',memo:'',             payment:'クレジットカード',member:'shared',sat:4,cancelUrl:'',paused:false},
-      // パパ
-      {id:1004,name:'Spotify',         cat:'音楽',            price:980,  freq:'月額',date:'2026-04-10',memo:'',             payment:'クレジットカード',member:'m1',sat:5,cancelUrl:'',paused:false},
-      {id:1005,name:'スポーツジム',    cat:'健康・フィットネス',price:8800,freq:'月額',date:'2026-04-01',memo:'近所のジム',   payment:'口座引落',        member:'m1',sat:3,cancelUrl:'',paused:false},
-      {id:1006,name:'日経電子版',      cat:'電子書籍・雑誌',  price:4277, freq:'月額',date:'2026-04-28',memo:'仕事用',       payment:'クレジットカード',member:'m1',sat:3,cancelUrl:'',paused:false},
-      // ママ
-      {id:1007,name:'ヨガアプリ',      cat:'健康・フィットネス',price:1280,freq:'月額',date:'2026-04-25',memo:'',            payment:'Apple Pay',       member:'m2',sat:4,cancelUrl:'',paused:false},
-      {id:1008,name:'Kindle Unlimited',cat:'電子書籍・雑誌',  price:980,  freq:'月額',date:'2026-04-15',memo:'',            payment:'クレジットカード',member:'m2',sat:4,cancelUrl:'',paused:false},
-      {id:1009,name:'料理動画サービス',cat:'習い事',           price:500,  freq:'月額',date:'2026-05-10',memo:'',            payment:'Apple Pay',       member:'m2',sat:5,cancelUrl:'',paused:false},
-      // 子供
-      {id:1010,name:'Nintendo Switch Online',cat:'ゲーム',    price:300,  freq:'月額',date:'2026-08-01',memo:'',            payment:'クレジットカード',member:'m3',sat:5,cancelUrl:'',paused:false},
-      {id:1011,name:'英語学習アプリ',  cat:'習い事',           price:1200, freq:'月額',date:'2026-05-01',memo:'',            payment:'Apple Pay',       member:'m3',sat:3,cancelUrl:'',paused:false},
-      {id:1012,name:'マンガアプリ',    cat:'電子書籍・雑誌',  price:600,  freq:'月額',date:'2026-04-18',memo:'',            payment:'Google Pay',      member:'m3',sat:5,cancelUrl:'',paused:false},
-      // ワンちゃん
-      {id:1013,name:'アニコム損保 ペット保険',cat:'保険',     price:2570, freq:'月額',date:'2026-04-27',memo:'柴犬・むぎ',  payment:'口座引落',        member:'m4',sat:5,cancelUrl:'',paused:false},
-      {id:1014,name:'ペットフード定期便',cat:'その他',         price:3800, freq:'月額',date:'2026-04-08',memo:'',            payment:'クレジットカード',member:'m4',sat:4,cancelUrl:'',paused:false},
-    ];
-    await save();
-    document.getElementById('how-to-box').style.display='none';
-  }
-
   applyPlanUI(); // プランUIを適用
-  console.log('[init] applyPlanUI完了');
   if(!onboarded) showOnboarding();
   goto('dashboard');
-  console.log('[init] goto dashboard完了');
   updateFilterCounts();
   checkInviteParam(); // 招待パラメータを検出
-  console.log('[init] 完了');
 
   // ── リピーター追跡：起動回数・登録件数をユーザープロパティにセット ──
   const openCountRaw = await Store.get('appOpenCount');
   const appOpenCount = (parseInt(openCountRaw) || 0) + 1;
   await Store.set('appOpenCount', String(appOpenCount));
-  if(typeof gtag === 'function'){
-    gtag('set', 'user_properties', {
-      app_open_count: appOpenCount,
-      subs_count: subs.length
-    });
-  }
 
-  // Web版: 月初の見直しバナー表示（onboarding後に少し遅らせて表示）
+  // Web版: 月初の見直しバナー表示
   _initChartSwipe();
   if(onboarded) setTimeout(()=>checkUpcomingPayments(), 1200);
-}
-
-/* ============================================================
-   Family機能（subly Family 追加分）
-============================================================ */
-
-// ── 月次レポート描画 ──
-// ══ 招待リンク機能 ══
-
-let _currentInviteCode = null;
-let _currentInviteUrl  = null;
-
-function generateInviteCode() {
-  // UUID v4 風の簡易生成（本番はFirestoreで管理）
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-    const r = Math.random() * 16 | 0;
-    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-  }).slice(0, 12).toUpperCase();
-}
-
-async function generateInviteLink() {
-  // Familyプランでなければ弾く
-  if (!isFamilyPlan()) {
-    showToast('招待リンクはFamilyプランでのみ発行できます');
-    return;
-  }
-
-  const code = generateInviteCode();
-  _currentInviteCode = code;
-
-  // 現在のURL（GitHub Pages）をベースに招待URLを生成
-  const baseUrl = window.location.origin + window.location.pathname.replace('app.html','') + 'index.html';
-  _currentInviteUrl = `${baseUrl}?invite=${code}&group=${encodeURIComponent(familyName)}`;
-
-  // 表示を更新
-  document.getElementById('invite-link-display').textContent = _currentInviteUrl;
-  document.getElementById('copy-invite-btn').style.display = 'block';
-  document.getElementById('share-invite-btn').style.display =
-    navigator.share ? 'block' : 'none';
-  document.getElementById('invite-expiry').style.display = 'block';
-
-  // localStorageに保存（Firebase実装後はFirestoreへ）
-  const expiry = Date.now() + 72 * 60 * 60 * 1000; // 72時間
-  localStorage.setItem('inviteCode', JSON.stringify({
-    code, familyId: familyName, expiry, createdAt: Date.now()
-  }));
-
-  showToast('招待リンクを生成しました');
-}
-
-function copyInviteLink() {
-  if (!_currentInviteUrl) return;
-  navigator.clipboard.writeText(_currentInviteUrl).then(() => {
-    showToast('リンクをコピーしました！LINEやメールで送ってください');
-    const btn = document.getElementById('copy-invite-btn');
-    btn.textContent = '✓ コピー済み';
-    setTimeout(() => { btn.textContent = 'コピー'; }, 2000);
-  }).catch(() => {
-    // フォールバック
-    const el = document.createElement('textarea');
-    el.value = _currentInviteUrl;
-    document.body.appendChild(el);
-    el.select();
-    document.execCommand('copy');
-    document.body.removeChild(el);
-    showToast('コピーしました！');
-  });
-}
-
-async function shareInviteLink() {
-  if (!_currentInviteUrl || !navigator.share) return;
-  try {
-    await navigator.share({
-      title: `${familyName}のsublyに招待`,
-      text: `家族のサブスク管理アプリ「subly」に招待します。以下のリンクから参加してください。`,
-      url: _currentInviteUrl
-    });
-  } catch(e) { /* キャンセル等 */ }
-}
-
-// ── 起動時に招待パラメータを検出 ──
-function checkInviteParam() {
-  const params = new URLSearchParams(window.location.search);
-  const inviteCode = params.get('invite');
-  const groupName  = params.get('group');
-  if (!inviteCode) return;
-
-  // Familyプランでなければアップグレードを促す
-  if (!isFamilyPlan()) {
-    setTimeout(() => {
-      showDialog({
-        icon: '🔗',
-        title: `「${decodeURIComponent(groupName || 'グループ')}」に招待されています`,
-        msg: `グループに参加するには<strong>Familyプラン</strong>への加入が必要です。`,
-        buttons: [
-          { label: '後で', cls: 'cancel' },
-          { label: 'Familyプランに加入', cls: 'ok', onClick: () => openUpgradeModal() }
-        ]
-      });
-    }, 500);
-    return;
-  }
-
-  // Familyプラン済みなら参加確認
-  setTimeout(() => {
-    showDialog({
-      icon: '🔗',
-      title: `「${decodeURIComponent(groupName || 'グループ')}」に参加しますか？`,
-      msg: 'このグループのサブスクデータが共有されます。',
-      buttons: [
-        { label: 'キャンセル', cls: 'cancel' },
-        { label: '参加する', cls: 'ok', onClick: async () => {
-          // Firebase実装後：Firestoreのfamilies/{familyId}/membersに追加
-          // 今はlocalStorageに記録
-          localStorage.setItem('joinedGroup', decodeURIComponent(groupName || ''));
-          familyName = decodeURIComponent(groupName || familyName);
-          await saveFamilyData();
-          renderFamilyArea();
-          renderDashboard();
-          showToast(`「${familyName}」に参加しました！`);
-          // URLパラメータをクリア
-          window.history.replaceState({}, '', window.location.pathname);
-        }}
-      ]
-    });
-  }, 500);
 }
 
 
 function openUpgradeModal() {
   showDialog({
-    icon: '',
-    title: '何名で使いますか？',
-    msg: `
-    <div style="margin-bottom:12px">
-      <div id="upm-me" onclick="upmSelect('me')"
-        style="display:flex;align-items:center;gap:12px;border:2px solid var(--p);background:var(--pl);border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer">
-        <span style="font-size:26px;line-height:1">👤</span>
-        <div style="flex:1">
-          <div style="font-size:14px;font-weight:700;color:var(--tx)">1名で使う — subly Me</div>
-          <div style="font-size:11px;color:var(--ts);margin-top:2px">広告なし・無制限・CSV・バックアップ</div>
-        </div>
-        <span id="upm-check-me" style="color:var(--p);font-size:18px">✓</span>
+    icon: '👨‍👩‍👧',
+    title: 'subly Family にアップグレード',
+    msg: `<div style="font-size:13px;color:var(--ts);line-height:1.8;margin-bottom:4px">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">✅</span><span>登録件数 <strong style="color:var(--tx)">無制限</strong></span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">✅</span><span>家族グループで <strong style="color:var(--tx)">共有管理</strong></span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">✅</span><span>複数端末から <strong style="color:var(--tx)">アクセス可能</strong></span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">✅</span><span>広告なし・メンバーフィルター</span></div>
       </div>
-      <div id="upm-family" onclick="upmSelect('family')"
-        style="display:flex;align-items:center;gap:12px;border:2px solid var(--bd);background:var(--card);border-radius:12px;padding:12px 14px;cursor:pointer">
-        <span style="font-size:26px;line-height:1">👨‍👩‍👧</span>
-        <div style="flex:1">
-          <div style="font-size:14px;font-weight:700;color:var(--tx)">2名以上 — subly Family</div>
-          <div style="font-size:11px;color:var(--ts);margin-top:2px">Meの全機能＋家族共有・リアルタイム同期</div>
-        </div>
-        <span id="upm-check-family" style="color:var(--p);font-size:18px;visibility:hidden">✓</span>
-      </div>
-    </div>
-    <div style="font-size:11px;color:var(--ts);text-align:center">料金：¥XXX/年（Stripe決済 準備中）</div>`,
+    </div>`,
     buttons: [
-      { label: 'キャンセル', cls: 'cancel' },
-      { label: '✓ このプランで続ける', cls: 'ok', onClick: async () => {
-        const sel = window._upmSelected || 'me';
-        await setPlan(sel);
-        renderDashboard();
-        renderListSummary();
-        showToast(`${PLAN_LABELS[sel]} に変更しました（決済は準備中）`);
-        window._upmSelected = null;
+      { label: 'あとで', cls: 'cancel' },
+      { label: 'Familyプランにする', cls: 'ok', onClick: async () => {
+        // 課金フェーズ実装後にStripe連携
+        // 今は即座にFamilyプランへ（テスト用）
+        await setPlan('family');
+        showToast('Familyプランになりました！');
+        showOnboarding();
       }}
     ]
   });
-  // デフォルト選択をmeに
-  window._upmSelected = 'me';
 }
 
-function upmSelect(plan) {
-  window._upmSelected = plan;
-  const meEl = document.getElementById('upm-me');
-  const famEl = document.getElementById('upm-family');
-  const meChk = document.getElementById('upm-check-me');
-  const famChk = document.getElementById('upm-check-family');
-  if (!meEl) return;
-  if (plan === 'me') {
-    meEl.style.borderColor = 'var(--p)'; meEl.style.background = 'var(--pl)';
-    famEl.style.borderColor = 'var(--bd)'; famEl.style.background = 'var(--card)';
-    meChk.style.visibility = 'visible'; famChk.style.visibility = 'hidden';
-  } else {
-    famEl.style.borderColor = 'var(--p)'; famEl.style.background = 'var(--pl)';
-    meEl.style.borderColor = 'var(--bd)'; meEl.style.background = 'var(--card)';
-    famChk.style.visibility = 'visible'; meChk.style.visibility = 'hidden';
-  }
-}
 
 
 let _listSummaryOpen = false;
@@ -4583,6 +4537,125 @@ function updateMemberSelect(currentVal) {
 }
 
 // ── Family設定の保存・読み込み ──
+let _currentInviteUrl = null;
+
+function generateInviteCode() {
+  // UUID v4 風の簡易生成（本番はFirestoreで管理）
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+    const r = Math.random() * 16 | 0;
+    return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  }).slice(0, 12).toUpperCase();
+}
+
+async function generateInviteLink() {
+  // Familyプランでなければ弾く
+  if (!isFamilyPlan()) {
+    showToast('招待リンクはFamilyプランでのみ発行できます');
+    return;
+  }
+
+  const code = generateInviteCode();
+  _currentInviteCode = code;
+
+  // 現在のURL（GitHub Pages）をベースに招待URLを生成
+  const baseUrl = window.location.origin + window.location.pathname.replace('app.html','') + 'index.html';
+  _currentInviteUrl = `${baseUrl}?invite=${code}&group=${encodeURIComponent(familyName)}`;
+
+  // 表示を更新
+  document.getElementById('invite-link-display').textContent = _currentInviteUrl;
+  document.getElementById('copy-invite-btn').style.display = 'block';
+  document.getElementById('share-invite-btn').style.display =
+    navigator.share ? 'block' : 'none';
+  document.getElementById('invite-expiry').style.display = 'block';
+
+  // localStorageに保存（Firebase実装後はFirestoreへ）
+  const expiry = Date.now() + 72 * 60 * 60 * 1000; // 72時間
+  localStorage.setItem('inviteCode', JSON.stringify({
+    code, familyId: familyName, expiry, createdAt: Date.now()
+  }));
+
+  showToast('招待リンクを生成しました');
+}
+
+function copyInviteLink() {
+  if (!_currentInviteUrl) return;
+  navigator.clipboard.writeText(_currentInviteUrl).then(() => {
+    showToast('リンクをコピーしました！LINEやメールで送ってください');
+    const btn = document.getElementById('copy-invite-btn');
+    btn.textContent = '✓ コピー済み';
+    setTimeout(() => { btn.textContent = 'コピー'; }, 2000);
+  }).catch(() => {
+    // フォールバック
+    const el = document.createElement('textarea');
+    el.value = _currentInviteUrl;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    showToast('コピーしました！');
+  });
+}
+
+async function shareInviteLink() {
+  if (!_currentInviteUrl || !navigator.share) return;
+  try {
+    await navigator.share({
+      title: `${familyName}のsublyに招待`,
+      text: `家族のサブスク管理アプリ「subly」に招待します。以下のリンクから参加してください。`,
+      url: _currentInviteUrl
+    });
+  } catch(e) { /* キャンセル等 */ }
+}
+
+// ── 起動時に招待パラメータを検出 ──
+
+function checkInviteParam() {
+  const params = new URLSearchParams(window.location.search);
+  const inviteCode = params.get('invite');
+  const groupName  = params.get('group');
+  if (!inviteCode) return;
+
+  // Familyプランでなければアップグレードを促す
+  if (!isFamilyPlan()) {
+    setTimeout(() => {
+      showDialog({
+        icon: '🔗',
+        title: `「${decodeURIComponent(groupName || 'グループ')}」に招待されています`,
+        msg: `グループに参加するには<strong>Familyプラン</strong>への加入が必要です。`,
+        buttons: [
+          { label: '後で', cls: 'cancel' },
+          { label: 'Familyプランに加入', cls: 'ok', onClick: () => openUpgradeModal() }
+        ]
+      });
+    }, 500);
+    return;
+  }
+
+  // Familyプラン済みなら参加確認
+  setTimeout(() => {
+    showDialog({
+      icon: '🔗',
+      title: `「${decodeURIComponent(groupName || 'グループ')}」に参加しますか？`,
+      msg: 'このグループのサブスクデータが共有されます。',
+      buttons: [
+        { label: 'キャンセル', cls: 'cancel' },
+        { label: '参加する', cls: 'ok', onClick: async () => {
+          // Firebase実装後：Firestoreのfamilies/{familyId}/membersに追加
+          // 今はlocalStorageに記録
+          localStorage.setItem('joinedGroup', decodeURIComponent(groupName || ''));
+          familyName = decodeURIComponent(groupName || familyName);
+          await saveFamilyData();
+          renderFamilyArea();
+          renderDashboard();
+          showToast(`「${familyName}」に参加しました！`);
+          // URLパラメータをクリア
+          window.history.replaceState({}, '', window.location.pathname);
+        }}
+      ]
+    });
+  }, 500);
+}
+
 async function loadFamilyData() {
   try {
     const fn = await Store.get('familyName');
@@ -4602,9 +4675,26 @@ function renderFamilyArea() {
   const area = document.getElementById('family-area');
   if (!area) return;
 
-  // メンバーが1人以上いれば表示
-  if (familyMembers.length === 0) { area.style.display = 'none'; return; }
+  // グループ名がある、またはメンバーがいれば表示
+  // Family機能が有効のときは常に表示（メンバー0でもCTAを出す）
   area.style.display = 'block';
+
+  // グループ未作成（メンバー0）ならCTA表示
+  const cta = document.getElementById('family-create-cta');
+  const membersContent = document.getElementById('member-avatars');
+  const breakdown = document.getElementById('member-breakdown');
+  const nameRow = area.querySelector('[style*="justify-content:space-between"]');
+  if (familyMembers.length === 0) {
+    if (cta) cta.style.display = 'block';
+    if (membersContent) membersContent.style.display = 'none';
+    if (breakdown) breakdown.style.display = 'none';
+    if (nameRow) nameRow.style.display = 'none';
+    return;
+  }
+  if (cta) cta.style.display = 'none';
+  if (membersContent) membersContent.style.display = 'flex';
+  if (breakdown) breakdown.style.display = 'flex';
+  if (nameRow) nameRow.style.display = 'flex';
 
   // グループ名
   document.getElementById('family-name-label').textContent = familyName;
@@ -4628,18 +4718,28 @@ function renderFamilyArea() {
 
   // ── アバター行 ──
   const avatarBox = document.getElementById('member-avatars');
+  const sharedChip = familyMembers.length >= 2 ? `
+    <div style="display:flex;align-items:center;gap:5px;background:var(--pl);border-radius:20px;padding:4px 10px 4px 4px;cursor:pointer"
+         onclick="filterByMember('shared')">
+      <div style="width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;font-size:12px">🔗</div>
+      <span style="font-size:12px;font-weight:600;color:var(--p)">共有</span>
+    </div>` : '';
   avatarBox.innerHTML = familyMembers.map(m => `
     <div style="display:flex;align-items:center;gap:5px;background:${m.color};border-radius:20px;padding:4px 10px 4px 4px;cursor:pointer"
          onclick="filterByMember('${m.id}')">
       <div style="width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;font-size:14px">${m.emoji}</div>
       <span style="font-size:12px;font-weight:600;color:var(--tx)">${m.name}</span>
     </div>
-  `).join('') + `
-    <div style="display:flex;align-items:center;gap:5px;background:var(--pl);border-radius:20px;padding:4px 10px 4px 4px;cursor:pointer"
-         onclick="filterByMember('shared')">
-      <div style="width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.6);display:flex;align-items:center;justify-content:center;font-size:12px">🔗</div>
-      <span style="font-size:12px;font-weight:600;color:var(--p)">共有</span>
-    </div>`;
+  `).join('') + sharedChip;
+
+  // メンバー管理ボタン：メンバーありなら「追加・管理」、なしなら「メンバーを追加」
+  const manageRow = document.getElementById('member-manage-row');
+  if (manageRow) {
+    const btnLabel = familyMembers.length === 0
+      ? '👨‍👩‍👧 メンバーを追加する'
+      : '＋ メンバーを追加・管理';
+    manageRow.querySelector('button').innerHTML = btnLabel;
+  }
 
   // ── メンバー別金額 ──
   const breakBox = document.getElementById('member-breakdown');
@@ -4714,7 +4814,12 @@ function addMember() {
 }
 function removeMember(idx) {
   familyMembers.splice(idx, 1);
+  saveFamilyData();
   renderFamilySettingsModal();
+  // メンバーが全員いなくなったらグループをリセット
+  if (familyMembers.length === 0) {
+    renderFamilyArea(); // CTAを表示
+  }
 }
 async function saveFamilySettings() {
   familyName = document.getElementById('fs-family-name').value.trim() || '家族';
