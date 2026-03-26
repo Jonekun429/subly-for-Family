@@ -1034,10 +1034,10 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 <div class="ob-overlay hidden" id="ob-ov">
 
   <!-- スライドコンテナ（3ステップ） -->
-  <div class="ob-slides" id="ob-slides" style="width:300%">
+  <div class="ob-slides" id="ob-slides" style="width:400%">
 
     <!-- ページ1: ようこそ -->
-    <div class="ob-slide" style="width:33.333%">
+    <div class="ob-slide" style="width:25%">
       <div class="ob-illust">
         <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
           <!-- アプリアイコン風ロゴ -->
@@ -1055,7 +1055,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
 
     <!-- ページ2: できること -->
-    <div class="ob-slide" style="width:33.333%">
+    <div class="ob-slide" style="width:25%">
       <div class="ob-illust">
         <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
           <!-- グラフ -->
@@ -1082,8 +1082,33 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
     </div>
 
-    <!-- ページ3: はじめよう（ルート選択） -->
-    <div class="ob-slide" style="width:33.333%">
+    <!-- ページ3: 家族でも使えるよ（Family紹介） -->
+    <div class="ob-slide" style="width:25%" id="ob-slide-family">
+      <div class="ob-illust">
+        <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
+          <!-- 家族アイコン -->
+          <circle cx="38" cy="36" r="13" fill="rgba(255,255,255,0.8)"/>
+          <circle cx="72" cy="36" r="13" fill="rgba(255,255,255,0.8)"/>
+          <circle cx="55" cy="58" r="10" fill="rgba(255,255,255,0.6)"/>
+          <path d="M16 90 Q16 70 38 70 Q50 70 55 76 Q60 70 72 70 Q94 70 94 90" fill="rgba(255,255,255,0.3)"/>
+          <!-- 繋がりライン -->
+          <path d="M38 49 Q55 60 72 49" stroke="rgba(255,255,255,0.7)" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- リンクアイコン -->
+          <rect x="42" y="88" width="26" height="14" rx="7" fill="rgba(255,255,255,0.35)"/>
+          <text x="55" y="99" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.9)" font-family="sans-serif" font-weight="700">LINK</text>
+        </svg>
+      </div>
+      <div class="ob-badge">Family プラン</div>
+      <div class="ob-ttl">家族みんなで<br><em>一緒に管理できる。</em></div>
+      <div class="ob-desc" style="text-align:left;padding:0 4px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:18px">👨‍👩‍👧</span><span>グループを作って招待リンクを送るだけ</span></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:18px">👤</span><span>誰のサブスクか、メンバー別に管理</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px">📊</span><span>家族全体の支払いを一目で確認</span></div>
+      </div>
+    </div>
+
+    <!-- ページ4: はじめよう（ルート選択） -->
+    <div class="ob-slide" style="width:25%">
       <div style="margin-bottom:16px;text-align:center">
         <div class="ob-badge" id="ob-start-badge">さあはじめよう</div>
         <div class="ob-ttl" id="ob-start-ttl" style="font-size:20px">どのように使いますか？</div>
@@ -1139,6 +1164,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     <div class="ob-dot on" onclick="obGoto(0)"></div>
     <div class="ob-dot" onclick="obGoto(1)"></div>
     <div class="ob-dot" onclick="obGoto(2)"></div>
+    <div class="ob-dot" onclick="obGoto(3)"></div>
   </div>
 
   <!-- ボタン -->
@@ -2642,27 +2668,71 @@ async function nativeShare(){
 }
 function showOnboarding(){
   closeSettings();
-  // Pro/Familyプランからの呼び出し時はメッセージを変える
+
   const badge  = document.getElementById('ob-welcome-badge');
   const ttl    = document.getElementById('ob-welcome-ttl');
   const desc   = document.getElementById('ob-welcome-desc');
   const sBadge = document.getElementById('ob-start-badge');
   const sTtl   = document.getElementById('ob-start-ttl');
-  if (isPaidPlan()) {
-    const planLabel = 'Family';
-    if (badge)  badge.textContent  = planLabel + ' プラン';
+  const dots   = document.querySelectorAll('.ob-dot');
+  const familySlide = document.getElementById('ob-slide-family');
+
+  if (isPaidPlan() && window._obFromUpgrade) {
+    // ── パターンB: Free→Family課金直後 ──
+    // Family紹介スライド1枚だけ表示してグループ設定へ
+    window._obMaxPage = 0;
+    // ob-slidesをFamily紹介スライドの位置に直接設定
+    const slides = document.getElementById('ob-slides');
+    if (slides) slides.style.transform = 'translateX(-50%)'; // 2枚目=Family紹介
+    // ドット非表示
+    const dotsEl = document.getElementById('ob-dots');
+    if (dotsEl) dotsEl.style.display = 'none';
+    // ボタンをグループ設定へ変更
+    const nextBtn = document.getElementById('ob-next');
+    const skipBtn = document.getElementById('ob-skip');
+    if (nextBtn) { nextBtn.textContent = 'グループを設定する →'; nextBtn.style.display = ''; }
+    if (skipBtn) skipBtn.style.display = 'none';
+    // 次へボタンでobNextを上書き
+    window._obFromUpgrade = false;
+    window._obNextOverride = () => {
+      window._obNextOverride = null;
+      closeOb();
+      setTimeout(() => obRouteAction('new'), 300);
+    };
+  } else if (isPaidPlan()) {
+    // ── パターンC: Familyプランで通常起動 ──
+    // 4枚（ようこそ〜ルート選択）
+    window._obMaxPage = 3;
+    const dotsEl = document.getElementById('ob-dots');
+    if (dotsEl) dotsEl.style.display = '';
+    if (badge)  badge.textContent  = 'Family プラン';
     if (ttl)    ttl.innerHTML      = 'ご利用ありがとうございます！';
-    if (desc)   desc.textContent   = 'subly ' + planLabel + ' プランへのお申し込みありがとうございます。まずグループの設定をして、家族と一緒に使い始めましょう。';
+    if (desc)   desc.textContent   = 'subly Familyへようこそ。家族と一緒に管理を始めましょう。';
     if (sBadge) sBadge.textContent = 'さあはじめよう';
-    if (sTtl)   sTtl.textContent   = 'どのように使いますか？';
+    if (sTtl)   sTtl.textContent   = 'グループをどうしますか？';
+    const nextBtn = document.getElementById('ob-next');
+    const skipBtn = document.getElementById('ob-skip');
+    if (nextBtn) nextBtn.textContent = '次へ';
+    if (skipBtn) skipBtn.style.display = '';
+    obGoto(0);
   } else {
+    // ── パターンA: Free（初回 or 通常）──
+    // 4枚（ようこそ→できること→Family紹介→ルート選択）
+    window._obMaxPage = 3;
+    const dotsEl = document.getElementById('ob-dots');
+    if (dotsEl) dotsEl.style.display = '';
     if (badge)  badge.textContent  = 'ようこそ';
     if (ttl)    ttl.innerHTML      = 'sublyへようこそ';
-    if (desc)   desc.textContent   = 'サブスクと固定費をかんたんに管理できるアプリです。まずは使い方をご紹介します。';
+    if (desc)   desc.textContent   = 'サブスクと固定費をかんたんに管理できるアプリです。';
     if (sBadge) sBadge.textContent = 'さあはじめよう';
     if (sTtl)   sTtl.textContent   = 'どのように使いますか？';
+    const nextBtn = document.getElementById('ob-next');
+    const skipBtn = document.getElementById('ob-skip');
+    if (nextBtn) nextBtn.textContent = '次へ';
+    if (skipBtn) skipBtn.style.display = '';
+    obGoto(0);
   }
-  obGoto(0);
+
   document.getElementById('ob-ov').classList.remove('hidden');
 }
 let _obPage=0;
@@ -2673,9 +2743,9 @@ function obGoto(n){
   const nextBtn=document.getElementById('ob-next');
   const skipBtn=document.getElementById('ob-skip');
   if(!slides) return;
-  slides.style.transform=`translateX(${-n*33.333}%)`;
+  slides.style.transform=`translateX(${-n*25}%)`;
   dots.forEach((d,i)=>d.classList.toggle('on',i===n));
-  const isLast=(n===2);
+  const isLast=(n === (window._obMaxPage || 3));
   // 最終ページは「次へ」ボタンを非表示（カード選択で進む）
   if(nextBtn) {
     nextBtn.style.display = isLast ? 'none' : '';
@@ -2684,7 +2754,8 @@ function obGoto(n){
   if(skipBtn) skipBtn.style.display=isLast?'none':'';
 }
 function obNext(){
-  if(_obPage<2){ obGoto(_obPage+1); }
+  if(window._obNextOverride) { window._obNextOverride(); return; }
+  if(_obPage < (window._obMaxPage || 3)){ obGoto(_obPage+1); }
 }
 
 // ルート選択
@@ -4331,6 +4402,7 @@ function openUpgradeModal() {
         // 今は即座にFamilyプランへ（テスト用）
         await setPlan('family');
         showToast('Familyプランになりました！');
+        window._obFromUpgrade = true;
         showOnboarding();
       }}
     ]
