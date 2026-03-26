@@ -552,29 +552,48 @@ function selectNick(name, emoji, btn) {
   document.getElementById('custom-nick-input').value = '';
 }
 function focusCustomNick() {
-  document.getElementById('custom-nick-input').focus();
-}
-function onCustomNickInput(val) {
-  if(!val) return;
-  selectedNick = val; selectedEmoji = '✏️';
+  // 全ボタンの選択を外して「自由入力」ボタンをONにする
   document.querySelectorAll('.nick-btn').forEach(b=>b.classList.remove('on'));
   document.getElementById('custom-nick-btn').classList.add('on');
-  document.getElementById('nick-preview').textContent = val;
+  const input = document.getElementById('custom-nick-input');
+  input.focus();
+  // 既に入力済みの値があればそれを使う
+  if(input.value) {
+    selectedNick = input.value;
+    selectedEmoji = '';
+    document.getElementById('nick-preview').textContent = input.value;
+  } else {
+    selectedNick = '';
+    document.getElementById('nick-preview').textContent = '入力してください';
+  }
+}
+function onCustomNickInput(val) {
+  // 文字入力したら「自由入力」ボタンをONにして他を外す
+  document.querySelectorAll('.nick-btn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('custom-nick-btn').classList.add('on');
+  selectedNick = val;
+  selectedEmoji = '';
+  document.getElementById('nick-preview').textContent = val || '入力してください';
 }
 async function saveProfile() {
   if(!currentUser) return;
-  const nickname = selectedNick;
-  const emoji    = selectedEmoji;
+  const nickname = selectedNick || 'ユーザー';
+  const emoji    = selectedEmoji || '';
   showScreen('loading');
   document.getElementById('loading-msg').textContent = 'プロフィールを保存中...';
-  await db.collection('users').doc(currentUser.uid).set({
-    displayName: currentUser.displayName || nickname,
-    email:       currentUser.email,
-    photoURL:    currentUser.photoURL || '',
-    nickname, emoji,
-    plan:        'free',
-    createdAt:   firebase.firestore.FieldValue.serverTimestamp()
-  }, {merge:true});
+  try {
+    await db.collection('users').doc(currentUser.uid).set({
+      displayName: currentUser.displayName || nickname,
+      email:       currentUser.email,
+      photoURL:    currentUser.photoURL || '',
+      nickname, emoji,
+      plan:        'free',
+      createdAt:   firebase.firestore.FieldValue.serverTimestamp()
+    }, {merge:true});
+  } catch(e) {
+    console.error('Firestore保存エラー:', e);
+    // Firestoreへの保存に失敗してもアプリは続行
+  }
   await onFullLogin(currentUser, {nickname, emoji, plan:'free'});
 }
 
