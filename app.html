@@ -707,6 +707,18 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         ログアウト
       </button>
     </div>
+    <!-- プラン情報バー -->
+    <div id="drawer-plan-bar" style="padding:12px 20px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:10px">
+      <div id="drawer-plan-icon" style="font-size:18px">📋</div>
+      <div style="flex:1">
+        <div style="font-size:10px;color:rgba(255,255,255,.5);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px">現在のプラン</div>
+        <div id="drawer-plan-name" style="font-size:13px;font-weight:700;color:#fff">Free プラン</div>
+        <div id="drawer-plan-sub" style="font-size:10px;color:rgba(255,255,255,.55)">登録件数 0 / 20件</div>
+      </div>
+      <button id="drawer-upgrade-btn" onclick="closeHdrop();setTimeout(openUpgradeModal,150)" style="display:none;font-size:11px;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:8px;padding:5px 10px;cursor:pointer;font-family:inherit;font-weight:700;flex-shrink:0">
+        アップグレード
+      </button>
+    </div>
 
     <!-- データ管理 -->
     <div class="hd-sec">データ管理</div>
@@ -1709,22 +1721,49 @@ function applyPlanUI() {
     if (mbSection) mbSection.closest('div[style*="rgba"]') && (mbSection.style.display = isFamilyPlan() ? 'flex' : 'none');
   }
 
-  // ── ヘッダー グループボタン ──
+  // ── ドロワー プランバー更新 ──
+  const drawerPlanName = document.getElementById('drawer-plan-name');
+  const drawerPlanSub  = document.getElementById('drawer-plan-sub');
+  const drawerPlanIcon = document.getElementById('drawer-plan-icon');
+  const drawerUpgradeBtn = document.getElementById('drawer-upgrade-btn');
+  if (drawerPlanName) {
+    if (isFamilyPlan()) {
+      drawerPlanIcon.textContent = '👨‍👩‍👧';
+      drawerPlanName.textContent = 'Family プラン';
+      drawerPlanSub.textContent  = familyName ? `グループ：${familyName}` : '登録件数 無制限';
+      if (drawerUpgradeBtn) drawerUpgradeBtn.style.display = 'none';
+    } else {
+      drawerPlanIcon.textContent = '📋';
+      drawerPlanName.textContent = 'Free プラン';
+      const cnt = subs.filter(s => !s.paused).length;
+      drawerPlanSub.textContent  = `登録件数 ${cnt} / 20件`;
+      if (drawerUpgradeBtn) drawerUpgradeBtn.style.display = 'block';
+    }
+  }
+
+  // ── ヘッダー グループボタン（常に表示） ──
+  // ── ヘッダー グループボタン（常に表示） ──
   const grpBtn   = document.getElementById('hdr-group-btn');
   const grpLabel = document.getElementById('hdr-group-label');
   if (grpBtn) {
     grpBtn.style.display = 'flex';
     if (grpLabel) {
-      grpLabel.textContent = isFamilyPlan() && familyName
-        ? familyName
-        : 'グループを作る';
+      // Family + グループ名あり → グループ名
+      // それ以外 → 「グループを作る」
+      grpLabel.textContent = (isFamilyPlan() && familyName) ? familyName : 'グループを作る';
     }
-    // Free時はオンボーディング起動、Family時はグループ設定
     const chip = document.getElementById('hdr-group-chip');
     if (chip) {
-      chip.onclick = isFamilyPlan()
-        ? openFamilySettings
-        : () => { closeSettings(); setTimeout(showOnboarding, 200); };
+      if (isFamilyPlan()) {
+        // Family → グループ設定シートへ
+        chip.onclick = openFamilySettings;
+      } else {
+        // Free → オンボーディング（グループ作成フロー）へ
+        chip.onclick = () => {
+          closeHdrop();
+          setTimeout(showOnboarding, 150);
+        };
+      }
     }
   }
   const rowLeave  = document.getElementById('s-row-leave-family');
@@ -1732,6 +1771,8 @@ function applyPlanUI() {
   const joinedGroup = localStorage.getItem('joinedGroup');
   if (rowLeave)  rowLeave.style.display  = (isFamilyPlan() && joinedGroup) ? 'flex' : 'none';
   if (rowCancel) rowCancel.style.display = isPaidPlan() ? 'flex' : 'none';
+
+  // ← ドロワープラン表示は上の「ドロワー プランバー更新」ブロックで処理済み
 
   // ── 設定画面のグループセクション ──
   const sFamilySec     = document.getElementById('s-sec-family');
@@ -3073,6 +3114,49 @@ function dismissSuggestion() {
    退会・プラン変更
 ============================================================ */
 // Familyグループから脱退（Free降格）
+
+// グループを解体する（オーナーのみ）
+function dissolveGroup() {
+  const groupName = familyName || 'グループ';
+  showDialog({
+    icon: '🗑️',
+    title: `「${groupName}」を解体`,
+    msg: `グループを解体しますか？<br><span style="font-size:12px;color:var(--ts)">メンバー全員がグループから外れます。<br>各自のサブスクデータは残ります。</span>`,
+    buttons: [
+      { label: 'キャンセル', cls: 'cancel' },
+      { label: '解体する', cls: 'danger', onClick: async () => {
+        // グループデータをリセット
+        familyMembers = [];
+        familyName = '';
+        localStorage.removeItem('joinedGroup');
+        localStorage.removeItem('inviteCode');
+        localStorage.removeItem('familyMembers');
+        localStorage.removeItem('familyName');
+        await Store.set('familyMembers', '[]');
+        await Store.set('familyName', '');
+        await setPlan('free');
+        closeFamilySettings();
+        closeSettings();
+        showToast('グループを解体しました');
+        renderDashboard();
+        goto('dashboard');
+        // 解体後すぐに新規作成を促す
+        setTimeout(() => {
+          showDialog({
+            icon: '👨‍👩‍👧',
+            title: 'グループを解体しました',
+            msg: '新しいグループを作成しますか？',
+            buttons: [
+              { label: 'あとで', cls: 'cancel' },
+              { label: '新しく作る', cls: 'ok', onClick: () => setTimeout(showOnboarding, 200) }
+            ]
+          });
+        }, 400);
+      }}
+    ]
+  });
+}
+
 function leaveFamily() {
   const groupName = localStorage.getItem('joinedGroup') || '家族グループ';
   showDialog({
@@ -5082,6 +5166,10 @@ if(document.readyState==='loading'){
         <button onclick="closeFamilySettings()" style="flex:1;padding:12px;border-radius:10px;background:transparent;color:var(--ts);border:1.5px solid var(--bd);font-size:14px;cursor:pointer;font-family:inherit">キャンセル</button>
         <button onclick="saveFamilySettings()" style="flex:2;padding:12px;border-radius:10px;background:var(--p);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit">保存する</button>
       </div>
+      <!-- 解体ボタン -->
+      <button onclick="dissolveGroup()" style="width:100%;padding:10px;background:none;color:#E05C5C;border:1.5px solid #E05C5C;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px">
+        🗑️ グループを解体する
+      </button>
     </div>
   </div>
 </div>
