@@ -440,6 +440,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 /* コンパクト1行カード */
 .sub-row{background:var(--card);border-radius:10px;padding:11px 13px;margin-bottom:7px;box-shadow:var(--sh);display:flex;align-items:center;gap:10px;cursor:pointer;transition:box-shadow .12s;-webkit-tap-highlight-color:transparent}
 .sub-row:hover{box-shadow:var(--shl)}
+.sub-row.canceled{opacity:.5;background:var(--bg)}
+.sub-canceled-badge{font-size:10px;font-weight:700;color:#fff;background:#9CA3AF;border-radius:4px;padding:2px 6px;margin-left:4px;vertical-align:middle}
 .sub-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
 .sub-body{flex:1;min-width:0}
 .sub-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1029,28 +1031,34 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
     <div class="s-sec">ヘルプ</div>
     <div class="s-grp">
-      <div class="s-row" style="display:none">
+      <div class="s-row" onclick="openGuide()">
+        <div class="s-ico" style="background:#EDF4F2"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm-5 18c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm5-4H7V3h10v12z"/></svg></div>
+        <div class="s-body"><div class="s-title">機種変更ガイド</div><div class="s-sub">データの引き継ぎ方法を確認</div></div>
+        <span class="s-arr">›</span>
+      </div>
+      <div class="s-row" onclick="showOnboarding()">
         <div class="s-ico" style="background:#F0FDF4"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg></div>
-        <div class="s-body"><div class="s-title">使い方を見る</div><div class="s-sub">Sublyの基本的な使い方</div></div>
+        <div class="s-body"><div class="s-title">使い方を見る</div><div class="s-sub">各画面の使い方を確認</div></div>
         <span class="s-arr">›</span>
       </div>
     </div>
     <div class="s-sec">サポート</div>
     <div class="s-grp">
-      <div class="s-row" onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSdP2gYFQDWnTMXbiLsXFV7i3y70phIT1Wu7HiIkt9Xjl8tZ4g/viewform?usp=dialog','_blank')">
+      <div class="s-row" onclick="openExternalLink('https://docs.google.com/forms/d/e/1FAIpQLSdP2gYFQDWnTMXbiLsXFV7i3y70phIT1Wu7HiIkt9Xjl8tZ4g/viewform?usp=dialog')">
         <div class="s-ico" style="background:#EEF6FF"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg></div>
         <div class="s-body"><div class="s-title">機能リクエスト</div><div class="s-sub">ご要望をお聞かせください</div></div>
         <span class="s-arr">›</span>
       </div>
-    </div>
-
-    <!-- お問い合わせ・プライバシーポリシー（小さく目立たなく） -->
-    <div style="display:flex;justify-content:center;gap:20px;padding:16px 0 8px;margin-top:4px">
-      <a onclick="window.open('https://docs.google.com/forms/d/e/1FAIpQLSecie4ubn9sDlzdoQUWvzcEoK0O46dmQhghSr3VmLpsS-Coww/viewform?usp=publish-editor','_blank')"
-        style="font-size:11px;color:var(--ts);text-decoration:none;cursor:pointer;opacity:.7">お問い合わせ</a>
-      <span style="font-size:11px;color:var(--bd)">|</span>
-      <a onclick="openPrivacy()"
-        style="font-size:11px;color:var(--ts);text-decoration:none;cursor:pointer;opacity:.7">プライバシーポリシー</a>
+      <div class="s-row" onclick="openExternalLink('https://docs.google.com/forms/d/e/1FAIpQLSecie4ubn9sDlzdoQUWvzcEoK0O46dmQhghSr3VmLpsS-Coww/viewform?usp=publish-editor')">
+        <div class="s-ico" style="background:#FDF6EE"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
+        <div class="s-body"><div class="s-title">お問い合わせ</div><div class="s-sub">不具合・ご意見はこちら</div></div>
+        <span class="s-arr">›</span>
+      </div>
+      <div class="s-row" onclick="openPrivacy()">
+        <div class="s-ico" style="background:#EDF4F2"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg></div>
+        <div class="s-body"><div class="s-title">プライバシーポリシー</div><div class="s-sub">データの取り扱いについて</div></div>
+        <span class="s-arr">›</span>
+      </div>
     </div>
     <div class="s-sec">データリセット</div>
     <div class="s-grp">
@@ -1572,6 +1580,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <option value="ローン">ローン</option>
         <option value="その他">その他</option>
         <option value="休止中">休止中</option>
+        <option value="解約済">解約済</option>
       </select>
       <select id="fl-sort" onchange="renderList()">
         <option value="date">更新日順</option>
@@ -1653,7 +1662,25 @@ const Store = (function(){
 /* ============================================================
    データ
 ============================================================ */
-function gaEvent(name, params){} // GA未実装時のダミー
+// Google Analytics
+  (function(){
+    const s=document.createElement('script');
+    s.async=true;
+    s.src='https://www.googletagmanager.com/gtag/js?id=G-8YLL4H8GYL';
+    document.head.appendChild(s);
+  })();
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-8YLL4H8GYL', {
+    page_title: document.title,
+    send_page_view: false,
+    debug_mode: false
+  });
+  function gaEvent(eventName, params) {
+    if (typeof gtag !== 'function') return;
+    gtag('event', eventName, params || {});
+  }
 let subs = [];
 let currentPlan = 'free';   // 'free' | 'pro'
 const PLAN_LIMITS = { free: 20, pro: Infinity };
@@ -1812,7 +1839,6 @@ let myChart=null, editId=null, calYear, calMonth, calFilter='all';
 let inclOt = false;
 let chartMode = 'month'; // 'month' or 'year'
 let satOpen=true;
-const MAX=200;
 const today=new Date();
 calYear=today.getFullYear(); calMonth=today.getMonth();
 
@@ -2621,7 +2647,7 @@ async function _scheduleUpdateNotifications(cfg){
       let idCounter = 2000;
       const today = new Date(); today.setHours(0,0,0,0);
 
-      subs.filter(s=>s.freq!=='単発（買い切り）'&&!s.paused).forEach(s=>{
+      subs.filter(s=>s.freq!=='単発（買い切り）'&&!s.paused&&!s.canceled).forEach(s=>{
         const np = nextPayDate(s);
         if(!np) return;
         cfg.timings.forEach(daysBefore=>{
@@ -2647,7 +2673,7 @@ async function _scheduleUpdateNotifications(cfg){
         showDialog({
           icon:'🔔',
           title:'通知を設定しました',
-          msg:`${subs.filter(s=>s.freq!=='単発（買い切り）'&&!s.paused).length}件のサブスクに対して通知を設定しました。`,
+          msg:`${subs.filter(s=>s.freq!=='単発（買い切り）'&&!s.paused&&!s.canceled).length}件のサブスクに対して通知を設定しました。`,
           buttons:[{label:'OK', cls:'ok'}]
         });
       } else {
@@ -2701,7 +2727,7 @@ async function checkUpcomingPayments(){
   const today = new Date(); today.setHours(0,0,0,0);
   const maxDays = Math.max(...(cfg.timings||[1]));
 
-  const upcoming = subs.filter(s=>{
+  const upcoming = subs.filter(s=>{ if(s.canceled) return false;
     if(s.freq==='単発（買い切り）'||s.paused) return false;
     const np = nextPayDate(s);
     if(!np) return false;
@@ -2879,7 +2905,7 @@ function openSettings(){
   applyPlanUI();
   // 件数バー更新
   const limit = getPlanLimit();
-  const count = subs.length;
+  const count = subs.filter(s=>!s.canceled).length;
   const pct = limit === Infinity ? 0 : Math.min(100, Math.round(count / limit * 100));
   const limitBar = document.getElementById('plan-limit-bar');
   const countLabel = document.getElementById('plan-count-label');
@@ -2897,6 +2923,35 @@ function closeSettings(){document.getElementById('settings-ov').classList.add('h
 
 function openPrivacy(){closeSettings();setTimeout(()=>{document.getElementById('privacy-ov').classList.remove('hidden');},200)}
 function closePrivacy(){document.getElementById('privacy-ov').classList.add('hidden')}
+
+/* ============================================================
+   外部リンクを開く（PWA/スタンドアロン対応）
+   iOSのスタンドアロンモードでは window.open が同ウィンドウに
+   遷移してしまうため、a要素経由で確実に別タブで開く
+============================================================ */
+function openExternalLink(url){
+  closeSettings();
+  closeHdrop();
+  gaEvent('external_link_open', { url });
+  const a = document.createElement('a');
+  a.href = url;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.style.display = 'none';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => document.body.removeChild(a), 100);
+}
+
+// visibilitychange: 外部ページから戻ったときオーバーレイをリセット
+document.addEventListener('visibilitychange', () => {
+  if(document.visibilityState === 'visible'){
+    ['settings-ov','guide-ov','sat-popup-ov','nudge-ov','privacy-ov'].forEach(id => {
+      document.getElementById(id)?.classList.add('hidden');
+    });
+    closeHdrop();
+  }
+});
 
 // ── シェア機能 ──────────────────────────────────────────
 const SUBLY_SHARE_URL = 'https://jonekun429.github.io/subly_lp/';
@@ -2972,7 +3027,33 @@ async function nativeShare(){
 }
 let _obPage=0;
 
-// ルート選択
+function showOnboarding(){
+  closeSettings();
+  obGoto(0);
+  document.getElementById('ob-ov').classList.remove('hidden');
+}
+function obGoto(n){
+  _obPage=n;
+  const slides=document.getElementById('ob-slides');
+  const dots=document.querySelectorAll('.ob-dot');
+  const nextBtn=document.getElementById('ob-next');
+  const skipBtn=document.getElementById('ob-skip');
+  if(!slides) return;
+  slides.style.transform=`translateX(${-n*25}%)`;
+  dots.forEach((d,i)=>d.classList.toggle('on',i===n));
+  const isLast=(n===3);
+  if(nextBtn) nextBtn.textContent=isLast?'はじめる':'次へ';
+  if(skipBtn) skipBtn.style.display=isLast?'none':'';
+}
+function obNext(){
+  if(_obPage<3){ obGoto(_obPage+1); }
+  else { closeOb(); }
+}
+async function closeOb(){
+  document.getElementById('ob-ov').classList.add('hidden');
+  await Store.set('onboarded','1');
+  gaEvent('onboarding_complete', { method: 'completed' });
+}
 
 async function resetAll(){
   showDialog({
@@ -2998,7 +3079,7 @@ function checkFamilyPlanSuggestion() {
     return;
   }
   // アクティブなサブスクの名前を正規化して重複チェック
-  const activeSubs = subs.filter(s => !s.paused && s.member && s.member !== 'other');
+  const activeSubs = subs.filter(s => !s.paused && !s.canceled && s.member && s.member !== 'other');
   const nameMap = {}; // 正規化した名前 → [{member, name, price}]
   activeSubs.forEach(s => {
     const key = s.name.toLowerCase().replace(/[\s　・.-]/g, '');
@@ -3177,7 +3258,7 @@ function setChartMode(mode){
 function renderDashboard(){
   let monthly=0,yearly=0;
   const cmap={};
-  subs.filter(s=>!s.paused).forEach(s=>{
+  subs.filter(s=>!s.paused&&!s.canceled).forEach(s=>{
     if(s.freq==='単発（買い切り）'){
       if(!inclOt)return;
       yearly+=s.price;
@@ -3199,7 +3280,7 @@ function renderDashboard(){
   document.getElementById('ttl-m').innerHTML=`<sup>¥</sup>${monthly.toLocaleString()}`;
   document.getElementById('ttl-y').innerHTML=`<sup>¥</sup>${yearly.toLocaleString()}`;
   // サブスク件数バナー更新（休止中を除く）
-  const activeCnt = subs.filter(s=>s.freq!=='単発（買い切り）'&&!s.paused).length;
+  const activeCnt = subs.filter(s=>s.freq!=='単発（買い切り）'&&!s.paused&&!s.canceled).length;
   document.getElementById('sub-total-count').textContent = activeCnt;
   // 0件のときはバナーをグレーに
   const banner = document.getElementById('sub-count-banner');
@@ -3207,7 +3288,7 @@ function renderDashboard(){
   drawChart(cmap);
   renderSatChart();
   checkAlerts();
-  renderFamilyArea(); // Family追加
+  renderFamilyArea();
   applyPlanUI();      // プランUI反映
   checkFamilyPlanSuggestion(); // Family提案バナー
 }
@@ -3341,7 +3422,7 @@ function drawFallback(ctx,canvas,data,colors,labels,total){
 function renderSatChart(){
   const area=document.getElementById('sat-chart-area');
   const groups={};
-  subs.filter(s=>s.sat&&s.freq!=='単発（買い切り）').forEach(s=>{
+  subs.filter(s=>s.sat&&s.freq!=='単発（買い切り）'&&!s.canceled).forEach(s=>{
     const mo=moFromSub(s);
     groups[s.sat]=(groups[s.sat]||{total:0,cnt:0});
     groups[s.sat].total+=mo;
@@ -3366,7 +3447,7 @@ function renderSatChart(){
     </div>`;
   });
   html+='</div>';
-  const lowSat=subs.filter(s=>!s.paused&&s.sat>=1&&s.sat<=2&&s.freq!=='単発（買い切り）');
+  const lowSat=subs.filter(s=>!s.paused&&!s.canceled&&s.sat>=1&&s.sat<=2&&s.freq!=='単発（買い切り）');
   if(lowSat.length){
     const low=lowSat.reduce((s,x)=>s+(x.freq==='月額'?x.price:Math.round(x.price/12)),0);
     html+=`<div class="sat-insight">満足度が低いサブスクに <b>¥${low.toLocaleString()}/月</b>。解約すると年間 <b>¥${(low*12).toLocaleString()}</b> 節約できます。</div>`;
@@ -3392,7 +3473,6 @@ function clearSatFilter(){
   renderList();
 }
 
-// Family追加：メンバーフィルター
 let currentMemberFilter = null;
 
 function renderMemberFilterTabs() {
@@ -3464,12 +3544,41 @@ function renderMemberFilterBar() {
 
 const _dismissedAlertCats = new Set();
 
+// アラートを消した日付を保存するキー
+function _alertStoreKey(cat){ return 'alertDismissed_' + cat.replace(/[^\w]/g,'_'); }
+
+// 今日が「再表示日」かどうか（毎月10・20・30日）
+function _isAlertResetDay(){
+  const d = new Date().getDate();
+  return d === 10 || d === 20 || d === 30;
+}
+
+async function _shouldShowAlert(cat){
+  if(_dismissedAlertCats.has(cat)) return false;
+  const key = _alertStoreKey(cat);
+  const stored = await Store.get(key);
+  if(!stored) return true;
+  const today = new Date();
+  const todayYM = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
+  if(stored === todayYM && !_isAlertResetDay()) return false;
+  return true;
+}
+
+async function _dismissAlert(cat, el){
+  _dismissedAlertCats.add(cat);
+  const today = new Date();
+  const todayYM = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
+  await Store.set(_alertStoreKey(cat), todayYM);
+  if(el) el.remove();
+  gaEvent('alert_dismissed', { category: cat });
+}
+
 function checkAlerts(){
   const box=document.getElementById('alerts');
   box.innerHTML='';
 
   // ① 節約キャンペーン対象サービスバナー（一度閉じたら再表示しない）
-  const savingSubs = subs.filter(s => s.freq !== '単発（買い切り）' && findCampaign(s.name));
+  const savingSubs = subs.filter(s => s.freq !== '単発（買い切り）' && !s.canceled && findCampaign(s.name));
   if (savingSubs.length > 0) {
     Store.get('savingBannerDismissed').then(dismissed => {
       if (dismissed) return;
@@ -3487,25 +3596,30 @@ function checkAlerts(){
     });
   }
 
-  // ② 同カテゴリ複数アラート → warn-section の上に表示
+  // ② 同カテゴリ複数アラート（Store永続化＋10/20/30日再表示）
   const catGroups={};
-  subs.filter(s=>s.freq!=='単発（買い切り）').forEach(s=>{
+  subs.filter(s=>s.freq!=='単発（買い切り）'&&!s.paused&&!s.canceled).forEach(s=>{
     catGroups[s.cat]=(catGroups[s.cat]||0)+1;
   });
   const catAlertBox = document.getElementById('cat-alert-box');
   if(catAlertBox) {
     catAlertBox.innerHTML='';
-    Object.entries(catGroups).filter(([,v])=>v>=2).filter(([cat])=>!_dismissedAlertCats.has(cat)).forEach(([cat])=>{
-      const ci=catMap[cat]||catMap['その他'];
-      const el=document.createElement('div');
-      el.className='alert-box';
-      el.innerHTML=`${ci.icon(ci.color,16)} <b>${cat}</b>のサブスクが複数あります。見直しのチャンスかも。<button class="alert-x" onclick="_dismissedAlertCats.add('${cat}');this.parentNode.remove()">✕</button>`;
-      catAlertBox.appendChild(el);
-    });
+    const targets = Object.entries(catGroups).filter(([,v])=>v>=2);
+    (async()=>{
+      for(const [cat] of targets){
+        if(await _shouldShowAlert(cat)){
+          const ci=catMap[cat]||catMap['その他'];
+          const el=document.createElement('div');
+          el.className='alert-box';
+          el.innerHTML=`${ci.icon(ci.color,16)} <b>${cat}</b>のサブスクが複数あります。見直しのチャンスかも。<button class="alert-x" onclick="_dismissAlert('${cat}',this.parentNode)">✕</button>`;
+          catAlertBox.appendChild(el);
+        }
+      }
+    })();
   }
 
   // ② 解約検討（満足度★1〜3）
-  const warns=subs.filter(s=>!s.paused&&s.sat>=1&&s.sat<=3&&s.freq!=='単発（買い切り）').sort((a,b)=>b.price-a.price);
+  const warns=subs.filter(s=>!s.paused&&!s.canceled&&s.sat>=1&&s.sat<=3&&s.freq!=='単発（買い切り）').sort((a,b)=>b.price-a.price);
   if(!warns.length) return;
 
   const section=document.createElement('div');
@@ -3562,7 +3676,7 @@ function renderCalendar(){
   const y=calYear, m=calMonth;
   document.getElementById('cal-label').textContent=`${y}年${m+1}月`;
 
-  let target=subs.filter(s=>s.freq!=='単発（買い切り）');
+  let target=subs.filter(s=>s.freq!=='単発（買い切り）'&&!s.canceled);
   if(calFilter==='warn') target=target.filter(s=>s.sat>=1&&s.sat<=3);
 
   // 休止中は「今月以降」非表示（今月中に休止した場合も含め翌月から除外）
@@ -3746,15 +3860,17 @@ function updateFilterCounts(){
   const sel=document.getElementById('fl-cat');
   const currentVal=sel.value;
   const counts={};
-  subs.forEach(s=>{
+  subs.filter(s=>!s.canceled).forEach(s=>{
     const key=catMap[s.cat]?s.cat:'その他';
     counts[key]=(counts[key]||0)+1;
   });
-  counts['休止中']=subs.filter(s=>s.paused).length;
-  counts['all']=subs.length;
+  counts['休止中']=subs.filter(s=>s.paused&&!s.canceled).length;
+  counts['解約済']=subs.filter(s=>s.canceled).length;
+  const allCount=subs.filter(s=>!s.canceled).length;
+  counts['all']=allCount;
 
   // カテゴリ表示順（固定）
-  const catOrder=['動画・配信','音楽','電子書籍・雑誌','仕事・ツール','ゲーム','健康・フィットネス','金融・年会費','習い事','通信費','保険','ローン','その他','休止中'];
+  const catOrder=['動画・配信','音楽','電子書籍・雑誌','仕事・ツール','ゲーム','健康・フィットネス','金融・年会費','習い事','通信費','保険','ローン','その他','休止中','解約済'];
 
   // selectを再構築（登録済みカテゴリのみ）
   sel.innerHTML='';
@@ -3782,7 +3898,7 @@ function updateFilterCounts(){
 }
 
 function renderList(){
-  // Family追加：タブを初期化（メンバーが変わっている可能性がある）
+ 
   renderMemberFilterTabs();
   // サマリーカードを更新
   renderListSummary();
@@ -3791,26 +3907,29 @@ function renderList(){
 
   const cat=document.getElementById('fl-cat').value;
   const sort=document.getElementById('fl-sort').value;
+  if(cat !== 'all') gaEvent('filter_used', { category: cat, sort: sort });
   let list;
-  if(cat==='休止中'){
-    list=subs.filter(s=>s.paused);
+  if(cat==='解約済'){
+    list=subs.filter(s=>s.canceled);
+  } else if(cat==='休止中'){
+    list=subs.filter(s=>s.paused&&!s.canceled);
   } else if(cat==='all'){
-    list=[...subs];
+    list=subs.filter(s=>!s.canceled);
   } else if(cat==='その他'){
-    list=subs.filter(s=>!catMap[s.cat]);
+    list=subs.filter(s=>!catMap[s.cat]&&!s.canceled);
   } else {
-    list=subs.filter(s=>s.cat===cat);
+    list=subs.filter(s=>s.cat===cat&&!s.canceled);
   }
   // 満足度フィルター（sat-bandタップ時）
   if(currentSatFilter!==null) list=list.filter(s=>s.sat===currentSatFilter);
-  // Family追加：メンバーフィルター
+ 
   if(currentMemberFilter!==null) list=list.filter(s=>s.member===currentMemberFilter);
   if(sort==='price-d')list.sort((a,b)=>b.price-a.price);
   else if(sort==='price-a')list.sort((a,b)=>a.price-b.price);
   else if(sort==='sat')list.sort((a,b)=>(b.sat||0)-(a.sat||0));
-  else list.sort((a,b)=>a.date.localeCompare(b.date));
-  // 休止中は常に末尾（カテゴリが「休止中」フィルターの場合は除く）
-  if(cat !== '休止中'){
+  else list.sort((a,b)=>(a.date||'').localeCompare(b.date||''));
+  // 休止中は常に末尾（解約済・休止中フィルター時は除く）
+  if(cat !== '休止中' && cat !== '解約済'){
     list.sort((a,b)=>{
       if(a.paused && !b.paused) return 1;
       if(!a.paused && b.paused) return -1;
@@ -3821,7 +3940,7 @@ function renderList(){
   const box=document.getElementById('list-items');
   box.innerHTML='';
 
-  // Family追加：絞り込み結果サマリー
+ 
   const summaryEl = document.getElementById('list-filter-summary');
   if (summaryEl) {
     if (currentMemberFilter !== null) {
@@ -3836,7 +3955,7 @@ function renderList(){
   }
 
   if(!list.length){
-    const filterMsg = currentMemberFilter !== null ? 'このメンバーのサブスクはありません' : '登録されているサブスクがありません<br>「追加」タブから登録してみましょう';
+    const filterMsg = currentMemberFilter !== null ? 'このメンバーのサブスクはありません' : cat==='解約済' ? '解約済のサブスクはありません' : '登録されているサブスクがありません<br>「追加」タブから登録してみましょう';
     box.innerHTML=`<div class="empty">${filterMsg}</div>`;
     return;
   }
@@ -3845,16 +3964,16 @@ function renderList(){
     const freqLbl=freqLabel(s.freq);
     const campaign=findCampaign(s.name);
     const row=document.createElement('div');
-    row.className='sub-row';
+    row.className='sub-row'+(s.canceled?' canceled':'');
     row.innerHTML=`
       <div class="sub-icon" style="background:${ci.color}20">${ci.icon(ci.color,20)}</div>
       <div class="sub-body">
-        <div class="sub-name">${s.name}${s.paused?' <span style="font-size:11px;font-weight:500;color:var(--ts);letter-spacing:.3px">休止中</span>':''}${campaign?`<span class="saving-badge" onclick="showSavingHint(findCampaign('${s.name.replace(/'/g,"\\'")}'),'${s.name.replace(/'/g,"\\'")}');event.stopPropagation()">💰</span>`:''}
+        <div class="sub-name">${s.name}${s.canceled?'<span class="sub-canceled-badge">解約済</span>':s.paused?' <span style="font-size:11px;font-weight:500;color:var(--ts);letter-spacing:.3px">休止中</span>':''}${campaign?`<span class="saving-badge" onclick="showSavingHint(findCampaign('${s.name.replace(/'/g,"\\'")}'),'${s.name.replace(/'/g,"\\'")}');event.stopPropagation()">💰</span>`:''}
         </div>
         <div class="sub-meta">
           <span class="badge" style="background:${ci.color}">${s.cat}</span>
           ${(()=>{
-            // Family追加：メンバーバッジ
+           
             if(!s.member) return '';
             if(s.member==='other'){
               return `<span style="font-size:11px;font-weight:600;color:var(--p);background:var(--pl);border:1px solid var(--p);border-radius:5px;padding:2px 6px">その他</span>`;
@@ -3865,6 +3984,7 @@ function renderList(){
           })()}
           ${s.payment?`<span style="font-size:11px;font-weight:600;color:var(--ts);background:var(--bg);border:1px solid var(--bd);border-radius:5px;padding:2px 6px">${s.payment}</span>`:''}
           <span>${(()=>{
+            if(s.canceled) return `解約日: ${s.canceledDate||'不明'}`;
             if(s.freq==='単発（買い切り）') return '買い切り';
             const np=nextPayDate(s);
             if(!np) return '更新: '+s.date;
@@ -3894,23 +4014,30 @@ function renderList(){
         })()}
       </div>
     `;
-    // 休止中バッジ
+    // 休止中・解約済バッジ
     if(s.paused) row.classList.add('paused');
 
     // タップで編集/削除/休止ボタン展開 + 左スワイプでも開く
     const actions=document.createElement('div');
     actions.className='sub-actions';
-    const pauseLabel=s.paused?'再開':'休止';
-    const pauseCls=s.paused?'btn-pause active':'btn-pause';
-    // 解約URLがあれば「解約ページを開く」、なければ「解約方法を検索」
-    const cancelBtnHtml = s.cancelUrl
-      ? `<button class="btn-e" onclick="window.open('${s.cancelUrl}','_blank');event.stopPropagation()" style="border-color:var(--ts);color:var(--ts)">🔗 解約ページ</button>`
-      : `<button class="btn-e" onclick="searchCancelUrl('${s.name.replace(/'/g,"\\'").replace(/"/g,'&quot;')}','${(s.cat||'').replace(/'/g,"\\'").replace(/"/g,'&quot;')}');event.stopPropagation()" style="border-color:var(--ts);color:var(--ts)">🔍 解約方法を検索</button>`;
-    actions.innerHTML=`
-      <button class="${pauseCls}" onclick="togglePause(${s.id});event.stopPropagation()">${pauseLabel}</button>
-      ${cancelBtnHtml}
-      <button class="btn-e" onclick="editSub(${s.id});event.stopPropagation()">編集</button>
-      <button class="btn-d" onclick="delSub(${s.id});event.stopPropagation()">削除</button>`;
+    if(s.canceled){
+      // 解約済：復元・完全削除のみ
+      actions.innerHTML=`
+        <button class="btn-e" onclick="restoreSub(${s.id});event.stopPropagation()" style="border-color:var(--p);color:var(--p)">▶ 復元</button>
+        <button class="btn-d" onclick="delSub(${s.id});event.stopPropagation()">完全削除</button>`;
+    } else {
+      const pauseLabel=s.paused?'再開':'休止';
+      const pauseCls=s.paused?'btn-pause active':'btn-pause';
+      const cancelBtnHtml = s.cancelUrl
+        ? `<button class="btn-e" onclick="window.open('${s.cancelUrl}','_blank');event.stopPropagation()" style="border-color:var(--ts);color:var(--ts)">🔗 解約ページ</button>`
+        : `<button class="btn-e" onclick="searchCancelUrl('${s.name.replace(/'/g,"\\'").replace(/"/g,'&quot;')}','${(s.cat||'').replace(/'/g,"\\'").replace(/"/g,'&quot;')}');event.stopPropagation()" style="border-color:var(--ts);color:var(--ts)">🔍 解約方法を検索</button>`;
+      actions.innerHTML=`
+        <button class="btn-e" onclick="editSub(${s.id});event.stopPropagation()">編集</button>
+        <button class="${pauseCls}" onclick="togglePause(${s.id});event.stopPropagation()">${pauseLabel}</button>
+        ${cancelBtnHtml}
+        <button class="btn-e" onclick="cancelSub(${s.id});event.stopPropagation()" style="border-color:#E67E22;color:#E67E22">解約</button>
+        <button class="btn-d" onclick="delSub(${s.id});event.stopPropagation()">削除</button>`;
+    }
     const wrapper=document.createElement('div');
     wrapper.style.cssText='background:var(--card);border-radius:10px;padding:11px 13px;margin-bottom:7px;box-shadow:var(--sh);transition:box-shadow .12s;overflow:hidden;position:relative';
     wrapper.appendChild(row);
@@ -4047,7 +4174,7 @@ function buildQItems(cat){
 }
 
 function openManualForm(item, cat){
-  updateMemberSelect(''); // Family追加：メンバー選択肢を最新状態に更新
+  updateMemberSelect('');
   // STEP2を表示
   document.getElementById('add-step1').style.display='none';
   document.getElementById('add-step2').style.display='block';
@@ -4099,13 +4226,13 @@ async function submitForm(){
   const date=document.getElementById('f-date').value;
   const memo=document.getElementById('f-memo').value.trim();
   const payment=document.getElementById('f-payment').value;
-  const member=document.getElementById('f-member').value || null; // Family追加
+  const member=document.getElementById('f-member').value || null;
   const cancelUrl=document.getElementById('f-url').value.trim();
   const satEl=document.querySelectorAll('.star-btn.on');
   const sat=satEl.length;
   if(!name){ showAlert('','サービス名を入力してください','サービス名は必須です'); return}
   if(!date){ showAlert('','次回支払日を入力してください','次の支払い予定日を入力してください'); return}
-  if(subs.length>=getPlanLimit()&&!editId){
+  if(subs.filter(s=>!s.canceled).length>=getPlanLimit()&&!editId){
     if(!isPaidPlan()){
       showDialog({
         icon:'🔒',
@@ -4145,7 +4272,7 @@ async function submitForm(){
     showDialog({
       icon:'',
       title:`「${name}」を登録しました`,
-      msg:`現在 ${subs.length} 件登録中`,
+      msg:`現在 ${subs.filter(s=>!s.canceled).length} 件登録中`,
       buttons:[
         {label:'続けて追加', cls:'ok', onClick:()=>{
           resetForm();
@@ -4195,7 +4322,7 @@ function editSub(id){
     document.getElementById('f-date').value=s.date;
     document.getElementById('f-memo').value=s.memo||'';
     document.getElementById('f-payment').value=s.payment||'';
-    updateMemberSelect(s.member||''); // Family追加
+    updateMemberSelect(s.member||'');
     document.getElementById('f-url').value=s.cancelUrl||'';
     toggleUrlBtn();
     if(s.sat){
@@ -4279,6 +4406,41 @@ async function togglePause(id){
   showToast(s.paused?`${s.name} を休止しました`:`${s.name} を再開しました`);
 }
 
+async function cancelSub(id){
+  const s = subs.find(x=>x.id===id);
+  if(!s) return;
+  showDialog({
+    icon:'',
+    title:`「${s.name}」を解約済にする`,
+    msg:'解約済にするとアーカイブされます。明細一覧の「解約済」フィルターから確認できます。',
+    buttons:[
+      {label:'キャンセル', cls:'cancel'},
+      {label:'解約済にする', cls:'danger', onClick: async ()=>{
+        s.canceled = true;
+        s.canceledDate = new Date().toISOString().slice(0,10);
+        s.paused = false;
+        await save();
+        renderDashboard();
+        renderList();
+        gaEvent('subscription_canceled', { service_name: s.name, category: s.cat });
+        showToast(`${s.name} を解約済にしました`);
+      }}
+    ]
+  });
+}
+
+async function restoreSub(id){
+  const s = subs.find(x=>x.id===id);
+  if(!s) return;
+  s.canceled = false;
+  delete s.canceledDate;
+  await save();
+  renderDashboard();
+  renderList();
+  gaEvent('subscription_restored', { service_name: s.name, category: s.cat });
+  showToast(`${s.name} を復元しました`);
+}
+
 async function delSub(id){
   const s = subs.find(x=>x.id===id);
   const name = s ? s.name : 'このサブスク';
@@ -4301,11 +4463,13 @@ async function delSub(id){
 /* ============================================================
    CSV
 ============================================================ */
+let _csvFileHandle = null; // ファイルハンドルを保持（上書き用）
+
 async function exportCSV(){
-  // GA: CSVエクスポート（データを活用しているヘビーユーザーの計測）
+  gaEvent('csv_export', { count: subs.length });
   if(!subs.length){ showAlert('','データがありません','登録されたサブスクがありません'); return; }
   const BOM='\uFEFF';
-  const header='ID,サービス名,カテゴリ,料金,頻度,更新日,メモ,満足度,休止';
+  const header='ID,サービス名,カテゴリ,料金,頻度,更新日,メモ,満足度,休止,支払い方法,解約URL,解約済,解約日';
   const rows=subs.map(s=>[
     s.id,
     `"${(s.name||'').replace(/"/g,'""')}"`,
@@ -4315,27 +4479,41 @@ async function exportCSV(){
     s.date||'',
     `"${(s.memo||'').replace(/"/g,'""')}"`,
     s.sat||'',
-    s.paused?1:0
+    s.paused?1:0,
+    `"${(s.payment||'').replace(/"/g,'""')}"`,
+    `"${(s.cancelUrl||'').replace(/"/g,'""')}"`,
+    s.canceled?1:0,
+    s.canceledDate||''
   ].join(','));
   const csvText = BOM+header+'\n'+rows.join('\n');
   const fileName = `subly_${new Date().toISOString().slice(0,10)}.csv`;
   const blob = new Blob([csvText], {type:'text/csv;charset=utf-8'});
 
-  // ① File System Access API（Android Chrome / PC Chrome → 保存先を指定できる）
+  // ① File System Access API — 同じファイルハンドルがあれば上書き、なければ保存先を選択
   if(window.showSaveFilePicker){
     try{
+      if(_csvFileHandle){
+        try{
+          const writable = await _csvFileHandle.createWritable();
+          await writable.write(blob);
+          await writable.close();
+          showToast('CSVを上書き保存しました');
+          gaEvent('csv_export_overwrite', {});
+          return;
+        }catch(e){ _csvFileHandle = null; }
+      }
       const fh = await window.showSaveFilePicker({
         suggestedName: fileName,
         types:[{ description:'CSVファイル', accept:{'text/csv':['.csv']} }]
       });
+      _csvFileHandle = fh;
       const writable = await fh.createWritable();
       await writable.write(blob);
       await writable.close();
-      showToast('CSVを保存しました');
+      showToast('CSVを保存しました（次回から上書き）');
       return;
     }catch(err){
       if(err.name==='AbortError') return;
-      // 失敗 → ②へ
     }
   }
 
@@ -4416,7 +4594,21 @@ function _processImportFile(file){
     lines.slice(1).forEach(line=>{
       const cols=parseCSVLine(line);
       if(cols.length<6)return;
-      imported.push({id:parseInt(cols[0])||Date.now(),name:cols[1],cat:cols[2],price:parseInt(cols[3])||0,freq:cols[4]||'月額',date:cols[5],memo:cols[6]||'',sat:parseInt(cols[7])||0,paused:cols[8]==="1"});
+      imported.push({
+        id: parseInt(cols[0])||Date.now(),
+        name: cols[1],
+        cat: cols[2],
+        price: parseInt(cols[3])||0,
+        freq: cols[4]||'月額',
+        date: cols[5],
+        memo: cols[6]||'',
+        sat: parseInt(cols[7])||0,
+        paused: cols[8]==="1",
+        payment: cols[9]||'',
+        cancelUrl: cols[10]||'',
+        canceled: cols[11]==="1",
+        canceledDate: cols[12]||''
+      });
     });
     if(!imported.length){ showAlert('','データがありません','インポートできるデータが見つかりませんでした'); return}
     showDialog({
@@ -4475,17 +4667,16 @@ async function loadTheme(){
    登録促進ポップアップ（3件登録後に表示）
 ============================================================ */
 async function init(){
-  await loadFamilyData(); // Family追加
+  // ── まず即座にダッシュボードを表示（データロード前でも画面を確定させる）
+  goto('dashboard');
 
-    // ── プランをロード ──
-  // Firebaseログイン済みならFirestoreで確定（_syncUserFromFirestoreで更新される）
-  // 未ログインの場合は常にfreeから開始
+  await loadFamilyData();
+
+  // ── プランをロード ──
   currentPlan = 'free';
   await Store.set('currentPlan', 'free');
 
-
-
-  // ストレージからデータをロード（なければ仮データを使用）
+  // ストレージからデータをロード
   const subsRaw  = await Store.get('subsData');
   const otRaw    = await Store.get('inclOt');
   const onboarded = await Store.get('onboarded');
@@ -4514,27 +4705,33 @@ async function init(){
       : 'オフ';
   }
 
-  applyPlanUI(); // プランUIを適用
-  updateNicknameUI(); // ニックネーム表示を更新
+  applyPlanUI();
+  updateNicknameUI();
+  // データロード後に再描画してコンテンツを反映
   goto('dashboard');
   updateFilterCounts();
-  checkInviteParam(); // 招待パラメータを検出
+  checkInviteParam();
 
-  // ── リピーター追跡：起動回数・登録件数をユーザープロパティにセット ──
+  // ── リピーター追跡 ──
   const openCountRaw = await Store.get('appOpenCount');
   const appOpenCount = (parseInt(openCountRaw) || 0) + 1;
   await Store.set('appOpenCount', String(appOpenCount));
 
-  // Web版: 月初の見直しバナー表示
+  await loadTheme();
   _initChartSwipe();
-  if(onboarded) setTimeout(()=>checkUpcomingPayments(), 1200);
+  if(onboarded){
+    setTimeout(()=>checkUpcomingPayments(), 1200);
+    setTimeout(()=>checkNudge(), 2000);
+  } else {
+    showOnboarding();
+  }
 }
 
 function openSavingHints(){
   const body = document.getElementById('saving-hints-body');
   body.innerHTML = '';
 
-  const matched = subs.filter(s => findCampaign(s.name));
+  const matched = subs.filter(s => !s.canceled && findCampaign(s.name));
   if(matched.length){
     const sec = document.createElement('div');
     const lbl = document.createElement('div');
@@ -4640,10 +4837,10 @@ function renderListSummaryMembers(){
   }
   // subly Pro：メンバー別内訳
   const cat = document.getElementById('fl-cat').value;
-  let list = cat === '休止中' ? subs.filter(s => s.paused)
-           : cat === 'all'    ? subs.filter(s => !s.paused)
-           : cat === 'その他' ? subs.filter(s => !catMap[s.cat] && !s.paused)
-           :                    subs.filter(s => s.cat === cat && !s.paused);
+  let list = cat === '休止中' ? subs.filter(s => s.paused && !s.canceled)
+           : cat === 'all'    ? subs.filter(s => !s.paused && !s.canceled)
+           : cat === 'その他' ? subs.filter(s => !catMap[s.cat] && !s.paused && !s.canceled)
+           :                    subs.filter(s => s.cat === cat && !s.paused && !s.canceled);
 
   const memberTotals = familyMembers.map(m => ({
     name: m.name,
@@ -4701,13 +4898,15 @@ function renderListSummary(){
   const cat = document.getElementById('fl-cat').value;
   let list;
   if(cat === '休止中'){
-    list = subs.filter(s => s.paused);
+    list = subs.filter(s => s.paused && !s.canceled);
+  } else if(cat === '解約済'){
+    list = subs.filter(s => s.canceled);
   } else if(cat === 'all'){
-    list = subs.filter(s => !s.paused);
+    list = subs.filter(s => !s.paused && !s.canceled);
   } else if(cat === 'その他'){
-    list = subs.filter(s => !catMap[s.cat] && !s.paused);
+    list = subs.filter(s => !catMap[s.cat] && !s.paused && !s.canceled);
   } else {
-    list = subs.filter(s => s.cat === cat && !s.paused);
+    list = subs.filter(s => s.cat === cat && !s.paused && !s.canceled);
   }
   if(currentSatFilter !== null) list = list.filter(s => s.sat === currentSatFilter);
 
@@ -4737,7 +4936,7 @@ let satPopupDraft = {};
 
 function openSatPopupReport() {
   // アクティブなサブスクを取得
-  const targets = subs.filter(s => !s.paused && s.freq !== '単発（買い切り）');
+  const targets = subs.filter(s => !s.paused && !s.canceled && s.freq !== '単発（買い切り）');
   if (targets.length === 0) {
     showToast('登録中のサブスクがありません');
     return;
@@ -5077,7 +5276,7 @@ function renderFamilyArea() {
   let otherTotal = 0;
   familyMembers.forEach(m => memberTotals[m.id] = 0);
 
-  subs.filter(s => !s.paused && s.freq !== '単発（買い切り）').forEach(s => {
+  subs.filter(s => !s.paused && !s.canceled && s.freq !== '単発（買い切り）').forEach(s => {
     const mo = moFromSub(s);
     if (s.member === 'other') {
       otherTotal += mo;
@@ -5653,6 +5852,121 @@ if(document.readyState==='loading'){
 </div>
 
 </div><!-- /main-app -->
+
+<!-- オンボーディング -->
+<div class="ob-overlay hidden" id="ob-ov">
+  <div class="ob-inner-wrap">
+
+  <!-- スライドコンテナ（4ステップ） -->
+  <div class="ob-slides" id="ob-slides" style="width:400%">
+
+    <!-- ページ1: 問題提起 -->
+    <div class="ob-slide" style="width:25%">
+      <div class="ob-illust">
+        <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
+          <rect x="28" y="30" width="54" height="48" rx="6" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+          <ellipse cx="55" cy="26" rx="8" ry="4" fill="rgba(255,255,255,0.4)"/>
+          <path d="M40 78 Q38 90 36 96" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M55 78 Q55 92 55 98" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M70 78 Q72 90 74 96" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round"/>
+          <text x="55" y="62" text-anchor="middle" font-size="26" font-weight="800" fill="rgba(255,255,255,0.85)" font-family="sans-serif">¥</text>
+          <path d="M34 52 Q42 46 50 52 Q58 58 66 52 Q74 46 76 52" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none"/>
+        </svg>
+      </div>
+      <div class="ob-badge">知ってますか？</div>
+      <div class="ob-ttl">毎月、知らないうちに<br><em>お金が消えている。</em></div>
+      <div class="ob-desc">カード引き落としは「支払いの痛み」を感じにくく、使っていないサブスクに気づかず払い続けてしまいがちです。まず全部を「見える化」することが家計改善の第一歩です。</div>
+    </div>
+
+    <!-- ページ2: 見える化 -->
+    <div class="ob-slide" style="width:25%">
+      <div class="ob-illust">
+        <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
+          <text x="55" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="rgba(255,255,255,0.6)" font-family="sans-serif">1日あたり</text>
+          <rect x="18" y="26" width="74" height="36" rx="10" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+          <text x="55" y="52" text-anchor="middle" font-size="22" font-weight="900" fill="#fff" font-family="sans-serif">約 ¥150</text>
+          <path d="M55 68 L55 76 M49 72 L55 78 L61 72" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="20" y="82" width="70" height="18" rx="9" fill="rgba(255,255,255,0.15)"/>
+          <text x="55" y="95" text-anchor="middle" font-size="10" font-weight="700" fill="#fff" font-family="sans-serif">年間 約 ¥54,750</text>
+        </svg>
+      </div>
+      <div class="ob-badge">見える化</div>
+      <div class="ob-ttl">「1日いくら」で<br><em>本当の重さがわかる。</em></div>
+      <div class="ob-desc">月額・年額だけでなく「1日あたり何円」かを自動計算。小さく見えた金額が、実は年間で大きな出費になっていることに気づけます。</div>
+    </div>
+
+    <!-- ページ3: 見直し -->
+    <div class="ob-slide" style="width:25%">
+      <div class="ob-illust">
+        <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
+          <line x1="55" y1="22" x2="55" y2="55" stroke="rgba(255,255,255,0.6)" stroke-width="2.5"/>
+          <line x1="22" y1="42" x2="88" y2="42" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" stroke-linecap="round"/>
+          <ellipse cx="28" cy="58" rx="16" ry="6" fill="rgba(255,255,255,0.25)" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+          <line x1="22" y1="42" x2="22" y2="52" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+          <line x1="34" y1="42" x2="34" y2="52" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+          <text x="28" y="62" text-anchor="middle" font-size="9" font-weight="700" fill="#fff" font-family="sans-serif">必要</text>
+          <ellipse cx="82" cy="62" rx="16" ry="6" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+          <line x1="76" y1="42" x2="76" y2="56" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+          <line x1="88" y1="42" x2="88" y2="56" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
+          <text x="82" y="66" text-anchor="middle" font-size="9" font-weight="700" fill="rgba(255,255,255,0.5)" font-family="sans-serif">解約</text>
+          <text x="55" y="90" text-anchor="middle" font-size="22" font-family="sans-serif">★</text>
+        </svg>
+      </div>
+      <div class="ob-badge">見直し</div>
+      <div class="ob-ttl">満足度★で<br><em>いるもの・いらないものを仕分ける。</em></div>
+      <div class="ob-desc">各サブスクに満足度★をつけて管理。低評価のサブスクを解約すれば、毎月の固定費が減り、浮いたお金を貯金や投資に回せます。</div>
+    </div>
+
+    <!-- ページ4: はじめる -->
+    <div class="ob-slide" style="width:25%">
+      <div class="ob-illust">
+        <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
+          <ellipse cx="55" cy="60" rx="32" ry="26" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+          <ellipse cx="55" cy="34" rx="14" ry="10" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+          <rect x="48" y="30" width="14" height="6" rx="3" fill="rgba(255,255,255,0.3)"/>
+          <rect x="48" y="38" width="14" height="3" rx="1.5" fill="rgba(255,255,255,0.5)"/>
+          <text x="55" y="68" text-anchor="middle" font-size="24" font-weight="900" fill="#fff" font-family="sans-serif">¥</text>
+          <rect x="40" y="84" width="8" height="10" rx="4" fill="rgba(255,255,255,0.4)"/>
+          <rect x="62" y="84" width="8" height="10" rx="4" fill="rgba(255,255,255,0.4)"/>
+        </svg>
+      </div>
+      <div class="ob-badge">完全無料・広告なし</div>
+      <div class="ob-ttl">登録は<em>30秒。</em><br>今日から家計を変えよう。</div>
+      <div class="ob-desc">完全無料・広告なし・個人情報不取得。まずサブスクを全部登録して、毎月いくら払っているか確認してみましょう。</div>
+      <div class="ob-home-hint" style="margin-top:18px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:14px 16px;text-align:left;width:100%">
+        <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:10px;letter-spacing:.5px">ホーム画面に追加すると便利です</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:12px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:8px">
+            <span style="background:rgba(255,255,255,.2);border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">i</span>
+            iPhone：Safari → 共有ボタン → 「ホーム画面に追加」
+          </div>
+          <div style="font-size:12px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:8px">
+            <span style="background:rgba(255,255,255,.2);border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">A</span>
+            Android：Chrome → ︙メニュー → 「ホーム画面に追加」
+          </div>
+        </div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:8px">追加するとURLなしでワンタップで開けます</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ドット -->
+  <div class="ob-dots" id="ob-dots">
+    <div class="ob-dot on" onclick="obGoto(0)"></div>
+    <div class="ob-dot" onclick="obGoto(1)"></div>
+    <div class="ob-dot" onclick="obGoto(2)"></div>
+    <div class="ob-dot" onclick="obGoto(3)"></div>
+  </div>
+
+  <!-- ボタン -->
+  <div class="ob-footer">
+    <button class="ob-btn-skip" id="ob-skip" onclick="gaEvent('onboarding_skip',{});closeOb()">スキップ</button>
+    <button class="ob-btn-next" id="ob-next" onclick="obNext()">次へ</button>
+  </div>
+
+  </div><!-- /ob-inner-wrap -->
+</div>
 
 </body>
 </html>
