@@ -635,7 +635,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     <div id="login-demo-note" style="margin-top:14px;padding:10px 12px;background:var(--wbg,#fffbeb);border:1px solid #f0d060;border-radius:8px;font-size:11px;color:#8a6a10;line-height:1.6">
       <strong>開発中（デモモード）：</strong>FirebaseのconfigをセットするとGoogleログインが有効になります。
       <br>
-      <button onclick="window._currentUser={uid:'demo',displayName:'田中パパ',email:'papa@example.com',photoURL:null};showApp();" style="margin-top:8px;padding:6px 14px;border-radius:8px;background:var(--p);color:#fff;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">デモで入る →</button>
+      <button onclick="window._currentUser={uid:'demo',displayName:'パパ',email:'demo@example.com',photoURL:null};showApp();" style="margin-top:8px;padding:6px 14px;border-radius:8px;background:var(--p);color:#fff;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">デモで入る →</button>
     </div>
   </div>
 
@@ -660,8 +660,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   <div id="hdr-group-btn" style="display:none;align-items:center">
     <button id="hdr-group-chip" onclick="openFamilySettings()"
       style="display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.35);border-radius:16px;padding:5px 11px;cursor:pointer;font-family:inherit;max-width:140px">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="rgba(255,255,255,.9)" style="flex-shrink:0"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-      <span id="hdr-group-label" style="color:#fff;font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">グループを作る</span>
+      <span id="hdr-group-icon" style="display:flex;align-items:center;flex-shrink:0"><svg width="13" height="13" viewBox="0 0 24 24" fill="rgba(255,255,255,.9)"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></span>
+      <span id="hdr-group-label" style="color:#fff;font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">グループ設定をする</span>
     </button>
   </div>
 </header>
@@ -864,7 +864,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     <div id="s-sec-family" style="display:none">
       <div class="s-sec">家族グループ</div>
       <div class="s-grp">
-        <div class="s-row" id="s-row-group-create" onclick="closeSettings();setTimeout(showOnboarding,200)">
+        <div class="s-row" id="s-row-group-create" onclick="showGroupTutorial()">
           <div class="s-ico" style="background:#E8F0ED"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg></div>
           <div class="s-body"><div class="s-title">グループを作成する</div><div class="s-sub">家族を招待して共有管理</div></div>
           <span class="s-arr">›</span>
@@ -1235,7 +1235,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
         <div style="display:flex;align-items:center;gap:6px">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--p)"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-          <span id="family-name-label" style="font-size:13px;font-weight:700;color:var(--tx)">田中家</span>
+          <span id="family-name-label" style="font-size:13px;font-weight:700;color:var(--tx)"></span>
         </div>
         <button onclick="openFamilySettings()" style="font-size:11px;color:var(--p);background:none;border:none;cursor:pointer;font-family:inherit;font-weight:600;padding:2px 6px">設定 ›</button>
       </div>
@@ -1648,7 +1648,9 @@ const Store = (function(){
 let subs = [];
 
 // ══ プラン管理（Free / Me / Family） ══
-let currentPlan = 'free'; // 'free' | 'family'
+let currentPlan = 'free';   // 'free' | 'family'
+let userNickname = '';        // ニックネーム（1人使い・グループ共通）
+let userMode = '';            // '' | 'solo' | 'group' （未設定 / 1人 / グループ）
 const PLAN_LIMITS = { free: 20, family: Infinity };
 const PLAN_LABELS = { free: 'Free', family: 'Family 👨‍👩‍👧' };
 
@@ -1742,28 +1744,28 @@ function applyPlanUI() {
   }
 
   // ── ヘッダー グループボタン（常に表示） ──
-  // ── ヘッダー グループボタン（常に表示） ──
+  // ── ヘッダー グループボタン（2状態） ──
   const grpBtn   = document.getElementById('hdr-group-btn');
   const grpLabel = document.getElementById('hdr-group-label');
+  const grpChip  = document.getElementById('hdr-group-chip');
+  const grpIcon  = document.getElementById('hdr-group-icon');
   if (grpBtn) {
     grpBtn.style.display = 'flex';
-    if (grpLabel) {
-      // Family + グループ名あり → グループ名
-      // それ以外 → 「グループを作る」
-      grpLabel.textContent = (isFamilyPlan() && familyName) ? familyName : 'グループを作る';
-    }
-    const chip = document.getElementById('hdr-group-chip');
-    if (chip) {
-      if (isFamilyPlan()) {
-        // Family → グループ設定シートへ
-        chip.onclick = openFamilySettings;
-      } else {
-        // Free → オンボーディング（グループ作成フロー）へ
-        chip.onclick = () => {
-          closeHdrop();
-          setTimeout(showOnboarding, 150);
-        };
-      }
+    if (isFamilyPlan() && familyName) {
+      // Family + グループあり → グループ名
+      if (grpLabel) grpLabel.textContent = familyName;
+      if (grpIcon)  grpIcon.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="rgba(255,255,255,.9)"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>';
+      if (grpChip) grpChip.onclick = openFamilySettings;
+    } else if (isFamilyPlan()) {
+      // Family + グループ未作成 → チュートリアルへ
+      if (grpLabel) grpLabel.textContent = 'グループを設定する';
+      if (grpIcon)  grpIcon.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="rgba(255,255,255,.9)"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>';
+      if (grpChip) grpChip.onclick = showGroupTutorial;
+    } else {
+      // Free → アップグレード誘導
+      if (grpLabel) grpLabel.textContent = 'Familyプランにする';
+      if (grpIcon)  grpIcon.innerHTML = '<svg width="11" height="11" viewBox="0 0 24 24" fill="rgba(255,255,255,.9)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+      if (grpChip) grpChip.onclick = openUpgradeModal;
     }
   }
   const rowLeave  = document.getElementById('s-row-leave-family');
@@ -2781,13 +2783,12 @@ function showOnboarding(){
     };
   } else if (isPaidPlan()) {
     // ── パターンC: Familyプランで通常起動 ──
-    // 4枚（ようこそ〜ルート選択）
     window._obMaxPage = 3;
     const dotsEl = document.getElementById('ob-dots');
     if (dotsEl) dotsEl.style.display = '';
     if (badge)  badge.textContent  = 'Family プラン';
-    if (ttl)    ttl.innerHTML      = 'ご利用ありがとうございます！';
-    if (desc)   desc.textContent   = 'subly Familyへようこそ。家族と一緒に管理を始めましょう。';
+    if (ttl)    ttl.innerHTML      = 'グループで<br><em>家族みんなと管理</em>';
+    if (desc)   desc.textContent   = 'グループを作って招待リンクを送るだけ。家族全員のサブスクをまとめて把握できます。';
     if (sBadge) sBadge.textContent = 'さあはじめよう';
     if (sTtl)   sTtl.textContent   = 'グループをどうしますか？';
     const nextBtn = document.getElementById('ob-next');
@@ -4516,6 +4517,14 @@ async function init(){
     await Store.set('currentPlan', savedPlan); // Storeにも同期
   }
 
+  // ── ニックネーム・ユーザーモードをロード ──
+  const savedNickname = await Store.get('userNickname');
+  const savedMode     = await Store.get('userMode');
+  if (savedNickname) userNickname = savedNickname;
+  if (savedMode && ['solo','group'].includes(savedMode)) userMode = savedMode;
+  // Familyプランなら強制的にgroupモード
+  if (isFamilyPlan()) userMode = 'group';
+
   // ── ログインユーザー情報をヘッダーに表示（あれば） ──
   const userName  = localStorage.getItem('userName');
   const userEmail = localStorage.getItem('userEmail');
@@ -4569,6 +4578,62 @@ async function init(){
 }
 
 
+// ── グループ設定をする：モード選択ダイアログ ──
+function openGroupModeDialog() {
+  showDialog({
+    icon: '👋',
+    title: 'どのように使いますか？',
+    msg: '<div style="font-size:12px;color:var(--ts);text-align:center;margin-bottom:4px">後から設定でいつでも変更できます</div>',
+    buttons: [
+      {
+        label: '👤 1人で使う',
+        cls: 'cancel',
+        onClick: () => openNicknameDialog(false)
+      },
+      {
+        label: '👨‍👩‍👧 グループを作る',
+        cls: 'ok',
+        onClick: () => {
+          setTimeout(openUpgradeModal, 200);
+        }
+      }
+    ]
+  });
+}
+
+// ── ニックネームダイアログ（新規 or 変更） ──
+function openNicknameDialog(isEdit = true) {
+  const current = userNickname || '';
+  showDialog({
+    icon: '👤',
+    title: isEdit ? 'ニックネームを変更' : 'ニックネームを設定',
+    msg: `<div style="font-size:12px;color:var(--ts);text-align:center;margin-bottom:12px">${isEdit ? 'グループ内での表示名になります' : '1人で使うときの名前を設定します'}</div>
+      <input id="nickname-input" type="text" maxlength="20" value="${current}"
+        placeholder="例：パパ、ママ、太郎..."
+        style="width:100%;border:1.5px solid var(--p);border-radius:10px;padding:10px;font-size:15px;font-family:inherit;text-align:center;font-weight:700;background:var(--bg);color:var(--tx);outline:none">
+      ${isEdit ? `<div style="text-align:center;margin-top:12px"><button onclick="openGroupModeDialog()" style="background:none;border:none;font-size:12px;color:var(--p);cursor:pointer;font-family:inherit;font-weight:600">グループを作る →</button></div>` : ''}`,
+    buttons: [
+      { label: 'キャンセル', cls: 'cancel' },
+      {
+        label: isEdit ? '保存' : 'この名前で始める',
+        cls: 'ok',
+        onClick: async () => {
+          const val = document.getElementById('nickname-input')?.value?.trim();
+          if (!val) { showToast('名前を入力してください'); return; }
+          userNickname = val;
+          userMode = 'solo';
+          await Store.set('userNickname', val);
+          await Store.set('userMode', 'solo');
+          applyPlanUI();
+          showToast(`「${val}」で始めます`);
+        }
+      }
+    ]
+  });
+  // フォーカス
+  setTimeout(() => document.getElementById('nickname-input')?.focus(), 100);
+}
+
 function openUpgradeModal() {
   showDialog({
     icon: '👨‍👩‍👧',
@@ -4588,8 +4653,7 @@ function openUpgradeModal() {
         // 今は即座にFamilyプランへ（テスト用）
         await setPlan('family');
         showToast('Familyプランになりました！');
-        window._obFromUpgrade = true;
-        showOnboarding();
+        setTimeout(showGroupTutorial, 400);
       }}
     ]
   });
@@ -5022,6 +5086,114 @@ function filterByMember(memberId) {
 }
 
 // ── 家族設定モーダル ──
+// ── グループチュートリアル（ポップアップ形式 STEP1〜4） ──
+let _gtStep = 0;
+const _gtSteps = [
+  {
+    icon: '👨‍👩‍👧',
+    badge: 'Family プラン',
+    ttl: 'グループで<br>家族みんなと管理',
+    desc: 'グループを作って招待リンクを送るだけ。家族全員のサブスクをまとめて把握できます。',
+    body: ''
+  },
+  {
+    icon: '🔗',
+    badge: 'STEP 2 / 4',
+    ttl: '招待は3ステップで完了',
+    desc: '',
+    body: `<div style="background:var(--pl);border-radius:11px;padding:12px 14px;margin-bottom:12px">
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
+        <div style="width:22px;height:22px;border-radius:50%;background:var(--p);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+        <div><div style="font-size:12px;font-weight:600;color:var(--tx)">グループ名をつける</div><div style="font-size:11px;color:var(--ts)">例：山田家、Yamamoto家...</div></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:10px">
+        <div style="width:22px;height:22px;border-radius:50%;background:var(--p);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+        <div><div style="font-size:12px;font-weight:600;color:var(--tx)">招待リンクを生成する</div><div style="font-size:11px;color:var(--ts)">有効期限72時間のURLが発行される</div></div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:10px">
+        <div style="width:22px;height:22px;border-radius:50%;background:var(--p);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+        <div><div style="font-size:12px;font-weight:600;color:var(--tx)">LINEで家族に送る</div><div style="font-size:11px;color:var(--ts)">タップするだけで参加完了</div></div>
+      </div>
+    </div>`
+  },
+  {
+    icon: '📋',
+    badge: 'STEP 3 / 4',
+    ttl: 'グループのルール',
+    desc: '',
+    body: `<div style="background:#FEF3C7;border:1px solid #D4A020;border-radius:10px;padding:10px 12px;display:flex;gap:10px;margin-bottom:12px">
+      <div style="font-size:16px;flex-shrink:0">💡</div>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#92400E;margin-bottom:3px">参加できるのは1グループのみ</div>
+        <div style="font-size:11px;color:#92400E;line-height:1.55">別のグループに参加する場合は、現在のグループから一度脱退してください。</div>
+      </div>
+    </div>
+    <div style="background:var(--pl);border-radius:11px;padding:12px 14px">
+      <div style="font-size:11px;font-weight:700;color:var(--p);margin-bottom:8px">招待された側の参加手順</div>
+      <div style="font-size:11px;color:var(--ts);line-height:1.8">① 届いたリンクをタップ<br>② 「参加する」をタップ<br>③ グループに自動で加入</div>
+    </div>`
+  },
+  {
+    icon: '📊',
+    badge: 'STEP 4 / 4',
+    ttl: '誰がいくら払ってるか<br>一目でわかる',
+    desc: '満足度は自分のサブスクのみ更新できます。他のメンバーのデータは参照のみです。',
+    body: `<div style="display:flex;gap:8px;margin-bottom:12px">
+      <div style="flex:1;background:var(--pl);border-radius:9px;padding:8px 10px;text-align:center">
+        <div style="font-size:9px;color:var(--ts);margin-bottom:4px">パパ</div>
+        <div style="height:4px;background:var(--bd);border-radius:2px;margin-bottom:4px;overflow:hidden"><div style="height:100%;width:82%;background:var(--p);border-radius:2px"></div></div>
+        <div style="font-size:11px;font-weight:700;color:var(--tx)">¥12,400</div>
+      </div>
+      <div style="flex:1;background:var(--pl);border-radius:9px;padding:8px 10px;text-align:center">
+        <div style="font-size:9px;color:var(--ts);margin-bottom:4px">ママ</div>
+        <div style="height:4px;background:var(--bd);border-radius:2px;margin-bottom:4px;overflow:hidden"><div style="height:100%;width:55%;background:var(--p);border-radius:2px"></div></div>
+        <div style="font-size:11px;font-weight:700;color:var(--tx)">¥8,200</div>
+      </div>
+      <div style="flex:1;background:var(--pl);border-radius:9px;padding:8px 10px;text-align:center">
+        <div style="font-size:9px;color:var(--ts);margin-bottom:4px">その他</div>
+        <div style="height:4px;background:var(--bd);border-radius:2px;margin-bottom:4px;overflow:hidden"><div style="height:100%;width:38%;background:#A0A0A0;border-radius:2px"></div></div>
+        <div style="font-size:11px;font-weight:700;color:var(--tx)">¥5,600</div>
+      </div>
+    </div>`
+  }
+];
+
+function showGroupTutorial() {
+  _gtStep = 0;
+  _renderGroupTutorial();
+}
+
+function _renderGroupTutorial() {
+  const step = _gtSteps[_gtStep];
+  const total = _gtSteps.length;
+  const isLast = _gtStep === total - 1;
+
+  const dots = Array.from({length: total}, (_, i) =>
+    `<div style="width:${i===_gtStep?'20px':'7px'};height:7px;border-radius:4px;background:${i===_gtStep?'var(--p)':'var(--bd)'};transition:all .25s"></div>`
+  ).join('');
+
+  showDialog({
+    icon: step.icon,
+    title: step.ttl,
+    msg: `<div style="font-size:10px;font-weight:700;color:var(--p);letter-spacing:.5px;text-align:center;margin-bottom:6px">${step.badge}</div>
+      <div style="display:flex;gap:5px;justify-content:center;margin-bottom:12px">${dots}</div>
+      ${step.desc ? `<div style="font-size:13px;color:var(--ts);text-align:center;line-height:1.65;margin-bottom:12px">${step.desc}</div>` : ''}
+      ${step.body}`,
+    buttons: [
+      { label: isLast ? 'グループを設定する →' : '次へ →', cls: 'ok', onClick: () => {
+        if (isLast) {
+          closeSettings();
+          setTimeout(openFamilySettings, 200);
+        } else {
+          _gtStep++;
+          setTimeout(_renderGroupTutorial, 50);
+        }
+      }},
+      ...(_gtStep > 0 ? [] : [{ label: 'スキップ', cls: 'cancel' }])
+    ]
+  });
+}
+
 function openFamilySettings() {
   const modal = document.getElementById('family-settings-modal');
   if (modal) { modal.style.display = 'flex'; renderFamilySettingsModal(); }
