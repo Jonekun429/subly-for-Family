@@ -4517,15 +4517,11 @@ async function loadTheme(){
 async function init(){
   await loadFamilyData(); // Family追加
 
-    // ── プランをロード（Storeのみ） ──
-  const savedPlan = await Store.get('currentPlan');
-  if (savedPlan && ['free','pro'].includes(savedPlan)) {
-    currentPlan = savedPlan;
-  } else {
-    // 初回アクセス: freeをStoreに保存
-    currentPlan = 'free';
-    await Store.set('currentPlan', 'free');
-  }
+    // ── プランをロード ──
+  // Firebaseログイン済みならFirestoreで確定（_syncUserFromFirestoreで更新される）
+  // 未ログインの場合は常にfreeから開始
+  currentPlan = 'free';
+  await Store.set('currentPlan', 'free');
 
 
   // ── ログインユーザー情報をヘッダーに表示（あれば） ──
@@ -4672,7 +4668,7 @@ function openPrivacyNewTab(){
 
 function closeSavingHints(){ document.getElementById('saving-hints-ov').classList.add('hidden'); }
 
-function openSettings(){document.getElementById('settings-ov').classList.remove('hidden')}
+function openSettings(){document.getElementById('settings-ov').classList.remove('hidden'); applyPlanUI();}
 function closeSettings(){document.getElementById('settings-ov').classList.add('hidden')}
 function openGuide(){document.getElementById('guide-ov').classList.remove('hidden');gaEvent('guide_open',{})}
 function closeGuide(){document.getElementById('guide-ov').classList.add('hidden')}
