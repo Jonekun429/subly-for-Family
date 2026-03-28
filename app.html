@@ -640,6 +640,52 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 /* ── 登録促進ポップアップ ── */
 
 
+.btn-pause{padding:5px 14px;font-size:14px;font-weight:700;border-radius:6px;cursor:pointer;border:1.5px solid var(--ts);background:#fff;color:var(--ts);font-family:inherit}
+.cal-chip-more{
+  font-size:clamp(6px,1.4vw,9px);
+  font-weight:700;
+  color:var(--ts);
+  margin-top:0;
+  line-height:1.25;
+  flex-shrink:0;
+}
+.cal-detail-bar{width:4px;border-radius:2px;align-self:stretch;flex-shrink:0}
+.nudge{background:var(--card);border-radius:18px;padding:0;max-width:360px;width:100%;box-shadow:0 12px 40px rgba(0,0,0,.18);animation:fadeUp .22s ease;overflow:hidden}
+.nudge-arr{color:var(--p);font-size:16px;font-weight:700}
+.nudge-body{padding:16px 20px 20px}
+.nudge-close{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff}
+.nudge-footer{padding:0 20px 16px;text-align:center}
+.nudge-hdr{background:linear-gradient(135deg,var(--p),var(--pd));padding:18px 20px 14px;position:relative}
+.nudge-hdr-sub{font-size:12px;color:rgba(255,255,255,.7);margin-top:4px}
+.nudge-hdr-ttl{font-size:16px;font-weight:800;color:#fff;line-height:1.4}
+.nudge-hint{font-size:11px;color:var(--ts);margin-top:2px}
+.nudge-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.nudge-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1.5px solid var(--bd);border-radius:12px;margin-bottom:8px;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.nudge-lbl{flex:1}
+.nudge-name{font-size:14px;font-weight:700;color:var(--tx)}
+.nudge-ov{position:fixed;inset:0;z-index:9400;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .18s ease}
+.nudge-skip{background:none;border:none;font-size:13px;color:var(--ts);cursor:pointer;font-family:inherit;padding:8px 16px}
+.ob-home-hint{display:none}
+.ob-inner-wrap{width:480px;max-height:88vh;background:var(--p);border-radius:24px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.3)}
+.plan-opt-lbl{font-size:14px;font-weight:500;color:var(--tx)}
+.plan-opt-prc{font-size:14px;font-weight:700;color:var(--p)}
+.q-plans-badge{font-size:12px;font-weight:700;background:var(--pl);color:var(--p);border-radius:3px;padding:1px 4px;margin-left:4px;vertical-align:middle}
+.s-theme-btn{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px 4px;border-radius:10px;border:1.5px solid transparent;background:rgba(255,255,255,.08);cursor:pointer;font-family:inherit;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.s-theme-dot{width:32px;height:32px;border-radius:50%;flex-shrink:0}
+.sat-band{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:7px;cursor:pointer;transition:background .12s}
+.sat-bw{flex:1;background:var(--bg);border-radius:3px;height:7px;overflow:hidden}
+.sat-popup{background:var(--card);border-radius:18px 18px 0 0;width:100%;max-width:680px;max-height:82vh;overflow-y:auto;animation:fadeUp .22s ease;padding-bottom:env(safe-area-inset-bottom)}
+.sat-popup-body{padding:12px 16px 20px}
+.sat-popup-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 12px;border-bottom:1px solid var(--bd);position:sticky;top:0;background:var(--card);z-index:1}
+.sat-popup-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sat-popup-name{flex:1;font-size:14px;font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sat-popup-ov{position:fixed;inset:0;z-index:9200;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .18s ease}
+.sat-popup-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd)}
+.sat-popup-save{width:100%;padding:14px;background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;font-size:15px;font-weight:700;font-family:inherit;border:none;border-radius:12px;cursor:pointer;margin-top:14px;-webkit-tap-highlight-color:transparent}
+.sat-popup-star{font-size:20px;background:none;border:none;cursor:pointer;opacity:.25;color:var(--ts);padding:1px;line-height:1;transition:opacity .1s,transform .1s}
+.sat-popup-stars{display:flex;gap:2px;flex-shrink:0}
+.sat-popup-ttl{font-size:15px;font-weight:700}
+.saving-badge{font-size:14px;cursor:pointer;display:inline-block;margin-left:4px;vertical-align:middle;transition:transform .15s;-webkit-tap-highlight-color:transparent}
 </style>
 
 
@@ -731,7 +777,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
           <span>オーシャン</span>
         </button>
         <button class="hd-theme-btn" onclick="setTheme('pastel')"  id="hd-th-pastel" data-theme="pastel">
-          <div class="hd-theme-dot" style="background:#FAF0F5;border:2px solid #E8A0BF"></div>
+          <div class="hd-theme-dot" style="background:linear-gradient(135deg,#F5E6F0,#E8F0FA,#FFF0F5);border:2px solid #E8A0BF"></div>
           <span>パステル</span>
         </button>
         <button class="hd-theme-btn" onclick="setTheme('dark')"    id="hd-th-dark"   data-theme="dark">
@@ -823,7 +869,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 <!-- カスタム確認ダイアログ -->
 <div class="dlg-ov hidden" id="dlg-ov" onclick="if(event.target===this)closeDialog()">
   <div class="dlg" style="position:relative">
-    <button id="dlg-close-btn" onclick="closeDialog()" style="position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:50%;background:var(--bg);border:none;cursor:pointer;font-size:14px;color:var(--ts);display:flex;align-items:center;justify-content:center;line-height:1">✕</button>
+    <button id="dlg-close" onclick="closeDialog()" style="position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;background:var(--bg);border:none;cursor:pointer;font-size:14px;color:var(--ts);display:none;align-items:center;justify-content:center;z-index:1">✕</button>
     <div class="dlg-icon" id="dlg-icon"></div>
     <div class="dlg-ttl" id="dlg-ttl"></div>
     <div class="dlg-msg" id="dlg-msg"></div>
@@ -903,6 +949,40 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
           <div class="s-ico" style="background:#E8F0ED"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
           <div class="s-body"><div class="s-title" id="s-group-name-label">グループ設定</div><div class="s-sub">メンバー管理・招待リンク</div></div>
           <span class="s-arr">›</span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ══ テーマ ══ -->
+    <div class="s-sec">テーマ</div>
+    <div class="s-grp">
+      <div style="padding:12px 16px">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+          <button class="s-theme-btn" onclick="setTheme('light')"  id="th-light"  data-theme="light">
+            <div class="s-theme-dot" style="background:#F5F5F0;border:2.5px solid #5C8E84"></div>
+            <span>ライト</span>
+          </button>
+          <button class="s-theme-btn" onclick="setTheme('ocean')"  id="th-ocean"  data-theme="ocean">
+            <div class="s-theme-dot" style="background:#F0F5FA;border:2.5px solid #4A90D0"></div>
+            <span>オーシャン</span>
+          </button>
+          <button class="s-theme-btn" onclick="setTheme('pastel')" id="th-pastel" data-theme="pastel">
+            <div class="s-theme-dot" style="background:#FAF0F5;border:2.5px solid #E8A0BF"></div>
+            <span>パステル</span>
+          </button>
+          <button class="s-theme-btn" onclick="setTheme('dark')"   id="th-dark"   data-theme="dark">
+            <div class="s-theme-dot" style="background:#121816;border:2.5px solid #6BA99F"></div>
+            <span>ダーク</span>
+          </button>
+          <button class="s-theme-btn" onclick="setTheme('night')"  id="th-night"  data-theme="night">
+            <div class="s-theme-dot" style="background:#0E1525;border:2.5px solid #5B8DEF"></div>
+            <span>ナイト</span>
+          </button>
+          <button class="s-theme-btn" onclick="setTheme('purple')" id="th-purple" data-theme="purple">
+            <div class="s-theme-dot" style="background:#1A0E2E;border:2.5px solid #A78BFA"></div>
+            <span>パープル</span>
+          </button>
         </div>
       </div>
     </div>
@@ -1458,7 +1538,18 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <button type="button" id="url-search-btn" onclick="searchCancelUrlFromForm()" style="display:none;margin-top:6px;width:100%;padding:9px;background:var(--bg);color:var(--ts);border:1.5px solid var(--bd);border-radius:9px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">🔍 解約方法をGoogleで検索</button>
       </div>
       <div class="f-row">
-        <label>満足度（任意）</label>
+        <label style="font-size:12px;font-weight:700;color:var(--ts);display:flex;align-items:center;gap:6px">
+          満足度（任意）
+          <button type="button" id="sat-help-btn" onclick="toggleSatHelp()" style="width:18px;height:18px;border-radius:50%;background:var(--ts);border:none;color:#fff;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1">?</button>
+        </label>
+        <div id="sat-help" style="display:none;background:var(--pl);border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:12px;line-height:1.8;color:var(--pd)">
+          <div style="font-weight:700;margin-bottom:4px;color:var(--p)">満足度の目安</div>
+          ★ 使っていることを忘れていた<br>
+          ★★ 使っているがあってもなくても同じ<br>
+          ★★★ あったら便利だが、なくても困らない<br>
+          ★★★★ 重宝しているが、なくても生活はできる<br>
+          ★★★★★ 必要不可欠・絶対に解約したくない
+        </div>
         <div class="star-row" id="stars"></div>
       </div>
       <button type="button" class="btn-submit" id="btn-submit" onclick="submitForm()">登録する</button>
@@ -2295,11 +2386,15 @@ function gotoAdd(){
     icon:'',
     title:'サブスクを登録する',
     msg:'',
+    closable:true,
+    onClose:()=>{ gaEvent('add_dialog_select', { method: 'close' }); },
     buttons:[
       {label:'⭐ 定番から選ぶ', cls:'ok', onClick:()=>{
+        gaEvent('add_dialog_select', { method: 'quick' });
         goto('add');
       }},
       {label:'✏️ 自分で入力', cls:'cancel', onClick:()=>{
+        gaEvent('add_dialog_select', { method: 'manual' });
         goto('add');
         setTimeout(()=>openManualForm(null,null), 100);
       }}
@@ -2566,7 +2661,7 @@ async function checkUpcomingPayments(){
 // アプリ起動時: Web版の見直しバナー表示（月初のみ）
 
 // showDialog({ icon, title, msg, buttons:[{label, cls, onClick}] })
-function showDialog({icon='', title='', msg='', buttons=[]}){
+function showDialog({icon='', title='', msg='', buttons=[], closable=false, onClose=null}){
   document.getElementById('dlg-icon').textContent=icon;
   document.getElementById('dlg-ttl').textContent=title;
   document.getElementById('dlg-msg').innerHTML = typeof msg === 'string' ? msg : '';
@@ -2579,6 +2674,11 @@ function showDialog({icon='', title='', msg='', buttons=[]}){
     el.onclick=()=>{ closeDialog(); b.onClick&&b.onClick(); };
     btns.appendChild(el);
   });
+  const closeBtn=document.getElementById('dlg-close');
+  if(closeBtn){
+    closeBtn.style.display=closable?'flex':'none';
+    closeBtn.onclick=()=>{ closeDialog(); onClose&&onClose(); };
+  }
   document.getElementById('dlg-ov').classList.remove('hidden');
 }
 function closeDialog(){ document.getElementById('dlg-ov').classList.add('hidden'); }
@@ -3786,6 +3886,7 @@ function closeCalSheet(){
 ============================================================ */
 function updateFilterCounts(){
   const sel=document.getElementById('fl-cat');
+  const currentVal=sel.value;
   const counts={};
   subs.forEach(s=>{
     const key=catMap[s.cat]?s.cat:'その他';
@@ -3793,19 +3894,33 @@ function updateFilterCounts(){
   });
   counts['休止中']=subs.filter(s=>s.paused).length;
   counts['all']=subs.length;
-  Array.from(sel.options).forEach(opt=>{
-    const base=opt.dataset.base||(opt.dataset.base=opt.text.replace(/（\d+件）/,''));
-    const n=opt.value==='all'?counts['all']:(counts[opt.value]||0);
-    if(opt.value==='all'){
-      opt.text=`すべてのカテゴリ（${n}件）`;
-    } else if(n>0){
-      opt.text=`${base}（${n}件）`;
-      opt.style.display='';
-    } else {
-      opt.text=base;
-      opt.style.display='none'; // 0件は非表示
+
+  // カテゴリ表示順（固定）
+  const catOrder=['動画・配信','音楽','電子書籍・雑誌','仕事・ツール','ゲーム','健康・フィットネス','金融・年会費','習い事','通信費','保険','ローン','その他','休止中'];
+
+  // selectを再構築（登録済みカテゴリのみ）
+  sel.innerHTML='';
+  const allOpt=document.createElement('option');
+  allOpt.value='all';
+  allOpt.text=`すべてのカテゴリ（${counts['all']}件）`;
+  sel.appendChild(allOpt);
+
+  catOrder.forEach(cat=>{
+    const n=counts[cat]||0;
+    if(n>0){
+      const opt=document.createElement('option');
+      opt.value=cat;
+      opt.text=`${cat}（${n}件）`;
+      sel.appendChild(opt);
     }
   });
+
+  // 選択状態を復元（なければallに戻す）
+  if(Array.from(sel.options).some(o=>o.value===currentVal)){
+    sel.value=currentVal;
+  } else {
+    sel.value='all';
+  }
 }
 
 function renderList(){
@@ -4078,6 +4193,11 @@ function openManualForm(item, cat){
   // STEP2を表示
   document.getElementById('add-step1').style.display='none';
   document.getElementById('add-step2').style.display='block';
+
+  // 戻るボタンのラベルを切り替え
+  const backBtn = document.querySelector('#add-step2 .btn-back');
+  if(backBtn){ backBtn.textContent = item ? '← 定番一覧に戻る' : '← カテゴリに戻る'; }
+
   if(item){
     // 定番から遷移：情報をセット
     document.getElementById('f-name').value=item.name||'';
@@ -4641,23 +4761,37 @@ async function checkNudge(){
 }
 
 function openGuide(){document.getElementById('guide-ov').classList.remove('hidden');gaEvent('guide_open',{})}
-function toggleSatHelp(){
-  const el = document.getElementById('sat-help');
-  const btn = document.getElementById('sat-help-btn');
-  const isOpen = el.style.display !== 'none';
-  el.style.display = isOpen ? 'none' : 'block';
-  btn.style.background = isOpen ? 'var(--ts)' : 'var(--p)';
+function closeGuide(){document.getElementById('guide-ov').classList.add('hidden')}
+function openPrivacy(){closeSettings();setTimeout(()=>{document.getElementById('privacy-ov').classList.remove('hidden');gaEvent('privacy_open',{});},200)}
+function closePrivacy(){document.getElementById('privacy-ov').classList.add('hidden')}
+function openPrivacyNewTab(){
+  closeHdrop&&closeHdrop();
+  gaEvent('privacy_open',{});
+  const privDiv=document.getElementById('privacy-ov').querySelector('.sheet > div:last-child');
+  const content=privDiv?privDiv.innerHTML:'';
+  const html=`<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>プライバシーポリシー - Subly</title><style>body{font-family:'Noto Sans JP',sans-serif;max-width:720px;margin:0 auto;padding:24px 20px 48px;color:#333;background:#fff;line-height:1.8}h1{font-size:18px;color:#5C8E84;margin-bottom:4px}p{margin:0 0 10px;font-size:13px;color:#555}a{color:#5C8E84}.sec-ttl{font-weight:700;color:#5C8E84;margin:18px 0 6px;font-size:14px}ul{margin:6px 0 10px 18px;color:#555;font-size:13px}</style></head><body><h1>プライバシーポリシー</h1>${content}</body></html>`;
+  const blob=new Blob([html],{type:'text/html'});
+  const url=URL.createObjectURL(blob);
+  window.open(url,'_blank');
 }
 
 function closeSavingHints(){ document.getElementById('saving-hints-ov').classList.add('hidden'); }
 
-async function closeNudge(){
-  document.getElementById('nudge-ov').classList.add('hidden');
-  // 現在の件数に対応したキーをdismissed済みにする
-  const count = subs.length;
-  if(count <= 3) await Store.set('nudgeDismissed3', '1');
-  else await Store.set('nudgeDismissed10', '1');
-  gaEvent('nudge_dismissed', {});
+function openSettings(){document.getElementById('settings-ov').classList.remove('hidden')}
+function closeSettings(){document.getElementById('settings-ov').classList.add('hidden')}
+function openGuide(){document.getElementById('guide-ov').classList.remove('hidden');gaEvent('guide_open',{})}
+function closeGuide(){document.getElementById('guide-ov').classList.add('hidden')}
+function openPrivacy(){closeSettings();setTimeout(()=>{document.getElementById('privacy-ov').classList.remove('hidden');gaEvent('privacy_open',{});},200)}
+function closePrivacy(){document.getElementById('privacy-ov').classList.add('hidden')}
+function openPrivacyNewTab(){
+  closeHdrop&&closeHdrop();
+  gaEvent('privacy_open',{});
+  const privDiv=document.getElementById('privacy-ov').querySelector('.sheet > div:last-child');
+  const content=privDiv?privDiv.innerHTML:'';
+  const html=`<!DOCTYPE html><html lang="ja"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>プライバシーポリシー - Subly</title><style>body{font-family:'Noto Sans JP',sans-serif;max-width:720px;margin:0 auto;padding:24px 20px 48px;color:#333;background:#fff;line-height:1.8}h1{font-size:18px;color:#5C8E84;margin-bottom:4px}p{margin:0 0 10px;font-size:13px;color:#555}a{color:#5C8E84}.sec-ttl{font-weight:700;color:#5C8E84;margin:18px 0 6px;font-size:14px}ul{margin:6px 0 10px 18px;color:#555;font-size:13px}</style></head><body><h1>プライバシーポリシー</h1>${content}</body></html>`;
+  const blob=new Blob([html],{type:'text/html'});
+  const url=URL.createObjectURL(blob);
+  window.open(url,'_blank');
 }
 
 function nudgeTap(name, cat){
@@ -5289,6 +5423,31 @@ function updateNicknameUI() {
   if (el) el.textContent = val;
 }
 
+function getToday(){ const d=new Date(); d.setHours(0,0,0,0); return d; }
+calYear=today.getFullYear(); calMonth=today.getMonth();
+
+
+/* ── 支払い周期ユーティリティ ── */
+function freqMonths(freq){
+  return {月額:1,'2ヶ月':2,'3ヶ月':3,'6ヶ月':6,年額:12}[freq]||1;
+}
+
+async function closeNudge(){
+  document.getElementById('nudge-ov').classList.add('hidden');
+  const count = subs.length;
+  if(count <= 3) await Store.set('nudgeDismissed3', '1');
+  else await Store.set('nudgeDismissed10', '1');
+  gaEvent('nudge_dismissed', {});
+}
+
+function toggleSatHelp(){
+  const el = document.getElementById('sat-help');
+  const btn = document.getElementById('sat-help-btn');
+  const isOpen = el.style.display !== 'none';
+  el.style.display = isOpen ? 'none' : 'block';
+  btn.style.background = isOpen ? 'var(--ts)' : 'var(--p)';
+}
+
 function openFamilySettings() {
   const modal = document.getElementById('family-settings-modal');
   if (modal) { modal.style.display = 'flex'; renderFamilySettingsModal(); }
@@ -5440,6 +5599,121 @@ if(document.readyState==='loading'){
       <button onclick="dissolveGroup()" style="width:100%;padding:10px;background:none;color:#E05C5C;border:1.5px solid #E05C5C;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:10px">
         🗑️ グループを解体する
       </button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="guide-ov" onclick="if(event.target===this)closeGuide()">
+  <div class="sheet">
+    <div class="sheet-hdr">
+      <span class="sheet-ttl"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg> 機種変更ガイド</span>
+      <button class="sheet-close" onclick="closeGuide()">✕</button>
+    </div>
+    <div class="guide-body">
+      <div class="guide-note" style="margin-bottom:20px">
+        <strong>Sublyのデータはお使いの端末に保存されています。</strong><br>
+        機種変更の前にCSVエクスポートでバックアップを取り、新しい端末でインポートしてください。
+      </div>
+      <p style="font-size:13px;font-weight:700;margin-bottom:14px"><svg width="14" height="14" viewBox="0 0 24 24" fill="#5C8E84"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg> 機種変更の手順</p>
+      <div class="guide-step">
+        <div class="guide-num">1</div>
+        <div><h4>旧端末でCSVエクスポート</h4><p>設定 → CSVエクスポートをタップして保存。ファイルはメール等で転送してください。</p></div>
+      </div>
+      <div class="guide-step">
+        <div class="guide-num">2</div>
+        <div><h4>新端末でSublyを開く</h4><p>新しい端末のブラウザで同じHTMLファイルを開きます。</p></div>
+      </div>
+      <div class="guide-step">
+        <div class="guide-num">3</div>
+        <div><h4>CSVインポート</h4><p>設定 → CSVインポートをタップして保存したCSVファイルを選択。</p></div>
+      </div>
+      <div class="guide-step">
+        <div class="guide-num">4</div>
+        <div><h4>データを確認</h4><p>ホームやカレンダーでデータが正しく読み込まれているか確認してください。</p></div>
+      </div>
+      <div class="guide-note">
+        <strong><svg width="14" height="14" viewBox="0 0 24 24" fill="#5C8E84"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg> ホーム画面に追加する方法：</strong><br>
+        iPhoneはSafariで開き「共有 → ホーム画面に追加」。<br>
+        Androidはメニューから「ホーム画面に追加」。
+      </div>
+    </div>
+    <div style="padding:0 16px 20px">
+      <button class="btn-submit" onclick="closeGuide();setTimeout(importCSVPicker,150)"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg> 今すぐインポート</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="saving-hints-ov" onclick="if(event.target===this)closeSavingHints()">
+  <div class="sheet">
+    <div class="sheet-hdr">
+      <span class="sheet-ttl">💰 節約のヒント</span>
+      <button class="sheet-close" onclick="closeSavingHints()">✕</button>
+    </div>
+    <div id="saving-hints-body" style="padding:16px 18px 24px"></div>
+  </div>
+</div>
+
+<div class="sat-popup-ov hidden" id="sat-popup-ov" onclick="if(event.target===this)closeSatPopup()">
+  <div class="sat-popup">
+    <div class="sat-popup-hdr">
+      <span class="sat-popup-ttl">⭐ 満足度を一括更新</span>
+      <button class="sheet-close" onclick="closeSatPopup()">✕</button>
+    </div>
+    <div class="sat-popup-body" id="sat-popup-body"></div>
+  </div>
+</div>
+
+<div class="nudge-ov hidden" id="nudge-ov" onclick="if(event.target===this)closeNudge()">
+  <div class="nudge">
+    <div class="nudge-hdr">
+      <button class="nudge-close" onclick="closeNudge()">✕</button>
+      <div class="nudge-hdr-ttl">こちらは入れましたか？</div>
+      <div class="nudge-hdr-sub">サブスクと思ってなくても、毎月払っている固定費です</div>
+    </div>
+    <div class="nudge-body">
+      <div class="nudge-item" onclick="nudgeTap('スマホ代','通信費')">
+        <div class="nudge-ico" style="background:#2980B922">📱</div>
+        <div class="nudge-lbl">
+          <div class="nudge-name">スマホ代</div>
+          <div class="nudge-hint">ドコモ・au・ソフトバンク・格安SIMなど</div>
+        </div>
+        <span class="nudge-arr">›</span>
+      </div>
+      <div class="nudge-item" onclick="nudgeTap('ネット回線','通信費')">
+        <div class="nudge-ico" style="background:#4A7EC822">🌐</div>
+        <div class="nudge-lbl">
+          <div class="nudge-name">ネット回線</div>
+          <div class="nudge-hint">光回線・Wi-Fiなど</div>
+        </div>
+        <span class="nudge-arr">›</span>
+      </div>
+      <div class="nudge-item" onclick="nudgeTap('家賃','その他')">
+        <div class="nudge-ico" style="background:#E9A40022">🏠</div>
+        <div class="nudge-lbl">
+          <div class="nudge-name">家賃</div>
+          <div class="nudge-hint">毎月の家賃・管理費</div>
+        </div>
+        <span class="nudge-arr">›</span>
+      </div>
+      <div class="nudge-item" onclick="nudgeTap('住宅ローン','ローン')">
+        <div class="nudge-ico" style="background:#C0392B22">🏡</div>
+        <div class="nudge-lbl">
+          <div class="nudge-name">住宅ローン</div>
+          <div class="nudge-hint">月々の返済額</div>
+        </div>
+        <span class="nudge-arr">›</span>
+      </div>
+      <div class="nudge-item" onclick="nudgeTap('車のローン','ローン')">
+        <div class="nudge-ico" style="background:#8E44AD22">🚗</div>
+        <div class="nudge-lbl">
+          <div class="nudge-name">車のローン</div>
+          <div class="nudge-hint">カーローン・リース代</div>
+        </div>
+        <span class="nudge-arr">›</span>
+      </div>
+    </div>
+    <div class="nudge-footer">
+      <button class="nudge-skip" onclick="closeNudge()">あとで確認する</button>
     </div>
   </div>
 </div>
