@@ -699,6 +699,43 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 <!-- ══ Firebase SDK ══ -->
 <!-- ★ 実装時にconfigの値を差し替えてください ★ -->
 <!-- Firebase: 将来の課金実装時に追加 -->
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+    from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+  import { getFirestore, doc, setDoc, getDoc, collection, addDoc, query, where, getDocs, onSnapshot, updateDoc, arrayUnion }
+    from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDKK_VzcumaMK9tvpt8-xsW_xXsQc-Eq7c",
+    authDomain: "subly-app-8316d.firebaseapp.com",
+    projectId: "subly-app-8316d",
+    storageBucket: "subly-app-8316d.firebasestorage.app",
+    messagingSenderId: "405096733928",
+    appId: "1:405096733928:web:9e2b0b1148ac348a563d5d"
+  };
+
+  const app    = initializeApp(firebaseConfig);
+  const auth   = getAuth(app);
+  const db     = getFirestore(app);
+  const gProvider = new GoogleAuthProvider();
+
+  // グローバルに公開（メインスクリプトから使用）
+  window._fbAuth      = auth;
+  window._fbDb        = db;
+  window._fbProvider  = gProvider;
+  window._fbFns = {
+    signInWithPopup, signOut, onAuthStateChanged,
+    doc, setDoc, getDoc, collection, addDoc, query, where, getDocs, onSnapshot, updateDoc, arrayUnion
+  };
+
+  // 認証状態の監視
+  onAuthStateChanged(auth, (user) => {
+    window._fbUser = user;
+    if (typeof window._onAuthChanged === 'function') window._onAuthChanged(user);
+  });
+</script>
 </head>
 <body>
 
@@ -2200,6 +2237,208 @@ function showSavingHint(campaign, serviceName) {
     </div>`,
     buttons: [{ label: '閉じる', cls: 'ok' }]
   });
+}
+
+
+/* ============================================================
+   Firebase Auth + Firestore
+============================================================ */
+
+// 現在のFirestoreユーザー情報
+let _uid = null;
+let _groupId = null;
+
+// 認証状態変化ハンドラ
+window._onAuthChanged = async function(user) {
+  if (user) {
+    _uid = user.uid;
+    await _syncUserFromFirestore(user);
+  } else {
+    _uid = null;
+  }
+};
+
+// Firestoreからユーザーデータを同期
+async function _syncUserFromFirestore(user) {
+  const fns = window._fbFns;
+  const db  = window._fbDb;
+  if (!fns || !db) return;
+  try {
+    const userRef  = fns.doc(db, 'users', user.uid);
+    const userSnap = await fns.getDoc(userRef);
+    if (userSnap.exists()) {
+      const data = userSnap.data();
+      currentPlan   = data.plan || 'free';
+      _groupId      = data.groupId || null;
+      if (data.nickname) await Store.set('userNickname', data.nickname);
+      // グループデータを取得
+      if (_groupId) await _syncGroupFromFirestore(_groupId);
+    } else {
+      // 新規ユーザーをFirestoreに登録
+      await fns.setDoc(userRef, {
+        uid: user.uid,
+        email: user.email,
+        nickname: '',
+        plan: currentPlan,
+        groupId: null,
+        createdAt: new Date()
+      });
+    }
+    await Store.set('currentPlan', currentPlan);
+    applyPlanUI();
+    renderDashboard();
+  } catch(e) {
+    console.error('Firestore同期エラー:', e);
+  }
+}
+
+// Firestoreからグループデータを同期
+async function _syncGroupFromFirestore(groupId) {
+  const fns = window._fbFns;
+  const db  = window._fbDb;
+  if (!fns || !db) return;
+  try {
+    const groupRef  = fns.doc(db, 'groups', groupId);
+    const groupSnap = await fns.getDoc(groupRef);
+    if (groupSnap.exists()) {
+      const data = groupSnap.data();
+      familyName    = data.name || '';
+      familyMembers = data.members || [];
+      await saveFamilyData();
+      // サブスクデータを同期
+      const subsRef  = fns.collection(db, 'groups', groupId, 'subs');
+      const subsSnap = await fns.getDocs(subsRef);
+      subs = [];
+      subsSnap.forEach(d => subs.push({ id: d.id, ...d.data() }));
+      await Store.set('subsData', JSON.stringify(subs));
+    }
+  } catch(e) {
+    console.error('グループ同期エラー:', e);
+  }
+}
+
+// Googleログイン（Pro加入時に呼ぶ）
+async function signInWithGoogle() {
+  const auth     = window._fbAuth;
+  const provider = window._fbProvider;
+  const fns      = window._fbFns;
+  if (!auth || !provider || !fns) {
+    showToast('Firebase未接続です');
+    return null;
+  }
+  try {
+    const result = await fns.signInWithPopup(auth, provider);
+    return result.user;
+  } catch(e) {
+    console.error('Firebase Auth Error:', e.code, e.message);
+    if (e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request') {
+      // ユーザーが閉じた場合は何もしない
+    } else if (e.code === 'auth/unauthorized-domain') {
+      showToast('このドメインは承認されていません。Firebase Consoleで設定してください。');
+    } else if (!auth || !provider || !fns) {
+      showToast('Firebase未接続 - SDKの読み込みをご確認ください');
+    } else {
+      showToast('ログインエラー: ' + (e.code || e.message || '不明'));
+    }
+    return null;
+  }
+}
+
+// Firestoreにプランを保存
+async function _saveUserPlanToFirestore(plan) {
+  const fns = window._fbFns;
+  const db  = window._fbDb;
+  if (!fns || !db || !_uid) return;
+  try {
+    await fns.setDoc(fns.doc(db, 'users', _uid), { plan }, { merge: true });
+  } catch(e) { console.error(e); }
+}
+
+// Firestoreにニックネームを保存
+async function _saveNicknameToFirestore(nickname) {
+  const fns = window._fbFns;
+  const db  = window._fbDb;
+  if (!fns || !db || !_uid) return;
+  try {
+    await fns.setDoc(fns.doc(db, 'users', _uid), { nickname }, { merge: true });
+  } catch(e) { console.error(e); }
+}
+
+// Firestoreにグループを作成
+async function _createGroupOnFirestore(name, nicknamee) {
+  const fns = window._fbFns;
+  const db  = window._fbDb;
+  if (!fns || !db || !_uid) return null;
+  try {
+    const groupRef = await fns.addDoc(fns.collection(db, 'groups'), {
+      name,
+      ownerId: _uid,
+      members: [{ uid: _uid, nickname: nicknamee, emoji: '👤', isMe: true }],
+      inviteCodes: [],
+      createdAt: new Date()
+    });
+    _groupId = groupRef.id;
+    // ユーザーのgroupIdを更新
+    await fns.setDoc(fns.doc(db, 'users', _uid), { groupId: _groupId }, { merge: true });
+    return _groupId;
+  } catch(e) {
+    console.error('グループ作成エラー:', e);
+    return null;
+  }
+}
+
+// Firestoreにサブスクを保存（Pro時）
+async function _saveSubsToFirestore() {
+  const fns = window._fbFns;
+  const db  = window._fbDb;
+  if (!fns || !db || !_groupId) return;
+  try {
+    // 全件書き直し（シンプル実装）
+    for (const s of subs) {
+      await fns.setDoc(fns.doc(db, 'groups', _groupId, 'subs', s.id), s);
+    }
+  } catch(e) { console.error(e); }
+}
+
+// 招待コードを検証してグループ参加
+async function _joinGroupWithCode(code) {
+  const fns = window._fbFns;
+  const db  = window._fbDb;
+  if (!fns || !db || !_uid) return false;
+  try {
+    // inviteCodesは文字列配列で管理
+    const q = fns.query(
+      fns.collection(db, 'groups'),
+      fns.where('inviteCodes', 'array-contains', code)
+    );
+    const snap = await fns.getDocs(q);
+    if (snap.empty) {
+      console.log('招待コードが見つかりません:', code);
+      return false;
+    }
+    const groupDoc = snap.docs[0];
+    const gid = groupDoc.id;
+    const groupData = groupDoc.data();
+    const nickname = await Store.get('userNickname') || 'メンバー';
+
+    // すでに参加済みか確認
+    const alreadyMember = (groupData.members || []).some(m => m.uid === _uid);
+    if (!alreadyMember) {
+      await fns.updateDoc(fns.doc(db, 'groups', gid), {
+        members: fns.arrayUnion({ uid: _uid, nickname, emoji: '😊', isMe: false })
+      });
+    }
+    // ユーザーのgroupIdを更新
+    await fns.setDoc(fns.doc(db, 'users', _uid), { groupId: gid, plan: 'pro' }, { merge: true });
+    _groupId = gid;
+    currentPlan = 'pro';
+    await Store.set('currentPlan', 'pro');
+    await _syncGroupFromFirestore(gid);
+    return true;
+  } catch(e) {
+    console.error('グループ参加エラー:', e);
+    return false;
+  }
 }
 
 /* ============================================================
@@ -4278,15 +4517,11 @@ async function loadTheme(){
 async function init(){
   await loadFamilyData(); // Family追加
 
-    // ── プランをロード（Storeのみ） ──
-  const savedPlan = await Store.get('currentPlan');
-  if (savedPlan && ['free','pro'].includes(savedPlan)) {
-    currentPlan = savedPlan;
-  } else {
-    // 初回アクセス: freeをStoreに保存
-    currentPlan = 'free';
-    await Store.set('currentPlan', 'free');
-  }
+    // ── プランをロード ──
+  // Firebaseログイン済みならFirestoreで確定（_syncUserFromFirestoreで更新される）
+  // 未ログインの場合は常にfreeから開始
+  currentPlan = 'free';
+  await Store.set('currentPlan', 'free');
 
 
   // ── ログインユーザー情報をヘッダーに表示（あれば） ──
@@ -4433,7 +4668,7 @@ function openPrivacyNewTab(){
 
 function closeSavingHints(){ document.getElementById('saving-hints-ov').classList.add('hidden'); }
 
-function openSettings(){document.getElementById('settings-ov').classList.remove('hidden')}
+function openSettings(){document.getElementById('settings-ov').classList.remove('hidden'); applyPlanUI();}
 function closeSettings(){document.getElementById('settings-ov').classList.add('hidden')}
 function openGuide(){document.getElementById('guide-ov').classList.remove('hidden');gaEvent('guide_open',{})}
 function closeGuide(){document.getElementById('guide-ov').classList.add('hidden')}
@@ -4506,14 +4741,19 @@ function openUpgradeModal() {
         <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">✅</span><span>登録件数 <strong style="color:var(--tx)">無制限</strong></span></div>
         <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">👥</span><span>グループ共有機能</span></div>
         <div style="display:flex;align-items:center;gap:8px"><span style="font-size:16px">📊</span><span>メンバー別集計</span></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid var(--bd)"><span style="font-size:14px">🔑</span><span style="font-size:11px;color:var(--ts)">Googleアカウントで新規登録・ログイン（どちらも同じボタン）</span></div>
       </div>
     </div>`,
     buttons: [
       { label: 'キャンセル', cls: 'cancel' },
-      { label: 'subly Pro にする', cls: 'ok', onClick: async () => {
+      { label: '🔑 Googleで登録 / ログイン', cls: 'ok', onClick: async () => {
+        closeDialog();
+        showToast('Googleログイン中...');
+        const user = await signInWithGoogle();
+        if (!user) return;
         await setPlan('pro');
+        await _saveUserPlanToFirestore('pro');
         applyPlanUI();
-        // ニックネーム入力へ
         openNicknameDialogForPro();
       }}
     ]
@@ -4709,11 +4949,10 @@ async function generateInviteLink() {
   const code = generateInviteCode();
   _currentInviteCode = code;
 
-  // 現在のURL（GitHub Pages）をベースに招待URLを生成
-  // 招待URLを生成（GitHub Pages / 本番URL）
+  // 招待URLを生成（常にapp.htmlを直接指定）
   const baseUrl = window.location.protocol === 'file:'
     ? 'https://jonekun429.github.io/subly-for-Family/app.html'
-    : window.location.origin + window.location.pathname.split('?')[0];
+    : window.location.origin + window.location.pathname.replace(/\/$/, '') + (window.location.pathname.endsWith('app.html') ? '' : '/app.html');
   _currentInviteUrl = `${baseUrl}?invite=${code}&group=${encodeURIComponent(familyName)}`;
 
   // 表示を更新
@@ -4723,13 +4962,25 @@ async function generateInviteLink() {
   document.getElementById('line-invite-btn').style.display = 'block';
   document.getElementById('invite-expiry').style.display = 'block';
 
-  // localStorageに保存（Firebase実装後はFirestoreへ）
+  // Firestoreに招待コードを保存
   const expiry = Date.now() + 72 * 60 * 60 * 1000; // 72時間
-  localStorage.setItem('inviteCode', JSON.stringify({
-    code, familyId: familyName, expiry, createdAt: Date.now()
-  }));
-
-  showToast('招待リンクを生成しました');
+  if (_uid && _groupId && window._fbFns && window._fbDb) {
+    try {
+      const fns = window._fbFns;
+      const db  = window._fbDb;
+      await fns.updateDoc(fns.doc(db, 'groups', _groupId), {
+        inviteCodes: fns.arrayUnion(code)
+      });
+      showToast('招待リンクを生成しました');
+    } catch(e) {
+      console.error('招待コード保存エラー:', e);
+      showToast('招待リンクを生成しました（Firestore保存失敗）');
+    }
+  } else {
+    // ローカル保存（フォールバック）
+    localStorage.setItem('inviteCode', JSON.stringify({ code, familyName, expiry }));
+    showToast('招待リンクを生成しました');
+  }
 }
 
 function copyInviteLink() {
@@ -4775,51 +5026,95 @@ async function shareInviteLink() {
 
 // ── 起動時に招待パラメータを検出 ──
 
-function checkInviteParam() {
+async function checkInviteParam() {
   const params = new URLSearchParams(window.location.search);
   const inviteCode = params.get('invite');
-  const groupName  = params.get('group');
+  const groupName  = decodeURIComponent(params.get('group') || 'グループ');
+
+  // デバッグ（確認後削除）
+  console.log('URL:', window.location.href);
+  console.log('invite:', inviteCode, 'group:', groupName);
+
   if (!inviteCode) return;
 
-  // subly Proでなければアップグレードを促す
-  if (!isFamilyPlan()) {
-    setTimeout(() => {
-      showDialog({
-        icon: '🔗',
-        title: `「${decodeURIComponent(groupName || 'グループ')}」に招待されています`,
-        msg: `グループに参加するには<strong>subly Pro</strong>への加入が必要です。`,
-        buttons: [
-          { label: '後で', cls: 'cancel' },
-          { label: 'subly Proに加入', cls: 'ok', onClick: () => openUpgradeModal() }
-        ]
-      });
-    }, 500);
-    return;
-  }
+  // URLパラメータを先に消す
+  window.history.replaceState({}, document.title, window.location.pathname);
 
-  // subly Pro済みなら参加確認
-  setTimeout(() => {
+  await new Promise(r => setTimeout(r, 1000)); // 初期化待ち
+
+  if (!isPaidPlan()) {
+    // Free → Pro加入 + Googleログイン → 参加
     showDialog({
       icon: '🔗',
-      title: `「${decodeURIComponent(groupName || 'グループ')}」に参加しますか？`,
-      msg: 'このグループのサブスクデータが共有されます。',
+      title: `「${groupName}」に招待されています`,
+      msg: `<div style="font-size:13px;color:var(--ts);line-height:1.8">
+        グループに参加するには<strong style="color:var(--tx)">subly Pro</strong>への加入が必要です。<br>
+        Googleアカウントで登録してそのまま参加できます。
+      </div>`,
       buttons: [
         { label: 'キャンセル', cls: 'cancel' },
-        { label: '参加する', cls: 'ok', onClick: async () => {
-          // Firebase実装後：Firestoreのfamilies/{familyId}/membersに追加
-          // 今はlocalStorageに記録
-          localStorage.setItem('joinedGroup', decodeURIComponent(groupName || ''));
-          familyName = decodeURIComponent(groupName || familyName);
-          await saveFamilyData();
-          renderFamilyArea();
-          renderDashboard();
-          showToast(`「${familyName}」に参加しました！`);
-          // URLパラメータをクリア
-          window.history.replaceState({}, '', window.location.pathname);
+        { label: '🔑 Googleで登録して参加', cls: 'ok', onClick: async () => {
+          closeDialog();
+          const user = await signInWithGoogle();
+          if (!user) return;
+          await setPlan('pro');
+          await _saveUserPlanToFirestore('pro');
+          applyPlanUI();
+          await _showNicknameAndJoin(inviteCode, groupName);
         }}
       ]
     });
-  }, 500);
+  } else if (!_uid) {
+    // Pro だがログイン未済
+    showDialog({
+      icon: '🔗',
+      title: `「${groupName}」に招待されています`,
+      msg: 'Googleログインして参加しますか？',
+      buttons: [
+        { label: 'キャンセル', cls: 'cancel' },
+        { label: '🔑 ログインして参加', cls: 'ok', onClick: async () => {
+          closeDialog();
+          const user = await signInWithGoogle();
+          if (!user) return;
+          await _showNicknameAndJoin(inviteCode, groupName);
+        }}
+      ]
+    });
+  } else {
+    // Pro + ログイン済み → ニックネーム確認して参加
+    await _showNicknameAndJoin(inviteCode, groupName);
+  }
+}
+
+async function _showNicknameAndJoin(inviteCode, groupName) {
+  const current = await Store.get('userNickname') || '';
+  showDialog({
+    icon: '👤',
+    title: 'ニックネームを確認',
+    msg: `<div style="font-size:12px;color:var(--ts);text-align:center;margin-bottom:12px">「${groupName}」内での表示名です</div>
+      <input id="nickname-invite-input" type="text" maxlength="20" value="${current}"
+        placeholder="例：パパ、ママ、太郎..."
+        style="width:100%;border:1.5px solid var(--p);border-radius:10px;padding:10px;font-size:15px;font-family:inherit;text-align:center;font-weight:700;background:var(--bg);color:var(--tx);outline:none">`,
+    buttons: [
+      { label: 'キャンセル', cls: 'cancel' },
+      { label: '参加する', cls: 'ok', onClick: async () => {
+        const val = document.getElementById('nickname-invite-input')?.value?.trim() || current || 'メンバー';
+        await Store.set('userNickname', val);
+        await _saveNicknameToFirestore(val);
+        updateNicknameUI();
+        showToast('参加処理中...');
+        const joined = await _joinGroupWithCode(inviteCode);
+        if (joined) {
+          applyPlanUI();
+          renderDashboard();
+          showToast(`「${groupName}」に参加しました！`);
+        } else {
+          showToast('招待コードが無効または期限切れです');
+        }
+      }}
+    ]
+  });
+  setTimeout(() => document.getElementById('nickname-invite-input')?.focus(), 100);
 }
 
 async function loadFamilyData() {
@@ -5091,13 +5386,13 @@ async function openNicknameDialog(forPro) {
         const val = document.getElementById('nickname-input')?.value?.trim();
         if (!val) { showToast('名前を入力してください'); return; }
         await Store.set('userNickname', val);
+        await _saveNicknameToFirestore(val);
         updateNicknameUI();
         // グループメンバーの自分として初期登録（Proかつ未登録の場合）
         if (forPro && familyMembers.length === 0) {
           familyMembers.push({ id: 'm_me', name: val, emoji: '👤', color: '#E8F0ED', isMe: true });
           await saveFamilyData();
         } else if (forPro) {
-          // すでにメンバーがいれば自分のエントリを更新
           const me = familyMembers.find(m => m.isMe);
           if (me) { me.name = val; await saveFamilyData(); }
         }
@@ -5201,6 +5496,19 @@ async function saveFamilySettings() {
   if (!inputName) { showToast('グループ名を入力してください'); return; }
   familyName = inputName;
   await saveFamilyData();
+  // Firestoreにグループを作成/更新
+  if (_uid) {
+    if (!_groupId) {
+      const nickname = await Store.get('userNickname') || 'オーナー';
+      _groupId = await _createGroupOnFirestore(familyName, nickname);
+    } else {
+      const fns = window._fbFns;
+      const db  = window._fbDb;
+      if (fns && db) {
+        await fns.setDoc(fns.doc(db, 'groups', _groupId), { name: familyName }, { merge: true });
+      }
+    }
+  }
   applyPlanUI();
   // 保存後に招待リンクセクションを表示
   const inviteSection = document.getElementById('invite-section');
