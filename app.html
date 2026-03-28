@@ -1196,27 +1196,23 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
 
     <!-- ══ グループメンバーエリア（Family追加） ══ -->
-    <div id="family-area" style="background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:12px 14px;margin-bottom:10px;display:none">
-      <!-- グループ未作成時は非表示（ヘッダーグループボタンから誘導） -->
-      <!-- グループ名 + 設定 -->
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+    <div id="family-area" style="background:var(--card);border-radius:var(--r);box-shadow:var(--sh);margin-bottom:10px;display:none;overflow:hidden">
+      <!-- ヘッダー（タップで折りたたみ） -->
+      <div onclick="toggleFamilyArea()" style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer">
         <div style="display:flex;align-items:center;gap:6px">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--p)"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
           <span id="family-name-label" style="font-size:13px;font-weight:700;color:var(--tx)"></span>
         </div>
-        <button onclick="openFamilySettings()" style="font-size:11px;color:var(--p);background:none;border:none;cursor:pointer;font-family:inherit;font-weight:600;padding:2px 6px">設定 ›</button>
+        <div style="display:flex;align-items:center;gap:8px">
+          <button onclick="event.stopPropagation();openFamilySettings()" style="font-size:11px;color:var(--p);background:none;border:none;cursor:pointer;font-family:inherit;font-weight:600;padding:2px 6px">設定 ›</button>
+          <svg id="family-area-arrow" width="14" height="14" viewBox="0 0 24 24" fill="var(--ts)" style="transition:transform .2s"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg>
+        </div>
       </div>
-      <!-- メンバーアバター行 -->
-      <div id="member-avatars" style="display:flex;align-items:center;gap:6px;margin-bottom:10px;flex-wrap:wrap"></div>
-      <!-- メンバー管理ボタン（family-areaから直接アクセス） -->
-      <div id="member-manage-row" style="display:flex;gap:8px;margin-bottom:6px">
-        <button onclick="openFamilySettings()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px;border-radius:10px;background:var(--pl);border:1.5px dashed var(--p);font-size:12px;font-weight:600;color:var(--p);cursor:pointer;font-family:inherit">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--p)"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-          メンバーを追加・管理
-        </button>
+      <!-- 折りたたみコンテンツ -->
+      <div id="family-area-body" style="padding:0 14px 12px">
+        <div id="member-avatars" style="display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap"></div>
+        <div id="member-breakdown" style="display:flex;flex-direction:column;gap:6px"></div>
       </div>
-      <!-- メンバー別金額 -->
-      <div id="member-breakdown" style="display:flex;flex-direction:column;gap:6px"></div>
     </div>
     <!-- ══ / グループメンバーエリア ══ -->
     <div id="sub-count-banner" style="display:flex;align-items:center;justify-content:space-between;background:var(--p);border-radius:12px;padding:10px 16px;margin-bottom:10px;cursor:pointer" onclick="goto('list')">
@@ -2222,7 +2218,7 @@ function goto(page, filterCat=null){
   // GA: 仮想ページビュー（SPAのためpage_viewを手動送信）
   const pageNames = { dashboard:'ホーム', add:'追加', list:'明細', calendar:'カレンダー' };
 
-  if(page==='dashboard') renderDashboard();
+  if(page==='dashboard') { renderDashboard(); applyPlanUI(); }
   else if(page==='list'){
     if(filterCat){
       const sel=document.getElementById('fl-cat');
@@ -5131,6 +5127,17 @@ async function updateNicknameUI() {
       renderFamilyArea();
     }
   }
+}
+
+
+// ── family-area 折りたたみ ──
+let _familyAreaOpen = true;
+function toggleFamilyArea() {
+  _familyAreaOpen = !_familyAreaOpen;
+  const body  = document.getElementById('family-area-body');
+  const arrow = document.getElementById('family-area-arrow');
+  if (body)  body.style.display  = _familyAreaOpen ? 'block' : 'none';
+  if (arrow) arrow.style.transform = _familyAreaOpen ? '' : 'rotate(-90deg)';
 }
 
 function openFamilySettings() {
