@@ -763,6 +763,13 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <div><div class="hd-lbl" id="hd-nickname-display">名前を設定</div><div class="hd-sub" id="hd-plan-display">Subly Free</div></div>
     </button>
 
+    <!-- グループ -->
+    <div class="hd-sec">グループ</div>
+    <button class="hd-row" onclick="closeHdrop();setTimeout(openGroupModal,150)">
+      <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+      <div><div class="hd-lbl" id="hd-group-btn-lbl">グループを作る</div><div class="hd-sub" id="hd-group-btn-sub">家族・カップルで共有</div></div>
+    </button>
+
     <!-- 設定 -->
     <div class="hd-sec">設定</div>
     <button class="hd-row" onclick="closeHdrop();gaEvent('menu_tap',{item:'notify_settings'});setTimeout(openNotifySettings,150)">
@@ -1409,6 +1416,71 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   </div>
 </div>
 
+<!-- グループ管理モーダル -->
+<div class="dlg-ov hidden" id="group-ov" onclick="if(event.target===this)closeGroupModal()">
+  <div class="dlg" style="max-width:360px;width:92%;padding:0;overflow:hidden">
+
+    <!-- グループ未参加 -->
+    <div id="group-panel-none" style="padding:26px 22px 20px">
+      <div style="font-size:17px;font-weight:800;color:var(--tx);margin-bottom:6px">グループ機能</div>
+      <div style="font-size:13px;color:var(--ts);margin-bottom:20px;line-height:1.7">家族・カップルのサブスクをまとめて管理。招待URLを共有するだけで参加できます。</div>
+
+      <!-- 新規作成 -->
+      <div style="margin-bottom:10px">
+        <input type="text" id="group-name-input" placeholder="グループ名（例：田中家）" maxlength="20"
+          style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none;margin-bottom:8px">
+        <button onclick="createGroup()" style="width:100%;padding:13px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">グループを作成する</button>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:10px;margin:14px 0">
+        <div style="flex:1;height:1px;background:var(--bd)"></div>
+        <span style="font-size:12px;color:var(--ts)">または</span>
+        <div style="flex:1;height:1px;background:var(--bd)"></div>
+      </div>
+
+      <!-- 招待コードで参加 -->
+      <div>
+        <input type="text" id="group-invite-input" placeholder="招待コードを入力（6桁）" maxlength="6"
+          style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none;margin-bottom:8px;letter-spacing:3px;text-align:center;text-transform:uppercase">
+        <button onclick="joinGroupByCode()" style="width:100%;padding:13px;background:var(--bg);color:var(--p);border:1.5px solid var(--p);border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">招待コードで参加する</button>
+      </div>
+
+      <button onclick="closeGroupModal()" style="width:100%;padding:11px;background:none;border:none;color:var(--ts);font-size:13px;font-family:inherit;cursor:pointer;margin-top:10px">閉じる</button>
+    </div>
+
+    <!-- グループ参加中 -->
+    <div id="group-panel-joined" style="display:none">
+      <!-- ヘッダー -->
+      <div style="background:var(--p);padding:18px 20px 14px;position:relative">
+        <button onclick="closeGroupModal()" style="position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);border:none;cursor:pointer;font-size:14px;color:#fff">✕</button>
+        <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.7);letter-spacing:1px;margin-bottom:4px">グループ</div>
+        <div style="font-size:20px;font-weight:800;color:#fff" id="group-display-name">—</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.6);margin-top:2px" id="group-member-count">メンバー —人</div>
+      </div>
+
+      <!-- メンバー一覧 -->
+      <div style="padding:16px 18px">
+        <div style="font-size:12px;font-weight:700;color:var(--ts);letter-spacing:1px;margin-bottom:10px">メンバー</div>
+        <div id="group-members-list" style="margin-bottom:16px"></div>
+
+        <!-- 招待URL発行 -->
+        <div style="background:var(--bg);border-radius:10px;padding:12px 14px;margin-bottom:12px">
+          <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:8px">招待コード</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="flex:1;font-size:22px;font-weight:800;color:var(--p);letter-spacing:4px;text-align:center;background:var(--card);border-radius:8px;padding:8px" id="group-invite-code">——</div>
+            <button onclick="copyInviteCode()" style="flex-shrink:0;background:var(--p);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer" id="copy-code-btn">コピー</button>
+          </div>
+          <div style="font-size:11px;color:var(--ts);margin-top:6px">このコードをメンバーに共有してください</div>
+        </div>
+
+        <!-- 退出 -->
+        <button onclick="leaveGroup()" style="width:100%;padding:11px;background:none;border:1px solid var(--dn);border-radius:10px;color:var(--dn);font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">グループから退出する</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- 満足度一括更新ポップアップ -->
 <div class="sat-popup-ov hidden" id="sat-popup-ov" onclick="if(event.target===this)closeSatPopup()">
   <div class="sat-popup">
@@ -1482,6 +1554,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
   <!-- ① ホーム -->
   <div id="pg-dashboard" class="page on">
+    <!-- グループタブ（グループ参加時のみ表示） -->
+    <div id="group-dashboard-tabs" style="display:none;gap:7px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch"></div>
     <div class="tog-row">
       <span>買い切りを含める</span>
       <label class="sw"><input type="checkbox" id="sw-ot" onchange="toggleOt()"><span class="sw-t"></span></label>
@@ -2980,6 +3054,8 @@ window._onAuthChanged = async (user) => {
     gaEvent('login', { method: user.providerData[0]?.providerId || 'unknown' });
     await _loadFromFirestore(user.uid);
     _updateAuthUI(user);
+    // グループ状態を確認してタブ更新
+    await _loadGroupForDashboard();
   } else {
     // 未ログイン → LocalStorageのまま
     _updateAuthUI(null);
@@ -3230,6 +3306,298 @@ function openAuthModal(){
   }
 }
 
+/* ============================================================
+   グループ機能
+============================================================ */
+let _groupId = null;
+let _groupData = null;
+let _groupMembersData = []; // メンバーのuserドキュメント
+let _currentGroupFilter = 'all'; // 'all' | uid
+
+// ランダム6桁の招待コード生成
+function _genInviteCode(){
+  return Math.random().toString(36).substring(2,8).toUpperCase();
+}
+
+// グループモーダルを開く
+async function openGroupModal(){
+  closeHdrop();
+  const user = window._fbUser;
+  if(!user){
+    showDialog({
+      icon:'', title:'ログインが必要です',
+      msg:'グループ機能を使うにはログインしてください。',
+      buttons:[
+        {label:'閉じる', cls:'cancel'},
+        {label:'ログインする', cls:'ok', onClick:()=>openAuthModal()}
+      ]
+    });
+    return;
+  }
+  document.getElementById('group-ov').classList.remove('hidden');
+  await _loadGroupState();
+  gaEvent('group_modal_open', {});
+}
+
+function closeGroupModal(){
+  document.getElementById('group-ov').classList.add('hidden');
+}
+
+// グループ状態を読み込んで表示切り替え
+async function _loadGroupState(){
+  const user = window._fbUser;
+  if(!user || !window._fbDb || !window._fbFns) return;
+  const { doc, getDoc } = window._fbFns;
+
+  // ユーザードキュメントからgroupIdを確認
+  const userSnap = await getDoc(doc(window._fbDb, 'users', user.uid));
+  const userData = userSnap.exists() ? userSnap.data() : {};
+  _groupId = userData.groupId || null;
+
+  if(_groupId){
+    // グループ参加中
+    const groupSnap = await getDoc(doc(window._fbDb, 'groups', _groupId));
+    if(groupSnap.exists()){
+      _groupData = groupSnap.data();
+      await _renderGroupJoined();
+    } else {
+      // グループが存在しない（削除済み）
+      _groupId = null;
+      _renderGroupNone();
+    }
+  } else {
+    _renderGroupNone();
+  }
+}
+
+function _renderGroupNone(){
+  document.getElementById('group-panel-none').style.display = 'block';
+  document.getElementById('group-panel-joined').style.display = 'none';
+}
+
+async function _renderGroupJoined(){
+  document.getElementById('group-panel-none').style.display = 'none';
+  document.getElementById('group-panel-joined').style.display = 'block';
+  document.getElementById('group-display-name').textContent = _groupData.name || 'グループ';
+  document.getElementById('group-invite-code').textContent = _groupData.inviteCode || '——';
+  const memberUids = _groupData.memberUids || [];
+  document.getElementById('group-member-count').textContent = `メンバー ${memberUids.length}人`;
+
+  // メンバー情報取得
+  const { doc, getDoc } = window._fbFns;
+  _groupMembersData = [];
+  const memberList = document.getElementById('group-members-list');
+  memberList.innerHTML = '';
+  for(const uid of memberUids){
+    const snap = await getDoc(doc(window._fbDb, 'users', uid));
+    const data = snap.exists() ? snap.data() : {};
+    _groupMembersData.push({ uid, ...data });
+    const isMe = uid === window._fbUser?.uid;
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd)';
+    row.innerHTML = `
+      <div style="width:32px;height:32px;border-radius:50%;background:var(--p);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0">
+        ${(data.nickname||'?').charAt(0)}
+      </div>
+      <div style="flex:1">
+        <div style="font-size:14px;font-weight:700;color:var(--tx)">${data.nickname||'名前未設定'}${isMe?' <span style="font-size:11px;color:var(--ts)">(自分)</span>':''}</div>
+        <div style="font-size:12px;color:var(--ts)">${data.email||''}</div>
+      </div>`;
+    memberList.appendChild(row);
+  }
+
+  // グループダッシュボードのタブを更新
+  _updateGroupTabs();
+}
+
+// グループ作成
+async function createGroup(){
+  const user = window._fbUser;
+  if(!user || !window._fbDb || !window._fbFns){ showToast('ログインが必要です'); return; }
+  const name = document.getElementById('group-name-input').value.trim();
+  if(!name){ showToast('グループ名を入力してください'); return; }
+
+  const { doc, setDoc, getDoc } = window._fbFns;
+
+  // すでにグループに参加していないか確認
+  const userSnap = await getDoc(doc(window._fbDb, 'users', user.uid));
+  if(userSnap.exists() && userSnap.data().groupId){
+    showToast('すでにグループに参加しています'); return;
+  }
+
+  const groupId = 'grp_' + Date.now();
+  const inviteCode = _genInviteCode();
+  const groupData = {
+    name,
+    inviteCode,
+    memberUids: [user.uid],
+    createdAt: new Date().toISOString()
+  };
+
+  await setDoc(doc(window._fbDb, 'groups', groupId), groupData);
+  await setDoc(doc(window._fbDb, 'users', user.uid), { groupId }, { merge: true });
+
+  _groupId = groupId;
+  _groupData = groupData;
+  await _renderGroupJoined();
+  gaEvent('group_create', { group_name: name });
+  showToast(`「${name}」を作成しました`);
+}
+
+// 招待コードで参加
+async function joinGroupByCode(){
+  const user = window._fbUser;
+  if(!user || !window._fbDb || !window._fbFns){ showToast('ログインが必要です'); return; }
+  const code = document.getElementById('group-invite-input').value.trim().toUpperCase();
+  if(code.length !== 6){ showToast('6桁のコードを入力してください'); return; }
+
+  const { collection, getDocs, query, where, doc, setDoc, getDoc, writeBatch } = window._fbFns;
+
+  // すでに参加済みか確認
+  const userSnap = await getDoc(doc(window._fbDb, 'users', user.uid));
+  if(userSnap.exists() && userSnap.data().groupId){
+    showToast('すでにグループに参加しています'); return;
+  }
+
+  // 招待コードからグループを検索
+  const q = query(collection(window._fbDb, 'groups'), where('inviteCode', '==', code));
+  const snap = await getDocs(q);
+  if(snap.empty){ showToast('招待コードが見つかりません'); return; }
+
+  const groupDoc = snap.docs[0];
+  const groupData = groupDoc.data();
+  const memberUids = groupData.memberUids || [];
+
+  if(memberUids.length >= 5){ showToast('グループの上限（5人）に達しています'); return; }
+  if(memberUids.includes(user.uid)){ showToast('すでにこのグループのメンバーです'); return; }
+
+  // メンバーに追加
+  const batch = writeBatch(window._fbDb);
+  batch.update(groupDoc.ref, { memberUids: [...memberUids, user.uid] });
+  batch.set(doc(window._fbDb, 'users', user.uid), { groupId: groupDoc.id }, { merge: true });
+  await batch.commit();
+
+  _groupId = groupDoc.id;
+  _groupData = { ...groupData, memberUids: [...memberUids, user.uid] };
+  await _renderGroupJoined();
+  gaEvent('group_join', { code });
+  showToast(`「${groupData.name}」に参加しました！`);
+  // ダッシュボードを更新
+  await _fetchGroupSubs();
+  renderDashboard();
+}
+
+// グループから退出
+async function leaveGroup(){
+  const user = window._fbUser;
+  if(!user || !_groupId || !window._fbDb || !window._fbFns) return;
+  showDialog({
+    icon:'', title:'グループから退出',
+    msg:'退出するとグループのデータは見えなくなります。自分のサブスクデータは残ります。',
+    buttons:[
+      {label:'キャンセル', cls:'cancel'},
+      {label:'退出する', cls:'danger', onClick: async ()=>{
+        const { doc, setDoc, getDoc } = window._fbFns;
+        const groupSnap = await getDoc(doc(window._fbDb, 'groups', _groupId));
+        if(groupSnap.exists()){
+          const memberUids = (groupSnap.data().memberUids||[]).filter(uid=>uid!==user.uid);
+          await setDoc(doc(window._fbDb,'groups',_groupId), { memberUids }, { merge:true });
+        }
+        await setDoc(doc(window._fbDb,'users',user.uid), { groupId:'' }, { merge:true });
+        _groupId = null; _groupData = null; _groupMembersData = [];
+        _currentGroupFilter = 'all';
+        closeGroupModal();
+        _updateGroupTabs();
+        renderDashboard();
+        gaEvent('group_leave', {});
+        showToast('グループから退出しました');
+      }}
+    ]
+  });
+}
+
+// 招待コードをコピー
+async function copyInviteCode(){
+  const code = document.getElementById('group-invite-code').textContent;
+  try{
+    await navigator.clipboard.writeText(code);
+    const btn = document.getElementById('copy-code-btn');
+    btn.textContent = 'コピー済 ✓';
+    btn.style.background = '#27AE60';
+    setTimeout(()=>{ btn.textContent='コピー'; btn.style.background=''; },2000);
+    gaEvent('group_invite_copy', {});
+  }catch(e){ showToast('コピーできませんでした'); }
+}
+
+// グループメンバーのサブスクを取得
+let _groupSubsCache = {}; // { uid: [subs] }
+async function _fetchGroupSubs(){
+  if(!_groupId || !_groupMembersData.length || !window._fbDb || !window._fbFns) return;
+  const { collection, getDocs } = window._fbFns;
+  _groupSubsCache = {};
+  for(const member of _groupMembersData){
+    const snap = await getDocs(collection(window._fbDb,'users',member.uid,'subs'));
+    _groupSubsCache[member.uid] = snap.docs.map(d=>({ ...d.data(), _ownerUid: member.uid, _ownerNickname: member.nickname||'名前未設定' }));
+  }
+}
+
+// グループダッシュボードのタブUI更新
+function _updateGroupTabs(){
+  const tabArea = document.getElementById('group-dashboard-tabs');
+  if(!tabArea) return;
+  if(!_groupId || !_groupMembersData.length){
+    tabArea.style.display = 'none';
+    return;
+  }
+  tabArea.style.display = 'flex';
+  tabArea.innerHTML = '';
+  const tabs = [{ uid:'all', name:'全員' }, ..._groupMembersData.map(m=>({ uid:m.uid, name:(m.nickname||'?')+'さん' }))];
+  tabs.forEach(t=>{
+    const btn = document.createElement('button');
+    const isOn = _currentGroupFilter === t.uid;
+    btn.style.cssText = `padding:6px 14px;border-radius:20px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;border:1.5px solid ${isOn?'var(--p)':'var(--bd)'};background:${isOn?'var(--p)':'var(--card)'};color:${isOn?'#fff':'var(--ts)'};white-space:nowrap;-webkit-tap-highlight-color:transparent`;
+    btn.textContent = t.name;
+    btn.onclick = async ()=>{
+      _currentGroupFilter = t.uid;
+      await _fetchGroupSubs();
+      renderDashboard();
+      _updateGroupTabs();
+    };
+    tabArea.appendChild(btn);
+  });
+}
+
+// ダッシュボード用グループデータ読み込み
+async function _loadGroupForDashboard(){
+  const user = window._fbUser;
+  if(!user || !window._fbDb || !window._fbFns) return;
+  const { doc, getDoc } = window._fbFns;
+  const userSnap = await getDoc(doc(window._fbDb,'users',user.uid));
+  if(!userSnap.exists()) return;
+  const userData = userSnap.data();
+  _groupId = userData.groupId || null;
+  if(!_groupId){ _updateGroupTabs(); return; }
+  const groupSnap = await getDoc(doc(window._fbDb,'groups',_groupId));
+  if(!groupSnap.exists()){ _groupId=null; _updateGroupTabs(); return; }
+  _groupData = groupSnap.data();
+  // メンバー情報とサブスクを取得
+  const memberUids = _groupData.memberUids || [];
+  _groupMembersData = [];
+  const { collection, getDocs } = window._fbFns;
+  for(const uid of memberUids){
+    const snap = await getDoc(doc(window._fbDb,'users',uid));
+    const data = snap.exists() ? snap.data() : {};
+    _groupMembersData.push({ uid, ...data });
+  }
+  await _fetchGroupSubs();
+  _updateGroupTabs();
+  // ドロワーのグループボタンを更新
+  const lbl = document.getElementById('hd-group-btn-lbl');
+  const sub = document.getElementById('hd-group-btn-sub');
+  if(lbl) lbl.textContent = _groupData.name || 'グループ';
+  if(sub) sub.textContent = `メンバー ${memberUids.length}人`;
+}
+
 function openPrivacy(){
   gaEvent('privacy_open',{});
   window.open('https://jonekun429.github.io/subly-Privacy-/','_blank','noopener');
@@ -3402,9 +3770,24 @@ function setChartMode(mode){
 }
 
 function renderDashboard(){
+  // グループフィルター適用：全員 or 特定メンバー
+  let targetSubs = subs;
+  if(_groupId && _currentGroupFilter !== 'all'){
+    // 特定メンバーのサブスク
+    const memberSubs = _groupSubsCache[_currentGroupFilter] || [];
+    targetSubs = memberSubs;
+  } else if(_groupId && _currentGroupFilter === 'all'){
+    // 全員分：自分 + グループメンバー全員
+    const allGroupSubs = Object.values(_groupSubsCache).flat();
+    // 重複を避けて自分のsubsと合算（自分のキャッシュがない場合）
+    const myUid = window._fbUser?.uid;
+    const othersUbs = allGroupSubs.filter(s => s._ownerUid !== myUid);
+    targetSubs = [...subs, ...othersUbs];
+  }
+
   let monthly=0,yearly=0;
   const cmap={};
-  subs.filter(s=>!s.paused&&!s.canceled).forEach(s=>{
+  targetSubs.filter(s=>!s.paused&&!s.canceled).forEach(s=>{
     if(s.freq==='単発（買い切り）'){
       if(!inclOt)return;
       yearly+=s.price;
@@ -4170,13 +4553,24 @@ function renderList(){
   const cat=document.getElementById('fl-cat').value;
   const sort=document.getElementById('fl-sort').value;
   if(cat !== 'all') gaEvent('filter_used', { category: cat, sort: sort });
+
+  // グループ全員表示の場合は全メンバーのサブスクを使う
+  let baseList = subs;
+  if(_groupId && _currentGroupFilter === 'all'){
+    const myUid = window._fbUser?.uid;
+    const others = Object.values(_groupSubsCache).flat().filter(s=>s._ownerUid !== myUid);
+    baseList = [...subs, ...others];
+  } else if(_groupId && _currentGroupFilter !== 'all'){
+    baseList = _groupSubsCache[_currentGroupFilter] || [];
+  }
+
   let list;
   if(cat==='解約済'){
-    list=subs.filter(s=>s.canceled);
+    list=baseList.filter(s=>s.canceled);
   } else if(cat==='休止中'){
-    list=subs.filter(s=>s.paused&&!s.canceled);
+    list=baseList.filter(s=>s.paused&&!s.canceled);
   } else if(cat==='all'){
-    list=subs.filter(s=>!s.canceled);
+    list=baseList.filter(s=>!s.canceled);
   } else if(cat==='その他'){
     list=subs.filter(s=>!catMap[s.cat]&&!s.canceled);
   } else {
@@ -4218,6 +4612,7 @@ function renderList(){
           <span class="badge" style="background:${ci.color}">${s.cat}</span>
           ${s.payment?`<span style="font-size:11px;font-weight:600;color:var(--ts);background:var(--bg);border:1px solid var(--bd);border-radius:5px;padding:2px 6px">${s.payment}</span>`:''}
           ${(s.payer && _nickname)?`<span style="font-size:11px;font-weight:600;color:var(--p);background:var(--pl);border-radius:5px;padding:2px 6px;display:inline-flex;align-items:center;gap:3px"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>${s.payer}</span>`:''}
+          ${s._ownerNickname && s._ownerUid !== window._fbUser?.uid ? `<span style="font-size:11px;font-weight:700;color:#fff;background:var(--p);border-radius:5px;padding:2px 7px">${s._ownerNickname}さん</span>` : ''}
           <span>${(()=>{
             if(s.canceled) return `解約日: ${s.canceledDate||'不明'}`;
             if(s.freq==='単発（買い切り）') return '買い切り';
@@ -4276,10 +4671,14 @@ function renderList(){
     const wrapper=document.createElement('div');
     wrapper.style.cssText='background:var(--card);border-radius:10px;padding:11px 13px;margin-bottom:7px;box-shadow:var(--sh);transition:box-shadow .12s;overflow:hidden;position:relative';
     wrapper.appendChild(row);
-    wrapper.appendChild(actions);
 
-    // タップで開閉
+    // 他メンバーのサブスクはアクション非表示
+    const isOthers = s._ownerUid && s._ownerUid !== window._fbUser?.uid;
+    if(!isOthers) wrapper.appendChild(actions);
+
+    // タップで開閉（自分のサブスクのみ）
     const toggleActions=()=>{
+      if(isOthers) return;
       const isOpen=actions.classList.contains('open');
       document.querySelectorAll('.sub-actions.open').forEach(a=>a.classList.remove('open'));
       if(!isOpen){
