@@ -933,9 +933,9 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
           </div>
           <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
             <button onclick="logoutFirebase();closeSettings()" style="background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--ts);font-family:inherit;cursor:pointer;white-space:nowrap">ログアウト</button>
-            <button onclick="deleteAccount()" style="background:#FEE2E2;border:1px solid var(--dn);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--dn);font-family:inherit;cursor:pointer;white-space:nowrap">退会</button>
           </div>
         </div>
+          <button onclick="deleteAccount()" style="width:calc(100% - 36px);margin:10px 18px 14px;padding:10px;background:#FEE2E2;border:1px solid var(--dn);border-radius:10px;font-size:13px;font-weight:700;color:var(--dn);font-family:inherit;cursor:pointer">退会する</button>
       </div>
       <!-- 未ログイン時 -->
       <div id="s-auth-logged-out" class="s-row" onclick="closeSettings();setTimeout(openAuthModal,200)" style="align-items:center">
@@ -2850,7 +2850,7 @@ function openSavingHints(){
 }
 function closeSavingHints(){ document.getElementById('saving-hints-ov').classList.add('hidden'); }
 
-function openSettings(){document.getElementById('settings-ov').classList.remove('hidden')}
+function openSettings(){document.getElementById('settings-ov').classList.remove('hidden');if(window._fbUser)_updateAuthUI(window._fbUser);}
 function closeSettings(){document.getElementById('settings-ov').classList.add('hidden')}
 let _hwPage = 0;
 function openHowto(){
