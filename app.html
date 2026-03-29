@@ -3296,15 +3296,19 @@ let _profileSelectedOcc = '';
 // 認証状態変化のコールバック
 window._onAuthChanged = async (user) => {
   if(user){
-    // ログイン済み → Firestoreからデータ読み込み
-    gaEvent('login', { method: user.providerData[0]?.providerId || 'unknown' });
-    await _loadFromFirestore(user.uid);
+    // ログイン済み → まずUIを即座に更新してからFirestoreを読み込む
     _updateAuthUI(user);
+    try{
+      await _loadFromFirestore(user.uid);
+      _updateAuthUI(user); // Firestore読み込み後に再度更新（ニックネーム等を反映）
+    }catch(e){
+      console.warn('Firestore load error (non-fatal):', e);
+    }
     // グループ状態を確認してタブ更新
-    await _loadGroupForDashboard();
+    try{ await _loadGroupForDashboard(); }catch(e){}
     // pending招待コードのチェック
-    await _checkPendingInvite();
-    // リアルタイム通知リスナー開始（onSnapshotで既読チェックも兼ねる）
+    try{ await _checkPendingInvite(); }catch(e){}
+    // リアルタイム通知リスナー開始
     _startNotificationListener(user.uid);
   } else {
     // 未ログイン → LocalStorageのまま
@@ -3403,8 +3407,19 @@ async function loginWithGoogle(){
     } else {
       // Android/PC → Popup方式
       const result = await window._fbFns.signInWithPopup(window._fbAuth, window._fbGoogleProvider);
-      const isNew = await _ensureUserDoc(result.user);
+      // ポップアップ成功 → まずモーダルを閉じてUIを確実に更新
       closeAuthModal();
+      // _updateAuthUI を即座に呼ぶ（onAuthStateChanged を待たずに表示を更新）
+      _updateAuthUI(result.user);
+
+      // Firestoreのユーザードキュメント処理（エラーが出てもUI表示には影響させない）
+      let isNew = false;
+      try{
+        isNew = await _ensureUserDoc(result.user);
+      }catch(fsErr){
+        console.warn('Firestore user doc error (non-fatal):', fsErr);
+      }
+
       if(isNew){
         gaEvent('signup', { method: 'google' });
         setTimeout(() => openProfileSetup(), 300);
@@ -3432,8 +3447,10 @@ async function submitAuth(){
 
   try{
     if(_authTab === 'login'){
-      await window._fbFns.signInWithEmailAndPassword(window._fbAuth, email, password);
+      const result = await window._fbFns.signInWithEmailAndPassword(window._fbAuth, email, password);
       closeAuthModal();
+      // UI を即座に更新（onAuthStateChanged を待たずに）
+      _updateAuthUI(result.user);
       showToast('ログインしました');
       gaEvent('login', { method: 'email' });
     } else {
