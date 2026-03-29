@@ -745,9 +745,15 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
     <!-- アカウント -->
     <div class="hd-sec">アカウント</div>
-    <button class="hd-row" onclick="openAuthModal()">
-      <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></div>
-      <div><div class="hd-lbl" id="hd-auth-btn-lbl">ログイン / 新規登録</div><div class="hd-sub" id="hd-auth-btn-sub">アカウントを作成</div></div>
+    <button class="hd-row" onclick="openAuthModal()" id="hd-auth-row">
+      <div id="hd-auth-ico" style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="rgba(255,255,255,.7)"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div class="hd-lbl" id="hd-auth-btn-lbl">ログイン / 新規登録</div>
+        <div class="hd-sub" id="hd-auth-btn-sub" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">アカウントを作成</div>
+      </div>
+      <div id="hd-auth-status" style="display:none;width:8px;height:8px;border-radius:50%;background:#4ADE80;flex-shrink:0"></div>
     </button>
 
     <!-- プロフィール -->
@@ -901,9 +907,38 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
     <div class="s-sec">プロフィール</div>
     <div class="s-grp">
-      <div class="s-row" onclick="openNicknameModal()" style="align-items:center">
+      <!-- ログイン中の表示 -->
+      <div id="s-auth-logged-in" style="display:none;padding:14px 18px;border-bottom:1px solid var(--bd)">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div id="s-auth-avatar" style="width:44px;height:44px;border-radius:50%;background:var(--p);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;font-size:18px;font-weight:700;color:#fff">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+          </div>
+          <div style="flex:1;min-width:0">
+            <div style="font-size:15px;font-weight:700;color:var(--tx)" id="s-auth-name">—</div>
+            <div style="font-size:12px;color:var(--ts);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="s-auth-email">—</div>
+            <div style="margin-top:4px;display:inline-flex;align-items:center;gap:4px;background:var(--pl);border-radius:20px;padding:2px 8px">
+              <div style="width:6px;height:6px;border-radius:50%;background:#4ADE80"></div>
+              <span style="font-size:11px;font-weight:700;color:var(--p)" id="s-auth-plan-badge">Subly Free</span>
+            </div>
+          </div>
+          <button onclick="logoutFirebase();closeSettings()" style="flex-shrink:0;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--ts);font-family:inherit;cursor:pointer">ログアウト</button>
+        </div>
+      </div>
+      <!-- 未ログイン時 -->
+      <div id="s-auth-logged-out" class="s-row" onclick="closeSettings();setTimeout(openAuthModal,200)" style="align-items:center">
         <div class="s-ico" style="background:#EDF4F2">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+        </div>
+        <div class="s-body">
+          <div class="s-title">ログイン / 新規登録</div>
+          <div class="s-sub">アカウントを作成してデータを保護</div>
+        </div>
+        <span class="s-arr">›</span>
+      </div>
+      <!-- ニックネーム編集（共通） -->
+      <div class="s-row" onclick="openNicknameModal()" style="align-items:center">
+        <div class="s-ico" style="background:#EDF4F2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
         </div>
         <div class="s-body">
           <div class="s-title" id="s-nickname-display" style="color:var(--tx)">名前を設定</div>
@@ -2952,24 +2987,57 @@ window._onAuthChanged = async (user) => {
 };
 
 function _updateAuthUI(user){
-  // プロフィール表示を更新
-  const planEl = document.getElementById('s-plan-display');
-  const hdPlanEl = document.getElementById('hd-plan-display');
+  const planEl      = document.getElementById('s-plan-display');
+  const hdPlanEl    = document.getElementById('hd-plan-display');
+  const authBtn     = document.getElementById('hd-auth-btn-lbl');
+  const authSub     = document.getElementById('hd-auth-btn-sub');
+  const authStatus  = document.getElementById('hd-auth-status');
+  const authIco     = document.getElementById('hd-auth-ico');
+  const loggedIn    = document.getElementById('s-auth-logged-in');
+  const loggedOut   = document.getElementById('s-auth-logged-out');
+  const sAuthName   = document.getElementById('s-auth-name');
+  const sAuthEmail  = document.getElementById('s-auth-email');
+  const sAuthAvatar = document.getElementById('s-auth-avatar');
+
   if(user){
-    if(planEl) planEl.innerHTML = `Subly Free <span style="font-size:11px;color:var(--p);font-weight:700">● ログイン中</span>`;
+    const displayName = user.displayName || _nickname || 'ユーザー';
+    const email = user.email || '';
+    const initial = displayName.charAt(0).toUpperCase();
+    const photoURL = user.photoURL;
+
+    // ドロワー
+    if(authBtn) authBtn.textContent = displayName;
+    if(authSub) authSub.textContent = email;
+    if(authStatus) authStatus.style.display = 'block';
+    if(authIco){
+      authIco.innerHTML = photoURL
+        ? `<img src="${photoURL}" style="width:100%;height:100%;object-fit:cover">`
+        : `<span style="font-size:15px;font-weight:700;color:#fff">${initial}</span>`;
+    }
+
+    // 設定画面
+    if(loggedIn)  loggedIn.style.display  = 'block';
+    if(loggedOut) loggedOut.style.display = 'none';
+    if(sAuthName)  sAuthName.textContent  = displayName;
+    if(sAuthEmail) sAuthEmail.textContent = email;
+    if(sAuthAvatar){
+      sAuthAvatar.innerHTML = photoURL
+        ? `<img src="${photoURL}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
+        : `<span style="font-size:18px;font-weight:700">${initial}</span>`;
+    }
+    if(planEl)   planEl.textContent   = 'Subly Free';
     if(hdPlanEl) hdPlanEl.textContent = 'ログイン中';
-    // ドロワーのログインボタンをログアウトに切り替え
-    const authBtn = document.getElementById('hd-auth-btn-lbl');
-    const authSub = document.getElementById('hd-auth-btn-sub');
-    if(authBtn) authBtn.textContent = 'ログアウト';
-    if(authSub) authSub.textContent = user.email || user.displayName || '';
+
   } else {
-    if(planEl) planEl.textContent = 'Subly Free';
-    if(hdPlanEl) hdPlanEl.textContent = 'Subly Free';
-    const authBtn = document.getElementById('hd-auth-btn-lbl');
-    const authSub = document.getElementById('hd-auth-btn-sub');
+    // 未ログイン
     if(authBtn) authBtn.textContent = 'ログイン / 新規登録';
     if(authSub) authSub.textContent = 'アカウントを作成';
+    if(authStatus) authStatus.style.display = 'none';
+    if(authIco) authIco.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="rgba(255,255,255,.7)"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>`;
+    if(loggedIn)  loggedIn.style.display  = 'none';
+    if(loggedOut) loggedOut.style.display = 'flex';
+    if(planEl)   planEl.textContent   = 'Subly Free';
+    if(hdPlanEl) hdPlanEl.textContent = 'Subly Free';
   }
 }
 
