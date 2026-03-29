@@ -997,8 +997,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         </div>
         <span class="s-arr">›</span>
       </div>
-      <!-- 年齢・職業編集 -->
-      <div class="s-row" onclick="openProfileEditModal()" style="align-items:center">
+      <!-- 年齢・職業編集（ログイン中のみ表示） -->
+      <div id="s-profile-row" class="s-row" onclick="openProfileEditModal()" style="align-items:center;display:none">
         <div class="s-ico" style="background:#EDF4F2">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
         </div>
@@ -1007,6 +1007,22 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
           <div class="s-sub" id="s-profile-display">未設定</div>
         </div>
         <span class="s-arr">›</span>
+      </div>
+    </div>
+    <!-- グループ（ログイン中のみ表示） -->
+    <div id="s-group-section" style="display:none">
+      <div class="s-sec">グループ</div>
+      <div class="s-grp">
+        <div class="s-row" onclick="closeSettings();setTimeout(openGroupModal,150)">
+          <div class="s-ico" style="background:#EDF4F2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+          </div>
+          <div class="s-body">
+            <div class="s-title" id="s-group-btn-lbl">グループを作る</div>
+            <div class="s-sub" id="s-group-btn-sub">家族・カップルで共有</div>
+          </div>
+          <span class="s-arr">›</span>
+        </div>
       </div>
     </div>
     <div class="s-sec">外観</div>
@@ -3377,6 +3393,26 @@ function _updateAuthUI(user){
   // アカウント削除ボタン: ログイン中のみ表示
   const delSection = document.getElementById('s-delete-account-section');
   if(delSection) delSection.style.display = user ? 'block' : 'none';
+  // グループセクション: ログイン中のみ表示
+  const groupSection = document.getElementById('s-group-section');
+  if(groupSection) groupSection.style.display = user ? 'block' : 'none';
+  // 年齢・職業行: ログイン中のみ表示
+  const profileRow = document.getElementById('s-profile-row');
+  if(profileRow) profileRow.style.display = user ? 'flex' : 'none';
+  // グループボタンのラベルをグループ参加状況に応じて更新
+  if(user){
+    const lbl = document.getElementById('s-group-btn-lbl');
+    const sub = document.getElementById('s-group-btn-sub');
+    if(lbl && sub){
+      if(_groupId){
+        lbl.textContent = 'グループを管理する';
+        sub.textContent = _groupData?.name || 'グループに参加中';
+      } else {
+        lbl.textContent = 'グループを作る';
+        sub.textContent = '家族・カップルで共有';
+      }
+    }
+  }
 }
 
 function closeAuthModal(){
@@ -4031,6 +4067,18 @@ async function _fetchGroupSubs(){
 
 // グループダッシュボードのタブUI更新
 function _updateGroupTabs(){
+  // 設定画面のグループラベルも更新
+  const lbl = document.getElementById('s-group-btn-lbl');
+  const sub = document.getElementById('s-group-btn-sub');
+  if(lbl && sub){
+    if(_groupId){
+      lbl.textContent = 'グループを管理する';
+      sub.textContent = _groupData?.name || 'グループに参加中';
+    } else {
+      lbl.textContent = 'グループを作る';
+      sub.textContent = '家族・カップルで共有';
+    }
+  }
   const tabArea = document.getElementById('group-dashboard-tabs');
   if(!tabArea) return;
   if(!_groupId || !_groupMembersData.length){
