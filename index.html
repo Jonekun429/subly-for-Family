@@ -669,6 +669,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     getAuth,
     onAuthStateChanged,
     signInWithPopup,
+    signInWithRedirect,
+    getRedirectResult,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     GoogleAuthProvider,
@@ -702,12 +704,25 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   window._fbGoogleProvider = googleProvider;
   window._fbFns = {
     signInWithPopup,
+    signInWithRedirect,
+    getRedirectResult,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     signOut,
     doc, getDoc, setDoc, collection,
     writeBatch, getDocs, query, where, onSnapshot
   };
+
+  // Redirectログイン後の処理
+  getRedirectResult(auth).then(async (result) => {
+    if(result?.user){
+      await _ensureUserDoc(result.user);
+      showToast(`${result.user.displayName || 'ようこそ'}さん、ログインしました`);
+      gaEvent('login', { method: 'google_redirect' });
+    }
+  }).catch(e => {
+    if(e.code !== 'auth/no-auth-event') console.error('Redirect error:', e);
+  });
 
   // 認証状態の監視
   onAuthStateChanged(auth, (user) => {
@@ -719,6 +734,24 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 </script>
 </head>
 <body>
+
+<!-- LINE内ブラウザ案内バナー -->
+<div id="line-browser-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:#06C755;color:#fff;padding:12px 16px;font-size:13px;font-weight:700;text-align:center;line-height:1.6">
+  LINEブラウザでは一部機能が使えません<br>
+  <span style="font-size:12px;font-weight:400">右下の「…」→「ブラウザで開く」をタップしてください</span>
+  <button onclick="document.getElementById('line-browser-banner').style.display='none'" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.3);border:none;color:#fff;border-radius:50%;width:24px;height:24px;font-size:14px;cursor:pointer;line-height:1">✕</button>
+</div>
+<script>
+  // LINE内ブラウザ判定
+  if(/Line\//.test(navigator.userAgent)){
+    document.getElementById('line-browser-banner').style.display = 'block';
+    // バナー分だけコンテンツを下にずらす
+    document.addEventListener('DOMContentLoaded', ()=>{
+      const app = document.getElementById('app');
+      if(app) app.style.paddingTop = '60px';
+    });
+  }
+</script>
 
 <!-- ヘッダー（スマホ） -->
 <header class="hdr">
@@ -3152,13 +3185,21 @@ function switchAuthTab(tab){
 async function loginWithGoogle(){
   if(!window._fbAuth || !window._fbFns) return;
   try{
-    const result = await window._fbFns.signInWithPopup(window._fbAuth, window._fbGoogleProvider);
-    const user = result.user;
-    // 初回ログイン時はニックネームを引き継ぎ
-    await _ensureUserDoc(user);
-    closeAuthModal();
-    showToast(`${user.displayName || 'ようこそ'}さん、ログインしました`);
-    gaEvent('login', { method: 'google' });
+    const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+    const isLINE = /Line\//.test(navigator.userAgent);
+
+    if(isIOS || isLINE){
+      // iOS/LINE → Redirect方式
+      await window._fbFns.signInWithRedirect(window._fbAuth, window._fbGoogleProvider);
+      // ↑ ページ遷移するのでこの後のコードは実行されない
+    } else {
+      // Android/PC → Popup方式
+      const result = await window._fbFns.signInWithPopup(window._fbAuth, window._fbGoogleProvider);
+      await _ensureUserDoc(result.user);
+      closeAuthModal();
+      showToast(`${result.user.displayName || 'ようこそ'}さん、ログインしました`);
+      gaEvent('login', { method: 'google' });
+    }
   }catch(e){
     _showAuthError(e.code);
   }
