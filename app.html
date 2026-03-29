@@ -725,13 +725,43 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   try{
     const result = await getRedirectResult(auth);
     if(result?.user){
-      // Redirect後は_ensureUserDocを呼んでUIを強制更新
-      await _ensureUserDoc(result.user);
-      if(typeof window._onAuthChanged === 'function'){
-        await window._onAuthChanged(result.user);
+      const savedTab = sessionStorage.getItem('authTab') || 'login';
+      sessionStorage.removeItem('authTab');
+      const { doc, getDoc } = window._fbFns;
+      const ref = doc(window._fbDb, 'users', result.user.uid);
+      const snap = await getDoc(ref);
+
+      if(savedTab === 'login'){
+        // ログインタブ：アカウントなければサインアウト
+        if(!snap.exists()){
+          await window._fbFns.signOut(window._fbAuth);
+          setTimeout(()=>{
+            openAuthModal();
+            switchAuthTab('login');
+            _showAuthError('no-account');
+          }, 500);
+          return;
+        }
+        await _ensureUserDoc(result.user);
+        if(typeof window._onAuthChanged === 'function') await window._onAuthChanged(result.user);
+        showToast(`おかえりなさい、${result.user.displayName || ''}さん`);
+        gaEvent('login', { method: 'google_redirect' });
+      } else {
+        // 新規登録タブ：すでに登録済みならサインアウト
+        if(snap.exists()){
+          await window._fbFns.signOut(window._fbAuth);
+          setTimeout(()=>{
+            openAuthModal();
+            switchAuthTab('signup');
+            _showAuthError('already-exists');
+          }, 500);
+          return;
+        }
+        await _ensureUserDoc(result.user);
+        if(typeof window._onAuthChanged === 'function') await window._onAuthChanged(result.user);
+        _showSignupComplete(result.user);
+        gaEvent('signup', { method: 'google_redirect' });
       }
-      showToast(`${result.user.displayName || 'ようこそ'}さん、ログインしました`);
-      gaEvent('login', { method: 'google_redirect' });
     }
   }catch(e){
     if(e.code !== 'auth/no-auth-event') console.error('Redirect error:', e);
@@ -3320,26 +3350,35 @@ function _showSignupComplete(user){
 
 // ユーザードキュメントの初期化（初回ログイン時）
 async function _ensureUserDoc(user){
-  if(!window._fbDb || !window._fbFns) return;
-  const { doc, getDoc, setDoc } = window._fbFns;
-  const ref = doc(window._fbDb, 'users', user.uid);
-  const snap = await getDoc(ref);
-  if(!snap.exists()){
-    // 初回：LocalStorageのデータをFirestoreに移行
-    await setDoc(ref, {
-      nickname: _nickname || user.displayName || '',
-      plan: 'free',
-      createdAt: new Date().toISOString(),
-      email: user.email || ''
-    });
-    // サブスクデータも移行
-    await _migrateSubsToFirestore(user.uid);
-    showToast('データをクラウドに同期しました');
-  } else {
-    // 既存ユーザー：Firestoreのニックネームを引き継ぎ
-    const data = snap.data();
-    if(data.nickname) _nickname = data.nickname;
-    _updateNicknameDisplay();
+  if(!window._fbDb || !window._fbFns){
+    console.error('_ensureUserDoc: Firestore未初期化');
+    return;
+  }
+  try{
+    const { doc, getDoc, setDoc } = window._fbFns;
+    const ref = doc(window._fbDb, 'users', user.uid);
+    const snap = await getDoc(ref);
+    if(!snap.exists()){
+      // 新規：Firestoreにユーザードキュメントを作成
+      const userData = {
+        nickname: _nickname || user.displayName || '',
+        plan: 'free',
+        createdAt: new Date().toISOString(),
+        email: user.email || ''
+      };
+      await setDoc(ref, userData);
+      console.log('✅ Firestoreにユーザー作成:', user.uid);
+      // サブスクデータも移行
+      if(subs.length > 0) await _migrateSubsToFirestore(user.uid);
+    } else {
+      // 既存ユーザー：Firestoreのニックネームを引き継ぎ
+      const data = snap.data();
+      if(data.nickname){ _nickname = data.nickname; _updateNicknameDisplay(); }
+      console.log('✅ 既存ユーザー確認:', user.uid);
+    }
+  }catch(e){
+    console.error('_ensureUserDoc エラー:', e);
+    showToast('データ保存に失敗しました: ' + e.message);
   }
 }
 
