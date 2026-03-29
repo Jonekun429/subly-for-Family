@@ -677,7 +677,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   import {
     getFirestore,
     doc, getDoc, setDoc, collection,
-    writeBatch, getDocs
+    writeBatch, getDocs, query, where, onSnapshot
   } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 
   const firebaseConfig = {
@@ -694,6 +694,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   const auth = getAuth(app);
   const db = getFirestore(app);
   const googleProvider = new GoogleAuthProvider();
+  googleProvider.setCustomParameters({ prompt: 'select_account' });
 
   // グローバルに公開
   window._fbAuth = auth;
@@ -705,7 +706,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     createUserWithEmailAndPassword,
     signOut,
     doc, getDoc, setDoc, collection,
-    writeBatch, getDocs
+    writeBatch, getDocs, query, where, onSnapshot
   };
 
   // 認証状態の監視
@@ -3056,9 +3057,16 @@ window._onAuthChanged = async (user) => {
     _updateAuthUI(user);
     // グループ状態を確認してタブ更新
     await _loadGroupForDashboard();
+    // pending招待コードのチェック
+    await _checkPendingInvite();
+    // 参加通知のチェック（初回）
+    await _checkGroupNotifications();
+    // リアルタイム通知リスナー開始
+    _startNotificationListener(user.uid);
   } else {
     // 未ログイン → LocalStorageのまま
     _updateAuthUI(null);
+    _stopNotificationListener();
   }
 };
 
@@ -3445,10 +3453,10 @@ async function createGroup(){
 }
 
 // 招待コードで参加
-async function joinGroupByCode(){
+async function joinGroupByCode(codeArg){
   const user = window._fbUser;
   if(!user || !window._fbDb || !window._fbFns){ showToast('ログインが必要です'); return; }
-  const code = document.getElementById('group-invite-input').value.trim().toUpperCase();
+  const code = (codeArg || document.getElementById('group-invite-input')?.value || '').trim().toUpperCase();
   if(code.length !== 6){ showToast('6桁のコードを入力してください'); return; }
 
   const { collection, getDocs, query, where, doc, setDoc, getDoc, writeBatch } = window._fbFns;
@@ -3481,6 +3489,8 @@ async function joinGroupByCode(){
   _groupData = { ...groupData, memberUids: [...memberUids, user.uid] };
   await _renderGroupJoined();
   gaEvent('group_join', { code });
+  // 参加通知をメンバーに送る
+  await _notifyGroupMembers(groupDoc.id, _nickname || user.displayName || 'メンバー');
   showToast(`「${groupData.name}」に参加しました！`);
   // ダッシュボードを更新
   await _fetchGroupSubs();
@@ -3519,8 +3529,9 @@ async function leaveGroup(){
 // 招待コードをコピー
 async function copyInviteCode(){
   const code = document.getElementById('group-invite-code').textContent;
+  const url = `${location.origin}${location.pathname}?invite=${code}`;
   try{
-    await navigator.clipboard.writeText(code);
+    await navigator.clipboard.writeText(url);
     const btn = document.getElementById('copy-code-btn');
     btn.textContent = 'コピー済 ✓';
     btn.style.background = '#27AE60';
@@ -3596,6 +3607,115 @@ async function _loadGroupForDashboard(){
   const sub = document.getElementById('hd-group-btn-sub');
   if(lbl) lbl.textContent = _groupData.name || 'グループ';
   if(sub) sub.textContent = `メンバー ${memberUids.length}人`;
+}
+
+// 招待URL確認モーダル
+async function _showInviteConfirm(code){
+  showDialog({
+    icon:'👥',
+    title:'グループへの招待',
+    msg:`招待コード「<strong>${code}</strong>」のグループに参加しますか？<br><br>参加にはログインが必要です。`,
+    buttons:[
+      {label:'キャンセル', cls:'cancel', onClick: async ()=>{
+        await Store.set('pendingInviteCode','');
+      }},
+      {label:'参加する', cls:'ok', onClick: async ()=>{
+        const user = window._fbUser;
+        if(!user){
+          // 未ログイン → ログインモーダルを開いてから参加
+          openAuthModal();
+          showToast('ログイン後に自動で参加します');
+        } else {
+          // ログイン済み → すぐ参加
+          document.getElementById('group-invite-input') && (document.getElementById('group-invite-input').value = code);
+          await joinGroupByCode(code);
+          await Store.set('pendingInviteCode','');
+        }
+      }}
+    ]
+  });
+}
+
+// ログイン後に pending な招待コードがあれば参加処理
+async function _checkPendingInvite(){
+  const code = await Store.get('pendingInviteCode');
+  if(!code) return;
+  await Store.set('pendingInviteCode','');
+  setTimeout(()=> _showInviteConfirm(code), 500);
+}
+
+// 参加通知をFirestoreに記録
+async function _notifyGroupMembers(groupId, joinerNickname){
+  if(!window._fbDb || !window._fbFns) return;
+  const { doc, getDoc, setDoc } = window._fbFns;
+  const groupSnap = await getDoc(doc(window._fbDb,'groups',groupId));
+  if(!groupSnap.exists()) return;
+  const memberUids = groupSnap.data().memberUids || [];
+  const joinerUid = window._fbUser?.uid;
+  // 自分以外のメンバーに通知
+  for(const uid of memberUids){
+    if(uid === joinerUid) continue;
+    const notifRef = doc(window._fbDb,'users',uid,'notifications','group_join');
+    await setDoc(notifRef, {
+      message: `${joinerNickname}さんがグループに参加しました`,
+      createdAt: new Date().toISOString(),
+      read: false
+    });
+  }
+}
+
+// 未読通知をチェックしてポップアップ
+async function _checkGroupNotifications(){
+  const user = window._fbUser;
+  if(!user || !window._fbDb || !window._fbFns) return;
+  const { doc, getDoc, setDoc } = window._fbFns;
+  const notifRef = doc(window._fbDb,'users',user.uid,'notifications','group_join');
+  const snap = await getDoc(notifRef);
+  if(snap.exists() && !snap.data().read){
+    const msg = snap.data().message;
+    // 既読にする
+    await setDoc(notifRef, { read: true }, { merge: true });
+    setTimeout(()=>{
+      showDialog({
+        icon:'🎉',
+        title:'グループに新メンバーが参加しました',
+        msg,
+        buttons:[{label:'確認', cls:'ok'}]
+      });
+    }, 1000);
+  }
+}
+
+// リアルタイム通知リスナー
+let _notifUnsubscribe = null;
+
+function _startNotificationListener(uid){
+  if(_notifUnsubscribe) _notifUnsubscribe(); // 既存リスナーを解除
+  if(!window._fbDb || !window._fbFns) return;
+  const { doc, onSnapshot, setDoc } = window._fbFns;
+  const notifRef = doc(window._fbDb, 'users', uid, 'notifications', 'group_join');
+
+  _notifUnsubscribe = onSnapshot(notifRef, async (snap) => {
+    if(snap.exists() && !snap.data().read){
+      const msg = snap.data().message;
+      // 既読にする
+      await setDoc(notifRef, { read: true }, { merge: true });
+      // ポップアップ表示
+      showDialog({
+        icon:'🎉',
+        title:'グループに新メンバーが参加しました',
+        msg,
+        buttons:[{ label:'確認', cls:'ok' }]
+      });
+    }
+  });
+}
+
+function _stopNotificationListener(){
+  if(_notifUnsubscribe){
+    _notifUnsubscribe();
+    _notifUnsubscribe = null;
+  }
 }
 
 function openPrivacy(){
@@ -5382,6 +5502,17 @@ async function init(){
   subs = JSON.parse(subsRaw) || [];
   subs.forEach(s=>{ if(s.freq==='単発') s.freq='単発（買い切り）'; });
   inclOt = JSON.parse(otRaw) || false;
+
+  // 招待URLのチェック（?invite=XXXXXX）
+  const urlParams = new URLSearchParams(window.location.search);
+  const inviteCode = urlParams.get('invite');
+  if(inviteCode){
+    // URLからコードを除去してクリーンに
+    window.history.replaceState({}, document.title, window.location.pathname);
+    // ログイン後に参加処理するためコードを保存
+    await Store.set('pendingInviteCode', inviteCode);
+    setTimeout(()=> _showInviteConfirm(inviteCode), 800);
+  }
 
   // データがすでにある場合は手順バナー不要
   if(subs.length > 0){
