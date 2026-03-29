@@ -3087,7 +3087,11 @@ function openSavingHints(){
 }
 function closeSavingHints(){ document.getElementById('saving-hints-ov').classList.add('hidden'); }
 
-function openSettings(){document.getElementById('settings-ov').classList.remove('hidden')}
+function openSettings(){
+  document.getElementById('settings-ov').classList.remove('hidden');
+  // 設定画面を開くたびに最新のログイン状態を反映
+  _updateAuthUI(window._fbUser || null);
+}
 function closeSettings(){document.getElementById('settings-ov').classList.add('hidden')}
 let _hwPage = 0;
 function openHowto(){
