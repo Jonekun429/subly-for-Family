@@ -493,6 +493,9 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .btn-submit:hover::after{background:rgba(255,255,255,.08)}
 .btn-submit:active{transform:scale(.97);box-shadow:0 2px 8px rgba(62,107,98,.3)}
 .btn-submit:hover{background:var(--pd)}
+.profile-choice-btn{padding:9px 6px;background:var(--card);border:1.5px solid var(--bd);border-radius:9px;font-size:13px;font-weight:600;color:var(--ts);font-family:inherit;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;text-align:center}
+.profile-choice-btn:hover{border-color:var(--p);color:var(--p)}
+.profile-choice-btn.selected{background:var(--pl);border-color:var(--p);color:var(--p);font-weight:700}
 .btn-submit:active{transform:scale(.98)}
 .btn-cancel{width:100%;padding:12px;background:#fff;color:var(--ts);font-size:14px;font-weight:700;font-family:inherit;border:1.5px solid var(--bd);border-radius:12px;cursor:pointer;margin-top:7px;-webkit-tap-highlight-color:transparent}
 
@@ -976,7 +979,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         </div>
         <span class="s-arr">›</span>
       </div>
-      <!-- ニックネーム編集（共通） -->
+      <!-- ニックネーム編集 -->
       <div class="s-row" onclick="openNicknameModal()" style="align-items:center">
         <div class="s-ico" style="background:#EDF4F2">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
@@ -984,6 +987,17 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <div class="s-body">
           <div class="s-title" id="s-nickname-display" style="color:var(--tx)">名前を設定</div>
           <div class="s-sub" id="s-plan-display">Subly Free</div>
+        </div>
+        <span class="s-arr">›</span>
+      </div>
+      <!-- 年齢・職業編集 -->
+      <div class="s-row" onclick="openProfileEditModal()" style="align-items:center">
+        <div class="s-ico" style="background:#EDF4F2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        </div>
+        <div class="s-body">
+          <div class="s-title">年齢・職業</div>
+          <div class="s-sub" id="s-profile-display">未設定</div>
         </div>
         <span class="s-arr">›</span>
       </div>
@@ -1417,17 +1431,20 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
 
     <!-- メール/パスワード -->
-    <div id="auth-signup-name" style="display:none;margin-bottom:10px">
-      <input type="text" id="auth-nickname" placeholder="ニックネーム" maxlength="20"
-        style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
-    </div>
     <div style="margin-bottom:10px">
       <input type="email" id="auth-email" placeholder="メールアドレス"
         style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
     </div>
-    <div style="margin-bottom:16px">
-      <input type="password" id="auth-password" placeholder="パスワード（6文字以上）"
-        style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
+    <div style="margin-bottom:6px">
+      <input type="password" id="auth-password" placeholder="パスワード（8文字以上）"
+        style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none"
+        oninput="updatePasswordStrength(this.value)">
+    </div>
+    <div id="auth-pw-hints" style="display:none;margin-bottom:12px;padding:8px 12px;background:var(--bg);border-radius:8px;border:1px solid var(--bd)">
+      <div style="font-size:11px;color:var(--ts);margin-bottom:6px;font-weight:600">パスワード条件</div>
+      <div id="pw-hint-len"  style="font-size:11px;display:flex;align-items:center;gap:6px;margin-bottom:3px"><span id="pw-len-ico">○</span> 8文字以上</div>
+      <div id="pw-hint-upper" style="font-size:11px;display:flex;align-items:center;gap:6px;margin-bottom:3px"><span id="pw-upper-ico">○</span> 大文字を含む</div>
+      <div id="pw-hint-num"  style="font-size:11px;display:flex;align-items:center;gap:6px"><span id="pw-num-ico">○</span> 数字を含む</div>
     </div>
     <button id="auth-submit-btn" onclick="submitAuth()" style="width:100%;padding:13px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer">ログイン</button>
     <div id="auth-error" style="display:none;margin-top:10px;font-size:13px;color:var(--dn);text-align:center"></div>
@@ -1446,6 +1463,92 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     <div style="display:flex;gap:10px;margin-top:16px">
       <button onclick="closeNicknameModal()" style="flex:1;padding:12px;background:var(--bg);color:var(--ts);border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">キャンセル</button>
       <button onclick="saveNickname()" style="flex:1;padding:12px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- プロフィール設定モーダル（新規登録後 必須） -->
+<div class="dlg-ov hidden" id="profile-setup-ov">
+  <div class="dlg" style="max-width:360px;width:92%;padding:26px 22px 22px">
+    <div style="font-size:19px;font-weight:800;color:var(--tx);margin-bottom:4px">プロフィール設定</div>
+    <div style="font-size:13px;color:var(--ts);margin-bottom:22px;line-height:1.6">どんな方が使っているか教えてください。<br>より良いアプリ改善に活かします。</div>
+
+    <!-- ニックネーム -->
+    <div style="margin-bottom:16px">
+      <div style="font-size:12px;font-weight:700;color:var(--ts);margin-bottom:6px;letter-spacing:.5px">ニックネーム <span style="color:var(--dn)">*</span></div>
+      <input type="text" id="profile-nickname" placeholder="例：田中 太郎" maxlength="20"
+        style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none"
+        oninput="this.style.borderColor=this.value?'var(--p)':'var(--bd)'">
+    </div>
+
+    <!-- 年齢層 -->
+    <div style="margin-bottom:16px">
+      <div style="font-size:12px;font-weight:700;color:var(--ts);margin-bottom:8px;letter-spacing:.5px">年齢層 <span style="color:var(--dn)">*</span></div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px" id="profile-age-grid">
+        <button class="profile-choice-btn" data-group="age" data-val="10代" onclick="selectProfileChoice(this,'age')">10代</button>
+        <button class="profile-choice-btn" data-group="age" data-val="20代" onclick="selectProfileChoice(this,'age')">20代</button>
+        <button class="profile-choice-btn" data-group="age" data-val="30代" onclick="selectProfileChoice(this,'age')">30代</button>
+        <button class="profile-choice-btn" data-group="age" data-val="40代" onclick="selectProfileChoice(this,'age')">40代</button>
+        <button class="profile-choice-btn" data-group="age" data-val="50代" onclick="selectProfileChoice(this,'age')">50代</button>
+        <button class="profile-choice-btn" data-group="age" data-val="60代" onclick="selectProfileChoice(this,'age')">60代</button>
+        <button class="profile-choice-btn" data-group="age" data-val="70代以上" onclick="selectProfileChoice(this,'age')" style="grid-column:span 2">70代以上</button>
+      </div>
+    </div>
+
+    <!-- 職業 -->
+    <div style="margin-bottom:22px">
+      <div style="font-size:12px;font-weight:700;color:var(--ts);margin-bottom:8px;letter-spacing:.5px">職業 <span style="color:var(--dn)">*</span></div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px" id="profile-occ-grid">
+        <button class="profile-choice-btn" data-group="occ" data-val="学生" onclick="selectProfileChoice(this,'occ')">学生</button>
+        <button class="profile-choice-btn" data-group="occ" data-val="会社員" onclick="selectProfileChoice(this,'occ')">会社員</button>
+        <button class="profile-choice-btn" data-group="occ" data-val="自営業・フリーランス" onclick="selectProfileChoice(this,'occ')">自営業・フリーランス</button>
+        <button class="profile-choice-btn" data-group="occ" data-val="主婦・主夫" onclick="selectProfileChoice(this,'occ')">主婦・主夫</button>
+        <button class="profile-choice-btn" data-group="occ" data-val="パート・アルバイト" onclick="selectProfileChoice(this,'occ')">パート・アルバイト</button>
+        <button class="profile-choice-btn" data-group="occ" data-val="その他" onclick="selectProfileChoice(this,'occ')">その他</button>
+      </div>
+    </div>
+
+    <div id="profile-setup-error" style="display:none;margin-bottom:10px;font-size:13px;color:var(--dn);text-align:center"></div>
+    <button onclick="saveProfileSetup()" style="width:100%;padding:14px;background:var(--p);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer">はじめる ›</button>
+  </div>
+</div>
+
+
+<!-- 年齢・職業編集モーダル -->
+<div class="dlg-ov hidden" id="profile-edit-ov" onclick="if(event.target===this)closeProfileEditModal()">
+  <div class="dlg" style="max-width:360px;width:92%;padding:22px">
+    <div style="font-size:16px;font-weight:800;color:var(--tx);margin-bottom:18px">年齢・職業を編集</div>
+
+    <!-- 年齢層 -->
+    <div style="margin-bottom:16px">
+      <div style="font-size:12px;font-weight:700;color:var(--ts);margin-bottom:8px;letter-spacing:.5px">年齢層</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
+        <button class="profile-choice-btn" data-group="edit-age" data-val="10代" onclick="selectProfileChoice(this,'edit-age')">10代</button>
+        <button class="profile-choice-btn" data-group="edit-age" data-val="20代" onclick="selectProfileChoice(this,'edit-age')">20代</button>
+        <button class="profile-choice-btn" data-group="edit-age" data-val="30代" onclick="selectProfileChoice(this,'edit-age')">30代</button>
+        <button class="profile-choice-btn" data-group="edit-age" data-val="40代" onclick="selectProfileChoice(this,'edit-age')">40代</button>
+        <button class="profile-choice-btn" data-group="edit-age" data-val="50代" onclick="selectProfileChoice(this,'edit-age')">50代</button>
+        <button class="profile-choice-btn" data-group="edit-age" data-val="60代" onclick="selectProfileChoice(this,'edit-age')">60代</button>
+        <button class="profile-choice-btn" data-group="edit-age" data-val="70代以上" onclick="selectProfileChoice(this,'edit-age')" style="grid-column:span 2">70代以上</button>
+      </div>
+    </div>
+
+    <!-- 職業 -->
+    <div style="margin-bottom:22px">
+      <div style="font-size:12px;font-weight:700;color:var(--ts);margin-bottom:8px;letter-spacing:.5px">職業</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px">
+        <button class="profile-choice-btn" data-group="edit-occ" data-val="学生" onclick="selectProfileChoice(this,'edit-occ')">学生</button>
+        <button class="profile-choice-btn" data-group="edit-occ" data-val="会社員" onclick="selectProfileChoice(this,'edit-occ')">会社員</button>
+        <button class="profile-choice-btn" data-group="edit-occ" data-val="自営業・フリーランス" onclick="selectProfileChoice(this,'edit-occ')">自営業・フリーランス</button>
+        <button class="profile-choice-btn" data-group="edit-occ" data-val="主婦・主夫" onclick="selectProfileChoice(this,'edit-occ')">主婦・主夫</button>
+        <button class="profile-choice-btn" data-group="edit-occ" data-val="パート・アルバイト" onclick="selectProfileChoice(this,'edit-occ')">パート・アルバイト</button>
+        <button class="profile-choice-btn" data-group="edit-occ" data-val="その他" onclick="selectProfileChoice(this,'edit-occ')">その他</button>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px">
+      <button onclick="closeProfileEditModal()" style="flex:1;padding:12px;background:var(--bg);color:var(--ts);border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">キャンセル</button>
+      <button onclick="saveProfileEdit()" style="flex:1;padding:12px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">保存</button>
     </div>
   </div>
 </div>
@@ -2952,8 +3055,13 @@ let _nickname = '';
 async function loadNickname(){
   const saved = await Store.get('nickname');
   if(saved) _nickname = saved;
+  const ag = await Store.get('ageGroup');
+  const oc = await Store.get('occupation');
+  if(ag) _userAgeGroup = ag;
+  if(oc) _userOccupation = oc;
   _updateNicknameDisplay();
   _updatePayerField();
+  _updateProfileDisplay();
 }
 
 function _updatePayerField(){
@@ -3076,6 +3184,10 @@ async function saveNickname(){
    Firebase Auth & Firestore
 ============================================================ */
 let _authTab = 'login';
+let _userAgeGroup = '';
+let _userOccupation = '';
+let _profileSelectedAge = '';
+let _profileSelectedOcc = '';
 
 // 認証状態変化のコールバック
 window._onAuthChanged = async (user) => {
@@ -3164,7 +3276,9 @@ function switchAuthTab(tab){
   document.getElementById('auth-tab-login').style.borderBottomColor = isLogin ? 'var(--p)' : 'transparent';
   document.getElementById('auth-tab-signup').style.color = !isLogin ? 'var(--p)' : 'var(--ts)';
   document.getElementById('auth-tab-signup').style.borderBottomColor = !isLogin ? 'var(--p)' : 'transparent';
-  document.getElementById('auth-signup-name').style.display = isLogin ? 'none' : 'block';
+  // パスワードヒント表示切り替え
+  const hints = document.getElementById('auth-pw-hints');
+  if(hints) hints.style.display = isLogin ? 'none' : 'block';
   document.getElementById('auth-submit-btn').textContent = isLogin ? 'ログイン' : '新規登録';
   document.getElementById('auth-error').style.display = 'none';
 }
@@ -3182,10 +3296,15 @@ async function loginWithGoogle(){
     } else {
       // Android/PC → Popup方式
       const result = await window._fbFns.signInWithPopup(window._fbAuth, window._fbGoogleProvider);
-      await _ensureUserDoc(result.user);
+      const isNew = await _ensureUserDoc(result.user);
       closeAuthModal();
-      showToast(`${result.user.displayName || 'ようこそ'}さん、ログインしました`);
-      gaEvent('login', { method: 'google' });
+      if(isNew){
+        gaEvent('signup', { method: 'google' });
+        setTimeout(() => openProfileSetup(), 300);
+      } else {
+        showToast(`${result.user.displayName || 'ようこそ'}さん、ログインしました`);
+        gaEvent('login', { method: 'google' });
+      }
     }
   }catch(e){
     _showAuthError(e.code);
@@ -3198,6 +3317,12 @@ async function submitAuth(){
   const password = document.getElementById('auth-password').value;
   if(!email || !password){ _showAuthError('empty'); return; }
 
+  // 新規登録時はパスワード強度チェック
+  if(_authTab === 'signup'){
+    const pwErr = _validatePassword(password);
+    if(pwErr){ _showAuthError(pwErr); return; }
+  }
+
   try{
     if(_authTab === 'login'){
       await window._fbFns.signInWithEmailAndPassword(window._fbAuth, email, password);
@@ -3205,14 +3330,12 @@ async function submitAuth(){
       showToast('ログインしました');
       gaEvent('login', { method: 'email' });
     } else {
-      const nickname = document.getElementById('auth-nickname').value.trim();
       const result = await window._fbFns.createUserWithEmailAndPassword(window._fbAuth, email, password);
-      // ニックネームを引き継ぎ or 新規入力
-      if(nickname) _nickname = nickname;
       await _ensureUserDoc(result.user);
       closeAuthModal();
-      showToast('アカウントを作成しました');
       gaEvent('signup', { method: 'email' });
+      // 新規登録後: プロフィール設定モーダルを表示
+      setTimeout(() => openProfileSetup(), 300);
     }
   }catch(e){
     _showAuthError(e.code);
@@ -3239,11 +3362,14 @@ async function logoutFirebase(){
 function _showAuthError(code){
   const msgs = {
     'empty': 'メールとパスワードを入力してください',
+    'pw_length': 'パスワードは8文字以上にしてください',
+    'pw_upper': 'パスワードに大文字を含めてください',
+    'pw_num': 'パスワードに数字を含めてください',
     'auth/user-not-found': 'メールアドレスが見つかりません',
     'auth/wrong-password': 'パスワードが違います',
     'auth/email-already-in-use': 'すでに登録済みのメールアドレスです',
     'auth/invalid-email': 'メールアドレスの形式が正しくありません',
-    'auth/weak-password': 'パスワードは6文字以上にしてください',
+    'auth/weak-password': 'パスワードは8文字以上にしてください',
     'auth/popup-closed-by-user': '',
     'auth/invalid-credential': 'メールアドレスまたはパスワードが違います',
   };
@@ -3252,6 +3378,152 @@ function _showAuthError(code){
   const el = document.getElementById('auth-error');
   el.textContent = msg;
   el.style.display = 'block';
+}
+
+// パスワード強度バリデーション
+function _validatePassword(pw){
+  if(pw.length < 8) return 'pw_length';
+  if(!/[A-Z]/.test(pw)) return 'pw_upper';
+  if(!/[0-9]/.test(pw)) return 'pw_num';
+  return null;
+}
+
+// パスワード入力時リアルタイム表示
+function updatePasswordStrength(pw){
+  if(_authTab !== 'signup') return;
+  const hints = document.getElementById('auth-pw-hints');
+  if(!hints) return;
+  hints.style.display = pw.length > 0 ? 'block' : 'none';
+
+  const setHint = (ico, ok) => {
+    const el = document.getElementById(ico);
+    if(!el) return;
+    el.textContent = ok ? '✓' : '○';
+    el.style.color = ok ? 'var(--p)' : 'var(--ts)';
+    el.parentElement.style.color = ok ? 'var(--p)' : 'var(--ts)';
+  };
+  setHint('pw-len-ico',   pw.length >= 8);
+  setHint('pw-upper-ico', /[A-Z]/.test(pw));
+  setHint('pw-num-ico',   /[0-9]/.test(pw));
+}
+
+/* ============================================================
+   プロフィール設定（新規登録後・設定画面）
+============================================================ */
+
+// 選択ボタンのトグル
+function selectProfileChoice(btn, group){
+  document.querySelectorAll(`.profile-choice-btn[data-group="${group}"]`).forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+// 新規登録後プロフィールモーダルを開く
+function openProfileSetup(){
+  // 既存のニックネームをあらかじめ入力欄に反映
+  const nicknameInput = document.getElementById('profile-nickname');
+  if(nicknameInput && _nickname) nicknameInput.value = _nickname;
+  // エラーリセット
+  const err = document.getElementById('profile-setup-error');
+  if(err) err.style.display = 'none';
+  document.getElementById('profile-setup-ov').classList.remove('hidden');
+}
+
+// プロフィール設定を保存（新規登録後）
+async function saveProfileSetup(){
+  const nickname = document.getElementById('profile-nickname').value.trim();
+  const ageBtn = document.querySelector('.profile-choice-btn[data-group="age"].selected');
+  const occBtn = document.querySelector('.profile-choice-btn[data-group="occ"].selected');
+  const err = document.getElementById('profile-setup-error');
+
+  if(!nickname){ err.textContent = 'ニックネームを入力してください'; err.style.display = 'block'; return; }
+  if(!ageBtn){ err.textContent = '年齢層を選択してください'; err.style.display = 'block'; return; }
+  if(!occBtn){ err.textContent = '職業を選択してください'; err.style.display = 'block'; return; }
+
+  _nickname = nickname;
+  _userAgeGroup = ageBtn.dataset.val;
+  _userOccupation = occBtn.dataset.val;
+
+  await Store.set('nickname', _nickname);
+  await Store.set('ageGroup', _userAgeGroup);
+  await Store.set('occupation', _userOccupation);
+
+  // Firestoreにも保存
+  if(window._fbUser && window._fbDb && window._fbFns){
+    const { doc, setDoc } = window._fbFns;
+    const ref = doc(window._fbDb, 'users', window._fbUser.uid);
+    await setDoc(ref, {
+      nickname: _nickname,
+      ageGroup: _userAgeGroup,
+      occupation: _userOccupation
+    }, { merge: true });
+  }
+
+  _updateNicknameDisplay();
+  _updateProfileDisplay();
+  document.getElementById('profile-setup-ov').classList.add('hidden');
+  showToast(`ようこそ、${_nickname}さん！`);
+  gaEvent('profile_setup', { ageGroup: _userAgeGroup, occupation: _userOccupation });
+}
+
+// 設定画面: 年齢・職業編集モーダルを開く
+function openProfileEditModal(){
+  // 現在値を選択状態に反映
+  ['edit-age', 'edit-occ'].forEach(group => {
+    document.querySelectorAll(`.profile-choice-btn[data-group="${group}"]`).forEach(b => b.classList.remove('selected'));
+  });
+  if(_userAgeGroup){
+    const ageBtn = document.querySelector(`.profile-choice-btn[data-group="edit-age"][data-val="${_userAgeGroup}"]`);
+    if(ageBtn) ageBtn.classList.add('selected');
+  }
+  if(_userOccupation){
+    const occBtn = document.querySelector(`.profile-choice-btn[data-group="edit-occ"][data-val="${_userOccupation}"]`);
+    if(occBtn) occBtn.classList.add('selected');
+  }
+  document.getElementById('profile-edit-ov').classList.remove('hidden');
+}
+
+function closeProfileEditModal(){
+  document.getElementById('profile-edit-ov').classList.add('hidden');
+}
+
+async function saveProfileEdit(){
+  const ageBtn = document.querySelector('.profile-choice-btn[data-group="edit-age"].selected');
+  const occBtn = document.querySelector('.profile-choice-btn[data-group="edit-occ"].selected');
+
+  if(ageBtn) _userAgeGroup = ageBtn.dataset.val;
+  if(occBtn) _userOccupation = occBtn.dataset.val;
+
+  await Store.set('ageGroup', _userAgeGroup);
+  await Store.set('occupation', _userOccupation);
+
+  // Firestoreにも保存
+  if(window._fbUser && window._fbDb && window._fbFns){
+    const { doc, setDoc } = window._fbFns;
+    const ref = doc(window._fbDb, 'users', window._fbUser.uid);
+    await setDoc(ref, {
+      ageGroup: _userAgeGroup,
+      occupation: _userOccupation
+    }, { merge: true });
+  }
+
+  _updateProfileDisplay();
+  closeProfileEditModal();
+  showToast('プロフィールを更新しました');
+  gaEvent('profile_edit', { ageGroup: _userAgeGroup, occupation: _userOccupation });
+}
+
+// 設定画面のプロフィール表示を更新
+function _updateProfileDisplay(){
+  const el = document.getElementById('s-profile-display');
+  if(!el) return;
+  if(_userAgeGroup || _userOccupation){
+    const parts = [_userAgeGroup, _userOccupation].filter(Boolean);
+    el.textContent = parts.join(' · ');
+    el.style.color = 'var(--tx)';
+  } else {
+    el.textContent = '未設定';
+    el.style.color = 'var(--ts)';
+  }
 }
 
 // ユーザードキュメントの初期化（初回ログイン時）
@@ -3266,16 +3538,23 @@ async function _ensureUserDoc(user){
       nickname: _nickname || user.displayName || '',
       plan: 'free',
       createdAt: new Date().toISOString(),
-      email: user.email || ''
+      email: user.email || '',
+      ageGroup: '',
+      occupation: ''
     });
     // サブスクデータも移行
     await _migrateSubsToFirestore(user.uid);
     showToast('データをクラウドに同期しました');
+    return true; // 初回フラグ
   } else {
-    // 既存ユーザー：Firestoreのニックネームを引き継ぎ
+    // 既存ユーザー：Firestoreのデータを引き継ぎ
     const data = snap.data();
-    if(data.nickname) _nickname = data.nickname;
+    if(data.nickname){ _nickname = data.nickname; }
+    if(data.ageGroup){ _userAgeGroup = data.ageGroup; }
+    if(data.occupation){ _userOccupation = data.occupation; }
     _updateNicknameDisplay();
+    _updateProfileDisplay();
+    return false;
   }
 }
 
@@ -3302,6 +3581,9 @@ async function _loadFromFirestore(uid){
     if(userSnap.exists()){
       const data = userSnap.data();
       if(data.nickname){ _nickname = data.nickname; _updateNicknameDisplay(); _updatePayerField(); }
+      if(data.ageGroup){ _userAgeGroup = data.ageGroup; }
+      if(data.occupation){ _userOccupation = data.occupation; }
+      _updateProfileDisplay();
     }
     // サブスクデータ
     const subsSnap = await getDocs(collection(window._fbDb, 'users', uid, 'subs'));
