@@ -672,12 +672,16 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     GoogleAuthProvider,
-    signOut
+    signOut,
+    deleteUser,
+    reauthenticateWithCredential,
+    GoogleAuthProvider as _GAP,
+    EmailAuthProvider
   } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
   import {
     getFirestore,
     doc, getDoc, setDoc, collection,
-    writeBatch, getDocs, query, where, onSnapshot
+    writeBatch, getDocs, query, where, onSnapshot, deleteDoc
   } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 
   const firebaseConfig = {
@@ -707,8 +711,11 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     signOut,
+    deleteUser,
+    reauthenticateWithCredential,
+    EmailAuthProvider,
     doc, getDoc, setDoc, collection,
-    writeBatch, getDocs, query, where, onSnapshot
+    writeBatch, getDocs, query, where, onSnapshot, deleteDoc
   };
 
   // 認証状態の監視（onAuthStateChangedを先に登録）
@@ -1111,6 +1118,22 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <div class="s-ico" style="background:#FEE2E2"><svg width="18" height="18" viewBox="0 0 24 24" fill="#C06060"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></div>
         <div class="s-body"><div class="s-title" style="color:var(--dn)">全データを削除</div><div class="s-sub">この操作は元に戻せません</div></div>
         <span class="s-arr">›</span>
+      </div>
+    </div>
+    <!-- アカウント削除（ログイン中のみ表示） -->
+    <div id="s-delete-account-section" style="display:none">
+      <div class="s-sec">アカウント</div>
+      <div class="s-grp">
+        <div class="s-row" onclick="startDeleteAccount()">
+          <div class="s-ico" style="background:#FEE2E2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#C06060"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+          </div>
+          <div class="s-body">
+            <div class="s-title" style="color:var(--dn)">アカウントを削除する</div>
+            <div class="s-sub">退会処理・30日後にデータ完全削除</div>
+          </div>
+          <span class="s-arr">›</span>
+        </div>
       </div>
     </div>
     <div style="padding:4px 18px 22px;text-align:center;font-size:12px;color:var(--ts)">Subly v1.0</div>
@@ -1550,6 +1573,87 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <button onclick="closeProfileEditModal()" style="flex:1;padding:12px;background:var(--bg);color:var(--ts);border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">キャンセル</button>
       <button onclick="saveProfileEdit()" style="flex:1;padding:12px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">保存</button>
     </div>
+  </div>
+</div>
+
+<!-- アカウント削除モーダル（3ステップ） -->
+<div class="dlg-ov hidden" id="delete-account-ov" onclick="if(event.target===this)closeDeleteAccount()">
+  <div class="dlg" style="max-width:360px;width:92%;padding:0;overflow:hidden">
+
+    <!-- Step 1: 注意事項 -->
+    <div id="delete-step-1" style="padding:26px 22px 22px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        <div style="width:36px;height:36px;border-radius:50%;background:#FEE2E2;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#C06060"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+        </div>
+        <div style="font-size:17px;font-weight:800;color:var(--tx)">アカウントの削除について</div>
+      </div>
+      <div style="background:#FFF5F5;border:1px solid #FCA5A5;border-radius:10px;padding:14px 16px;margin-bottom:18px">
+        <div style="font-size:13px;color:#991B1B;line-height:1.9">
+          <div style="display:flex;gap:8px;margin-bottom:6px"><span>📅</span><span>退会後<strong>30日間</strong>はデータを保持します</span></div>
+          <div style="display:flex;gap:8px;margin-bottom:6px"><span>📥</span><span>30日以内にCSVでデータを書き出せます</span></div>
+          <div style="display:flex;gap:8px;margin-bottom:6px"><span>🗑️</span><span>30日経過後はすべてのデータが<strong>完全削除</strong>されます</span></div>
+          <div style="display:flex;gap:8px"><span>🔓</span><span>同じメールアドレスで再登録できます（データは空になります）</span></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button onclick="closeDeleteAccount()" style="flex:1;padding:12px;background:var(--bg);color:var(--ts);border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">キャンセル</button>
+        <button onclick="deleteAccountStep(2)" style="flex:1;padding:12px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">次へ →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: CSV出力を促す -->
+    <div id="delete-step-2" style="display:none;padding:26px 22px 22px">
+      <div style="font-size:17px;font-weight:800;color:var(--tx);margin-bottom:8px">データを書き出しますか？</div>
+      <div style="font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:20px">
+        退会前にサブスクデータをCSVファイルとして保存できます。<br>あとでスプレッドシートで確認できます。
+      </div>
+      <button onclick="exportCSV();gaEvent('delete_account_csv',{})" style="width:100%;padding:13px;background:var(--bg);border:1.5px solid var(--p);border-radius:10px;font-size:14px;font-weight:700;color:var(--p);font-family:inherit;cursor:pointer;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+        CSVを書き出す
+      </button>
+      <button onclick="deleteAccountStep(3)" style="width:100%;padding:12px;background:none;border:none;font-size:13px;color:var(--ts);font-family:inherit;cursor:pointer;text-decoration:underline">
+        書き出さずに続ける
+      </button>
+      <div style="margin-top:14px">
+        <button onclick="deleteAccountStep(1)" style="padding:0;background:none;border:none;font-size:12px;color:var(--ts);font-family:inherit;cursor:pointer">← 戻る</button>
+      </div>
+    </div>
+
+    <!-- Step 3: 最終確認 -->
+    <div id="delete-step-3" style="display:none;padding:26px 22px 22px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+        <div style="width:36px;height:36px;border-radius:50%;background:#FEE2E2;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#C06060"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+        </div>
+        <div style="font-size:17px;font-weight:800;color:var(--tx)">最終確認</div>
+      </div>
+      <div style="font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:16px">
+        本当にアカウントを削除しますか？<br>
+        確認のため、登録中のメールアドレスを入力してください。
+      </div>
+      <div style="background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:var(--ts)">
+        登録メール：<strong id="delete-confirm-email" style="color:var(--tx)">—</strong>
+      </div>
+      <input type="email" id="delete-email-confirm" placeholder="メールアドレスを入力"
+        style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none;margin-bottom:8px"
+        oninput="checkDeleteConfirm()">
+      <!-- Googleログインユーザー向けパスワード不要メッセージ -->
+      <div id="delete-google-note" style="display:none;font-size:12px;color:var(--ts);margin-bottom:8px;padding:8px 12px;background:var(--bg);border-radius:8px;border:1px solid var(--bd)">
+        <span>🔑</span> Googleアカウントで再認証します
+      </div>
+      <input type="password" id="delete-password-confirm" placeholder="パスワードを入力（メール登録の方）"
+        style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none;margin-bottom:8px">
+      <div id="delete-confirm-error" style="display:none;font-size:12px;color:var(--dn);margin-bottom:8px;text-align:center"></div>
+      <button id="delete-final-btn" onclick="executeDeleteAccount()" disabled
+        style="width:100%;padding:13px;background:#FCA5A5;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:800;font-family:inherit;cursor:not-allowed;opacity:.6;transition:all .2s">
+        アカウントを削除する
+      </button>
+      <div style="margin-top:12px">
+        <button onclick="deleteAccountStep(2)" style="padding:0;background:none;border:none;font-size:12px;color:var(--ts);font-family:inherit;cursor:pointer">← 戻る</button>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -3262,6 +3366,9 @@ function _updateAuthUI(user){
     if(planEl)   planEl.textContent   = 'Subly Free';
     if(hdPlanEl) hdPlanEl.textContent = 'Subly Free';
   }
+  // アカウント削除ボタン: ログイン中のみ表示
+  const delSection = document.getElementById('s-delete-account-section');
+  if(delSection) delSection.style.display = user ? 'block' : 'none';
 }
 
 function closeAuthModal(){
@@ -4174,6 +4281,158 @@ async function closeOb(){
   document.getElementById('ob-ov').classList.add('hidden');
   await Store.set('onboarded','1');
   gaEvent('onboarding_complete', { method: 'completed' });
+}
+
+/* ============================================================
+   アカウント削除（退会）
+============================================================ */
+
+function startDeleteAccount(){
+  if(!window._fbUser){
+    showToast('ログインが必要です');
+    return;
+  }
+  // ステップ1から開始
+  deleteAccountStep(1);
+  document.getElementById('delete-account-ov').classList.remove('hidden');
+}
+
+function closeDeleteAccount(){
+  document.getElementById('delete-account-ov').classList.add('hidden');
+  // 入力をリセット
+  const emailInput = document.getElementById('delete-email-confirm');
+  const pwInput = document.getElementById('delete-password-confirm');
+  const err = document.getElementById('delete-confirm-error');
+  if(emailInput) emailInput.value = '';
+  if(pwInput) pwInput.value = '';
+  if(err) err.style.display = 'none';
+  const btn = document.getElementById('delete-final-btn');
+  if(btn){ btn.disabled = true; btn.style.opacity = '.6'; btn.style.cursor = 'not-allowed'; btn.style.background = '#FCA5A5'; }
+}
+
+function deleteAccountStep(step){
+  [1, 2, 3].forEach(n => {
+    const el = document.getElementById(`delete-step-${n}`);
+    if(el) el.style.display = n === step ? 'block' : 'none';
+  });
+
+  // Step 3: メールアドレスを表示 & Google判定
+  if(step === 3 && window._fbUser){
+    const user = window._fbUser;
+    const emailEl = document.getElementById('delete-confirm-email');
+    if(emailEl) emailEl.textContent = user.email || '—';
+
+    // Google認証かどうか判定
+    const isGoogle = user.providerData?.some(p => p.providerId === 'google.com');
+    const googleNote = document.getElementById('delete-google-note');
+    const pwField = document.getElementById('delete-password-confirm');
+    if(googleNote) googleNote.style.display = isGoogle ? 'block' : 'none';
+    if(pwField) pwField.style.display = isGoogle ? 'none' : 'block';
+
+    // 入力リセット
+    const emailInput = document.getElementById('delete-email-confirm');
+    if(emailInput) emailInput.value = '';
+    checkDeleteConfirm();
+  }
+}
+
+function checkDeleteConfirm(){
+  const user = window._fbUser;
+  if(!user) return;
+  const inputEmail = document.getElementById('delete-email-confirm')?.value.trim();
+  const matches = inputEmail === user.email;
+  const btn = document.getElementById('delete-final-btn');
+  if(!btn) return;
+  if(matches){
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+    btn.style.background = '#DC2626';
+  } else {
+    btn.disabled = true;
+    btn.style.opacity = '.6';
+    btn.style.cursor = 'not-allowed';
+    btn.style.background = '#FCA5A5';
+  }
+}
+
+async function executeDeleteAccount(){
+  const user = window._fbUser;
+  if(!user || !window._fbDb || !window._fbFns) return;
+
+  const err = document.getElementById('delete-confirm-error');
+  const isGoogle = user.providerData?.some(p => p.providerId === 'google.com');
+
+  try{
+    // 再認証処理
+    if(isGoogle){
+      // Google: ポップアップで再認証
+      const { reauthenticateWithCredential, signInWithPopup } = window._fbFns;
+      try{
+        await window._fbFns.signInWithPopup(window._fbAuth, window._fbGoogleProvider);
+      }catch(e){
+        if(err){ err.textContent = 'Google認証に失敗しました。もう一度お試しください。'; err.style.display = 'block'; }
+        return;
+      }
+    } else {
+      // メール: パスワードで再認証
+      const pw = document.getElementById('delete-password-confirm')?.value;
+      if(!pw){
+        if(err){ err.textContent = 'パスワードを入力してください'; err.style.display = 'block'; }
+        return;
+      }
+      const { reauthenticateWithCredential, EmailAuthProvider } = window._fbFns;
+      const credential = EmailAuthProvider.credential(user.email, pw);
+      try{
+        await reauthenticateWithCredential(user, credential);
+      }catch(e){
+        if(err){ err.textContent = 'パスワードが違います'; err.style.display = 'block'; }
+        return;
+      }
+    }
+
+    // Firestoreに退会フラグを記録（30日保持のため削除せず）
+    const { doc, setDoc, deleteDoc, collection, getDocs } = window._fbFns;
+    const userRef = doc(window._fbDb, 'users', user.uid);
+    await setDoc(userRef, {
+      deletedAt: new Date().toISOString(),
+      deleteScheduled: true,
+      email: user.email || ''
+    }, { merge: true });
+
+    // Firebase Authアカウントを削除
+    const { deleteUser } = window._fbFns;
+    await deleteUser(user);
+
+    // LocalStorageをリセット
+    subs = [];
+    _nickname = '';
+    _userAgeGroup = '';
+    _userOccupation = '';
+    await Store.set('subs', '[]');
+    await Store.set('nickname', '');
+    await Store.set('ageGroup', '');
+    await Store.set('occupation', '');
+
+    closeDeleteAccount();
+    closeSettings();
+    gaEvent('account_deleted', {});
+    showDialog({
+      icon: '',
+      title: 'アカウントを削除しました',
+      msg: `<div style="text-align:left;line-height:1.9;color:var(--ts)">
+        <div style="display:flex;gap:8px;margin-bottom:6px"><span>✅</span><span>退会処理が完了しました</span></div>
+        <div style="display:flex;gap:8px;margin-bottom:6px"><span>📅</span><span>データは<strong style="color:var(--tx)">30日間</strong>保持されます</span></div>
+        <div style="display:flex;gap:8px"><span>🔓</span><span>同じメールアドレスで再登録できます</span></div>
+      </div>`,
+      closable: false,
+      buttons:[{ label: 'OK', cls: 'ok', onClick: ()=>{ goto('dashboard'); renderDashboard(); } }]
+    });
+
+  }catch(e){
+    console.error('Delete account error:', e);
+    if(err){ err.textContent = 'エラーが発生しました。もう一度お試しください。'; err.style.display = 'block'; }
+  }
 }
 
 async function resetAll(){
