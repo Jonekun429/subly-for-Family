@@ -713,24 +713,29 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     writeBatch, getDocs, query, where, onSnapshot
   };
 
-  // Redirectログイン後の処理
-  getRedirectResult(auth).then(async (result) => {
+  // 認証状態の監視（onAuthStateChangedを先に登録）
+  onAuthStateChanged(auth, async (user) => {
+    window._fbUser = user || null;
+    if(typeof window._onAuthChanged === 'function'){
+      await window._onAuthChanged(user);
+    }
+  });
+
+  // Redirectログイン後の処理（onAuthStateChangedの後に実行）
+  try{
+    const result = await getRedirectResult(auth);
     if(result?.user){
+      // Redirect後は_ensureUserDocを呼んでUIを強制更新
       await _ensureUserDoc(result.user);
+      if(typeof window._onAuthChanged === 'function'){
+        await window._onAuthChanged(result.user);
+      }
       showToast(`${result.user.displayName || 'ようこそ'}さん、ログインしました`);
       gaEvent('login', { method: 'google_redirect' });
     }
-  }).catch(e => {
+  }catch(e){
     if(e.code !== 'auth/no-auth-event') console.error('Redirect error:', e);
-  });
-
-  // 認証状態の監視
-  onAuthStateChanged(auth, (user) => {
-    window._fbUser = user || null;
-    if(typeof window._onAuthChanged === 'function'){
-      window._onAuthChanged(user);
-    }
-  });
+  }
 </script>
 </head>
 <body>
@@ -3092,9 +3097,7 @@ window._onAuthChanged = async (user) => {
     await _loadGroupForDashboard();
     // pending招待コードのチェック
     await _checkPendingInvite();
-    // 参加通知のチェック（初回）
-    await _checkGroupNotifications();
-    // リアルタイム通知リスナー開始
+    // リアルタイム通知リスナー開始（onSnapshotで既読チェックも兼ねる）
     _startNotificationListener(user.uid);
   } else {
     // 未ログイン → LocalStorageのまま
@@ -3156,13 +3159,6 @@ function _updateAuthUI(user){
     if(planEl)   planEl.textContent   = 'Subly Free';
     if(hdPlanEl) hdPlanEl.textContent = 'Subly Free';
   }
-}
-
-function openAuthModal(){
-  closeHdrop();
-  switchAuthTab('login');
-  document.getElementById('auth-ov').classList.remove('hidden');
-  gaEvent('auth_modal_open', {});
 }
 
 function closeAuthModal(){
@@ -3329,17 +3325,14 @@ async function _loadFromFirestore(uid){
   }
 }
 
-// save()をオーバーライド：ログイン中はFirestoreにも保存
-const _originalSave = save;
 async function save(){
-  await _originalSave();
+  await Store.set('subsData', JSON.stringify(subs));
+  updateFilterCounts();
+  // ログイン中はFirestoreにも保存
   const user = window._fbUser;
   if(user && window._fbDb && window._fbFns){
-    try{
-      await _migrateSubsToFirestore(user.uid);
-    }catch(e){
-      console.error('Firestore保存エラー:', e);
-    }
+    try{ await _migrateSubsToFirestore(user.uid); }
+    catch(e){ console.error('Firestore保存エラー:', e); }
   }
 }
 
@@ -3466,12 +3459,17 @@ async function createGroup(){
   const name = document.getElementById('group-name-input').value.trim();
   if(!name){ showToast('グループ名を入力してください'); return; }
 
+  // キャッシュ確認（二重作成防止）
+  if(_groupId){ showToast('すでにグループに参加しています'); return; }
+
   const { doc, setDoc, getDoc } = window._fbFns;
 
-  // すでにグループに参加していないか確認
+  // Firestore確認（念のため）
   const userSnap = await getDoc(doc(window._fbDb, 'users', user.uid));
   if(userSnap.exists() && userSnap.data().groupId){
-    showToast('すでにグループに参加しています'); return;
+    showToast('すでにグループに参加しています');
+    await _loadGroupState();
+    return;
   }
 
   const groupId = 'grp_' + Date.now();
@@ -3923,8 +3921,6 @@ async function resetAll(){
 /* ============================================================
    保存
 ============================================================ */
-async function save(){ await Store.set('subsData', JSON.stringify(subs)); updateFilterCounts(); }
-
 /* ============================================================
    ダッシュボード
 ============================================================ */
