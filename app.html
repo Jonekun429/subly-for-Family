@@ -496,6 +496,10 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .profile-choice-btn{padding:9px 6px;background:var(--card);border:1.5px solid var(--bd);border-radius:9px;font-size:13px;font-weight:600;color:var(--ts);font-family:inherit;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;text-align:center}
 .profile-choice-btn:hover{border-color:var(--p);color:var(--p)}
 .profile-choice-btn.selected{background:var(--pl);border-color:var(--p);color:var(--p);font-weight:700}
+/* ログイン状態によるセクション表示制御 */
+#s-group-section,#s-delete-account-section,#s-profile-row{display:none}
+body.logged-in #s-group-section,body.logged-in #s-delete-account-section{display:block}
+body.logged-in #s-profile-row{display:flex}
 .btn-submit:active{transform:scale(.98)}
 .btn-cancel{width:100%;padding:12px;background:#fff;color:var(--ts);font-size:14px;font-weight:700;font-family:inherit;border:1.5px solid var(--bd);border-radius:12px;cursor:pointer;margin-top:7px;-webkit-tap-highlight-color:transparent}
 
@@ -3105,8 +3109,20 @@ function closeSavingHints(){ document.getElementById('saving-hints-ov').classLis
 
 function openSettings(){
   document.getElementById('settings-ov').classList.remove('hidden');
-  // 設定画面を開くたびに最新のログイン状態を反映
-  _updateAuthUI(window._fbUser || null);
+  // グループラベルを最新状態に更新
+  if(window._fbUser){
+    const lbl = document.getElementById('s-group-btn-lbl');
+    const sub = document.getElementById('s-group-btn-sub');
+    if(lbl && sub){
+      if(_groupId){
+        lbl.textContent = 'グループを管理する';
+        sub.textContent = _groupData?.name || 'グループに参加中';
+      } else {
+        lbl.textContent = 'グループを作る';
+        sub.textContent = '家族・カップルで共有';
+      }
+    }
+  }
 }
 function closeSettings(){document.getElementById('settings-ov').classList.add('hidden')}
 let _hwPage = 0;
@@ -3319,6 +3335,21 @@ window._onAuthChanged = async (user) => {
     // ログイン済み → まずUIを即座に更新してからFirestoreを読み込む
     _updateAuthUI(user);
     try{
+      // 退会済みアカウントチェック
+      if(window._fbDb && window._fbFns){
+        const { doc, getDoc } = window._fbFns;
+        const snap = await getDoc(doc(window._fbDb, 'users', user.uid));
+        if(snap.exists() && snap.data().deleteScheduled){
+          await window._fbFns.signOut(window._fbAuth);
+          showDialog({
+            icon:'',
+            title:'このアカウントは削除済みです',
+            msg:'退会処理が完了したアカウントです。同じメールアドレスで新規登録できます。',
+            buttons:[{label:'OK', cls:'ok'}]
+          });
+          return;
+        }
+      }
       await _loadFromFirestore(user.uid);
       _updateAuthUI(user); // Firestore読み込み後に再度更新（ニックネーム等を反映）
     }catch(e){
@@ -3390,15 +3421,12 @@ function _updateAuthUI(user){
     if(planEl)   planEl.textContent   = 'Subly Free';
     if(hdPlanEl) hdPlanEl.textContent = 'Subly Free';
   }
-  // アカウント削除ボタン: ログイン中のみ表示
-  const delSection = document.getElementById('s-delete-account-section');
-  if(delSection) delSection.style.display = user ? 'block' : 'none';
-  // グループセクション: ログイン中のみ表示
-  const groupSection = document.getElementById('s-group-section');
-  if(groupSection) groupSection.style.display = user ? 'block' : 'none';
-  // 年齢・職業行: ログイン中のみ表示
-  const profileRow = document.getElementById('s-profile-row');
-  if(profileRow) profileRow.style.display = user ? 'flex' : 'none';
+  // body に logged-in クラスを付与/除去（CSS で一括制御）
+  if(user){
+    document.body.classList.add('logged-in');
+  } else {
+    document.body.classList.remove('logged-in');
+  }
   // グループボタンのラベルをグループ参加状況に応じて更新
   if(user){
     const lbl = document.getElementById('s-group-btn-lbl');
@@ -3711,8 +3739,19 @@ async function _ensureUserDoc(user){
     showToast('データをクラウドに同期しました');
     return true; // 初回フラグ
   } else {
-    // 既存ユーザー：Firestoreのデータを引き継ぎ
     const data = snap.data();
+    // 退会済みアカウントの場合は強制ログアウト
+    if(data.deleteScheduled){
+      await window._fbFns.signOut(window._fbAuth);
+      showDialog({
+        icon:'',
+        title:'このアカウントは削除済みです',
+        msg:'退会処理が完了したアカウントです。同じメールアドレスで新規登録できます。',
+        buttons:[{label:'OK', cls:'ok'}]
+      });
+      return false;
+    }
+    // 既存ユーザー：Firestoreのデータを引き継ぎ
     if(data.nickname){ _nickname = data.nickname; }
     if(data.ageGroup){ _userAgeGroup = data.ageGroup; }
     if(data.occupation){ _userOccupation = data.occupation; }
