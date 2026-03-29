@@ -668,14 +668,10 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   import {
     getAuth,
     onAuthStateChanged,
-    signInWithPopup,
-    signInWithRedirect,
-    getRedirectResult,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     sendPasswordResetEmail,
     deleteUser,
-    GoogleAuthProvider,
     signOut
   } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
   import {
@@ -697,17 +693,10 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const db = getFirestore(app);
-  const googleProvider = new GoogleAuthProvider();
-  googleProvider.setCustomParameters({ prompt: 'select_account' });
-
   // グローバルに公開
   window._fbAuth = auth;
   window._fbDb = db;
-  window._fbGoogleProvider = googleProvider;
   window._fbFns = {
-    signInWithPopup,
-    signInWithRedirect,
-    getRedirectResult,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     sendPasswordResetEmail,
@@ -717,71 +706,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     writeBatch, getDocs, query, where, onSnapshot
   };
 
-  // Redirect処理が完了するまでonAuthStateChangedを保留するフラグ
-  let _redirectChecked = false;
-
-  // ① まずRedirect結果を処理（onAuthStateChangedより先に完了させる）
-  try{
-    const result = await getRedirectResult(auth);
-    if(result?.user){
-      const savedTab = sessionStorage.getItem('authTab') || 'login';
-      sessionStorage.removeItem('authTab');
-      const snap = await getDoc(doc(db, 'users', result.user.uid));
-
-      if(savedTab === 'login'){
-        if(!snap.exists()){
-          // Sublyアカウントなし → サインアウトしてエラー表示
-          await signOut(auth);
-          _redirectChecked = true;
-          window._fbUser = null;
-          setTimeout(()=>{
-            openAuthModal();
-            switchAuthTab('login');
-            _showAuthError('no-account');
-          }, 300);
-        } else {
-          // 既存ユーザー → ログイン処理
-          window._fbUser = result.user;
-          _redirectChecked = true;
-          await _ensureUserDoc(result.user);
-          if(typeof window._onAuthChanged === 'function') await window._onAuthChanged(result.user);
-          showToast(`おかえりなさい、${result.user.displayName || ''}さん`);
-          gaEvent('login', { method: 'google_redirect' });
-        }
-      } else {
-        // 新規登録タブ
-        if(snap.exists()){
-          // すでに登録済み → サインアウトしてエラー表示
-          await signOut(auth);
-          _redirectChecked = true;
-          window._fbUser = null;
-          setTimeout(()=>{
-            openAuthModal();
-            switchAuthTab('signup');
-            _showAuthError('already-exists');
-          }, 300);
-        } else {
-          // 新規作成
-          window._fbUser = result.user;
-          _redirectChecked = true;
-          await _ensureUserDoc(result.user);
-          if(typeof window._onAuthChanged === 'function') await window._onAuthChanged(result.user);
-          setTimeout(()=> _showSignupComplete(result.user), 300);
-          gaEvent('signup', { method: 'google_redirect' });
-        }
-      }
-    } else {
-      _redirectChecked = true;
-    }
-  }catch(e){
-    _redirectChecked = true;
-    if(e.code !== 'auth/no-auth-event') console.error('Redirect error:', e);
-  }
-
-  // ② Redirect処理完了後にonAuthStateChangedを登録
+  // 認証状態の監視
   onAuthStateChanged(auth, async (user) => {
-    // Redirect処理が未完了の場合は無視（競合防止）
-    if(!_redirectChecked) return;
     window._fbUser = user || null;
     if(typeof window._onAuthChanged === 'function'){
       await window._onAuthChanged(user);
@@ -791,23 +717,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 </head>
 <body>
 
-<!-- LINE内ブラウザ案内バナー -->
-<div id="line-browser-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:#06C755;color:#fff;padding:12px 16px;font-size:13px;font-weight:700;text-align:center;line-height:1.6">
-  LINEブラウザでは一部機能が使えません<br>
-  <span style="font-size:12px;font-weight:400">右下の「…」→「ブラウザで開く」をタップしてください</span>
-  <button onclick="document.getElementById('line-browser-banner').style.display='none'" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.3);border:none;color:#fff;border-radius:50%;width:24px;height:24px;font-size:14px;cursor:pointer;line-height:1">✕</button>
-</div>
-<script>
-  // LINE内ブラウザ判定
-  if(/Line\//.test(navigator.userAgent)){
-    document.getElementById('line-browser-banner').style.display = 'block';
-    // バナー分だけコンテンツを下にずらす
-    document.addEventListener('DOMContentLoaded', ()=>{
-      const app = document.getElementById('app');
-      if(app) app.style.paddingTop = '60px';
-    });
-  }
-</script>
+
 
 <!-- ヘッダー（スマホ） -->
 <header class="hdr">
@@ -3129,7 +3039,7 @@ async function saveNickname(){
 /* ============================================================
    Firebase Auth & Firestore
 ============================================================ */
-let _authTab = 'login';
+
 
 // 認証状態変化のコールバック
 window._onAuthChanged = async (user) => {
@@ -3222,7 +3132,6 @@ function closeAuthModal(){
 }
 
 function switchAuthTab(tab){
-  _authTab = tab;
   const isLogin = tab === 'login';
   document.getElementById('auth-tab-login').style.color = isLogin ? 'var(--p)' : 'var(--ts)';
   document.getElementById('auth-tab-login').style.borderBottomColor = isLogin ? 'var(--p)' : 'transparent';
@@ -3270,7 +3179,8 @@ async function submitAuth(){
   if(!email || !password){ _showAuthError('empty'); return; }
 
   try{
-    if(_authTab === 'login'){
+    const isLoginTab = document.getElementById('auth-tab-login').style.color !== 'var(--ts)';
+    if(isLoginTab){
       // ログインタブ：Firestoreにアカウントが存在するか確認
       const { doc, getDoc, signInWithEmailAndPassword } = window._fbFns;
       const tempResult = await signInWithEmailAndPassword(window._fbAuth, email, password);
@@ -3291,11 +3201,6 @@ async function submitAuth(){
       const result = await window._fbFns.createUserWithEmailAndPassword(window._fbAuth, email, password);
       if(nickname) _nickname = nickname;
       await _ensureUserDoc(result.user);
-      // ニックネームをFirestoreにも保存
-      if(nickname){
-        const { doc, setDoc } = window._fbFns;
-        await setDoc(doc(window._fbDb,'users',result.user.uid),{nickname},{merge:true});
-      }
       _updateNicknameDisplay();
       _updatePayerField();
       _updateAuthUI(result.user);
@@ -3929,26 +3834,7 @@ async function _notifyGroupMembers(groupId, joinerNickname){
 }
 
 // 未読通知をチェックしてポップアップ
-async function _checkGroupNotifications(){
-  const user = window._fbUser;
-  if(!user || !window._fbDb || !window._fbFns) return;
-  const { doc, getDoc, setDoc } = window._fbFns;
-  const notifRef = doc(window._fbDb,'users',user.uid,'notifications','group_join');
-  const snap = await getDoc(notifRef);
-  if(snap.exists() && !snap.data().read){
-    const msg = snap.data().message;
-    // 既読にする
-    await setDoc(notifRef, { read: true }, { merge: true });
-    setTimeout(()=>{
-      showDialog({
-        icon:'🎉',
-        title:'グループに新メンバーが参加しました',
-        msg,
-        buttons:[{label:'確認', cls:'ok'}]
-      });
-    }, 1000);
-  }
-}
+
 
 // リアルタイム通知リスナー
 let _notifUnsubscribe = null;
@@ -4786,30 +4672,7 @@ function renderListSummary(){
 
 function renderListSummaryMembers(){
   const mbEl = document.getElementById('ls-members');
-  if(!mbEl) return;
-  // Freeプラン（familyMembersなし）：内訳なし、ボタンだけ表示
-  if(typeof familyMembers === 'undefined' || familyMembers.length === 0){
-    mbEl.innerHTML = '';
-    return;
-  }
-  // Familyプラン：メンバー別内訳
-  const cat = document.getElementById('fl-cat').value;
-  let list = cat === '休止中' ? subs.filter(s => s.paused)
-           : cat === 'all'    ? subs.filter(s => !s.paused)
-           : cat === 'その他' ? subs.filter(s => !catMap[s.cat] && !s.paused)
-           :                    subs.filter(s => s.cat === cat && !s.paused);
-
-  const memberTotals = familyMembers.map(m => ({
-    name: m.name,
-    total: list.filter(s => s.memberId === m.id && s.freq !== '単発（買い切り）')
-               .reduce((a, s) => a + moFromSub(s), 0)
-  }));
-
-  mbEl.innerHTML = memberTotals.map(m => `
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid var(--bd)">
-      <span style="color:var(--ts);font-weight:600">${m.name}</span>
-      <span style="font-weight:700;color:var(--p)">¥${m.total.toLocaleString()}/月</span>
-    </div>`).join('') + '<div style="height:12px"></div>';
+  if(mbEl) mbEl.innerHTML = '';
 }
 
 /* ============================================================
@@ -5229,13 +5092,7 @@ function openManualForm(item, cat){
   window.scrollTo(0,0);
 }
 
-function toggleSatHelp(){
-  const el = document.getElementById('sat-help');
-  const btn = document.getElementById('sat-help-btn');
-  const isOpen = el.style.display !== 'none';
-  el.style.display = isOpen ? 'none' : 'block';
-  btn.style.background = isOpen ? 'var(--ts)' : 'var(--p)';
-}
+
 
 function backToStep1(){
   document.getElementById('add-step2').style.display='none';
