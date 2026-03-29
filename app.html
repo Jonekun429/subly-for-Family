@@ -1378,15 +1378,21 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
     <!-- メール/パスワード -->
     <div id="auth-signup-name" style="display:none;margin-bottom:10px">
-      <input type="text" id="auth-nickname" placeholder="ニックネーム（表示名）" maxlength="20" autocomplete="off"
+      <input type="text" id="auth-nickname" placeholder="ニックネーム（表示名）" maxlength="20"
+        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
         style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
     </div>
     <div style="margin-bottom:10px">
-      <input type="email" id="auth-email" placeholder="メールアドレス" autocomplete="off"
+      <input type="text" id="auth-email" placeholder="メールアドレス"
+        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+        inputmode="email"
+        onfocus="this.setAttribute('type','email')"
         style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
     </div>
     <div style="margin-bottom:6px">
-      <input type="password" id="auth-password" placeholder="パスワード（6文字以上）" autocomplete="new-password"
+      <input type="text" id="auth-password" placeholder="パスワード（6文字以上）"
+        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+        onfocus="this.setAttribute('type','password')"
         style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
     </div>
     <!-- パスワードを忘れた（ログインタブのみ表示） -->
