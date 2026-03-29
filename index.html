@@ -1502,7 +1502,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
           <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:8px">招待コード</div>
           <div style="display:flex;align-items:center;gap:8px">
             <div style="flex:1;font-size:22px;font-weight:800;color:var(--p);letter-spacing:4px;text-align:center;background:var(--card);border-radius:8px;padding:8px" id="group-invite-code">——</div>
-            <button onclick="copyInviteCode()" style="flex-shrink:0;background:var(--p);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer" id="copy-code-btn">コピー</button>
+            <button onclick="copyInviteCode()" style="flex-shrink:0;background:var(--p);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer" id="copy-code-btn">招待文をコピー</button>
           </div>
           <div style="font-size:11px;color:var(--ts);margin-top:6px">このコードをメンバーに共有してください</div>
         </div>
@@ -3542,42 +3542,65 @@ async function joinGroupByCode(codeArg){
 async function leaveGroup(){
   const user = window._fbUser;
   if(!user || !_groupId || !window._fbDb || !window._fbFns) return;
-  showDialog({
-    icon:'', title:'グループから退出',
-    msg:'退出するとグループのデータは見えなくなります。自分のサブスクデータは残ります。',
-    buttons:[
-      {label:'キャンセル', cls:'cancel'},
-      {label:'退出する', cls:'danger', onClick: async ()=>{
-        const { doc, setDoc, getDoc } = window._fbFns;
-        const groupSnap = await getDoc(doc(window._fbDb, 'groups', _groupId));
-        if(groupSnap.exists()){
-          const memberUids = (groupSnap.data().memberUids||[]).filter(uid=>uid!==user.uid);
-          await setDoc(doc(window._fbDb,'groups',_groupId), { memberUids }, { merge:true });
-        }
-        await setDoc(doc(window._fbDb,'users',user.uid), { groupId:'' }, { merge:true });
-        _groupId = null; _groupData = null; _groupMembersData = [];
-        _currentGroupFilter = 'all';
-        closeGroupModal();
-        _updateGroupTabs();
-        renderDashboard();
-        gaEvent('group_leave', {});
-        showToast('グループから退出しました');
-      }}
-    ]
-  });
+
+  // 先にグループモーダルを閉じてから確認ダイアログを表示
+  closeGroupModal();
+
+  setTimeout(()=>{
+    showDialog({
+      icon:'', title:'グループから退出',
+      msg:'退出するとグループのデータは見えなくなります。自分のサブスクデータは残ります。',
+      buttons:[
+        {label:'キャンセル', cls:'cancel'},
+        {label:'退出する', cls:'danger', onClick: async ()=>{
+          const { doc, setDoc, getDoc } = window._fbFns;
+          const groupSnap = await getDoc(doc(window._fbDb, 'groups', _groupId));
+          if(groupSnap.exists()){
+            const memberUids = (groupSnap.data().memberUids||[]).filter(uid=>uid!==user.uid);
+            await setDoc(doc(window._fbDb,'groups',_groupId), { memberUids }, { merge:true });
+          }
+          await setDoc(doc(window._fbDb,'users',user.uid), { groupId:'' }, { merge:true });
+          _groupId = null; _groupData = null; _groupMembersData = [];
+          _currentGroupFilter = 'all';
+          _updateGroupTabs();
+          renderDashboard();
+          gaEvent('group_leave', {});
+          showToast('グループから退出しました');
+        }}
+      ]
+    });
+  }, 200);
 }
 
 // 招待コードをコピー
 async function copyInviteCode(){
   const code = document.getElementById('group-invite-code').textContent;
-  const url = `${location.origin}${location.pathname}?invite=${code}`;
+  const groupName = _groupData?.name || 'グループ';
+  const appUrl = 'https://jonekun429.github.io/subly_lp/';
+
+  const shareText = `【Subly グループ招待】
+
+「${groupName}」に招待します！
+
+▼ 参加手順
+① 下のURLからSublyを開く
+${appUrl}
+
+② アカウント未登録の方は新規登録
+
+③ 左上メニュー →「グループ」→「招待コードを入力」に以下を入力
+招待コード：${code}
+
+④ 参加完了！`;
+
   try{
-    await navigator.clipboard.writeText(url);
+    await navigator.clipboard.writeText(shareText);
     const btn = document.getElementById('copy-code-btn');
     btn.textContent = 'コピー済 ✓';
     btn.style.background = '#27AE60';
-    setTimeout(()=>{ btn.textContent='コピー'; btn.style.background=''; },2000);
+    setTimeout(()=>{ btn.textContent='コピー'; btn.style.background=''; }, 2000);
     gaEvent('group_invite_copy', {});
+    showToast('招待文をコピーしました');
   }catch(e){ showToast('コピーできませんでした'); }
 }
 
