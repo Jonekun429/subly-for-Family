@@ -574,15 +574,15 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .ob-overlay.hidden{display:none}
 /* スライドラッパー */
 .ob-slides{display:flex;width:400%;flex:1;overflow:hidden;transition:transform .38s cubic-bezier(.4,0,.2,1)}
-.ob-slide{width:25%;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:24px 32px;text-align:left;box-sizing:border-box;overflow-y:auto}
+.ob-slide{width:25%;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 32px;text-align:center;box-sizing:border-box;overflow-y:auto}
 /* イラストエリア */
 .ob-illust{width:160px;height:160px;border-radius:36px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 28px;flex-shrink:0}
 .ob-illust svg{filter:drop-shadow(0 4px 16px rgba(0,0,0,.15))}
 /* テキスト */
-.ob-badge{font-size:11px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.7);text-transform:uppercase;margin-bottom:10px;text-align:left;width:100%}
-.ob-ttl{font-size:clamp(15px,4.2vw,22px);font-weight:800;color:#fff;line-height:1.3;margin-bottom:12px;text-align:left;width:100%;word-break:keep-all;overflow-wrap:break-word}
+.ob-badge{font-size:11px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.7);text-transform:uppercase;margin-bottom:10px;text-align:center;width:100%}
+.ob-ttl{font-size:clamp(15px,4.2vw,22px);font-weight:800;color:#fff;line-height:1.3;margin-bottom:12px;text-align:center;width:100%;word-break:keep-all;overflow-wrap:break-word}
 .ob-ttl em{font-style:normal;color:rgba(255,255,255,.75)}
-.ob-desc{font-size:13px;color:rgba(255,255,255,.85);line-height:1.65;max-width:100%;text-align:left}
+.ob-desc{font-size:13px;color:rgba(255,255,255,.85);line-height:1.65;max-width:100%;text-align:center}
 /* ドットインジケーター */
 .ob-dots{display:flex;gap:8px;justify-content:center;padding:28px 0 12px;flex-shrink:0}
 .ob-dot{width:8px;height:8px;border-radius:4px;background:rgba(255,255,255,.35);transition:all .3s;cursor:pointer}
@@ -1806,11 +1806,9 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <div class="f-row">
         <label>満足度（任意）</label>
         <div id="sat-help" style="background:var(--pl);border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:12px;line-height:1.8;color:var(--pd)">
-          ★ 使っていることを忘れていた<br>
-          ★★ 使っているがあってもなくても同じ<br>
-          ★★★ あったら便利だが、なくても困らない<br>
-          ★★★★ 重宝しているが、なくても生活はできる<br>
-          ★★★★★ 生活必須レベル
+          ★ ほとんど使っていない（解約を検討）<br>
+          ★★ たまに使う（継続するか要検討）<br>
+          ★★★ よく使う・生活に必要
         </div>
         <div class="star-row" id="stars"></div>
       </div>
@@ -3100,8 +3098,10 @@ window._onAuthChanged = async (user) => {
     gaEvent('login', { method: user.providerData[0]?.providerId || 'unknown' });
     await _loadFromFirestore(user.uid);
     _updateAuthUI(user);
-    // グループ状態を確認してタブ更新
+    // グループ状態を確認してタブ更新（完了後にダッシュボードを再描画）
     await _loadGroupForDashboard();
+    // グループデータ込みでダッシュボードを再描画
+    renderDashboard();
     // pending招待コードのチェック
     await _checkPendingInvite();
     // リアルタイム通知リスナー開始（onSnapshotで既読チェックも兼ねる）
@@ -3960,35 +3960,50 @@ ${appUrl}
 // グループメンバーのサブスクを取得
 let _groupSubsCache = {}; // { uid: [subs] }
 async function _fetchGroupSubs(){
-  if(!_groupId || !_groupMembersData.length || !window._fbDb || !window._fbFns) return;
+  if(!_groupId || !window._fbDb || !window._fbFns) return;
+  if(!_groupMembersData.length){ _groupSubsCache={}; return; }
   const { collection, getDocs } = window._fbFns;
   _groupSubsCache = {};
   for(const member of _groupMembersData){
-    const snap = await getDocs(collection(window._fbDb,'users',member.uid,'subs'));
-    _groupSubsCache[member.uid] = snap.docs.map(d=>({ ...d.data(), _ownerUid: member.uid, _ownerNickname: member.nickname||'名前未設定' }));
+    try{
+      const snap = await getDocs(collection(window._fbDb,'users',member.uid,'subs'));
+      _groupSubsCache[member.uid] = snap.docs.map(d=>({ ...d.data(), _ownerUid: member.uid, _ownerNickname: member.nickname||'名前未設定' }));
+      console.log(`グループメンバー ${member.nickname||member.uid}: ${snap.docs.length}件取得`);
+    }catch(e){
+      console.error(`メンバー ${member.uid} のサブスク取得失敗:`, e.message);
+      _groupSubsCache[member.uid] = [];
+    }
   }
+  console.log('グループsubsキャッシュ:', Object.fromEntries(Object.entries(_groupSubsCache).map(([k,v])=>[k,v.length+'件'])));
 }
 
 // グループダッシュボードのタブUI更新
 function _updateGroupTabs(){
   const tabArea = document.getElementById('group-dashboard-tabs');
   if(!tabArea) return;
-  if(!_groupId || !_groupMembersData.length){
+  if(!_groupId){
     tabArea.style.display = 'none';
+    const nameEl = document.getElementById('group-tab-name');
+    if(nameEl) nameEl.style.display = 'none';
     return;
   }
   tabArea.style.display = 'flex';
   tabArea.innerHTML = '';
+  // グループ名エリアも表示
+  const nameAreaEl = document.getElementById('group-tab-name');
+  if(nameAreaEl){
+    nameAreaEl.style.display = 'block';
+    nameAreaEl.textContent = _groupData?.name || 'グループ';
+  }
 
   const myUid = window._fbUser?.uid;
 
   // タブ定義：全体 / 自分 / 他メンバー
   const tabs = [
-    { uid:'all', name:'全体', icon:'👥' },
+    { uid:'all', name:'全体' },
     ..._groupMembersData.map(m=>({
       uid: m.uid,
-      name: m.uid === myUid ? '自分' : (m.nickname || '名前未設定'),
-      icon: m.uid === myUid ? '👤' : '👤'
+      name: m.uid === myUid ? '自分' : (m.nickname || '名前未設定')
     }))
   ];
 
@@ -3996,7 +4011,6 @@ function _updateGroupTabs(){
     const isOn = _currentGroupFilter === t.uid;
     const btn = document.createElement('button');
     btn.style.cssText = `
-      display:flex;align-items:center;gap:5px;
       padding:7px 16px;border-radius:20px;font-size:13px;font-weight:700;
       font-family:inherit;cursor:pointer;white-space:nowrap;
       border:1.5px solid ${isOn?'var(--p)':'var(--bd)'};
@@ -4005,7 +4019,7 @@ function _updateGroupTabs(){
       -webkit-tap-highlight-color:transparent;
       transition:all .15s;flex-shrink:0;
     `;
-    btn.innerHTML = `<span>${t.icon}</span><span>${t.name}</span>`;
+    btn.textContent = t.name;
     btn.onclick = async ()=>{
       _currentGroupFilter = t.uid;
       await _fetchGroupSubs();
@@ -4017,17 +4031,7 @@ function _updateGroupTabs(){
     tabArea.appendChild(btn);
   });
 
-  // グループ名を表示
-  const groupNameEl = document.getElementById('group-tab-name');
-  if(!groupNameEl){
-    const nameDiv = document.createElement('div');
-    nameDiv.id = 'group-tab-name';
-    nameDiv.style.cssText = 'font-size:11px;font-weight:700;color:var(--ts);letter-spacing:.5px;padding:0 4px;white-space:nowrap;align-self:center';
-    nameDiv.textContent = _groupData?.name || 'グループ';
-    tabArea.parentNode.insertBefore(nameDiv, tabArea);
-  } else {
-    groupNameEl.textContent = _groupData?.name || 'グループ';
-  }
+
 }
 
 // ダッシュボード用グループデータ読み込み
@@ -4041,9 +4045,10 @@ async function _loadGroupForDashboard(){
 
   // ユーザードキュメントからgroupIdを取得
   const userSnap = await getDoc(doc(window._fbDb,'users',user.uid));
-  if(!userSnap.exists()) return;
+  if(!userSnap.exists()){ console.log('ユーザードキュメントが存在しません'); return; }
   const userData = userSnap.data();
   _groupId = userData.groupId || null;
+  console.log('groupId:', _groupId);
   if(!_groupId){ _updateGroupTabs(); return; }
 
   // グループをリアルタイムで監視（メンバー追加を即反映）
@@ -4453,11 +4458,10 @@ function drawChart(obj){
     row.onclick=()=>{
       _setCenterSelected(cat, val, total, ci.color);
       _setLegendActive(i);
-      // ハイライト
-      if(myChart){
-        myChart.setDatasetVisibility(0,true);
-        myChart.update();
-      }
+      if(myChart){ myChart.setDatasetVisibility(0,true); myChart.update(); }
+      // 凡例タップで明細をその場に展開
+      _showLegendDetail(cat, legendBox, row, i);
+      gaEvent('legend_tap', { category: cat });
     };
     legendBox.appendChild(row);
   });
@@ -4498,6 +4502,71 @@ function _clearLegendActive(){
   document.querySelectorAll('#chart-legend .leg-row').forEach(r=>{
     r.classList.remove('active'); r.style.opacity='1';
   });
+  // 既存の展開パネルを閉じる
+  document.querySelectorAll('.leg-detail-panel').forEach(p=>p.remove());
+}
+
+let _lastLegendCat = null;
+
+function _showLegendDetail(cat, legendBox, row, idx){
+  // 同じカテゴリをもう一度タップしたら閉じる
+  if(_lastLegendCat === cat){
+    _clearLegendActive();
+    _lastLegendCat = null;
+    _setCenterDefault(Object.values(_groupSubsCache).flat().length || subs.length > 0 ? null : 0);
+    // 合計を再表示
+    let total = 0;
+    subs.filter(s=>!s.paused&&!s.canceled&&s.freq!=='単発（買い切り）').forEach(s=>total+=moFromSub(s));
+    _setCenterDefault(total);
+    return;
+  }
+  _lastLegendCat = cat;
+
+  // 既存パネル削除
+  document.querySelectorAll('.leg-detail-panel').forEach(p=>p.remove());
+
+  // 対象サブスクを絞り込み
+  const ci = catMap[cat] || catMap['その他'];
+  const targetSubs = subs.filter(s=>
+    (catMap[s.cat]?s.cat:'その他') === cat && !s.paused && !s.canceled
+  );
+  if(!targetSubs.length) return;
+
+  const panel = document.createElement('div');
+  panel.className = 'leg-detail-panel';
+  panel.style.cssText = 'margin:6px 0 10px;background:var(--bg);border-radius:10px;overflow:hidden;border:1px solid var(--bd);animation:fadeUp .15s ease';
+
+  targetSubs.sort((a,b)=>moFromSub(b)-moFromSub(a)).forEach(s=>{
+    const mo = moFromSub(s);
+    const np = nextPayDate(s);
+    const item = document.createElement('div');
+    item.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .1s;-webkit-tap-highlight-color:transparent';
+    item.innerHTML = `
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:700;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.name}</div>
+        <div style="font-size:11px;color:var(--ts);margin-top:2px">${s.freq}${np?' · 次回'+dateMD(np):''}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <div style="font-size:13px;font-weight:700;color:${ci.color}">¥${mo.toLocaleString()}<span style="font-size:10px;color:var(--ts)">/月</span></div>
+        ${s.sat?`<div style="font-size:11px;color:#F4C430">${'★'.repeat(s.sat)}<span style="color:var(--bd)">${'☆'.repeat(3-s.sat)}</span></div>`:''}
+      </div>`;
+    item.onclick = ()=>{ editSub(s.id); };
+    item.addEventListener('mouseenter',()=>item.style.background='var(--pl)');
+    item.addEventListener('mouseleave',()=>item.style.background='');
+    panel.appendChild(item);
+  });
+  // 最後の border-bottom を削除
+  panel.lastElementChild && (panel.lastElementChild.style.borderBottom='none');
+
+  // 「明細一覧で見る」ボタン
+  const moreBtn = document.createElement('div');
+  moreBtn.style.cssText = 'padding:9px 12px;text-align:center;cursor:pointer;font-size:12px;font-weight:700;color:var(--p);background:var(--pl)';
+  moreBtn.textContent = '明細一覧で見る →';
+  moreBtn.onclick = ()=>goto('list', cat);
+  panel.appendChild(moreBtn);
+
+  // rowの直後に挿入
+  row.after(panel);
 }
 
 function drawFallback(ctx,canvas,data,colors,labels,total){
@@ -4525,15 +4594,15 @@ function renderSatChart(){
     groups[s.sat].total+=mo;
     groups[s.sat].cnt++;
   });
-  const keys=Object.keys(groups).map(Number).sort((a,b)=>b-a);
+  const keys=Object.keys(groups).map(Number).filter(k=>k>=1&&k<=3).sort((a,b)=>b-a);
   if(!keys.length){area.innerHTML='<div class="sat-none">満足度を登録すると表示されます</div>';return}
   const maxV=Math.max(...keys.map(k=>groups[k].total));
   let html='<div class="sat-row">';
   keys.forEach(k=>{
     const g=groups[k];
     const pct=maxV>0?Math.round(g.total/maxV*100):0;
-    const bar_colors=['','#C07070','#B8956A','#A8A860','#7AAB82','#4E8B82'];
-    const stars='★'.repeat(k)+'☆'.repeat(5-k);
+    const bar_colors=['','#C07070','#B8956A','#4E8B82'];
+    const stars='★'.repeat(k)+'☆'.repeat(3-k);
     html+=`<div class="sat-band" onclick="filterBySat(${k})" style="cursor:pointer">
       <span class="sat-stars">${stars}</span>
       <div class="sat-bw"><div class="sat-b" style="width:${pct}%;background:${bar_colors[k]||'#8A9890'}"></div></div>
@@ -4544,7 +4613,7 @@ function renderSatChart(){
     </div>`;
   });
   html+='</div>';
-  const lowSat=subs.filter(s=>!s.paused&&!s.canceled&&s.sat>=1&&s.sat<=3&&s.freq!=='単発（買い切り）');
+  const lowSat=subs.filter(s=>!s.paused&&!s.canceled&&s.sat===1&&s.freq!=='単発（買い切り）');
   if(lowSat.length){
     const low=lowSat.reduce((s,x)=>s+(x.freq==='月額'?x.price:Math.round(x.price/12)),0);
     html+=`<div class="sat-insight">満足度が低いサブスクに <b>¥${low.toLocaleString()}/月</b>。解約すると年間 <b>¥${(low*12).toLocaleString()}</b> 節約できます。</div>`;
@@ -4556,7 +4625,7 @@ function filterBySat(star){
   currentSatFilter = star;
   goto('list');
   const bar=document.getElementById('sat-filter-bar');
-  if(bar){ bar.style.display='flex'; document.getElementById('sat-filter-label').textContent=`${'★'.repeat(star)} のサブスクを表示中`; }
+  if(bar){ bar.style.display='flex'; document.getElementById('sat-filter-label').textContent=`${'★'.repeat(Math.min(star,3))} のサブスクを表示中`; }
   renderList();
   showToast(`★${star} のサブスクを表示中`);
   gaEvent('sat_filter_apply', { star });
@@ -4652,7 +4721,7 @@ function checkAlerts(){
   }
 
   // ② 解約検討（満足度★1〜3）
-  const warns=subs.filter(s=>!s.paused&&!s.canceled&&s.sat>=1&&s.sat<=3&&s.freq!=='単発（買い切り）').sort((a,b)=>b.price-a.price);
+  const warns=subs.filter(s=>!s.paused&&!s.canceled&&s.sat===1&&s.freq!=='単発（買い切り）').sort((a,b)=>b.price-a.price);
   if(!warns.length) return;
 
   const section=document.createElement('div');
@@ -4674,7 +4743,7 @@ function checkAlerts(){
       <div style="width:32px;height:32px;border-radius:8px;background:${ci.color}22;display:flex;align-items:center;justify-content:center;flex-shrink:0">${ci.icon(ci.color,18)}</div>
       <div style="flex:1;min-width:0">
         <div style="font-size:14px;font-weight:700;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.name}</div>
-        <div style="font-size:13px;color:var(--ts)"><span style="color:var(--p)">${'★'.repeat(s.sat)}</span><span style="color:var(--bd)">${'☆'.repeat(5-s.sat)}</span> · ${s.cat}${(()=>{const np=nextPayDate(s);return np?' · 次回'+dateMD(np):''})()}</div>
+        <div style="font-size:13px;color:var(--ts)"><span style="color:var(--p)">${'★'.repeat(Math.min(s.sat,3))}</span><span style="color:var(--bd)">${'☆'.repeat(Math.max(0,3-s.sat))}</span> · ${s.cat}${(()=>{const np=nextPayDate(s);return np?' · 次回'+dateMD(np):''})()}</div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
         <div style="font-size:14px;font-weight:700;color:var(--dn);white-space:nowrap">¥${mo.toLocaleString()}<span style="font-size:12px;font-weight:400;color:var(--ts)">/月</span></div>
@@ -4714,7 +4783,7 @@ function renderCalendar(){
   document.getElementById('cal-label').textContent=`${y}年${m+1}月`;
 
   let target=subs.filter(s=>s.freq!=='単発（買い切り）'&&!s.canceled);
-  if(calFilter==='warn') target=target.filter(s=>s.sat>=1&&s.sat<=3);
+  if(calFilter==='warn') target=target.filter(s=>s.sat===1);
 
   // 休止中は「今月以降」非表示（今月中に休止した場合も含め翌月から除外）
   const calViewStart = new Date(y, m, 1);
@@ -4875,7 +4944,7 @@ function showCalDetail(y,m,d,evs){
       <div class="cal-detail-icon" style="width:24px;display:flex;align-items:center;justify-content:center">${ci.icon(ci.color,16)}</div>
       <div class="cal-detail-body">
         <div class="cal-detail-name">${isWarn?`<svg width="13" height="13" viewBox="0 0 24 24" fill="var(--dn)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> `:''}${s.name}</div>
-        <div class="cal-detail-meta">${s.cat}${s.sat?' · <span style="color:var(--p)">'+'★'.repeat(s.sat)+'</span><span style="color:var(--bd)">'+'☆'.repeat(5-s.sat)+'</span>':''}</div>
+        <div class="cal-detail-meta">${s.cat}${s.sat?' · <span style="color:var(--p)">'+'★'.repeat(Math.min(s.sat,3))+'</span><span style="color:var(--bd)">'+'☆'.repeat(Math.max(0,3-s.sat))+'</span>':''}</div>
       </div>
       <div class="cal-detail-price">${dispAmt}</div>`;
     row.onclick=()=>{ closeCalSheet(); editSub(s.id); };
@@ -5014,7 +5083,7 @@ function openSatPopupReport(){
 
     // 星ボタンを生成
     const starsEl = row.querySelector(`#pstars-${s.id}`);
-    for(let i = 1; i <= 5; i++){
+    for(let i = 1; i <= 3; i++){
       const btn = document.createElement('button');
       btn.className = 'sat-popup-star' + (i <= tmpSat[s.id] ? ' on' : '');
       btn.textContent = '★';
@@ -5302,9 +5371,11 @@ function buildQuickAdd(){
   // 星ボタン
   const starsEl=document.getElementById('stars');
   starsEl.innerHTML='';
-  for(let i=1;i<=5;i++){
+  const SAT_LABELS = ['', '使っていない', 'たまに使う', '毎日使う'];
+  for(let i=1;i<=3;i++){
     const b=document.createElement('button');
     b.type='button';b.className='star-btn';b.textContent='★';b.dataset.v=i;
+    b.title=SAT_LABELS[i];
     b.onclick=()=>{
       document.querySelectorAll('.star-btn').forEach((s,j)=>s.classList.toggle('on',j<i));
     };
@@ -5520,7 +5591,8 @@ function editSub(id){
     document.getElementById('f-url').value=s.cancelUrl||'';
     toggleUrlBtn();
     if(s.sat){
-      document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('on',i<s.sat));
+      const satVal = Math.min(s.sat, 3); // 旧5段階データを3段階にクランプ
+      document.querySelectorAll('.star-btn').forEach((b,i)=>b.classList.toggle('on',i<satVal));
     }
     document.getElementById('btn-submit').textContent='更新する';
     document.getElementById('btn-cancel').style.display='block';
@@ -5798,7 +5870,13 @@ function _processImportFile(file){
         freq:        cols[4] || '月額',
         date:        cols[5] || '',
         memo:        cols[6] || '',
-        sat:         parseInt(cols[7]) || 0,
+        sat:         (()=>{
+          const raw = parseInt(cols[7]) || 0;
+          if(raw <= 0) return 0;
+          if(raw <= 2) return 1; // 旧1〜2 → 新1（ほとんど使っていない）
+          if(raw === 3) return 2; // 旧3 → 新2（たまに使う）
+          return 3;              // 旧4〜5 → 新3（よく使う）
+        })(),
         paused:      cols[8] === '1',
         payment:     cols[9] || '',
         cancelUrl:   cols[10] || '',
