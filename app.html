@@ -1519,7 +1519,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
             <div style="flex:1;font-size:22px;font-weight:800;color:var(--p);letter-spacing:4px;text-align:center;background:var(--card);border-radius:8px;padding:8px" id="group-invite-code">——</div>
             <button onclick="copyInviteCode()" style="flex-shrink:0;background:var(--p);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer" id="copy-code-btn">共有・コピー</button>
           </div>
-          <div style="font-size:11px;color:var(--ts);margin-top:6px">このコードをメンバーに共有してください</div>
+          <div style="font-size:11px;color:var(--ts);margin-top:6px" id="invite-expire-hint">このコードをメンバーに共有してください</div>
         </div>
 
         <!-- 退出 -->
@@ -1612,26 +1612,27 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
     <div id="ot-note" style="display:none;font-size:12px;color:var(--ts);margin-bottom:10px;margin-top:-6px;text-align:right">※ 買い切りは年間合計にのみ加算</div>
     <div id="alerts"></div>
-    <!-- サブスク件数バナー -->
-    <div id="sub-count-banner" style="display:flex;align-items:center;justify-content:space-between;background:var(--p);border-radius:12px;padding:10px 16px;margin-bottom:10px;cursor:pointer" onclick="goto('list')">
-      <div style="display:flex;align-items:center;gap:8px">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,.8)"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
-        <span style="font-size:13px;font-weight:700;color:rgba(255,255,255,.9)">登録中のサブスク</span>
+    <!-- 案B サマリカード -->
+    <div class="card" style="padding:16px 18px;margin-bottom:12px">
+      <!-- 月額（大） + 年額（小） -->
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px">
+        <div>
+          <div style="font-size:12px;font-weight:700;color:var(--ts);letter-spacing:.5px;margin-bottom:4px">月額合計</div>
+          <div id="ttl-m" style="font-size:clamp(28px,8vw,36px);font-weight:800;color:var(--tx);line-height:1"><sup style="font-size:55%;color:var(--p);font-weight:700">¥</sup>0</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:12px;font-weight:700;color:var(--ts);letter-spacing:.5px;margin-bottom:4px">年額合計</div>
+          <div id="ttl-y" style="font-size:clamp(18px,5vw,22px);font-weight:700;color:var(--ts);line-height:1"><sup style="font-size:55%;font-weight:700">¥</sup>0</div>
+        </div>
       </div>
-      <div style="display:flex;align-items:baseline;gap:4px">
-        <span id="sub-total-count" style="font-size:26px;font-weight:800;color:#fff;line-height:1">0</span>
-        <span style="font-size:13px;font-weight:700;color:rgba(255,255,255,.75)">件</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="rgba(255,255,255,.6)" style="margin-left:4px"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
-      </div>
-    </div>
-    <div class="sum-row">
-      <div class="sum-tile" onclick="goto('list')">
-        <div class="sum-lbl">月間の支払い</div>
-        <div class="sum-amt" id="ttl-m"><sup>¥</sup>0</div>
-      </div>
-      <div class="sum-tile" onclick="goto('list')">
-        <div class="sum-lbl">年間の支払い</div>
-        <div class="sum-amt" id="ttl-y"><sup>¥</sup>0</div>
+      <!-- 件数バッジ + 明細へ -->
+      <div style="display:flex;align-items:center;gap:8px;padding-top:12px;border-top:1px solid var(--bd)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--ts)"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+        <span style="font-size:13px;color:var(--ts)">登録中</span>
+        <span id="sub-total-count" style="background:var(--bg);border:1.5px solid var(--bd);font-size:13px;font-weight:700;color:var(--tx);padding:2px 12px;border-radius:20px">0件</span>
+        <button onclick="goto('list')" style="margin-left:auto;background:none;border:none;font-size:13px;font-weight:700;color:var(--p);cursor:pointer;font-family:inherit;padding:0">明細を見る
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+        </button>
       </div>
     </div>
     <div class="card">
@@ -3732,7 +3733,7 @@ async function _renderGroupJoined(){
   document.getElementById('group-member-count').textContent = `メンバー ${memberUids.length}人`;
 
   // メンバー情報取得
-  const { doc, getDoc } = window._fbFns;
+  const { doc, getDoc, setDoc } = window._fbFns;
   _groupMembersData = [];
   const memberList = document.getElementById('group-members-list');
   memberList.innerHTML = '';
@@ -3742,8 +3743,13 @@ async function _renderGroupJoined(){
     _groupMembersData.push({ uid, ...data });
     const isMe = uid === window._fbUser?.uid;
     const row = document.createElement('div');
-    row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd)';
+    row.dataset.uid = uid;
+    row.draggable = true;
+    row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd);cursor:grab;transition:opacity .15s;-webkit-user-select:none;user-select:none';
     row.innerHTML = `
+      <div style="color:var(--ts);flex-shrink:0;padding:0 2px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 18c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm-2-8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6 4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+      </div>
       <div style="width:32px;height:32px;border-radius:50%;background:var(--p);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;flex-shrink:0">
         ${(data.nickname||'?').charAt(0)}
       </div>
@@ -3754,8 +3760,68 @@ async function _renderGroupJoined(){
     memberList.appendChild(row);
   }
 
+  // ドラッグ＆ドロップで並べ替え
+  let _dragEl = null;
+  memberList.querySelectorAll('[draggable]').forEach(el=>{
+    el.addEventListener('dragstart', e=>{
+      _dragEl = el;
+      setTimeout(()=>el.style.opacity='0.4', 0);
+    });
+    el.addEventListener('dragend', async e=>{
+      el.style.opacity='1';
+      // 新しい順番をFirestoreに保存
+      const newOrder = [...memberList.querySelectorAll('[data-uid]')].map(r=>r.dataset.uid);
+      await setDoc(doc(window._fbDb,'groups',_groupId),{memberUids:newOrder},{merge:true});
+      gaEvent('group_member_reorder',{});
+    });
+    el.addEventListener('dragover', e=>{
+      e.preventDefault();
+      if(_dragEl && _dragEl !== el){
+        const rect = el.getBoundingClientRect();
+        const mid = rect.top + rect.height/2;
+        if(e.clientY < mid) memberList.insertBefore(_dragEl, el);
+        else memberList.insertBefore(_dragEl, el.nextSibling);
+      }
+    });
+  });
+
+  // 有効期限表示
+  const hintEl = document.getElementById('invite-expire-hint');
+  if(hintEl && _groupData.inviteExpiredAt){
+    const exp = new Date(_groupData.inviteExpiredAt);
+    const now = new Date();
+    const diff = Math.round((exp - now) / 60000); // 分
+    if(diff <= 0){
+      hintEl.innerHTML = '<span style="color:var(--dn);font-weight:700">コードの有効期限が切れています</span> <button onclick="renewInviteCode()" style="margin-left:6px;background:none;border:none;color:var(--p);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">再発行</button>';
+    } else if(diff < 60){
+      hintEl.innerHTML = `<span style="color:var(--wtx);font-weight:700">残り${diff}分</span>（有効期限あり）<button onclick="renewInviteCode()" style="margin-left:6px;background:none;border:none;color:var(--p);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">再発行</button>`;
+    } else {
+      const hours = Math.floor(diff/60);
+      hintEl.innerHTML = `残り約${hours}時間 · <button onclick="renewInviteCode()" style="background:none;border:none;color:var(--p);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">コードを再発行</button>`;
+    }
+  }
+
   // グループダッシュボードのタブを更新
   _updateGroupTabs();
+}
+
+// 招待コードを再発行（24時間リセット）
+async function renewInviteCode(){
+  if(!_groupId || !window._fbDb || !window._fbFns) return;
+  const { doc, setDoc } = window._fbFns;
+  const newCode = _genInviteCode();
+  const newExpiredAt = new Date(Date.now() + 24*60*60*1000).toISOString();
+  await setDoc(doc(window._fbDb,'groups',_groupId),{
+    inviteCode: newCode,
+    inviteExpiredAt: newExpiredAt
+  },{merge:true});
+  _groupData.inviteCode = newCode;
+  _groupData.inviteExpiredAt = newExpiredAt;
+  document.getElementById('group-invite-code').textContent = newCode;
+  const hintEl = document.getElementById('invite-expire-hint');
+  if(hintEl) hintEl.innerHTML = '残り約24時間 · <button onclick="renewInviteCode()" style="background:none;border:none;color:var(--p);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit">コードを再発行</button>';
+  showToast('招待コードを再発行しました（24時間有効）');
+  gaEvent('invite_code_renew',{});
 }
 
 // グループ作成
@@ -3780,11 +3846,13 @@ async function createGroup(){
 
   const groupId = 'grp_' + Date.now();
   const inviteCode = _genInviteCode();
+  const expiredAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(); // 24時間後
   const groupData = {
     name,
     inviteCode,
     memberUids: [user.uid],
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
+    inviteExpiredAt: expiredAt
   };
 
   await setDoc(doc(window._fbDb, 'groups', groupId), groupData);
@@ -3830,6 +3898,17 @@ async function joinGroupByCode(codeArg){
 
     if(memberUids.length >= 5){ showToast('グループの上限（5人）に達しています'); return; }
     if(memberUids.includes(user.uid)){ showToast('すでにこのグループのメンバーです'); await _loadGroupState(); return; }
+
+    // 有効期限チェック（inviteExpiredAt がある場合のみ）
+    const expiredAt = groupData.inviteExpiredAt;
+    if(expiredAt && new Date(expiredAt) < new Date()){
+      showDialog({
+        icon:'', title:'招待コードの有効期限が切れています',
+        msg:'このコードは有効期限（24時間）が過ぎています。<br>グループ作成者に新しいコードを発行してもらってください。',
+        buttons:[{label:'OK', cls:'ok'}]
+      });
+      return;
+    }
 
     // メンバーに追加
     const batch = writeBatch(window._fbDb);
@@ -3894,11 +3973,18 @@ async function leaveGroup(){
       buttons:[
         {label:'キャンセル', cls:'cancel'},
         {label:'退出する', cls:'danger', onClick: async ()=>{
-          const { doc, setDoc, getDoc } = window._fbFns;
+          const { doc, setDoc, getDoc, deleteDoc, collection, getDocs } = window._fbFns;
           const groupSnap = await getDoc(doc(window._fbDb, 'groups', _groupId));
           if(groupSnap.exists()){
             const memberUids = (groupSnap.data().memberUids||[]).filter(uid=>uid!==user.uid);
-            await setDoc(doc(window._fbDb,'groups',_groupId), { memberUids }, { merge:true });
+            if(memberUids.length === 0){
+              // 最後の1人 → グループ自体を削除
+              await deleteDoc(doc(window._fbDb,'groups',_groupId));
+              showToast('グループを解体しました');
+            } else {
+              await setDoc(doc(window._fbDb,'groups',_groupId), { memberUids }, { merge:true });
+              showToast('グループから退出しました');
+            }
           }
           await setDoc(doc(window._fbDb,'users',user.uid), { groupId:'' }, { merge:true });
           _groupId = null; _groupData = null; _groupMembersData = [];
@@ -3906,7 +3992,6 @@ async function leaveGroup(){
           _updateGroupTabs();
           renderDashboard();
           gaEvent('group_leave', {});
-          showToast('グループから退出しました');
         }}
       ]
     });
@@ -4024,7 +4109,19 @@ function _updateGroupTabs(){
       -webkit-tap-highlight-color:transparent;
       transition:all .15s;flex-shrink:0;
     `;
-    btn.textContent = t.name;
+    // 件数を集計
+    let tabCount = '';
+    if(t.uid === 'all'){
+      const allSubs = Object.values(_groupSubsCache).flat();
+      const myUid2 = window._fbUser?.uid;
+      const others2 = allSubs.filter(s=>s._ownerUid!==myUid2);
+      tabCount = subs.filter(s=>!s.canceled).length + others2.filter(s=>!s.canceled).length;
+    } else if(t.uid === myUid){
+      tabCount = subs.filter(s=>!s.canceled).length;
+    } else {
+      tabCount = (_groupSubsCache[t.uid]||[]).filter(s=>!s.canceled).length;
+    }
+    btn.textContent = tabCount > 0 ? `${t.name} ${tabCount}` : t.name;
     btn.onclick = async ()=>{
       _currentGroupFilter = t.uid;
       await _fetchGroupSubs();
@@ -4397,12 +4494,11 @@ function renderDashboard(){
       cmap[key]=(cmap[key]||0)+val;
     }
   });
-  document.getElementById('ttl-m').innerHTML=`<sup>¥</sup>${monthly.toLocaleString()}`;
-  document.getElementById('ttl-y').innerHTML=`<sup>¥</sup>${yearly.toLocaleString()}`;
-  const activeCnt = subs.filter(s=>s.freq!=='単発（買い切り）'&&!s.paused&&!s.canceled).length;
-  document.getElementById('sub-total-count').textContent = activeCnt;
-  const banner = document.getElementById('sub-count-banner');
-  banner.style.background = activeCnt > 0 ? 'var(--p)' : 'var(--ts)';
+  document.getElementById('ttl-m').innerHTML=`<sup style="font-size:55%;color:var(--p);font-weight:700">¥</sup>${monthly.toLocaleString()}`;
+  document.getElementById('ttl-y').innerHTML=`<sup style="font-size:55%;font-weight:700">¥</sup>${yearly.toLocaleString()}`;
+  // 件数：タブに連動
+  const activeCnt = targetSubs.filter(s=>s.freq!=='単発（買い切り）'&&!s.paused&&!s.canceled).length;
+  document.getElementById('sub-total-count').textContent = activeCnt + '件';
   drawChart(cmap);
   renderSatChart();
   checkAlerts();
