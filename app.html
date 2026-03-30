@@ -760,9 +760,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
       <div id="hd-auth-status" style="display:none;width:8px;height:8px;border-radius:50%;background:#4ADE80;flex-shrink:0"></div>
     </button>
-    <div id="hd-delete-account-row" style="display:none;padding:0 20px 8px">
-      <button onclick="closeHdrop();setTimeout(deleteAccount,200)" style="width:100%;padding:8px;background:rgba(255,100,100,.15);border:1px solid rgba(255,150,150,.4);border-radius:8px;font-size:12px;font-weight:700;color:#ffaaaa;font-family:inherit;cursor:pointer">アカウントを削除（退会）</button>
-    </div>
+
 
     <!-- プロフィール -->
     <div class="hd-sec">プロフィール</div>
@@ -1075,8 +1073,9 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
     <div style="padding:4px 18px 22px;text-align:center;font-size:12px;color:var(--ts)">Subly v1.0</div>
     <!-- 退会リンク（ログイン中のみ表示・目立たないテキスト） -->
-    <div id="s-withdraw-link" style="display:none;text-align:center;padding:0 18px 28px">
-      <button onclick="deleteAccount()" style="background:none;border:none;font-size:12px;color:var(--ts);cursor:pointer;font-family:inherit;text-decoration:underline;opacity:0.6">アカウントを退会する</button>
+    <div id="s-withdraw-link" style="display:none;text-align:center;padding:0 18px 32px">
+      <div style="font-size:11px;color:var(--ts);margin-bottom:8px;opacity:0.6">アカウントの退会はこちら</div>
+      <button onclick="deleteAccount()" style="background:none;border:1px solid var(--bd);border-radius:8px;padding:7px 18px;font-size:13px;font-weight:600;color:var(--ts);cursor:pointer;font-family:inherit">退会する</button>
     </div>
   </div>
 </div>
@@ -1402,6 +1401,58 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <button onclick="closeNicknameModal()" style="flex:1;padding:12px;background:var(--bg);color:var(--ts);border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">キャンセル</button>
       <button onclick="saveNickname()" style="flex:1;padding:12px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">保存</button>
     </div>
+  </div>
+</div>
+
+<!-- Proプランアップグレードモーダル -->
+<div class="dlg-ov hidden" id="pro-upgrade-ov" onclick="if(event.target===this)_closeProUpgradeModal()">
+  <div class="dlg" style="max-width:340px;width:92%;padding:0;overflow:hidden;border-radius:20px">
+
+    <!-- ヘッダー -->
+    <div style="background:linear-gradient(135deg,var(--p),var(--pd));padding:24px 22px 20px;text-align:center;position:relative">
+      <button onclick="_closeProUpgradeModal()" style="position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);border:none;cursor:pointer;font-size:14px;color:#fff">✕</button>
+      <div style="font-size:32px;margin-bottom:8px">👑</div>
+      <div style="font-size:20px;font-weight:800;color:#fff;margin-bottom:4px">Subly Pro</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.8)">サブスク管理が、もっと便利に。</div>
+    </div>
+
+    <!-- 機能リスト -->
+    <div style="padding:20px 22px">
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:22px">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="width:36px;height:36px;border-radius:10px;background:var(--pl);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px">☁️</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--tx)">どこでも使える</div>
+            <div style="font-size:12px;color:var(--ts);margin-top:3px;line-height:1.6">外出先でもスマホ・PCから確認できます</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="width:36px;height:36px;border-radius:10px;background:var(--pl);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px">📱</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--tx)">機種変更も安心</div>
+            <div style="font-size:12px;color:var(--ts);margin-top:3px;line-height:1.6">データはクラウドに自動保存されます</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          <div style="width:36px;height:36px;border-radius:10px;background:var(--pl);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px">👥</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:var(--tx)">グループ機能を使って、</div>
+            <div style="font-size:12px;color:var(--ts);margin-top:3px;line-height:1.6">みんなで賢くサブスクを管理しよう</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 登録ボタン -->
+      <button onclick="_closeProUpgradeModal();setTimeout(()=>{openAuthModal();switchAuthTab('signup')},200)"
+        style="width:100%;padding:15px;background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;font-size:15px;font-weight:800;border:none;border-radius:14px;cursor:pointer;font-family:inherit;margin-bottom:10px">
+        登録する
+      </button>
+      <button onclick="_closeProUpgradeModal()"
+        style="width:100%;padding:10px;background:none;border:none;font-size:13px;font-weight:600;color:var(--ts);cursor:pointer;font-family:inherit">
+        キャンセル
+      </button>
+    </div>
+
   </div>
 </div>
 
@@ -3093,9 +3144,7 @@ function _updateAuthUI(user){
     }
     if(planEl)   planEl.textContent   = 'Subly Pro ✓';
     if(hdPlanEl) hdPlanEl.textContent = 'Subly Pro ✓';
-    // ドロワーの退会ボタンを表示
-    const delRow = document.getElementById('hd-delete-account-row');
-    if(delRow) delRow.style.display = 'block';
+
     // 設定画面の退会リンクを表示
     const wdLink = document.getElementById('s-withdraw-link');
     if(wdLink) wdLink.style.display = 'block';
@@ -3110,9 +3159,7 @@ function _updateAuthUI(user){
     if(loggedOut) loggedOut.style.display = 'flex';
     if(planEl)   planEl.textContent   = 'Subly Free';
     if(hdPlanEl) hdPlanEl.textContent = 'Subly Free';
-    // ドロワーの退会ボタンを非表示
-    const delRow2 = document.getElementById('hd-delete-account-row');
-    if(delRow2) delRow2.style.display = 'none';
+
     // 設定画面の退会リンクを非表示
     const wdLink2 = document.getElementById('s-withdraw-link');
     if(wdLink2) wdLink2.style.display = 'none';
@@ -3140,6 +3187,11 @@ function switchAuthTab(tab){
   // パスワードリセットはログインタブのみ表示
   const forgot = document.getElementById('auth-forgot-wrap');
   if(forgot) forgot.style.display = isLogin ? 'block' : 'none';
+  // 新規登録タブをタップしたらProポップアップを表示
+  if(!isLogin){
+    closeAuthModal();
+    setTimeout(()=> _showProUpgradeModal(), 150);
+  }
 }
 
 // パスワードリセットメール送信
@@ -3227,29 +3279,57 @@ async function logoutFirebase(){
 }
 
 // 退会処理
+// 退会 STEP1：注意喚起
 async function deleteAccount(){
   const user = window._fbUser;
   if(!user){ showToast('ログインしていません'); return; }
 
   showDialog({
     icon:'',
-    title:'アカウントを削除する',
-    msg:'退会するとすべてのデータが完全に削除されます。<br>この操作は元に戻せません。<br><br>本当に退会しますか？',
+    title:'退会すると使えなくなる機能',
+    msg:`<div style="text-align:left">
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:10px">
+          <span style="font-size:20px">📱</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--tx)">複数端末での同期</div>
+            <div style="font-size:12px;color:var(--ts)">スマホ・PC間でデータを共有できなくなります</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:10px">
+          <span style="font-size:20px">👨‍👩‍👧</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--tx)">グループ機能</div>
+            <div style="font-size:12px;color:var(--ts)">家族・カップルとの共有ができなくなります</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:10px">
+          <span style="font-size:20px">☁️</span>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--tx)">クラウドバックアップ</div>
+            <div style="font-size:12px;color:var(--ts)">データの自動保存・復元ができなくなります</div>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--ts);text-align:center;line-height:1.6">
+        ※ サブスクの管理はFreeプランで引き続き利用できます
+      </div>
+    </div>`,
     buttons:[
       {label:'キャンセル', cls:'cancel'},
-      {label:'退会する', cls:'danger', onClick: ()=> _confirmDeleteAccount(user) }
+      {label:'それでも退会する', cls:'danger', onClick: ()=> _confirmDeleteAccount(user) }
     ]
   });
 }
 
+// 退会 STEP2：パスワード認証
 async function _confirmDeleteAccount(user){
-  // パスワード入力付きの退会確認ダイアログ
   showDialog({
     icon:'',
-    title:'退会の最終確認',
+    title:'パスワードを入力して退会',
     msg:`<div style="text-align:left">
       <div style="font-size:13px;color:var(--ts);margin-bottom:14px;line-height:1.7">
-        退会するとすべてのデータが削除されます。<br>確認のためパスワードを入力してください。
+        本人確認のため、登録したパスワードを入力してください。
       </div>
       <input type="password" id="dlg-delete-pw" placeholder="パスワード"
         style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
@@ -3257,7 +3337,7 @@ async function _confirmDeleteAccount(user){
     </div>`,
     buttons:[
       {label:'キャンセル', cls:'cancel'},
-      {label:'退会する', cls:'danger', onClick: async ()=>{
+      {label:'退会を確定する', cls:'danger', onClick: async ()=>{
         const pw = document.getElementById('dlg-delete-pw')?.value;
         const errEl = document.getElementById('dlg-delete-err');
         if(!pw){
@@ -3286,12 +3366,24 @@ async function _confirmDeleteAccount(user){
           closeSettings();
           renderDashboard();
           gaEvent('account_deleted', {});
+
+          // STEP3：退会完了ポップアップ
           showDialog({
             icon:'',
             title:'退会が完了しました',
-            msg:'ご利用ありがとうございました。',
-            buttons:[{label:'閉じる', cls:'ok'}]
+            msg:`<div style="text-align:center">
+              <div style="font-size:36px;margin-bottom:12px">👋</div>
+              <div style="font-size:14px;color:var(--ts);line-height:1.8;margin-bottom:16px">
+                ご利用ありがとうございました。<br>
+                引き続きFreeプランで<br>サブスクの管理ができます。
+              </div>
+              <div style="background:var(--pl);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--pd);line-height:1.7">
+                💡 またいつでも新規登録してProプランをご利用いただけます
+              </div>
+            </div>`,
+            buttons:[{label:'アプリを続ける', cls:'ok'}]
           });
+
         }catch(e){
           const msgs = {
             'auth/wrong-password': 'パスワードが違います',
@@ -3299,7 +3391,6 @@ async function _confirmDeleteAccount(user){
             'auth/too-many-requests': 'しばらく待ってから再試行してください',
           };
           const msg = msgs[e.code] || '退会に失敗しました: ' + e.message;
-          // ダイアログを閉じずにエラー表示
           document.getElementById('dlg-ov').classList.remove('hidden');
           const errEl = document.getElementById('dlg-delete-err');
           if(errEl){ errEl.textContent = msg; errEl.style.display = 'block'; }
@@ -3534,10 +3625,10 @@ async function openGroupModal(){
   if(!user){
     showDialog({
       icon:'', title:'ログインが必要です',
-      msg:'グループ機能を使うにはログインしてください。',
+      msg:'グループ機能はSubly Proプランでご利用いただけます。<br>新規登録してご利用ください。',
       buttons:[
         {label:'閉じる', cls:'cancel'},
-        {label:'ログインする', cls:'ok', onClick:()=>openAuthModal()}
+        {label:'登録する', cls:'ok', onClick:()=>{ closeDialog(); setTimeout(()=>_showProUpgradeModal(), 150); }}
       ]
     });
     return;
@@ -3545,6 +3636,18 @@ async function openGroupModal(){
   document.getElementById('group-ov').classList.remove('hidden');
   await _loadGroupState();
   gaEvent('group_modal_open', {});
+}
+
+// Proプラン紹介モーダル
+function _showProUpgradeModal(){
+  const ov = document.getElementById('pro-upgrade-ov');
+  if(ov) ov.classList.remove('hidden');
+  gaEvent('pro_upgrade_modal_open', {});
+}
+
+function _closeProUpgradeModal(){
+  const ov = document.getElementById('pro-upgrade-ov');
+  if(ov) ov.classList.add('hidden');
 }
 
 function closeGroupModal(){
