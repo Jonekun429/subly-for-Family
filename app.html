@@ -1443,7 +1443,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
 
       <!-- 登録ボタン -->
-      <button onclick="_closeProUpgradeModal();setTimeout(()=>{openAuthModal();switchAuthTab('signup')},200)"
+      <button onclick="_closeProUpgradeModal();setTimeout(()=>{openAuthModal();switchAuthTab('signup',true)},200)"
         style="width:100%;padding:15px;background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;font-size:15px;font-weight:800;border:none;border-radius:14px;cursor:pointer;font-family:inherit;margin-bottom:10px">
         登録する
       </button>
@@ -3179,7 +3179,7 @@ function closeAuthModal(){
   if(window._fbUser) _updateAuthUI(window._fbUser);
 }
 
-function switchAuthTab(tab){
+function switchAuthTab(tab, skipProModal){
   const isLogin = tab === 'login';
   document.getElementById('auth-tab-login').style.color = isLogin ? 'var(--p)' : 'var(--ts)';
   document.getElementById('auth-tab-login').style.borderBottomColor = isLogin ? 'var(--p)' : 'transparent';
@@ -3191,8 +3191,8 @@ function switchAuthTab(tab){
   // パスワードリセットはログインタブのみ表示
   const forgot = document.getElementById('auth-forgot-wrap');
   if(forgot) forgot.style.display = isLogin ? 'block' : 'none';
-  // 新規登録タブをタップしたらProポップアップを表示
-  if(!isLogin){
+  // 新規登録タブをタップしたらProポップアップを表示（skipProModal=trueのときはスキップ）
+  if(!isLogin && !skipProModal){
     closeAuthModal();
     setTimeout(()=> _showProUpgradeModal(), 150);
   }
