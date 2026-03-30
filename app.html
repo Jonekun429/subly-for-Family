@@ -1461,31 +1461,34 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   <div class="dlg" style="max-width:360px;width:92%;padding:0;overflow:hidden">
 
     <!-- グループ未参加 -->
-    <div id="group-panel-none" style="padding:26px 22px 20px">
-      <div style="font-size:17px;font-weight:800;color:var(--tx);margin-bottom:6px">グループ機能</div>
-      <div style="font-size:13px;color:var(--ts);margin-bottom:20px;line-height:1.7">家族・カップルのサブスクをまとめて管理。招待URLを共有するだけで参加できます。</div>
+    <div id="group-panel-none" style="padding:0;overflow:hidden">
 
-      <!-- 新規作成 -->
-      <div style="margin-bottom:10px">
-        <input type="text" id="group-name-input" placeholder="グループ名（例：田中家）" maxlength="20"
-          style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none;margin-bottom:8px">
-        <button onclick="createGroup()" style="width:100%;padding:13px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">グループを作成する</button>
+      <!-- ① 招待コードで参加（メイン・目立つ） -->
+      <div style="background:linear-gradient(135deg,var(--p),var(--pd));padding:22px 22px 20px">
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.7);letter-spacing:1px;margin-bottom:8px">招待コードをお持ちの方はこちら</div>
+        <div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:14px">招待コードで参加する</div>
+        <input type="text" id="group-invite-input" placeholder="招待コード（6桁）を入力" maxlength="6"
+          style="width:100%;padding:13px 14px;border:none;border-radius:10px;font-size:18px;font-family:inherit;color:var(--tx);background:#fff;box-sizing:border-box;outline:none;letter-spacing:6px;text-align:center;text-transform:uppercase;font-weight:800;margin-bottom:10px"
+          oninput="this.value=this.value.toUpperCase()">
+        <button onclick="joinGroupByCode()" style="width:100%;padding:14px;background:#fff;color:var(--p);border:none;border-radius:10px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer">
+          参加する →
+        </button>
       </div>
 
-      <div style="display:flex;align-items:center;gap:10px;margin:14px 0">
-        <div style="flex:1;height:1px;background:var(--bd)"></div>
-        <span style="font-size:12px;color:var(--ts)">または</span>
-        <div style="flex:1;height:1px;background:var(--bd)"></div>
+      <!-- ② グループを新規作成（サブ・折りたたみ） -->
+      <div style="padding:16px 22px 20px">
+        <button onclick="document.getElementById('group-create-area').style.display=document.getElementById('group-create-area').style.display==='none'?'block':'none';this.style.display='none'"
+          style="width:100%;padding:11px;background:none;border:1px solid var(--bd);border-radius:10px;font-size:13px;font-weight:600;color:var(--ts);font-family:inherit;cursor:pointer">
+          ＋ 新しくグループを作る
+        </button>
+        <div id="group-create-area" style="display:none;margin-top:12px">
+          <div style="font-size:12px;color:var(--ts);margin-bottom:8px;line-height:1.6">グループを作成して招待コードをメンバーに共有しましょう。</div>
+          <input type="text" id="group-name-input" placeholder="グループ名（例：田中家）" maxlength="20"
+            style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none;margin-bottom:8px">
+          <button onclick="createGroup()" style="width:100%;padding:13px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">グループを作成する</button>
+        </div>
+        <button onclick="closeGroupModal()" style="width:100%;padding:10px;background:none;border:none;color:var(--ts);font-size:13px;font-family:inherit;cursor:pointer;margin-top:8px">閉じる</button>
       </div>
-
-      <!-- 招待コードで参加 -->
-      <div>
-        <input type="text" id="group-invite-input" placeholder="招待コードを入力（6桁）" maxlength="6"
-          style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none;margin-bottom:8px;letter-spacing:3px;text-align:center;text-transform:uppercase">
-        <button onclick="joinGroupByCode()" style="width:100%;padding:13px;background:var(--bg);color:var(--p);border:1.5px solid var(--p);border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">招待コードで参加する</button>
-      </div>
-
-      <button onclick="closeGroupModal()" style="width:100%;padding:11px;background:none;border:none;color:var(--ts);font-size:13px;font-family:inherit;cursor:pointer;margin-top:10px">閉じる</button>
     </div>
 
     <!-- グループ参加中 -->
