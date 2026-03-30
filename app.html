@@ -1595,7 +1595,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   <!-- ① ホーム -->
   <div id="pg-dashboard" class="page on">
     <!-- グループタブ（グループ参加時のみ表示） -->
-    <div id="group-dashboard-tabs" style="display:none;gap:7px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch"></div>
+    <div id="group-tab-name" style="display:none;font-size:11px;font-weight:700;color:var(--ts);letter-spacing:.5px;margin-bottom:6px"></div>
+    <div id="group-dashboard-tabs" style="display:none;gap:7px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none"></div>
     <div class="tog-row">
       <span>買い切りを含める</span>
       <label class="sw"><input type="checkbox" id="sw-ot" onchange="toggleOt()"><span class="sw-t"></span></label>
@@ -3800,8 +3801,8 @@ async function joinGroupByCode(codeArg){
   // 参加通知をメンバーに送る
   await _notifyGroupMembers(groupDoc.id, _nickname || user.displayName || 'メンバー');
   showToast(`「${groupData.name}」に参加しました！`);
-  // ダッシュボードを更新
-  await _fetchGroupSubs();
+  // リアルタイムリスナーを開始してダッシュボードを更新
+  await _loadGroupForDashboard();
   renderDashboard();
 }
 
@@ -3843,22 +3844,25 @@ async function leaveGroup(){
 async function copyInviteCode(){
   const code = document.getElementById('group-invite-code').textContent;
   const groupName = _groupData?.name || 'グループ';
-  const appUrl = 'https://jonekun429.github.io/subly_lp/';
+  const appUrl = 'https://jonekun429.github.io/subly-for-Family/app.html';
 
   const shareText = `【Subly グループ招待】
 
 「${groupName}」に招待します！
 
-▼ 参加手順
+▼ すでにSublyを使っている方
+① あなたのSublyアプリを開く
+② 左上メニュー →「グループ」
+③ 招待コードを入力：${code}
+
+▼ Sublyを使っていない方
 ① 下のURLからSublyを開く
 ${appUrl}
 
-② アカウント未登録の方は新規登録
+② アカウントを新規登録
 
-③ 左上メニュー →「グループ」→「招待コードを入力」に以下を入力
-招待コード：${code}
-
-④ 参加完了！`;
+③ 左上メニュー →「グループ」→
+　 招待コードを入力：${code}`;
 
   // Web Share API（iOS/Android）が使えれば共有シートを表示
   if(navigator.share){
@@ -3907,51 +3911,100 @@ function _updateGroupTabs(){
   }
   tabArea.style.display = 'flex';
   tabArea.innerHTML = '';
-  const tabs = [{ uid:'all', name:'全員' }, ..._groupMembersData.map(m=>({ uid:m.uid, name:(m.nickname||'?')+'さん' }))];
+
+  const myUid = window._fbUser?.uid;
+
+  // タブ定義：全体 / 自分 / 他メンバー
+  const tabs = [
+    { uid:'all', name:'全体', icon:'👥' },
+    ..._groupMembersData.map(m=>({
+      uid: m.uid,
+      name: m.uid === myUid ? '自分' : (m.nickname || '名前未設定'),
+      icon: m.uid === myUid ? '👤' : '👤'
+    }))
+  ];
+
   tabs.forEach(t=>{
-    const btn = document.createElement('button');
     const isOn = _currentGroupFilter === t.uid;
-    btn.style.cssText = `padding:6px 14px;border-radius:20px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;border:1.5px solid ${isOn?'var(--p)':'var(--bd)'};background:${isOn?'var(--p)':'var(--card)'};color:${isOn?'#fff':'var(--ts)'};white-space:nowrap;-webkit-tap-highlight-color:transparent`;
-    btn.textContent = t.name;
+    const btn = document.createElement('button');
+    btn.style.cssText = `
+      display:flex;align-items:center;gap:5px;
+      padding:7px 16px;border-radius:20px;font-size:13px;font-weight:700;
+      font-family:inherit;cursor:pointer;white-space:nowrap;
+      border:1.5px solid ${isOn?'var(--p)':'var(--bd)'};
+      background:${isOn?'var(--p)':'var(--card)'};
+      color:${isOn?'#fff':'var(--ts)'};
+      -webkit-tap-highlight-color:transparent;
+      transition:all .15s;flex-shrink:0;
+    `;
+    btn.innerHTML = `<span>${t.icon}</span><span>${t.name}</span>`;
     btn.onclick = async ()=>{
       _currentGroupFilter = t.uid;
       await _fetchGroupSubs();
       renderDashboard();
+      renderList();
       _updateGroupTabs();
+      gaEvent('group_tab_switch', { filter: t.uid === 'all' ? 'all' : (t.uid === myUid ? 'me' : 'member') });
     };
     tabArea.appendChild(btn);
   });
+
+  // グループ名を表示
+  const groupNameEl = document.getElementById('group-tab-name');
+  if(!groupNameEl){
+    const nameDiv = document.createElement('div');
+    nameDiv.id = 'group-tab-name';
+    nameDiv.style.cssText = 'font-size:11px;font-weight:700;color:var(--ts);letter-spacing:.5px;padding:0 4px;white-space:nowrap;align-self:center';
+    nameDiv.textContent = _groupData?.name || 'グループ';
+    tabArea.parentNode.insertBefore(nameDiv, tabArea);
+  } else {
+    groupNameEl.textContent = _groupData?.name || 'グループ';
+  }
 }
 
 // ダッシュボード用グループデータ読み込み
+// グループリアルタイムリスナー
+let _groupUnsubscribe = null;
+
 async function _loadGroupForDashboard(){
   const user = window._fbUser;
   if(!user || !window._fbDb || !window._fbFns) return;
-  const { doc, getDoc } = window._fbFns;
+  const { doc, getDoc, onSnapshot } = window._fbFns;
+
+  // ユーザードキュメントからgroupIdを取得
   const userSnap = await getDoc(doc(window._fbDb,'users',user.uid));
   if(!userSnap.exists()) return;
   const userData = userSnap.data();
   _groupId = userData.groupId || null;
   if(!_groupId){ _updateGroupTabs(); return; }
-  const groupSnap = await getDoc(doc(window._fbDb,'groups',_groupId));
-  if(!groupSnap.exists()){ _groupId=null; _updateGroupTabs(); return; }
-  _groupData = groupSnap.data();
-  // メンバー情報とサブスクを取得
-  const memberUids = _groupData.memberUids || [];
-  _groupMembersData = [];
-  const { collection, getDocs } = window._fbFns;
-  for(const uid of memberUids){
-    const snap = await getDoc(doc(window._fbDb,'users',uid));
-    const data = snap.exists() ? snap.data() : {};
-    _groupMembersData.push({ uid, ...data });
-  }
-  await _fetchGroupSubs();
-  _updateGroupTabs();
-  // ドロワーのグループボタンを更新
-  const lbl = document.getElementById('hd-group-btn-lbl');
-  const sub = document.getElementById('hd-group-btn-sub');
-  if(lbl) lbl.textContent = _groupData.name || 'グループ';
-  if(sub) sub.textContent = `メンバー ${memberUids.length}人`;
+
+  // グループをリアルタイムで監視（メンバー追加を即反映）
+  if(_groupUnsubscribe) _groupUnsubscribe();
+  _groupUnsubscribe = onSnapshot(doc(window._fbDb,'groups',_groupId), async (groupSnap) => {
+    if(!groupSnap.exists()){ _groupId=null; _groupData=null; _groupMembersData=[]; _updateGroupTabs(); return; }
+    _groupData = groupSnap.data();
+    const memberUids = _groupData.memberUids || [];
+
+    // メンバー情報を取得
+    _groupMembersData = [];
+    const { collection, getDocs } = window._fbFns;
+    for(const uid of memberUids){
+      const snap = await getDoc(doc(window._fbDb,'users',uid));
+      const data = snap.exists() ? snap.data() : {};
+      _groupMembersData.push({ uid, ...data });
+    }
+
+    // 全メンバーのサブスクを取得
+    await _fetchGroupSubs();
+    _updateGroupTabs();
+    renderDashboard();
+
+    // ドロワー・設定のグループ表示を更新
+    const lbl = document.getElementById('hd-group-btn-lbl');
+    const sub = document.getElementById('hd-group-btn-sub');
+    if(lbl) lbl.textContent = _groupData.name || 'グループ';
+    if(sub) sub.textContent = `メンバー ${memberUids.length}人`;
+  });
 }
 
 // 招待URL確認モーダル
@@ -4042,6 +4095,18 @@ function _stopNotificationListener(){
     _notifUnsubscribe();
     _notifUnsubscribe = null;
   }
+  // グループリスナーも解除
+  if(_groupUnsubscribe){
+    _groupUnsubscribe();
+    _groupUnsubscribe = null;
+  }
+  // タブをリセット
+  _groupId = null;
+  _groupData = null;
+  _groupMembersData = [];
+  _groupSubsCache = {};
+  _currentGroupFilter = 'all';
+  _updateGroupTabs();
 }
 
 function openPrivacy(){
