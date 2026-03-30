@@ -1185,7 +1185,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <!-- STEP 5: Free/Pro・グループ -->
       <div class="howto-slide">
         <div class="howto-step-lbl">STEP 5 / 5</div>
-        <div class="howto-slide-icon">👨‍👩‍👧</div>
+        <div class="howto-slide-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="var(--p)"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
         <div class="howto-slide-ttl">ProプランとFreeプランの違い</div>
         <div class="howto-slide-desc">
           <b>Freeプラン</b>（未ログイン）<br>
@@ -1193,7 +1193,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
           <b>Proプラン</b>（アカウント登録）<br>
           データがクラウドに同期され複数端末で利用可能。グループを作成して家族・カップルとサブスクをまとめて管理できます。
         </div>
-        <div class="howto-slide-tip">💡 メニュー →「グループ」からグループを作成し、招待コードを共有するだけで参加できます。</div>
+        <div class="howto-slide-tip">メニュー →「グループ」からグループを作成し、招待コードを共有するだけで参加できます。</div>
       </div>
     </div>
     <!-- フッター -->
@@ -1376,7 +1376,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
     </div>
     <div style="margin-bottom:6px">
-      <input type="password" id="auth-password" placeholder="パスワード（6文字以上）"
+      <input type="password" id="auth-password" placeholder="パスワード（英数字・大文字含む8文字以上）"
         style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
     </div>
     <!-- パスワードを忘れた（ログインタブのみ表示） -->
@@ -1411,7 +1411,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     <!-- ヘッダー -->
     <div style="background:linear-gradient(135deg,var(--p),var(--pd));padding:24px 22px 20px;text-align:center;position:relative">
       <button onclick="_closeProUpgradeModal()" style="position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);border:none;cursor:pointer;font-size:14px;color:#fff">✕</button>
-      <div style="font-size:32px;margin-bottom:8px">👑</div>
+      <div style="margin-bottom:8px;color:#fff"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg></div>
       <div style="font-size:20px;font-weight:800;color:#fff;margin-bottom:4px">Subly Pro</div>
       <div style="font-size:13px;color:rgba(255,255,255,.8)">サブスク管理が、もっと便利に。</div>
     </div>
@@ -1420,21 +1420,27 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     <div style="padding:20px 22px">
       <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:22px">
         <div style="display:flex;align-items:flex-start;gap:12px">
-          <div style="width:36px;height:36px;border-radius:10px;background:var(--pl);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px">☁️</div>
+          <div style="width:44px;height:44px;border-radius:12px;background:var(--pl);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--p)"><path d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
+          </div>
           <div>
             <div style="font-size:14px;font-weight:700;color:var(--tx)">どこでも使える</div>
             <div style="font-size:12px;color:var(--ts);margin-top:3px;line-height:1.6">外出先でもスマホ・PCから確認できます</div>
           </div>
         </div>
         <div style="display:flex;align-items:flex-start;gap:12px">
-          <div style="width:36px;height:36px;border-radius:10px;background:var(--pl);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px">📱</div>
+          <div style="width:44px;height:44px;border-radius:12px;background:var(--pl);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--p)"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
+          </div>
           <div>
             <div style="font-size:14px;font-weight:700;color:var(--tx)">機種変更も安心</div>
             <div style="font-size:12px;color:var(--ts);margin-top:3px;line-height:1.6">データはクラウドに自動保存されます</div>
           </div>
         </div>
         <div style="display:flex;align-items:flex-start;gap:12px">
-          <div style="width:36px;height:36px;border-radius:10px;background:var(--pl);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px">👥</div>
+          <div style="width:44px;height:44px;border-radius:12px;background:var(--pl);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="var(--p)"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+          </div>
           <div>
             <div style="font-size:14px;font-weight:700;color:var(--tx)">グループ機能を使って、</div>
             <div style="font-size:12px;color:var(--ts);margin-top:3px;line-height:1.6">みんなで賢くサブスクを管理しよう</div>
@@ -2435,11 +2441,11 @@ function gotoAdd(){
     closable:true,
     onClose:()=>{ gaEvent('add_dialog_select', { method: 'close' }); },
     buttons:[
-      {label:'★ 定番から選ぶ', cls:'ok', onClick:()=>{
+      {label:'定番から選ぶ', cls:'ok', onClick:()=>{
         gaEvent('add_dialog_select', { method: 'quick' });
         goto('add');
       }},
-      {label:'✏️ 自分で入力', cls:'cancel', onClick:()=>{
+      {label:'自分で入力', cls:'cancel', onClick:()=>{
         gaEvent('add_dialog_select', { method: 'manual' });
         goto('add');
         setTimeout(()=>openManualForm(null,null), 100);
@@ -2705,7 +2711,7 @@ async function checkUpcomingPayments(){
 }
 
 function showDialog({icon='', title='', msg='', buttons=[], closable=false, onClose=null}){
-  document.getElementById('dlg-icon').textContent=icon;
+  document.getElementById('dlg-icon').innerHTML=icon||'';
   document.getElementById('dlg-ttl').textContent=title;
   document.getElementById('dlg-msg').innerHTML = typeof msg === 'string' ? msg : '';
   const btns=document.getElementById('dlg-btns');
@@ -3232,7 +3238,19 @@ async function submitAuth(){
   if(!email || !password){ _showAuthError('empty'); return; }
 
   try{
-    const isLoginTab = document.getElementById('auth-tab-login').style.color !== 'var(--ts)';
+    // 新規登録時のパスワードバリデーション
+  const isLoginTab = document.getElementById('auth-tab-login').style.color !== 'var(--ts)';
+  if(!isLoginTab){
+    if(password.length < 8){
+      _showAuthError('pw-short'); return;
+    }
+    if(!/[A-Z]/.test(password)){
+      _showAuthError('pw-no-upper'); return;
+    }
+    if(!/[0-9]/.test(password)){
+      _showAuthError('pw-no-number'); return;
+    }
+  }
     if(isLoginTab){
       // ログインタブ：Firestoreにアカウントが存在するか確認
       const { doc, getDoc, signInWithEmailAndPassword } = window._fbFns;
@@ -3294,21 +3312,21 @@ async function deleteAccount(){
     msg:`<div style="text-align:left">
       <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
         <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:10px">
-          <span style="font-size:20px">📱</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--p)"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
           <div>
             <div style="font-size:13px;font-weight:700;color:var(--tx)">複数端末での同期</div>
             <div style="font-size:12px;color:var(--ts)">スマホ・PC間でデータを共有できなくなります</div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:10px">
-          <span style="font-size:20px">👨‍👩‍👧</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--p)"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
           <div>
             <div style="font-size:13px;font-weight:700;color:var(--tx)">グループ機能</div>
             <div style="font-size:12px;color:var(--ts)">家族・カップルとの共有ができなくなります</div>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:10px">
-          <span style="font-size:20px">☁️</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--p)"><path d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>
           <div>
             <div style="font-size:13px;font-weight:700;color:var(--tx)">クラウドバックアップ</div>
             <div style="font-size:12px;color:var(--ts)">データの自動保存・復元ができなくなります</div>
@@ -3376,7 +3394,7 @@ async function _confirmDeleteAccount(user){
             icon:'',
             title:'退会が完了しました',
             msg:`<div style="text-align:center">
-              <div style="font-size:36px;margin-bottom:12px">👋</div>
+              <div style="margin-bottom:12px;color:var(--p)"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
               <div style="font-size:14px;color:var(--ts);line-height:1.8;margin-bottom:16px">
                 ご利用ありがとうございました。<br>
                 引き続きFreeプランで<br>サブスクの管理ができます。
@@ -3413,7 +3431,10 @@ function _showAuthError(code){
     'auth/wrong-password': 'パスワードが違います',
     'auth/email-already-in-use': 'すでに登録済みのメールアドレスです',
     'auth/invalid-email': 'メールアドレスの形式が正しくありません',
-    'auth/weak-password': 'パスワードは6文字以上にしてください',
+    'auth/weak-password': 'パスワードは英数字・大文字を含む8文字以上にしてください',
+    'pw-short': 'パスワードは8文字以上にしてください',
+    'pw-no-upper': 'パスワードに大文字（A〜Z）を1文字以上含めてください',
+    'pw-no-number': 'パスワードに数字を1文字以上含めてください',
     'auth/popup-closed-by-user': '',
     'auth/invalid-credential': 'メールアドレスまたはパスワードが違います',
     'no-account': 'アカウントが見つかりません。先に新規登録をしてください。',
@@ -3448,7 +3469,7 @@ function _showSignupComplete(user){
     const slides = [
       // スライド0：登録完了
       `<div style="text-align:center;padding:16px 0 8px">
-        <div style="font-size:36px;margin-bottom:12px">🎉</div>
+        <div style="margin-bottom:12px;color:var(--p)"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
         <div style="font-size:18px;font-weight:800;color:var(--tx);margin-bottom:6px">登録完了！</div>
         <div style="font-size:13px;color:var(--ts);margin-bottom:20px">Subly Proへようこそ</div>
         ${user.photoURL
@@ -3461,7 +3482,7 @@ function _showSignupComplete(user){
       </div>`,
       // スライド1：複数端末
       `<div style="padding:24px 8px 8px">
-        <div style="font-size:40px;text-align:center;margin-bottom:16px">📱</div>
+        <div style="text-align:center;margin-bottom:16px;color:#fff"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg></div>
         <div style="font-size:17px;font-weight:800;color:var(--tx);margin-bottom:10px;text-align:center">複数端末で使える</div>
         <div style="font-size:14px;color:var(--ts);line-height:1.8;text-align:center;margin-bottom:16px">
           このアカウントでログインすれば<br>
@@ -3474,7 +3495,7 @@ function _showSignupComplete(user){
       </div>`,
       // スライド2：グループ
       `<div style="padding:24px 8px 8px">
-        <div style="font-size:40px;text-align:center;margin-bottom:16px">👨‍👩‍👧</div>
+        <div style="text-align:center;margin-bottom:16px;color:#fff"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
         <div style="font-size:17px;font-weight:800;color:var(--tx);margin-bottom:10px;text-align:center">家族と一緒に管理</div>
         <div style="font-size:14px;color:var(--ts);line-height:1.8;text-align:center;margin-bottom:16px">
           グループを作成して招待コードを共有するだけ。<br>
@@ -3628,8 +3649,11 @@ async function openGroupModal(){
   const user = window._fbUser;
   if(!user){
     showDialog({
-      icon:'', title:'ログインが必要です',
-      msg:'グループ機能はSubly Proプランでご利用いただけます。<br>新規登録してご利用ください。',
+      icon:'', title:'Subly Pro の機能です',
+      msg:`<div style="text-align:left;line-height:1.9;font-size:14px;color:var(--ts)">
+        グループ機能は <b style="color:var(--tx)">Subly Pro プラン</b> でご利用いただけます。<br><br>
+        アカウントを登録してご利用ください。
+      </div>`,
       buttons:[
         {label:'閉じる', cls:'cancel'},
         {label:'登録する', cls:'ok', onClick:()=>{ closeDialog(); setTimeout(()=>_showProUpgradeModal(), 150); }}
@@ -3637,6 +3661,15 @@ async function openGroupModal(){
     });
     return;
   }
+  // 入力欄をリセット
+  const invInput = document.getElementById('group-invite-input');
+  if(invInput) invInput.value = '';
+  const createArea = document.getElementById('group-create-area');
+  if(createArea) createArea.style.display = 'none';
+  // 「新しくグループを作る」ボタンを再表示
+  const createBtn = document.querySelector('#group-panel-none button[onclick*="group-create-area"]');
+  if(createBtn) createBtn.style.display = '';
+
   document.getElementById('group-ov').classList.remove('hidden');
   await _loadGroupState();
   gaEvent('group_modal_open', {});
@@ -3771,42 +3804,74 @@ async function joinGroupByCode(codeArg){
   const code = (codeArg || document.getElementById('group-invite-input')?.value || '').trim().toUpperCase();
   if(code.length !== 6){ showToast('6桁のコードを入力してください'); return; }
 
-  const { collection, getDocs, query, where, doc, setDoc, getDoc, writeBatch } = window._fbFns;
+  // ボタンをローディング状態に
+  const joinBtn = document.querySelector('#group-panel-none button[onclick="joinGroupByCode()"]');
+  if(joinBtn){ joinBtn.textContent = '参加中...'; joinBtn.disabled = true; }
 
-  // すでに参加済みか確認
-  const userSnap = await getDoc(doc(window._fbDb, 'users', user.uid));
-  if(userSnap.exists() && userSnap.data().groupId){
-    showToast('すでにグループに参加しています'); return;
+  try{
+    const { collection, getDocs, query, where, doc, setDoc, getDoc, writeBatch } = window._fbFns;
+
+    // すでに参加済みか確認
+    const userSnap = await getDoc(doc(window._fbDb, 'users', user.uid));
+    if(userSnap.exists() && userSnap.data().groupId){
+      showToast('すでにグループに参加しています');
+      await _loadGroupState();
+      return;
+    }
+
+    // 招待コードからグループを検索
+    const q = query(collection(window._fbDb, 'groups'), where('inviteCode', '==', code));
+    const snap = await getDocs(q);
+    if(snap.empty){ showToast('招待コードが見つかりません（コードを確認してください）'); return; }
+
+    const groupDoc = snap.docs[0];
+    const groupData = groupDoc.data();
+    const memberUids = groupData.memberUids || [];
+
+    if(memberUids.length >= 5){ showToast('グループの上限（5人）に達しています'); return; }
+    if(memberUids.includes(user.uid)){ showToast('すでにこのグループのメンバーです'); await _loadGroupState(); return; }
+
+    // メンバーに追加
+    const batch = writeBatch(window._fbDb);
+    batch.update(groupDoc.ref, { memberUids: [...memberUids, user.uid] });
+    batch.set(doc(window._fbDb, 'users', user.uid), { groupId: groupDoc.id }, { merge: true });
+    await batch.commit();
+
+    _groupId = groupDoc.id;
+    _groupData = { ...groupData, memberUids: [...memberUids, user.uid] };
+
+    gaEvent('group_join', { code });
+    // 参加通知をメンバーに送る
+    await _notifyGroupMembers(groupDoc.id, _nickname || user.displayName || 'メンバー');
+
+    // モーダルを閉じて参加完了ダイアログを表示
+    closeGroupModal();
+    showDialog({
+      icon:`<span style='color:var(--p)'><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>`,
+      title:`「${groupData.name}」に参加しました！`,
+      msg:`<div style="text-align:left;line-height:1.9;font-size:14px;color:var(--ts)">
+        メンバー ${memberUids.length + 1}人でサブスクを共有中です。<br>
+        ホーム画面にグループタブが表示されます。
+      </div>`,
+      buttons:[{label:'ホームで確認する', cls:'ok', onClick: async ()=>{
+        // リアルタイムリスナーを開始してダッシュボードを更新
+        await _loadGroupForDashboard();
+        renderDashboard();
+        goto('dashboard');
+      }}]
+    });
+
+  }catch(e){
+    console.error('グループ参加エラー:', e);
+    showDialog({
+      icon:'',
+      title:'参加に失敗しました',
+      msg:`エラー: ${e.message}<br><br>Firestoreのセキュリティルールを確認してください。`,
+      buttons:[{label:'OK', cls:'ok'}]
+    });
+  } finally {
+    if(joinBtn){ joinBtn.textContent = '参加する →'; joinBtn.disabled = false; }
   }
-
-  // 招待コードからグループを検索
-  const q = query(collection(window._fbDb, 'groups'), where('inviteCode', '==', code));
-  const snap = await getDocs(q);
-  if(snap.empty){ showToast('招待コードが見つかりません'); return; }
-
-  const groupDoc = snap.docs[0];
-  const groupData = groupDoc.data();
-  const memberUids = groupData.memberUids || [];
-
-  if(memberUids.length >= 5){ showToast('グループの上限（5人）に達しています'); return; }
-  if(memberUids.includes(user.uid)){ showToast('すでにこのグループのメンバーです'); return; }
-
-  // メンバーに追加
-  const batch = writeBatch(window._fbDb);
-  batch.update(groupDoc.ref, { memberUids: [...memberUids, user.uid] });
-  batch.set(doc(window._fbDb, 'users', user.uid), { groupId: groupDoc.id }, { merge: true });
-  await batch.commit();
-
-  _groupId = groupDoc.id;
-  _groupData = { ...groupData, memberUids: [...memberUids, user.uid] };
-  await _renderGroupJoined();
-  gaEvent('group_join', { code });
-  // 参加通知をメンバーに送る
-  await _notifyGroupMembers(groupDoc.id, _nickname || user.displayName || 'メンバー');
-  showToast(`「${groupData.name}」に参加しました！`);
-  // リアルタイムリスナーを開始してダッシュボードを更新
-  await _loadGroupForDashboard();
-  renderDashboard();
 }
 
 // グループから退出
@@ -4013,7 +4078,7 @@ async function _loadGroupForDashboard(){
 // 招待URL確認モーダル
 async function _showInviteConfirm(code){
   showDialog({
-    icon:'👥',
+    icon:`<span style='color:var(--p)'><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></span>`,
     title:'グループへの招待',
     msg:`招待コード「<strong>${code}</strong>」のグループに参加しますか？<br><br>参加にはログインが必要です。`,
     buttons:[
@@ -4084,7 +4149,7 @@ function _startNotificationListener(uid){
       await setDoc(notifRef, { read: true }, { merge: true });
       // ポップアップ表示
       showDialog({
-        icon:'🎉',
+        icon:`<span style='color:var(--p)'><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></span>`,
         title:'グループに新メンバーが参加しました',
         msg,
         buttons:[{ label:'確認', cls:'ok' }]
@@ -5746,7 +5811,7 @@ function _processImportFile(file){
       return;
     }
     showDialog({
-      icon:'↓',
+      icon:`<span style='color:var(--p)'><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></span>`,
       title:`${imported.length}件をインポート`,
       msg:'現在のデータは上書きされます。よろしいですか？',
       buttons:[
