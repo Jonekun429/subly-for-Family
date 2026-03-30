@@ -3856,6 +3856,11 @@ async function joinGroupByCode(codeArg){
       buttons:[{label:'ホームで確認する', cls:'ok', onClick: async ()=>{
         // リアルタイムリスナーを開始してダッシュボードを更新
         await _loadGroupForDashboard();
+        // ドロワーのグループ表示を更新
+        const lbl = document.getElementById('hd-group-btn-lbl');
+        const sub = document.getElementById('hd-group-btn-sub');
+        if(lbl) lbl.textContent = _groupData?.name || 'グループ';
+        if(sub) sub.textContent = `メンバー ${(_groupData?.memberUids||[]).length}人`;
         renderDashboard();
         goto('dashboard');
       }}]
@@ -4077,6 +4082,10 @@ async function _loadGroupForDashboard(){
     const sub = document.getElementById('hd-group-btn-sub');
     if(lbl) lbl.textContent = _groupData.name || 'グループ';
     if(sub) sub.textContent = `メンバー ${memberUids.length}人`;
+
+    // 明細一覧も更新
+    renderList();
+    console.log('グループ更新完了:', _groupData.name, 'メンバー:', memberUids.length);
   });
 }
 
