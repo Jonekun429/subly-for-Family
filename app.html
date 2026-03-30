@@ -550,8 +550,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .howto-dots{display:flex;gap:8px;justify-content:center;padding:20px 0 0}
 .howto-dot{width:8px;height:8px;border-radius:50%;background:#D1D5DB;transition:all .25s}
 .howto-dot.on{background:var(--p);width:24px;border-radius:4px}
-.howto-slides{display:flex;width:400%;transition:transform .35s cubic-bezier(.4,0,.2,1)}
-.howto-slide{width:25%;padding:20px 28px 28px;box-sizing:border-box;flex-shrink:0}
+.howto-slides{display:flex;width:500%;transition:transform .35s cubic-bezier(.4,0,.2,1)}
+.howto-slide{width:20%;padding:20px 28px 28px;box-sizing:border-box;flex-shrink:0}
 .howto-step-lbl{font-size:12px;font-weight:700;color:var(--p);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
 .howto-slide-icon{width:52px;height:52px;border-radius:16px;background:var(--pl);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:14px;flex-shrink:0}
 .howto-slide-ttl{font-size:22px;font-weight:800;color:#1a1a1a;line-height:1.3;margin-bottom:14px}
@@ -672,6 +672,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     createUserWithEmailAndPassword,
     sendPasswordResetEmail,
     deleteUser,
+    reauthenticateWithCredential,
+    EmailAuthProvider,
     signOut
   } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js';
   import {
@@ -692,6 +694,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
+  auth.languageCode = 'ja'; // パスワードリセットメールを日本語に
   const db = getFirestore(app);
   // グローバルに公開
   window._fbAuth = auth;
@@ -701,6 +704,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     createUserWithEmailAndPassword,
     sendPasswordResetEmail,
     deleteUser,
+    reauthenticateWithCredential,
+    EmailAuthProvider,
     signOut,
     doc, getDoc, setDoc, deleteDoc, collection,
     writeBatch, getDocs, query, where, onSnapshot
@@ -931,11 +936,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
               <span style="font-size:11px;font-weight:700;color:var(--p)" id="s-auth-plan-badge">Subly Pro ✓</span>
             </div>
           </div>
-          <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
-            <button onclick="logoutFirebase();closeSettings()" style="background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--ts);font-family:inherit;cursor:pointer;white-space:nowrap">ログアウト</button>
-          </div>
+          <button onclick="logoutFirebase();closeSettings()" style="flex-shrink:0;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--ts);font-family:inherit;cursor:pointer;white-space:nowrap">ログアウト</button>
         </div>
-          <button onclick="deleteAccount()" style="width:calc(100% - 36px);margin:10px 18px 14px;padding:10px;background:#FEE2E2;border:1px solid var(--dn);border-radius:10px;font-size:13px;font-weight:700;color:var(--dn);font-family:inherit;cursor:pointer">退会する</button>
       </div>
       <!-- 未ログイン時 -->
       <div id="s-auth-logged-out" class="s-row" onclick="closeSettings();setTimeout(openAuthModal,200)" style="align-items:center">
@@ -1072,6 +1074,10 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
     </div>
     <div style="padding:4px 18px 22px;text-align:center;font-size:12px;color:var(--ts)">Subly v1.0</div>
+    <!-- 退会リンク（ログイン中のみ表示・目立たないテキスト） -->
+    <div id="s-withdraw-link" style="display:none;text-align:center;padding:0 18px 28px">
+      <button onclick="deleteAccount()" style="background:none;border:none;font-size:12px;color:var(--ts);cursor:pointer;font-family:inherit;text-decoration:underline;opacity:0.6">アカウントを退会する</button>
+    </div>
   </div>
 </div>
 
@@ -1104,7 +1110,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
       <!-- URL表示 -->
       <div style="background:var(--bg);border:1.5px solid var(--bd);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:16px">
-        <div style="font-size:12px;color:var(--ts);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">https://jonekun429.github.io/subly-for-Family/</div>
+        <div style="font-size:12px;color:var(--ts);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">https://jonekun429.github.io/subly_lp/</div>
         <button onclick="copyShareUrl()" style="flex-shrink:0;background:var(--p);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer" id="copy-btn">コピー</button>
       </div>
 
@@ -1140,12 +1146,13 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <div class="howto-dot" id="hwdot-1"></div>
       <div class="howto-dot" id="hwdot-2"></div>
       <div class="howto-dot" id="hwdot-3"></div>
+      <div class="howto-dot" id="hwdot-4"></div>
     </div>
     <!-- スライド -->
     <div class="howto-slides" id="howto-slides">
       <!-- STEP 1: ホーム -->
       <div class="howto-slide">
-        <div class="howto-step-lbl">STEP 1 / 4</div>
+        <div class="howto-step-lbl">STEP 1 / 5</div>
         <div class="howto-slide-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
         <div class="howto-slide-ttl">ホーム画面の見方</div>
         <div class="howto-slide-desc">月額・年間の支出合計と、カテゴリ別グラフが確認できます。グラフをタップすると詳細に絞り込めます。</div>
@@ -1153,7 +1160,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
       <!-- STEP 2: 登録 -->
       <div class="howto-slide">
-        <div class="howto-step-lbl">STEP 2 / 4</div>
+        <div class="howto-step-lbl">STEP 2 / 5</div>
         <div class="howto-slide-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg></div>
         <div class="howto-slide-ttl">サブスクを登録する</div>
         <div class="howto-slide-desc">Netflix・Spotifyなど人気サービスはカテゴリタブから選ぶだけ。リストにないものは「自分で入力」から追加できます。</div>
@@ -1161,7 +1168,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
       <!-- STEP 3: カレンダー -->
       <div class="howto-slide">
-        <div class="howto-step-lbl">STEP 3 / 4</div>
+        <div class="howto-step-lbl">STEP 3 / 5</div>
         <div class="howto-slide-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg></div>
         <div class="howto-slide-ttl">カレンダーで支払日確認</div>
         <div class="howto-slide-desc">各サブスクの次回支払日がカレンダーに表示されます。日付をタップするとその日の詳細が確認できます。</div>
@@ -1169,11 +1176,25 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
       <!-- STEP 4: 明細 -->
       <div class="howto-slide">
-        <div class="howto-step-lbl">STEP 4 / 4</div>
+        <div class="howto-step-lbl">STEP 4 / 5</div>
         <div class="howto-slide-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-2h5v2zm5-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
         <div class="howto-slide-ttl">明細一覧で管理する</div>
         <div class="howto-slide-desc">カテゴリ・金額順・満足度順で絞り込みができます。タップで編集・休止・削除、左スワイプでも操作できます。</div>
         <div class="howto-slide-tip"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> 上部のサマリーを開くと「満足度を一括更新」がまとめてできます。</div>
+      </div>
+    </div>
+      <!-- STEP 5: Free/Pro・グループ -->
+      <div class="howto-slide">
+        <div class="howto-step-lbl">STEP 5 / 5</div>
+        <div class="howto-slide-icon">👨‍👩‍👧</div>
+        <div class="howto-slide-ttl">ProプランとFreeプランの違い</div>
+        <div class="howto-slide-desc">
+          <b>Freeプラン</b>（未ログイン）<br>
+          端末のみにデータを保存。<br><br>
+          <b>Proプラン</b>（アカウント登録）<br>
+          データがクラウドに同期され複数端末で利用可能。グループを作成して家族・カップルとサブスクをまとめて管理できます。
+        </div>
+        <div class="howto-slide-tip">💡 メニュー →「グループ」からグループを作成し、招待コードを共有するだけで参加できます。</div>
       </div>
     </div>
     <!-- フッター -->
@@ -1239,114 +1260,84 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   <!-- スライドコンテナ（4ステップ） -->
   <div class="ob-slides" id="ob-slides" style="width:400%">
 
-    <!-- ページ1: 問題提起 -->
+    <!-- ページ1: Sublyとは -->
     <div class="ob-slide" style="width:25%">
       <div class="ob-illust">
-        <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
-          <!-- 水が漏れるバケツ -->
-          <rect x="28" y="30" width="54" height="48" rx="6" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
-          <!-- 水滴（漏れている） -->
-          <ellipse cx="55" cy="26" rx="8" ry="4" fill="rgba(255,255,255,0.4)"/>
-          <path d="M40 78 Q38 90 36 96" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round"/>
-          <path d="M55 78 Q55 92 55 98" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round"/>
-          <path d="M70 78 Q72 90 74 96" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" stroke-linecap="round"/>
-          <!-- ¥マーク -->
-          <text x="55" y="62" text-anchor="middle" font-size="26" font-weight="800" fill="rgba(255,255,255,0.85)" font-family="sans-serif">¥</text>
-          <!-- 波線（水面） -->
-          <path d="M34 52 Q42 46 50 52 Q58 58 66 52 Q74 46 76 52" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none"/>
+        <svg width="100" height="100" viewBox="0 0 110 110" fill="none">
+          <rect x="20" y="25" width="70" height="60" rx="10" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+          <rect x="30" y="38" width="22" height="6" rx="3" fill="rgba(255,255,255,0.8)"/>
+          <rect x="30" y="50" width="36" height="6" rx="3" fill="rgba(255,255,255,0.6)"/>
+          <rect x="30" y="62" width="28" height="6" rx="3" fill="rgba(255,255,255,0.4)"/>
+          <circle cx="80" cy="38" r="10" fill="rgba(255,255,255,0.3)"/>
+          <text x="80" y="43" text-anchor="middle" font-size="12" font-weight="800" fill="#fff" font-family="sans-serif">¥</text>
         </svg>
       </div>
-      <div class="ob-badge">知ってますか？</div>
-      <div class="ob-ttl">毎月、<em>知らないうちにお金が消えている。</em></div>
-      <div class="ob-desc">カード引き落としは痛みを感じにくく、使っていないサブスクに気づかず払い続けがちです。全部を「見える化」することが家計改善の第一歩。</div>
+      <div class="ob-badge">SUBLY とは</div>
+      <div class="ob-ttl">サブスクを<em>全部まとめて</em>管理しよう</div>
+      <div class="ob-desc">Netflix・スマホ代・保険・ローンまで、毎月払っている固定費をすべて登録して「本当の支出」を把握できます。</div>
     </div>
 
-    <!-- ページ2: 見える化 -->
+    <!-- ページ2: 登録するだけ -->
     <div class="ob-slide" style="width:25%">
       <div class="ob-illust">
-        <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
-          <!-- ラベル「1日あたり」 -->
-          <text x="55" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="rgba(255,255,255,0.6)" font-family="sans-serif">1日あたり</text>
-          <!-- カード -->
-          <rect x="18" y="26" width="74" height="36" rx="10" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
-          <text x="55" y="52" text-anchor="middle" font-size="22" font-weight="900" fill="#fff" font-family="sans-serif">約 ¥150</text>
-          <!-- 矢印 -->
-          <path d="M55 68 L55 76 M49 72 L55 78 L61 72" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <!-- 年間ラベル -->
-          <rect x="20" y="82" width="70" height="18" rx="9" fill="rgba(255,255,255,0.15)"/>
-          <text x="55" y="95" text-anchor="middle" font-size="10" font-weight="700" fill="#fff" font-family="sans-serif">年間 約 ¥54,750</text>
+        <svg width="100" height="100" viewBox="0 0 110 110" fill="none">
+          <circle cx="55" cy="55" r="32" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+          <line x1="55" y1="38" x2="55" y2="72" stroke="white" stroke-width="4" stroke-linecap="round"/>
+          <line x1="38" y1="55" x2="72" y2="55" stroke="white" stroke-width="4" stroke-linecap="round"/>
         </svg>
       </div>
-      <div class="ob-badge">見える化</div>
-      <div class="ob-ttl">「1日いくら」で<em>本当の重さがわかる。</em></div>
-      <div class="ob-desc">月額・年額だけでなく「1日あたり何円」かを自動計算。小さく見えた金額が年間で大きな出費になっていることに気づけます。</div>
+      <div class="ob-badge">STEP 1</div>
+      <div class="ob-ttl">登録は<em>タップするだけ</em></div>
+      <div class="ob-desc">Netflix・Spotifyなど人気サービスはカテゴリから選ぶだけで金額が自動入力。リストにないものも自由に追加できます。</div>
     </div>
 
-    <!-- ページ3: 見直し -->
+    <!-- ページ3: アカウント登録で便利に -->
     <div class="ob-slide" style="width:25%">
       <div class="ob-illust">
-        <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
-          <!-- 天秤風 -->
-          <line x1="55" y1="22" x2="55" y2="55" stroke="rgba(255,255,255,0.6)" stroke-width="2.5"/>
-          <line x1="22" y1="42" x2="88" y2="42" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" stroke-linecap="round"/>
-          <!-- 左皿（必要） -->
-          <ellipse cx="28" cy="58" rx="16" ry="6" fill="rgba(255,255,255,0.25)" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
-          <line x1="22" y1="42" x2="22" y2="52" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
-          <line x1="34" y1="42" x2="34" y2="52" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
-          <text x="28" y="62" text-anchor="middle" font-size="9" font-weight="700" fill="#fff" font-family="sans-serif">必要</text>
-          <!-- 右皿（不要） -->
-          <ellipse cx="82" cy="62" rx="16" ry="6" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-          <line x1="76" y1="42" x2="76" y2="56" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-          <line x1="88" y1="42" x2="88" y2="56" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-          <text x="82" y="66" text-anchor="middle" font-size="9" font-weight="700" fill="rgba(255,255,255,0.5)" font-family="sans-serif">解約</text>
-          <!-- 星マーク -->
-          <text x="55" y="90" text-anchor="middle" font-size="22" font-family="sans-serif">★</text>
+        <svg width="100" height="100" viewBox="0 0 110 110" fill="none">
+          <rect x="18" y="30" width="32" height="48" rx="6" fill="rgba(255,255,255,0.25)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+          <rect x="60" y="30" width="32" height="48" rx="6" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+          <path d="M50 54 L60 54" stroke="rgba(255,255,255,0.8)" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M56 50 L60 54 L56 58" stroke="rgba(255,255,255,0.8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="34" cy="54" r="6" fill="rgba(255,255,255,0.4)"/>
+          <circle cx="76" cy="54" r="6" fill="rgba(255,255,255,0.4)"/>
         </svg>
       </div>
-      <div class="ob-badge">見直し</div>
-      <div class="ob-ttl">満足度★で<em>いる・いらないを仕分ける。</em></div>
-      <div class="ob-desc">各サブスクに満足度★をつけて管理。低評価のサブスクを解約すれば、毎月の固定費が減り、浮いたお金を貯金や投資に回せます。</div>
+      <div class="ob-badge">PRO 機能</div>
+      <div class="ob-ttl">アカウント登録で<em>複数端末に対応</em></div>
+      <div class="ob-desc">無料でアカウントを作成するとデータがクラウドに同期。スマホ・タブレット・PCどこでも同じデータを確認できます。機種変更も安心！</div>
     </div>
 
-    <!-- ページ4: はじめる -->
+    <!-- ページ4: グループ機能 -->
     <div class="ob-slide" style="width:25%">
       <div class="ob-illust">
-        <svg width="110" height="110" viewBox="0 0 110 110" fill="none">
-          <!-- 貯金箱風 -->
-          <ellipse cx="55" cy="60" rx="32" ry="26" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
-          <ellipse cx="55" cy="34" rx="14" ry="10" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-          <rect x="48" y="30" width="14" height="6" rx="3" fill="rgba(255,255,255,0.3)"/>
-          <!-- コイン投入スロット -->
-          <rect x="48" y="38" width="14" height="3" rx="1.5" fill="rgba(255,255,255,0.5)"/>
-          <!-- ¥マーク -->
-          <text x="55" y="68" text-anchor="middle" font-size="24" font-weight="900" fill="#fff" font-family="sans-serif">¥</text>
-          <!-- 足 -->
-          <rect x="40" y="84" width="8" height="10" rx="4" fill="rgba(255,255,255,0.4)"/>
-          <rect x="62" y="84" width="8" height="10" rx="4" fill="rgba(255,255,255,0.4)"/>
+        <svg width="100" height="100" viewBox="0 0 110 110" fill="none">
+          <circle cx="40" cy="42" r="14" fill="rgba(255,255,255,0.3)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+          <circle cx="70" cy="42" r="14" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+          <path d="M18 78 Q18 65 40 65 Q62 65 62 78" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M62 72 Q62 65 70 65 Q85 65 85 72" stroke="rgba(255,255,255,0.4)" stroke-width="2" fill="none" stroke-linecap="round"/>
         </svg>
       </div>
-      <div class="ob-badge">完全無料・広告なし</div>
-      <div class="ob-ttl"><em>30秒</em>で登録。今日から家計を変えよう。</div>
-      <div class="ob-desc">完全無料・広告なし・個人情報不取得。まずサブスクを全部登録して、毎月いくら払っているか確認しましょう。</div>
+      <div class="ob-badge">PRO 機能</div>
+      <div class="ob-ttl">家族と<em>一緒に管理</em>できる</div>
+      <div class="ob-desc">グループを作成して招待コードを共有するだけ。家族・カップルのサブスクをまとめて見える化できます。</div>
 
-      <!-- ホーム画面追加の案内（スマホのみ表示） -->
       <div class="ob-home-hint" style="margin-top:18px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:14px 16px;text-align:left;width:100%">
-        <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:10px;letter-spacing:.5px">ホーム画面に追加すると便利です</div>
+        <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:10px">ホーム画面に追加すると便利です</div>
         <div style="display:flex;flex-direction:column;gap:8px">
           <div style="font-size:12px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:8px">
             <span style="background:rgba(255,255,255,.2);border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">i</span>
-            iPhone：Safari → 共有ボタン → 「ホーム画面に追加」
+            iPhone：Safari → 共有 →「ホーム画面に追加」
           </div>
           <div style="font-size:12px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:8px">
             <span style="background:rgba(255,255,255,.2);border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">A</span>
             Android：Chrome → メニュー →「ホーム画面に追加」
           </div>
         </div>
-        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:8px">追加するとURLなしでワンタップで開けます</div>
       </div>
     </div>
 
-  </div>
+  </div><!-- /ob-slides -->
 
   <!-- ドット -->
   <div class="ob-dots" id="ob-dots">
@@ -1379,20 +1370,14 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     <!-- メール/パスワード -->
     <div id="auth-signup-name" style="display:none;margin-bottom:10px">
       <input type="text" id="auth-nickname" placeholder="ニックネーム（表示名）" maxlength="20"
-        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
         style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
     </div>
     <div style="margin-bottom:10px">
-      <input type="text" id="auth-email" placeholder="メールアドレス"
-        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-        inputmode="email"
-        onfocus="this.setAttribute('type','email')"
+      <input type="email" id="auth-email" placeholder="メールアドレス"
         style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
     </div>
     <div style="margin-bottom:6px">
-      <input type="text" id="auth-password" placeholder="パスワード（6文字以上）"
-        autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-        onfocus="this.setAttribute('type','password')"
+      <input type="password" id="auth-password" placeholder="パスワード（6文字以上）"
         style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
     </div>
     <!-- パスワードを忘れた（ログインタブのみ表示） -->
@@ -2850,7 +2835,7 @@ function openSavingHints(){
 }
 function closeSavingHints(){ document.getElementById('saving-hints-ov').classList.add('hidden'); }
 
-function openSettings(){document.getElementById('settings-ov').classList.remove('hidden');if(window._fbUser)_updateAuthUI(window._fbUser);}
+function openSettings(){document.getElementById('settings-ov').classList.remove('hidden')}
 function closeSettings(){document.getElementById('settings-ov').classList.add('hidden')}
 let _hwPage = 0;
 function openHowto(){
@@ -2864,18 +2849,18 @@ function openHowto(){
 }
 function closeHowto(){ document.getElementById('howto-ov').classList.add('hidden'); }
 function howtoNext(){
-  if(_hwPage < 3){ _hwPage++; _hwRender(); }
+  if(_hwPage < 4){ _hwPage++; _hwRender(); }
   else { closeHowto(); }
 }
 function _hwRender(){
   const slides = document.getElementById('howto-slides');
-  if(slides) slides.style.transform = `translateX(${-_hwPage * 25}%)`;
-  for(let i=0;i<4;i++){
+  if(slides) slides.style.transform = `translateX(${-_hwPage * 20}%)`;
+  for(let i=0;i<5;i++){
     const d = document.getElementById('hwdot-'+i);
     if(d) d.classList.toggle('on', i===_hwPage);
   }
   const btn = document.getElementById('howto-btn-next');
-  if(btn) btn.textContent = _hwPage === 3 ? 'はじめる' : '次へ';
+  if(btn) btn.textContent = _hwPage === 4 ? 'はじめる' : '次へ';
   gaEvent('howto_step',{step:_hwPage+1});
 }
 function openGuide(){document.getElementById('guide-ov').classList.remove('hidden');gaEvent('guide_open',{})}
@@ -3111,6 +3096,9 @@ function _updateAuthUI(user){
     // ドロワーの退会ボタンを表示
     const delRow = document.getElementById('hd-delete-account-row');
     if(delRow) delRow.style.display = 'block';
+    // 設定画面の退会リンクを表示
+    const wdLink = document.getElementById('s-withdraw-link');
+    if(wdLink) wdLink.style.display = 'block';
 
   } else {
     // 未ログイン
@@ -3125,6 +3113,9 @@ function _updateAuthUI(user){
     // ドロワーの退会ボタンを非表示
     const delRow2 = document.getElementById('hd-delete-account-row');
     if(delRow2) delRow2.style.display = 'none';
+    // 設定画面の退会リンクを非表示
+    const wdLink2 = document.getElementById('s-withdraw-link');
+    if(wdLink2) wdLink2.style.display = 'none';
   }
 }
 
@@ -3252,26 +3243,44 @@ async function deleteAccount(){
 }
 
 async function _confirmDeleteAccount(user){
-  // 2段階確認
+  // パスワード入力付きの退会確認ダイアログ
   showDialog({
     icon:'',
-    title:'最終確認',
-    msg:'パスワードを入力して退会を確定してください。',
+    title:'退会の最終確認',
+    msg:`<div style="text-align:left">
+      <div style="font-size:13px;color:var(--ts);margin-bottom:14px;line-height:1.7">
+        退会するとすべてのデータが削除されます。<br>確認のためパスワードを入力してください。
+      </div>
+      <input type="password" id="dlg-delete-pw" placeholder="パスワード"
+        style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
+      <div id="dlg-delete-err" style="display:none;margin-top:8px;font-size:12px;color:var(--dn)"></div>
+    </div>`,
     buttons:[
       {label:'キャンセル', cls:'cancel'},
-      {label:'退会を確定する', cls:'danger', onClick: async ()=>{
+      {label:'退会する', cls:'danger', onClick: async ()=>{
+        const pw = document.getElementById('dlg-delete-pw')?.value;
+        const errEl = document.getElementById('dlg-delete-err');
+        if(!pw){
+          if(errEl){ errEl.textContent='パスワードを入力してください'; errEl.style.display='block'; }
+          return;
+        }
         try{
-          const { deleteUser, deleteDoc, doc, collection, getDocs } = window._fbFns;
-          // Firestoreのサブスクデータ削除
+          // ① パスワードで再認証
+          const { reauthenticateWithCredential, EmailAuthProvider, deleteUser, doc, collection, getDocs } = window._fbFns;
+          const credential = EmailAuthProvider.credential(user.email, pw);
+          await reauthenticateWithCredential(user, credential);
+
+          // ② Firestoreのデータをすべて削除
           const subsSnap = await getDocs(collection(window._fbDb, 'users', user.uid, 'subs'));
           const batch = window._fbFns.writeBatch(window._fbDb);
           subsSnap.docs.forEach(d => batch.delete(d.ref));
-          // ユーザードキュメント削除
           batch.delete(doc(window._fbDb, 'users', user.uid));
           await batch.commit();
-          // Firebase Authアカウント削除
+
+          // ③ Firebase Authアカウント削除
           await deleteUser(user);
-          // ローカルデータもクリア
+
+          // ④ ローカルデータもクリア
           subs = [];
           await Store.set('subsData', '[]');
           closeSettings();
@@ -3284,20 +3293,22 @@ async function _confirmDeleteAccount(user){
             buttons:[{label:'閉じる', cls:'ok'}]
           });
         }catch(e){
-          if(e.code === 'auth/requires-recent-login'){
-            showDialog({
-              icon:'',
-              title:'再認証が必要です',
-              msg:'セキュリティのため、一度ログアウトして再度ログインしてから退会してください。',
-              buttons:[{label:'OK', cls:'ok'}]
-            });
-          } else {
-            showAlert('', '退会に失敗しました', e.message);
-          }
+          const msgs = {
+            'auth/wrong-password': 'パスワードが違います',
+            'auth/invalid-credential': 'パスワードが違います',
+            'auth/too-many-requests': 'しばらく待ってから再試行してください',
+          };
+          const msg = msgs[e.code] || '退会に失敗しました: ' + e.message;
+          // ダイアログを閉じずにエラー表示
+          document.getElementById('dlg-ov').classList.remove('hidden');
+          const errEl = document.getElementById('dlg-delete-err');
+          if(errEl){ errEl.textContent = msg; errEl.style.display = 'block'; }
         }
       }}
     ]
   });
+  // パスワード入力欄にフォーカス
+  setTimeout(()=> document.getElementById('dlg-delete-pw')?.focus(), 200);
 }
 
 function _showAuthError(code){
@@ -3336,21 +3347,77 @@ function _showSignupComplete(user){
   const name = _nickname || user.displayName || user.email.split('@')[0];
   const ov = document.getElementById('auth-ov');
   const box = ov.querySelector('.auth-box') || ov.firstElementChild;
-  box.innerHTML = `
-    <div style="text-align:center;padding:16px 0 24px">
-      <div style="font-size:36px;margin-bottom:12px">🎉</div>
-      <div style="font-size:18px;font-weight:800;color:var(--tx);margin-bottom:6px">登録完了！</div>
-      <div style="font-size:13px;color:var(--ts);margin-bottom:20px">Subly Proへようこそ</div>
-      ${user.photoURL
-        ? `<img src="${user.photoURL}" style="width:56px;height:56px;border-radius:50%;margin-bottom:8px">`
-        : `<div style="width:56px;height:56px;border-radius:50%;background:var(--p);color:#fff;font-size:22px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 8px">${name.charAt(0).toUpperCase()}</div>`
-      }
-      <div style="font-size:16px;font-weight:700;color:var(--tx);margin-bottom:4px">${name}</div>
-      <div style="font-size:13px;color:var(--ts);margin-bottom:24px">${user.email || ''}</div>
-      <div style="display:inline-flex;align-items:center;gap:6px;background:var(--pl);color:var(--p);font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:28px">✓ Subly Pro</div>
-      <br>
-      <button onclick="closeAuthModal()" style="width:100%;max-width:260px;padding:14px;background:var(--p);color:#fff;font-size:15px;font-weight:800;border:none;border-radius:14px;cursor:pointer">はじめる →</button>
-    </div>`;
+  let _proSlide = 0;
+
+  function _renderProSlide(){
+    const slides = [
+      // スライド0：登録完了
+      `<div style="text-align:center;padding:16px 0 8px">
+        <div style="font-size:36px;margin-bottom:12px">🎉</div>
+        <div style="font-size:18px;font-weight:800;color:var(--tx);margin-bottom:6px">登録完了！</div>
+        <div style="font-size:13px;color:var(--ts);margin-bottom:20px">Subly Proへようこそ</div>
+        ${user.photoURL
+          ? '<img src="'+user.photoURL+'" style="width:56px;height:56px;border-radius:50%;margin-bottom:8px">'
+          : '<div style="width:56px;height:56px;border-radius:50%;background:var(--p);color:#fff;font-size:22px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 8px">'+name.charAt(0).toUpperCase()+'</div>'
+        }
+        <div style="font-size:16px;font-weight:700;color:var(--tx);margin-bottom:4px">${name}</div>
+        <div style="font-size:13px;color:var(--ts);margin-bottom:16px">${user.email || ''}</div>
+        <div style="display:inline-flex;align-items:center;gap:6px;background:var(--pl);color:var(--p);font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;margin-bottom:24px">✓ Subly Pro</div>
+      </div>`,
+      // スライド1：複数端末
+      `<div style="padding:24px 8px 8px">
+        <div style="font-size:40px;text-align:center;margin-bottom:16px">📱</div>
+        <div style="font-size:17px;font-weight:800;color:var(--tx);margin-bottom:10px;text-align:center">複数端末で使える</div>
+        <div style="font-size:14px;color:var(--ts);line-height:1.8;text-align:center;margin-bottom:16px">
+          このアカウントでログインすれば<br>
+          スマホ・タブレット・PCで<br>
+          同じデータをいつでも確認できます。
+        </div>
+        <div style="background:var(--pl);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--pd);line-height:1.7">
+          💡 機種変更のときもデータが引き継がれるので安心です
+        </div>
+      </div>`,
+      // スライド2：グループ
+      `<div style="padding:24px 8px 8px">
+        <div style="font-size:40px;text-align:center;margin-bottom:16px">👨‍👩‍👧</div>
+        <div style="font-size:17px;font-weight:800;color:var(--tx);margin-bottom:10px;text-align:center">家族と一緒に管理</div>
+        <div style="font-size:14px;color:var(--ts);line-height:1.8;text-align:center;margin-bottom:16px">
+          グループを作成して招待コードを共有するだけ。<br>
+          家族・カップルのサブスクを<br>
+          まとめて管理できます。
+        </div>
+        <div style="background:var(--pl);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--pd);line-height:1.7">
+          💡 メニュー →「グループ」から作成できます
+        </div>
+      </div>`
+    ];
+
+    // ドット
+    const dotsHtml = [0,1,2].map(i =>
+      '<div style="width:'+(i===_proSlide?'24px':'8px')+';height:8px;border-radius:4px;background:'+(i===_proSlide?'var(--p)':'var(--bd)')+';transition:all .3s"></div>'
+    ).join('');
+
+    const isLast = _proSlide === 2;
+
+    box.innerHTML = `
+      <div style="max-height:80vh;overflow-y:auto">
+        ${slides[_proSlide]}
+      </div>
+      <div style="display:flex;justify-content:center;gap:8px;padding:12px 0 8px">${dotsHtml}</div>
+      <div style="padding:0 20px 20px;display:flex;flex-direction:column;gap:8px">
+        <button onclick="window._proSlideNext()" style="width:100%;padding:14px;background:var(--p);color:#fff;font-size:15px;font-weight:800;border:none;border-radius:14px;cursor:pointer;font-family:inherit">
+          ${isLast ? 'アプリを始める →' : '次へ'}
+        </button>
+        ${!isLast ? '<button onclick="closeAuthModal()" style="width:100%;padding:10px;background:none;border:none;color:var(--ts);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">スキップ</button>' : ''}
+      </div>`;
+  }
+
+  window._proSlideNext = function(){
+    if(_proSlide < 2){ _proSlide++; _renderProSlide(); }
+    else { closeAuthModal(); }
+  };
+
+  _renderProSlide();
 }
 
 // ユーザードキュメントの初期化（初回ログイン時）
@@ -3673,7 +3740,7 @@ async function leaveGroup(){
 async function copyInviteCode(){
   const code = document.getElementById('group-invite-code').textContent;
   const groupName = _groupData?.name || 'グループ';
-  const appUrl = 'https://jonekun429.github.io/subly-for-Family/';
+  const appUrl = 'https://jonekun429.github.io/subly_lp/';
 
   const shareText = `【Subly グループ招待】
 
@@ -3880,7 +3947,7 @@ function openPrivacy(){
 }
 
 // ── シェア機能 ──────────────────────────────────────────
-const SUBLY_SHARE_URL = 'https://jonekun429.github.io/subly-for-Family/';
+const SUBLY_SHARE_URL = 'https://jonekun429.github.io/subly_lp/';
 const SUBLY_SHARE_TEXT = 'サブスクを無料で管理できるアプリ「Subly」を使ってみてください';
 
 function openShare(){
