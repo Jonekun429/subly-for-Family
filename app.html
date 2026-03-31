@@ -2912,7 +2912,10 @@ function openSavingHints(){
 }
 function closeSavingHints(){ document.getElementById('saving-hints-ov').classList.add('hidden'); }
 
-function openSettings(){document.getElementById('settings-ov').classList.remove('hidden')}
+function openSettings(){
+  document.getElementById('settings-ov').classList.remove('hidden');
+  if(window._fbUser) _updateAuthUI(window._fbUser);
+}
 function closeSettings(){document.getElementById('settings-ov').classList.add('hidden')}
 let _hwPage = 0;
 function openHowto(){
