@@ -3293,10 +3293,15 @@ window._onAuthChanged = async (user) => {
     // リアルタイム通知リスナー開始（onSnapshotで既読チェックも兼ねる）
     _startNotificationListener(user.uid);
   } else {
-    // 未ログイン → LocalStorageのまま
+    // 未ログイン → データを非表示にする（LocalStorageには残す）
+    subs = [];
+    _groupId = null;
+    _groupData = null;
     _updateAuthUI(null);
-    _updateNewBadges(); // ログアウト時にNEWバッジを再表示
+    _updateNewBadges();
     _stopNotificationListener();
+    renderDashboard();
+    renderList();
   }
 };
 
