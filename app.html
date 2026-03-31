@@ -4534,8 +4534,8 @@ function renderDashboard(){
     grpHeader.style.display = 'none';
   }
   drawChart(cmap);
-  renderSatChart();
-  checkAlerts();
+  renderSatChart(targetSubs);
+  checkAlerts(targetSubs);
 }
 
 function drawChart(obj){
@@ -4724,10 +4724,11 @@ function drawFallback(ctx,canvas,data,colors,labels,total){
   ctx.beginPath();ctx.arc(cx,cy,inner,0,2*Math.PI);ctx.fillStyle=bg;ctx.fill();
 }
 
-function renderSatChart(){
+function renderSatChart(targetSubs){
   const area=document.getElementById('sat-chart-area');
+  const srcSubs = targetSubs || subs;
   const groups={};
-  subs.filter(s=>s.sat&&s.freq!=='単発（買い切り）'&&!s.canceled).forEach(s=>{
+  srcSubs.filter(s=>s.sat&&s.freq!=='単発（買い切り）'&&!s.canceled).forEach(s=>{
     const mo=moFromSub(s);
     groups[s.sat]=(groups[s.sat]||{total:0,cnt:0});
     groups[s.sat].total+=mo;
@@ -4752,7 +4753,8 @@ function renderSatChart(){
     </div>`;
   });
   html+='</div>';
-  const lowSat=subs.filter(s=>!s.paused&&!s.canceled&&s.sat===1&&s.freq!=='単発（買い切り）');
+  const lowSrc = (typeof targetSubs !== 'undefined' && targetSubs) ? targetSubs : subs;
+  const lowSat=lowSrc.filter(s=>!s.paused&&!s.canceled&&s.sat===1&&s.freq!=='単発（買い切り）');
   if(lowSat.length){
     const low=lowSat.reduce((s,x)=>s+(x.freq==='月額'?x.price:Math.round(x.price/12)),0);
     html+=`<div class="sat-insight">満足度が低いサブスクに <b>¥${low.toLocaleString()}/月</b>。解約すると年間 <b>¥${(low*12).toLocaleString()}</b> 節約できます。</div>`;
@@ -4814,7 +4816,7 @@ async function _dismissAlert(cat, el){
 }
 
 
-function checkAlerts(){
+function checkAlerts(targetSubs){
   const box=document.getElementById('alerts');
   box.innerHTML='';
 
@@ -4859,8 +4861,9 @@ function checkAlerts(){
     })();
   }
 
-  // ② 解約検討（満足度★1〜3）
-  const warns=subs.filter(s=>!s.paused&&!s.canceled&&s.sat===1&&s.freq!=='単発（買い切り）').sort((a,b)=>b.price-a.price);
+  // ② 解約検討（満足度★1）
+  const warnSrc = (typeof targetSubs !== 'undefined' && targetSubs) ? targetSubs : subs;
+  const warns=warnSrc.filter(s=>!s.paused&&!s.canceled&&s.sat===1&&s.freq!=='単発（買い切り）').sort((a,b)=>b.price-a.price);
   if(!warns.length) return;
 
   const section=document.createElement('div');
