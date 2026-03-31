@@ -3000,8 +3000,13 @@ function closeSavingHints(){ document.getElementById('saving-hints-ov').classLis
 function openSettings(){
   document.getElementById('settings-ov').classList.remove('hidden');
   // 退会ボタンをログイン状態に応じて確実に制御
-  const wdLink = document.getElementById('s-withdraw-link');
-  if(wdLink) wdLink.style.display = window._fbUser ? 'block' : 'none';
+  const applyWithdraw = () => {
+    const wdLink = document.getElementById('s-withdraw-link');
+    if(wdLink) wdLink.style.display = window._fbUser ? 'block' : 'none';
+  };
+  applyWithdraw();
+  // Firebase認証の確定を待って再チェック
+  setTimeout(applyWithdraw, 500);
   _updateAuthUI(window._fbUser || null);
 }
 function closeSettings(){document.getElementById('settings-ov').classList.add('hidden')}
