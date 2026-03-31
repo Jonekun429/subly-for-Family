@@ -3994,7 +3994,16 @@ async function leaveGroup(){
           }
           await setDoc(doc(window._fbDb,'users',user.uid), { groupId:'' }, { merge:true });
           _groupId = null; _groupData = null; _groupMembersData = [];
+          _groupSubsCache = {};
           _currentGroupFilter = 'all';
+          // ドロワーのグループ表示をリセット
+          const lbl = document.getElementById('hd-group-btn-lbl');
+          const sub = document.getElementById('hd-group-btn-sub');
+          if(lbl) lbl.textContent = 'グループを作る';
+          if(sub) sub.textContent = '家族・カップルで共有';
+          // サマリのグループヘッダーも非表示
+          const grpHeader = document.getElementById('summary-group-header');
+          if(grpHeader) grpHeader.style.display = 'none';
           _updateGroupTabs();
           renderDashboard();
           gaEvent('group_leave', {});
