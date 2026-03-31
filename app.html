@@ -488,9 +488,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .btn-submit{width:100%;padding:16px;background:linear-gradient(135deg,var(--p) 0%,var(--pd) 100%);color:#fff;font-size:16px;font-weight:700;font-family:inherit;border:none;border-radius:14px;cursor:pointer;margin-top:8px;transition:background .15s,transform .1s,box-shadow .15s;box-shadow:0 6px 20px rgba(62,107,98,.45);letter-spacing:.5px;position:relative;overflow:hidden}
 .btn-submit::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0);transition:background .2s}
 .btn-submit:hover::after{background:rgba(255,255,255,.08)}
-.btn-submit:active{transform:scale(.97);box-shadow:0 2px 8px rgba(62,107,98,.3)}
 .btn-submit:hover{background:var(--pd)}
-.btn-submit:active{transform:scale(.98)}
+.btn-submit:active{transform:scale(.97);box-shadow:0 2px 8px rgba(62,107,98,.3)}
 .btn-cancel{width:100%;padding:12px;background:#fff;color:var(--ts);font-size:14px;font-weight:700;font-family:inherit;border:1.5px solid var(--bd);border-radius:12px;cursor:pointer;margin-top:7px;-webkit-tap-highlight-color:transparent}
 
 /* ── カスタム確認ダイアログ ── */
@@ -771,9 +770,14 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
     <!-- グループ -->
     <div class="hd-sec">グループ</div>
-    <button class="hd-row" onclick="closeHdrop();setTimeout(openGroupModal,150)">
+    <button class="hd-row" id="hd-group-btn" onclick="closeHdrop();setTimeout(_onGroupMenuTap,150)">
       <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
       <div><div class="hd-lbl" id="hd-group-btn-lbl">グループを作る</div><div class="hd-sub" id="hd-group-btn-sub">家族・カップルで共有</div></div>
+    </button>
+    <!-- Freeユーザー向け：招待コードで参加ボタン -->
+    <button class="hd-row" id="hd-group-join-btn" style="display:none" onclick="closeHdrop();setTimeout(_openFreeJoinModal,150)">
+      <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
+      <div><div class="hd-lbl">招待コードで参加</div><div class="hd-sub">グループに招待されていますか？</div></div>
     </button>
 
     <!-- 設定 -->
@@ -896,7 +900,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 <!-- カスタム確認ダイアログ -->
 <div class="dlg-ov hidden" id="dlg-ov">
   <div class="dlg">
-    <button id="dlg-close" onclick="closeDialog()" style="display:none;position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:var(--bg);border:none;cursor:pointer;font-size:15px;color:var(--ts);display:none;align-items:center;justify-content:center" id="dlg-close">✕</button>
+    <button id="dlg-close" onclick="closeDialog()" style="display:none;position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:var(--bg);border:none;cursor:pointer;font-size:15px;color:var(--ts);align-items:center;justify-content:center">✕</button>
     <div class="dlg-icon" id="dlg-icon"></div>
     <div class="dlg-ttl" id="dlg-ttl"></div>
     <div class="dlg-msg" id="dlg-msg"></div>
@@ -1377,9 +1381,12 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <input type="email" id="auth-email" placeholder="メールアドレス"
         style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
     </div>
-    <div style="margin-bottom:6px">
+    <div style="margin-bottom:6px;position:relative">
       <input type="password" id="auth-password" placeholder="パスワード（英数字・大文字含む8文字以上）"
-        style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
+        style="width:100%;padding:11px 44px 11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
+      <button type="button" onclick="togglePwVisibility('auth-password',this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:0;color:var(--ts);display:flex;align-items:center">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+      </button>
     </div>
     <!-- パスワードを忘れた（ログインタブのみ表示） -->
     <div id="auth-forgot-wrap" style="text-align:right;margin-bottom:14px">
@@ -1552,6 +1559,31 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 <!-- メインコンテンツ -->
 
 <!-- 登録促進ポップアップ -->
+<!-- Freeユーザー向けグループ参加モーダル -->
+<div class="dlg-ov hidden" id="free-join-ov" onclick="if(event.target===this)_closeFreeJoinModal()">
+  <div class="dlg" style="max-width:340px;width:92%">
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="width:48px;height:48px;border-radius:50%;background:var(--pl);display:flex;align-items:center;justify-content:center;margin:0 auto 10px">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--p)"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+      </div>
+      <div style="font-size:16px;font-weight:800;color:var(--tx);margin-bottom:4px">グループに参加する</div>
+      <div style="font-size:13px;color:var(--ts);line-height:1.6">招待コードを持っていますか？<br>参加にはアカウント登録が必要です。</div>
+    </div>
+    <div style="background:var(--pl);border-radius:12px;padding:12px 14px;margin-bottom:16px">
+      <div style="font-size:12px;color:var(--p);font-weight:700;margin-bottom:6px">参加の手順</div>
+      <div style="font-size:12px;color:var(--ts);line-height:1.9">
+        1. アカウントを無料登録<br>
+        2. メニュー → グループ → 招待コードを入力<br>
+        3. 参加完了！
+      </div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button onclick="_closeFreeJoinModal()" style="flex:1;padding:12px;background:var(--bg);border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-weight:700;color:var(--ts);font-family:inherit;cursor:pointer">閉じる</button>
+      <button onclick="_closeFreeJoinModal();setTimeout(()=>openAuthModal('signup'),200)" style="flex:1;padding:12px;background:var(--p);border:none;border-radius:10px;font-size:14px;font-weight:700;color:#fff;font-family:inherit;cursor:pointer">無料登録する</button>
+    </div>
+  </div>
+</div>
+
 <div class="nudge-ov hidden" id="nudge-ov" onclick="if(event.target===this)closeNudge()">
   <div class="nudge">
     <div class="nudge-hdr">
@@ -1607,6 +1639,38 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   </div>
 </div>
 
+<!-- Proプラン誘導ポップアップ -->
+<div class="nudge-ov hidden" id="pro-nudge-ov" onclick="if(event.target===this)closeProNudge()">
+  <div class="nudge">
+    <div class="nudge-hdr">
+      <button class="nudge-close" onclick="closeProNudge()">✕</button>
+      <div class="nudge-hdr-ttl">家族と一緒に管理しませんか？</div>
+      <div class="nudge-hdr-sub">Subly Pro なら複数人でサブスクを共有できます</div>
+    </div>
+    <div class="nudge-body">
+      <div class="nudge-item" onclick="closeProNudge();setTimeout(openGroupModal,200)">
+        <div class="nudge-ico" style="background:var(--pl)"><svg width="20" height="20" viewBox="0 0 24 24" fill="var(--p)"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+        <div class="nudge-lbl">
+          <div class="nudge-name">グループ機能を使う</div>
+          <div class="nudge-hint">招待コードで家族・カップルと共有</div>
+        </div>
+        <span class="nudge-arr">›</span>
+      </div>
+      <div class="nudge-item" onclick="closeProNudge();setTimeout(_showProUpgradeModal,200)">
+        <div class="nudge-ico" style="background:var(--pl)"><svg width="20" height="20" viewBox="0 0 24 24" fill="var(--p)"><path d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg></div>
+        <div class="nudge-lbl">
+          <div class="nudge-name">クラウド同期を使う</div>
+          <div class="nudge-hint">スマホ・PCどこでもデータ共有</div>
+        </div>
+        <span class="nudge-arr">›</span>
+      </div>
+    </div>
+    <div class="nudge-footer">
+      <button class="nudge-skip" onclick="closeProNudge()">今は使わない</button>
+    </div>
+  </div>
+</div>
+
 <div class="wrap">
 
   <!-- ① ホーム -->
@@ -1623,7 +1687,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     <!-- サマリカード（左ボーダーアクセント） -->
     <div style="border-radius:14px;overflow:hidden;border:1px solid var(--bd);background:var(--card);margin-bottom:12px;box-shadow:var(--sh)">
       <!-- グループ名カード（グループ参加時のみ表示） -->
-      <div id="summary-group-header" style="display:none;background:var(--p);padding:9px 16px;display:none;align-items:center;justify-content:space-between">
+      <div id="summary-group-header" style="display:none;background:var(--p);padding:9px 16px;align-items:center;justify-content:space-between">
         <div style="display:flex;align-items:center;gap:8px">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="rgba(255,255,255,.85)"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
           <span id="summary-group-name" style="font-size:13px;font-weight:700;color:#fff"></span>
@@ -3034,6 +3098,34 @@ function openNicknameModal(){
   setTimeout(() => input.focus(), 100);
 }
 
+// グループメニュータップ：ログイン済みはopenGroupModal、未ログインはFreeJoinModal
+function _onGroupMenuTap(){
+  if(window._fbUser){
+    openGroupModal();
+  } else {
+    _openFreeJoinModal();
+    // 未ログインユーザーにPro訴求も併せてチェック
+    setTimeout(()=>checkProNudge(true), 600);
+  }
+}
+
+function _openFreeJoinModal(){
+  document.getElementById('free-join-ov').classList.remove('hidden');
+}
+function _closeFreeJoinModal(){
+  document.getElementById('free-join-ov').classList.add('hidden');
+}
+
+function togglePwVisibility(inputId, btn){
+  const inp = document.getElementById(inputId);
+  if(!inp) return;
+  const isHidden = inp.type === 'password';
+  inp.type = isHidden ? 'text' : 'password';
+  btn.innerHTML = isHidden
+    ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24M1 1l22 22"/></svg>`
+    : `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>`;
+}
+
 function closeNicknameModal(){
   document.getElementById('nickname-ov').classList.add('hidden');
 }
@@ -3091,6 +3183,9 @@ async function saveNickname(){
   if(acctNickEl){ acctNickEl.textContent = val || '名前を設定'; acctNickEl.style.color = val ? 'var(--tx)' : 'var(--ts)'; }
   const hdNickEl = document.getElementById('hd-nickname-display');
   if(hdNickEl){ hdNickEl.textContent = val || '名前を設定'; }
+  // アカウント情報欄のニックネームも即時更新
+  const sAuthNameEl = document.getElementById('s-auth-name');
+  if(sAuthNameEl){ sAuthNameEl.textContent = val || '—'; }
   closeNicknameModal();
   gaEvent('nickname_set', { has_name: !!val, is_first: isFirstTime });
 
@@ -3195,6 +3290,12 @@ function _updateAuthUI(user){
     const wdLink = document.getElementById('s-withdraw-link');
     if(wdLink) wdLink.style.display = 'block';
 
+    // ドロワー：ログイン済みはグループ通常ボタン、参加ボタン非表示
+    const hdGroupBtn = document.getElementById('hd-group-btn');
+    const hdGroupJoinBtn = document.getElementById('hd-group-join-btn');
+    if(hdGroupBtn) hdGroupBtn.style.display = '';
+    if(hdGroupJoinBtn) hdGroupJoinBtn.style.display = 'none';
+
   } else {
     // 未ログイン
     if(authBtn) authBtn.textContent = 'ログイン / 新規登録';
@@ -3209,6 +3310,12 @@ function _updateAuthUI(user){
     // 設定画面の退会リンクを非表示
     const wdLink2 = document.getElementById('s-withdraw-link');
     if(wdLink2) wdLink2.style.display = 'none';
+
+    // ドロワー：未ログインは招待コード参加ボタンを表示
+    const hdGroupBtn2 = document.getElementById('hd-group-btn');
+    const hdGroupJoinBtn2 = document.getElementById('hd-group-join-btn');
+    if(hdGroupBtn2) hdGroupBtn2.style.display = 'none';
+    if(hdGroupJoinBtn2) hdGroupJoinBtn2.style.display = '';
   }
 }
 
@@ -3666,13 +3773,13 @@ async function save(){
   }
 }
 
-function openAuthModal(){
+function openAuthModal(tab){
   const user = window._fbUser;
-  if(user){
+  if(user && !tab){
     logoutFirebase();
   } else {
     closeHdrop();
-    switchAuthTab('login');
+    switchAuthTab(tab || 'login');
     document.getElementById('auth-ov').classList.remove('hidden');
     gaEvent('auth_modal_open', {});
   }
@@ -3696,15 +3803,16 @@ async function openGroupModal(){
   closeHdrop();
   const user = window._fbUser;
   if(!user){
+    // 未ログイン：招待コード入力はできるが登録が必要と案内
     showDialog({
-      icon:'', title:'Subly Pro の機能です',
+      icon:'', title:'グループに参加するには',
       msg:`<div style="text-align:left;line-height:1.9;font-size:14px;color:var(--ts)">
-        グループ機能は <b style="color:var(--tx)">Subly Pro プラン</b> でご利用いただけます。<br><br>
-        アカウントを登録してご利用ください。
+        招待コードで参加するには<b style="color:var(--tx)">アカウント登録</b>が必要です。<br><br>
+        無料で登録してグループ機能をお使いください。
       </div>`,
       buttons:[
         {label:'閉じる', cls:'cancel'},
-        {label:'登録する', cls:'ok', onClick:()=>{ closeDialog(); setTimeout(()=>_showProUpgradeModal(), 150); }}
+        {label:'登録する', cls:'ok', onClick:()=>{ closeDialog(); setTimeout(()=> document.getElementById('auth-ov').classList.remove('hidden'), 150); }}
       ]
     });
     return;
@@ -6233,6 +6341,24 @@ async function closeNudge(){
   gaEvent('nudge_dismissed', {});
 }
 
+async function closeProNudge(){
+  document.getElementById('pro-nudge-ov').classList.add('hidden');
+  await Store.set('proNudgeDismissed', '1');
+  gaEvent('pro_nudge_dismissed', {});
+}
+
+// Proプラン誘導ポップアップ：未ログインユーザーに表示
+// タイミング：サブスク3件登録後 / グループメニュータップ時
+async function checkProNudge(force){
+  if(window._fbUser) return; // ログイン済みは不要
+  const dismissed = await Store.get('proNudgeDismissed');
+  if(dismissed) return;
+  const count = subs.length;
+  if(!force && count < 3) return;
+  document.getElementById('pro-nudge-ov').classList.remove('hidden');
+  gaEvent('pro_nudge_shown', { sub_count: count, force: !!force });
+}
+
 function nudgeTap(name, cat){
   closeNudge();
   gaEvent('nudge_tap', { service_name: name, category: cat });
@@ -6297,6 +6423,8 @@ async function init(){
   // Web版: 月初の見直しバナー表示（onboarding後に少し遅らせて表示）
   _initChartSwipe();
   if(onboarded) setTimeout(()=>checkUpcomingPayments(), 1200);
+  // Proプラン誘導（未ログイン・3件以上登録済みの場合）
+  if(onboarded) setTimeout(()=>checkProNudge(), 2500);
 }
 
 /* ============================================================
