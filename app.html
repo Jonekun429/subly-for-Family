@@ -3196,6 +3196,7 @@ function closeAuthModal(){
 }
 
 function switchAuthTab(tab, skipProModal){
+  _authMode = tab; // フラグ更新
   const isLogin = tab === 'login';
   document.getElementById('auth-tab-login').style.color = isLogin ? 'var(--p)' : 'var(--ts)';
   document.getElementById('auth-tab-login').style.borderBottomColor = isLogin ? 'var(--p)' : 'transparent';
@@ -3249,7 +3250,7 @@ async function submitAuth(){
 
   try{
     // 新規登録時のパスワードバリデーション
-  const isLoginTab = document.getElementById('auth-tab-login').style.color !== 'var(--ts)';
+  const isLoginTab = (_authMode === 'login');
   if(!isLoginTab){
     if(password.length < 8){
       _showAuthError('pw-short'); return;
@@ -4154,6 +4155,7 @@ function _updateGroupTabs(){
 // グループリアルタイムリスナー
 let _groupUnsubscribe = null;
 let _groupInitialized = false; // 初回ロード完了フラグ
+let _authMode = 'login'; // 'login' or 'signup'
 
 async function _loadGroupForDashboard(){
   const user = window._fbUser;
