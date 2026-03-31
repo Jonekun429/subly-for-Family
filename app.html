@@ -754,25 +754,36 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <svg width="18" height="18" viewBox="0 0 24 24" fill="rgba(255,255,255,.7)"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
       </div>
       <div style="flex:1;min-width:0">
-        <div class="hd-lbl" id="hd-auth-btn-lbl">ログイン / 新規登録</div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div class="hd-lbl" id="hd-auth-btn-lbl">ログイン / 新規登録</div>
+          <span id="hd-auth-new-badge" style="display:none;background:#ff6b6b;border-radius:4px;padding:1px 5px;font-size:9px;font-weight:700;color:#fff;flex-shrink:0">NEW</span>
+        </div>
         <div class="hd-sub" id="hd-auth-btn-sub" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">アカウントを作成</div>
       </div>
       <div id="hd-auth-status" style="display:none;width:8px;height:8px;border-radius:50%;background:#4ADE80;flex-shrink:0"></div>
     </button>
 
-
     <!-- プロフィール -->
     <div class="hd-sec">プロフィール</div>
     <button class="hd-row" onclick="closeHdrop();setTimeout(openNicknameModal,150)">
       <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></div>
-      <div><div class="hd-lbl" id="hd-nickname-display">名前を設定</div><div class="hd-sub" id="hd-plan-display">Subly Free</div></div>
+      <div style="flex:1;min-width:0">
+        <div class="hd-lbl" id="hd-nickname-display">名前を設定</div>
+        <div class="hd-sub" id="hd-plan-display">Subly Free</div>
+      </div>
     </button>
 
     <!-- グループ -->
     <div class="hd-sec">グループ</div>
     <button class="hd-row" id="hd-group-btn" onclick="closeHdrop();setTimeout(_onGroupMenuTap,150)">
       <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
-      <div><div class="hd-lbl" id="hd-group-btn-lbl">グループを作る</div><div class="hd-sub" id="hd-group-btn-sub">家族・カップルで共有</div></div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:6px">
+          <div class="hd-lbl" id="hd-group-btn-lbl">グループを作る</div>
+          <span id="hd-group-new-badge" style="display:none;background:#ff6b6b;border-radius:4px;padding:1px 5px;font-size:9px;font-weight:700;color:#fff;flex-shrink:0">NEW</span>
+        </div>
+        <div class="hd-sub" id="hd-group-btn-sub">家族・カップルで共有</div>
+      </div>
     </button>
     <!-- Freeユーザー向け：招待コードで参加ボタン -->
     <button class="hd-row" id="hd-group-join-btn" style="display:none" onclick="closeHdrop();setTimeout(_openFreeJoinModal,150)">
@@ -944,7 +955,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
               <span style="font-size:11px;font-weight:700;color:var(--p)" id="s-auth-plan-badge">Subly Pro ✓</span>
             </div>
           </div>
-          <button onclick="logoutFirebase();closeSettings()" style="flex-shrink:0;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--ts);font-family:inherit;cursor:pointer;white-space:nowrap">ログアウト</button>
+          <button onclick="logoutFirebase()" style="flex-shrink:0;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--ts);font-family:inherit;cursor:pointer;white-space:nowrap">ログアウト</button>
         </div>
       </div>
       <!-- 未ログイン時 -->
@@ -2798,12 +2809,13 @@ async function checkUpcomingPayments(){
   box.insertBefore(banner, box.firstChild);
 }
 
-function showDialog({icon='', title='', msg='', buttons=[], closable=false, onClose=null}){
+function showDialog({icon='', title='', msg='', buttons=[], closable=false, onClose=null, btnColumn=false}){
   document.getElementById('dlg-icon').innerHTML=icon||'';
   document.getElementById('dlg-ttl').textContent=title;
   document.getElementById('dlg-msg').innerHTML = typeof msg === 'string' ? msg : '';
   const btns=document.getElementById('dlg-btns');
   btns.innerHTML='';
+  btns.style.flexDirection = btnColumn ? 'column' : '';
   buttons.forEach(b=>{
     const el=document.createElement('button');
     el.className='dlg-btn '+(b.cls||'ok');
@@ -2842,6 +2854,7 @@ function toggleHdrop(e){
   if(isOpen){ closeHdrop(); }
   else {
     drop.classList.add('open'); bg.classList.add('open');
+    _updateNewBadges();
     gaEvent('drawer_open', {});
   }
 }
@@ -2986,6 +2999,9 @@ function closeSavingHints(){ document.getElementById('saving-hints-ov').classLis
 
 function openSettings(){
   document.getElementById('settings-ov').classList.remove('hidden');
+  // 退会ボタンをログイン状態に応じて確実に制御
+  const wdLink = document.getElementById('s-withdraw-link');
+  if(wdLink) wdLink.style.display = window._fbUser ? 'block' : 'none';
   _updateAuthUI(window._fbUser || null);
 }
 function closeSettings(){document.getElementById('settings-ov').classList.add('hidden')}
@@ -3122,6 +3138,38 @@ function _closeFreeJoinModal(){
   document.getElementById('free-join-ov').classList.add('hidden');
 }
 
+// NEWバッジ：未ログインかつ未登録ユーザーのみ表示
+async function _updateNewBadges(){
+  const authBadge = document.getElementById('hd-auth-new-badge');
+  const groupBadge = document.getElementById('hd-group-new-badge');
+
+  // ① アカウントのNEW：未ログインなら表示
+  if(authBadge) authBadge.style.display = window._fbUser ? 'none' : '';
+
+  // ② グループのNEW：ログイン済み＆グループ未参加＆登録直後フラグあり
+  if(groupBadge){
+    if(!window._fbUser || _groupId){
+      groupBadge.style.display = 'none';
+    } else {
+      const groupBadgeOn = await Store.get('groupNewBadge');
+      groupBadge.style.display = groupBadgeOn ? '' : 'none';
+    }
+  }
+}
+
+// NEWバッジを非表示にして記録（登録モーダルを開いたとき）
+async function _dismissNewBadge(){
+  const authBadge = document.getElementById('hd-auth-new-badge');
+  if(authBadge) authBadge.style.display = 'none';
+}
+
+// グループNEWバッジを消す（グループ参加・作成後）
+async function _dismissGroupNewBadge(){
+  await Store.set('groupNewBadge', '');
+  const groupBadge = document.getElementById('hd-group-new-badge');
+  if(groupBadge) groupBadge.style.display = 'none';
+}
+
 function togglePwVisibility(inputId, btn){
   const inp = document.getElementById(inputId);
   if(!inp) return;
@@ -3233,6 +3281,7 @@ window._onAuthChanged = async (user) => {
     gaEvent('login', { method: user.providerData[0]?.providerId || 'unknown' });
     await _loadFromFirestore(user.uid);
     _updateAuthUI(user);
+    _updateNewBadges(); // ログイン時にNEWバッジを消す
     // グループ状態を確認してタブ更新（完了後にダッシュボードを再描画）
     await _loadGroupForDashboard();
     // グループデータ込みでダッシュボードを再描画
@@ -3246,6 +3295,7 @@ window._onAuthChanged = async (user) => {
   } else {
     // 未ログイン → LocalStorageのまま
     _updateAuthUI(null);
+    _updateNewBadges(); // ログアウト時にNEWバッジを再表示
     _stopNotificationListener();
   }
 };
@@ -3435,16 +3485,26 @@ async function logoutFirebase(){
   if(!window._fbAuth || !window._fbFns) return;
   showDialog({
     icon:'',
-    title:'ログアウト',
-    msg:'ログアウトするとデータはクラウドに保存されたままです。',
+    title:'ログアウトしますか？',
+    msg:`<div style="text-align:center">
+      <div style="font-size:13px;color:var(--ts);margin-bottom:14px;line-height:1.7">
+        ログアウトするとデータが非表示になります。<br>
+        再ログインでいつでも復元できます。
+      </div>
+      <div style="background:#F5FAF9;border-radius:12px;padding:12px 14px;text-align:left;font-size:12px;color:var(--ts);line-height:1.8;margin-bottom:0">
+        データはクラウドに<strong style="color:var(--tx)">安全に保存</strong>されています。ログアウトしても削除されません。
+      </div>
+    </div>`,
     buttons:[
-      {label:'キャンセル', cls:'cancel'},
       {label:'ログアウト', cls:'ok', onClick: async ()=>{
         await window._fbFns.signOut(window._fbAuth);
+        closeSettings();
         showToast('ログアウトしました');
         gaEvent('logout', {});
-      }}
-    ]
+      }},
+      {label:'キャンセル', cls:'cancel'}
+    ],
+    btnColumn: true
   });
 }
 
@@ -3622,6 +3682,9 @@ function _showAuthError(code){
 
 // 登録完了画面を表示
 function _showSignupComplete(user){
+  // 新規登録完了 → グループNEWバッジを表示するフラグを立てる
+  Store.set('groupNewBadge', '1');
+  Store.set('newBadgeDismissed', '1'); // アカウントNEWは消す
   const name = _nickname || user.displayName || user.email.split('@')[0];
   const ov = document.getElementById('auth-ov');
   const box = ov.querySelector('.auth-box') || ov.firstElementChild;
@@ -3782,6 +3845,7 @@ function openAuthModal(tab){
   if(user && !tab){
     logoutFirebase();
   } else {
+    _dismissNewBadge();
     closeHdrop();
     switchAuthTab(tab || 'login');
     document.getElementById('auth-ov').classList.remove('hidden');
@@ -4052,6 +4116,7 @@ async function createGroup(){
   _groupId = groupId;
   _groupData = groupData;
   await _renderGroupJoined();
+  _dismissGroupNewBadge();
   gaEvent('group_create', { group_name: name });
   showToast(`「${name}」を作成しました`);
 }
@@ -4111,6 +4176,7 @@ async function joinGroupByCode(codeArg){
     _groupData = { ...groupData, memberUids: [...memberUids, user.uid] };
 
     gaEvent('group_join', { code });
+    _dismissGroupNewBadge();
     // 参加通知をメンバーに送る
     await _notifyGroupMembers(groupDoc.id, _nickname || user.displayName || 'メンバー');
 
