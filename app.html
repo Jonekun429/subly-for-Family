@@ -562,38 +562,44 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .guide-note{background:var(--pl);border-radius:9px;padding:12px 14px;font-size:14px;color:var(--pd);line-height:1.7;margin-top:6px}
 
 /* ── オンボーディング ── */
-.ob-overlay{position:fixed;inset:0;z-index:9999;background:var(--p);display:flex;flex-direction:column;overflow:hidden}
+.ob-overlay{position:fixed;inset:0;z-index:9999;background:#000;display:flex;flex-direction:column;overflow:hidden}
 .ob-overlay.hidden{display:none}
 /* スライドラッパー */
 .ob-slides{display:flex;width:400%;flex:1;overflow:hidden;transition:transform .38s cubic-bezier(.4,0,.2,1)}
-.ob-slide{width:25%;flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 32px;text-align:center;box-sizing:border-box;overflow-y:auto}
-/* イラストエリア */
-.ob-illust{width:160px;height:160px;border-radius:36px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 28px;flex-shrink:0}
-.ob-illust svg{filter:drop-shadow(0 4px 16px rgba(0,0,0,.15))}
-/* テキスト */
-.ob-badge{font-size:11px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.7);text-transform:uppercase;margin-bottom:10px;text-align:center;width:100%}
-.ob-ttl{font-size:clamp(15px,4.2vw,22px);font-weight:800;color:#fff;line-height:1.3;margin-bottom:12px;text-align:center;width:100%;word-break:keep-all;overflow-wrap:break-word}
-.ob-ttl em{font-style:normal;color:rgba(255,255,255,.75)}
-.ob-desc{font-size:13px;color:rgba(255,255,255,.85);line-height:1.65;max-width:100%;text-align:center}
-/* ドットインジケーター */
-.ob-dots{display:flex;gap:8px;justify-content:center;padding:28px 0 12px;flex-shrink:0}
-.ob-dot{width:8px;height:8px;border-radius:4px;background:rgba(255,255,255,.35);transition:all .3s;cursor:pointer}
-.ob-dot.on{width:24px;background:#fff}
-/* ボタンエリア */
-.ob-footer{width:100%;padding:12px 28px calc(env(safe-area-inset-bottom,0px) + 20px);box-sizing:border-box;display:flex;gap:10px;flex-shrink:0;position:sticky;bottom:0;background:var(--p)}
-.ob-btn-next{flex:1;padding:15px;background:#fff;color:var(--p);border:none;border-radius:14px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity .15s}
+.ob-slide{width:25%;flex-shrink:0;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden;background:#fff}
+/* 上部カラーヘッダー */
+.ob-header{height:46%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:22px;flex-shrink:0;background:linear-gradient(160deg,var(--p),var(--pd))}
+.ob-icon{width:80px;height:80px;border-radius:22px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.ob-badge{font-size:10px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.65);margin-bottom:5px;text-align:center}
+.ob-ttl{font-size:18px;font-weight:800;color:#fff;text-align:center;line-height:1.25;padding:0 24px;white-space:nowrap}
+.ob-ttl em{font-style:normal;color:rgba(255,255,255,.65)}
+/* 下部白エリア */
+.ob-body{flex:1;padding:18px 22px 0;display:flex;flex-direction:column;overflow:hidden;background:#fff}
+.ob-li{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f2f2f2;font-size:13px;color:#333;font-weight:500}
+.ob-li:last-of-type{border-bottom:none}
+.ob-li-dot{width:7px;height:7px;border-radius:50%;background:var(--p);flex-shrink:0}
+/* ヒントカード */
+.ob-hint{background:#f7f7f7;border-radius:12px;padding:10px 14px;margin-top:10px}
+.ob-hint p{font-size:10px;font-weight:700;color:#999;margin-bottom:6px;letter-spacing:.5px}
+.ob-hint-row{display:flex;align-items:center;gap:8px;font-size:11px;color:#555;padding:2px 0}
+.ob-hint-badge{background:#e0e0e0;border-radius:5px;padding:2px 6px;font-size:9px;font-weight:700;color:#555;flex-shrink:0}
+/* ドット */
+.ob-dots{display:flex;gap:6px;justify-content:center;padding:14px 0 10px;flex-shrink:0;background:#fff}
+.ob-dot{width:20px;height:3px;border-radius:2px;background:#e0e0e0;transition:all .3s;cursor:pointer}
+.ob-dot.on{width:28px;background:var(--p)}
+/* ボタン */
+.ob-footer{width:100%;padding:0 22px calc(env(safe-area-inset-bottom,0px) + 20px);box-sizing:border-box;display:flex;gap:10px;flex-shrink:0;background:#fff}
+.ob-btn-next{flex:1;padding:14px;background:var(--p);color:#fff;border:none;border-radius:14px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:opacity .15s}
 .ob-btn-next:active{opacity:.8}
-.ob-btn-skip{padding:15px 16px;background:rgba(255,255,255,.15);color:rgba(255,255,255,.8);border:none;border-radius:14px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
-/* PC対応：中央モーダル風に */
+.ob-btn-skip{padding:14px 16px;background:#f0f0f0;color:#999;border:none;border-radius:14px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+/* PC対応 */
 @media(min-width:768px){
-  .ob-overlay{align-items:center;justify-content:center;background:rgba(0,0,0,.55)}
-  .ob-inner-wrap{width:480px;max-height:88vh;background:var(--p);border-radius:24px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.3)}
+  .ob-overlay{align-items:center;justify-content:center;background:rgba(0,0,0,.6)}
+  .ob-inner-wrap{width:400px;max-height:88vh;border-radius:28px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 24px 64px rgba(0,0,0,.4)}
   .ob-slides{border-radius:0}
-  .ob-slide{padding:32px 40px}
-  .ob-illust{width:120px;height:120px;margin-bottom:20px}
-  .ob-footer{padding:12px 40px 24px;border-radius:0 0 24px 24px}
-  .ob-dots{padding:20px 0 8px}
-  .ob-home-hint{display:none}
+  .ob-header{height:200px}
+  .ob-footer{border-radius:0 0 28px 28px}
+  .ob-dots{border-radius:0}
 }
 
 /* PCサイドバー設定ボタン */
@@ -1253,96 +1259,93 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
     <!-- ページ1: Sublyとは -->
     <div class="ob-slide" style="width:25%">
-      <div class="ob-illust">
-        <svg width="100" height="100" viewBox="0 0 110 110" fill="none">
-          <rect x="20" y="25" width="70" height="60" rx="10" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
-          <rect x="30" y="38" width="22" height="6" rx="3" fill="rgba(255,255,255,0.8)"/>
-          <rect x="30" y="50" width="36" height="6" rx="3" fill="rgba(255,255,255,0.6)"/>
-          <rect x="30" y="62" width="28" height="6" rx="3" fill="rgba(255,255,255,0.4)"/>
-          <circle cx="80" cy="38" r="10" fill="rgba(255,255,255,0.3)"/>
-          <text x="80" y="43" text-anchor="middle" font-size="12" font-weight="800" fill="#fff" font-family="sans-serif">¥</text>
-        </svg>
+      <div class="ob-header">
+        <div class="ob-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="rgba(255,255,255,.95)"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-9 3h2v2h-2V7zm0 4h2v6h-2v-6zM7 7h6v2H7V7zm0 4h6v2H7v-2zm0 4h6v2H7v-2zm10 2h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg></div>
+        <div class="ob-badge">SUBLY とは</div>
+        <div class="ob-ttl">サブスクを<em>全部まとめて</em>管理しよう</div>
       </div>
-      <div class="ob-badge">SUBLY とは</div>
-      <div class="ob-ttl">サブスクを<em>全部まとめて</em>管理しよう</div>
-      <div class="ob-desc">Netflix・スマホ代・保険・ローンまで、毎月払っている固定費をすべて登録して「本当の支出」を把握できます。</div>
+      <div class="ob-body">
+        <div class="ob-li"><div class="ob-li-dot"></div>Netflix・スマホ代・保険を一括管理</div>
+        <div class="ob-li"><div class="ob-li-dot"></div>毎月の支出を一目で把握できる</div>
+        <div class="ob-li"><div class="ob-li-dot"></div>解約忘れや無駄な出費を防げる</div>
+      </div>
+      <div class="ob-dots" style="margin-top:auto">
+        <div class="ob-dot on" onclick="obGoto(0)"></div><div class="ob-dot" onclick="obGoto(1)"></div><div class="ob-dot" onclick="obGoto(2)"></div><div class="ob-dot" onclick="obGoto(3)"></div>
+      </div>
+      <div class="ob-footer">
+        <button class="ob-btn-skip" onclick="gaEvent('onboarding_skip',{});closeOb()">スキップ</button>
+        <button class="ob-btn-next" onclick="obNext()">次へ</button>
+      </div>
     </div>
 
     <!-- ページ2: 登録するだけ -->
     <div class="ob-slide" style="width:25%">
-      <div class="ob-illust">
-        <svg width="100" height="100" viewBox="0 0 110 110" fill="none">
-          <circle cx="55" cy="55" r="32" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
-          <line x1="55" y1="38" x2="55" y2="72" stroke="white" stroke-width="4" stroke-linecap="round"/>
-          <line x1="38" y1="55" x2="72" y2="55" stroke="white" stroke-width="4" stroke-linecap="round"/>
-        </svg>
+      <div class="ob-header">
+        <div class="ob-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="rgba(255,255,255,.95)"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></div>
+        <div class="ob-badge">STEP 1</div>
+        <div class="ob-ttl">登録は<em>タップするだけ</em></div>
       </div>
-      <div class="ob-badge">STEP 1</div>
-      <div class="ob-ttl">登録は<em>タップするだけ</em></div>
-      <div class="ob-desc">Netflix・Spotifyなど人気サービスはカテゴリから選ぶだけで金額が自動入力。リストにないものも自由に追加できます。</div>
+      <div class="ob-body">
+        <div class="ob-li"><div class="ob-li-dot"></div>人気サービスはカテゴリから選ぶだけ</div>
+        <div class="ob-li"><div class="ob-li-dot"></div>金額が自動入力されるので手間なし</div>
+        <div class="ob-li"><div class="ob-li-dot"></div>リストにないサービスも追加できる</div>
+      </div>
+      <div class="ob-dots" style="margin-top:auto">
+        <div class="ob-dot" onclick="obGoto(0)"></div><div class="ob-dot on" onclick="obGoto(1)"></div><div class="ob-dot" onclick="obGoto(2)"></div><div class="ob-dot" onclick="obGoto(3)"></div>
+      </div>
+      <div class="ob-footer">
+        <button class="ob-btn-skip" onclick="gaEvent('onboarding_skip',{});closeOb()">スキップ</button>
+        <button class="ob-btn-next" onclick="obNext()">次へ</button>
+      </div>
     </div>
 
     <!-- ページ3: アカウント登録で便利に -->
     <div class="ob-slide" style="width:25%">
-      <div class="ob-illust">
-        <svg width="100" height="100" viewBox="0 0 110 110" fill="none">
-          <rect x="18" y="30" width="32" height="48" rx="6" fill="rgba(255,255,255,0.25)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
-          <rect x="60" y="30" width="32" height="48" rx="6" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
-          <path d="M50 54 L60 54" stroke="rgba(255,255,255,0.8)" stroke-width="2.5" stroke-linecap="round"/>
-          <path d="M56 50 L60 54 L56 58" stroke="rgba(255,255,255,0.8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="34" cy="54" r="6" fill="rgba(255,255,255,0.4)"/>
-          <circle cx="76" cy="54" r="6" fill="rgba(255,255,255,0.4)"/>
-        </svg>
+      <div class="ob-header">
+        <div class="ob-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="rgba(255,255,255,.95)"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg></div>
+        <div class="ob-badge">PRO 機能</div>
+        <div class="ob-ttl">アカウント登録で<em>複数端末に対応</em></div>
       </div>
-      <div class="ob-badge">PRO 機能</div>
-      <div class="ob-ttl">アカウント登録で<em>複数端末に対応</em></div>
-      <div class="ob-desc">無料でアカウントを作成するとデータがクラウドに同期。スマホ・タブレット・PCどこでも同じデータを確認できます。機種変更も安心！</div>
+      <div class="ob-body">
+        <div class="ob-li"><div class="ob-li-dot"></div>無料でアカウントを作成するだけ</div>
+        <div class="ob-li"><div class="ob-li-dot"></div>データがクラウドに自動同期される</div>
+        <div class="ob-li"><div class="ob-li-dot"></div>スマホ・PC・タブレットで確認可能</div>
+        <div class="ob-li"><div class="ob-li-dot"></div>機種変更してもデータが消えない</div>
+      </div>
+      <div class="ob-dots" style="margin-top:auto">
+        <div class="ob-dot" onclick="obGoto(0)"></div><div class="ob-dot" onclick="obGoto(1)"></div><div class="ob-dot on" onclick="obGoto(2)"></div><div class="ob-dot" onclick="obGoto(3)"></div>
+      </div>
+      <div class="ob-footer">
+        <button class="ob-btn-skip" onclick="gaEvent('onboarding_skip',{});closeOb()">スキップ</button>
+        <button class="ob-btn-next" onclick="obNext()">次へ</button>
+      </div>
     </div>
 
     <!-- ページ4: グループ機能 -->
     <div class="ob-slide" style="width:25%">
-      <div class="ob-illust">
-        <svg width="100" height="100" viewBox="0 0 110 110" fill="none">
-          <circle cx="40" cy="42" r="14" fill="rgba(255,255,255,0.3)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
-          <circle cx="70" cy="42" r="14" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
-          <path d="M18 78 Q18 65 40 65 Q62 65 62 78" stroke="rgba(255,255,255,0.6)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-          <path d="M62 72 Q62 65 70 65 Q85 65 85 72" stroke="rgba(255,255,255,0.4)" stroke-width="2" fill="none" stroke-linecap="round"/>
-        </svg>
+      <div class="ob-header">
+        <div class="ob-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="rgba(255,255,255,.95)"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+        <div class="ob-badge">PRO 機能</div>
+        <div class="ob-ttl">家族と<em>一緒に管理</em>できる</div>
       </div>
-      <div class="ob-badge">PRO 機能</div>
-      <div class="ob-ttl">家族と<em>一緒に管理</em>できる</div>
-      <div class="ob-desc">グループを作成して招待コードを共有するだけ。家族・カップルのサブスクをまとめて見える化できます。</div>
-
-      <div class="ob-home-hint" style="margin-top:18px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:14px 16px;text-align:left;width:100%">
-        <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.9);margin-bottom:10px">ホーム画面に追加すると便利です</div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <div style="font-size:12px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:8px">
-            <span style="background:rgba(255,255,255,.2);border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">i</span>
-            iPhone：Safari → 共有 →「ホーム画面に追加」
-          </div>
-          <div style="font-size:12px;color:rgba(255,255,255,.65);display:flex;align-items:center;gap:8px">
-            <span style="background:rgba(255,255,255,.2);border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">A</span>
-            Android：Chrome → メニュー →「ホーム画面に追加」
-          </div>
+      <div class="ob-body">
+        <div class="ob-li"><div class="ob-li-dot"></div>招待コードを共有するだけで参加できる</div>
+        <div class="ob-li"><div class="ob-li-dot"></div>家族・カップルの支出をまとめて把握</div>
+        <div class="ob-hint">
+          <p>ホーム画面に追加すると便利です</p>
+          <div class="ob-hint-row"><span class="ob-hint-badge">i</span>Safari → 共有 →「ホーム画面に追加」</div>
+          <div class="ob-hint-row"><span class="ob-hint-badge">A</span>Chrome → メニュー →「ホーム画面に追加」</div>
         </div>
+      </div>
+      <div class="ob-dots" style="margin-top:auto">
+        <div class="ob-dot" onclick="obGoto(0)"></div><div class="ob-dot" onclick="obGoto(1)"></div><div class="ob-dot" onclick="obGoto(2)"></div><div class="ob-dot on" onclick="obGoto(3)"></div>
+      </div>
+      <div class="ob-footer">
+        <button class="ob-btn-next" onclick="obNext()" style="flex:1">はじめる</button>
       </div>
     </div>
 
   </div><!-- /ob-slides -->
-
-  <!-- ドット -->
-  <div class="ob-dots" id="ob-dots">
-    <div class="ob-dot on" onclick="obGoto(0)"></div>
-    <div class="ob-dot" onclick="obGoto(1)"></div>
-    <div class="ob-dot" onclick="obGoto(2)"></div>
-    <div class="ob-dot" onclick="obGoto(3)"></div>
-  </div>
-
-  <!-- ボタン -->
-  <div class="ob-footer">
-    <button class="ob-btn-skip" id="ob-skip" onclick="gaEvent('onboarding_skip',{});closeOb()">スキップ</button>
-    <button class="ob-btn-next" id="ob-next" onclick="obNext()">次へ</button>
-  </div>
 
   </div><!-- /ob-inner-wrap -->
 </div>
@@ -1495,7 +1498,10 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <div style="background:var(--p);padding:18px 20px 14px;position:relative">
         <button onclick="closeGroupModal()" style="position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);border:none;cursor:pointer;font-size:14px;color:#fff">✕</button>
         <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.7);letter-spacing:1px;margin-bottom:4px">グループ</div>
-        <div style="font-size:20px;font-weight:800;color:#fff" id="group-display-name">—</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="font-size:20px;font-weight:800;color:#fff" id="group-display-name">—</div>
+          <button onclick="editGroupName()" style="background:rgba(255,255,255,.2);border:none;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;color:#fff;cursor:pointer;font-family:inherit">変更</button>
+        </div>
         <div style="font-size:12px;color:rgba(255,255,255,.6);margin-top:2px" id="group-member-count">メンバー —人</div>
       </div>
 
@@ -1509,7 +1515,10 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
           <div style="font-size:13px;font-weight:700;color:var(--tx);margin-bottom:8px">招待コード</div>
           <div style="display:flex;align-items:center;gap:8px">
             <div style="flex:1;font-size:22px;font-weight:800;color:var(--p);letter-spacing:4px;text-align:center;background:var(--card);border-radius:8px;padding:8px" id="group-invite-code">——</div>
-            <button onclick="copyInviteCode()" style="flex-shrink:0;background:var(--p);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer" id="copy-code-btn">共有・コピー</button>
+            <div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0">
+              <button onclick="copyCodeOnly()" style="background:var(--pl);color:var(--pd);border:1.5px solid var(--p);border-radius:8px;padding:6px 10px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer" id="copy-code-only-btn">コードだけコピー</button>
+              <button onclick="copyInviteCode()" style="background:var(--p);color:#fff;border:none;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer" id="copy-code-btn">招待文を共有</button>
+            </div>
           </div>
           <div style="font-size:11px;color:var(--ts);margin-top:6px" id="invite-expire-hint">このコードをメンバーに共有してください</div>
         </div>
@@ -3067,6 +3076,11 @@ async function saveNickname(){
 
   _updateNicknameDisplay();
   _updatePayerField();
+  // アカウントセクションのニックネームも即時更新
+  const acctNickEl = document.getElementById('s-nickname-display');
+  if(acctNickEl){ acctNickEl.textContent = val || '名前を設定'; acctNickEl.style.color = val ? 'var(--tx)' : 'var(--ts)'; }
+  const hdNickEl = document.getElementById('hd-nickname-display');
+  if(hdNickEl){ hdNickEl.textContent = val || '名前を設定'; }
   closeNicknameModal();
   gaEvent('nickname_set', { has_name: !!val, is_first: isFirstTime });
 
@@ -3114,6 +3128,8 @@ window._onAuthChanged = async (user) => {
     renderDashboard();
     // pending招待コードのチェック
     await _checkPendingInvite();
+    // ウェルカムバックポップアップ
+    setTimeout(()=>_checkWelcomeBack(), 1500);
     // リアルタイム通知リスナー開始（onSnapshotで既読チェックも兼ねる）
     _startNotificationListener(user.uid);
   } else {
@@ -3812,6 +3828,38 @@ async function _renderGroupJoined(){
   _updateGroupTabs();
 }
 
+// グループ名を変更
+async function editGroupName(){
+  if(!_groupId || !window._fbDb || !window._fbFns) return;
+  const current = _groupData?.name || '';
+  showDialog({
+    icon:'',
+    title:'グループ名を変更',
+    msg:`<input id="dlg-group-name-input" type="text" value="${current}" maxlength="20"
+      style="width:100%;padding:10px 12px;font-size:15px;border:1.5px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font-family:inherit;box-sizing:border-box;margin-top:8px"
+      placeholder="グループ名（例：田中家）">`,
+    buttons:[
+      {label:'キャンセル', cls:'cancel'},
+      {label:'保存', cls:'ok', onClick: async ()=>{
+        const newName = document.getElementById('dlg-group-name-input')?.value.trim();
+        if(!newName){ showToast('グループ名を入力してください'); return; }
+        const { doc, setDoc } = window._fbFns;
+        await setDoc(doc(window._fbDb,'groups',_groupId), { name: newName }, { merge:true });
+        _groupData.name = newName;
+        // UI即時更新
+        document.getElementById('group-display-name').textContent = newName;
+        const lbl = document.getElementById('hd-group-btn-lbl');
+        if(lbl) lbl.textContent = newName;
+        const grpName = document.getElementById('summary-group-name');
+        if(grpName) grpName.textContent = newName;
+        showToast(`グループ名を「${newName}」に変更しました`);
+        gaEvent('group_name_edit', {});
+      }}
+    ]
+  });
+  setTimeout(()=>{ document.getElementById('dlg-group-name-input')?.focus(); }, 200);
+}
+
 // 招待コードを再発行（24時間リセット）
 async function renewInviteCode(){
   if(!_groupId || !window._fbDb || !window._fbFns) return;
@@ -4015,28 +4063,34 @@ async function leaveGroup(){
 }
 
 // 招待コードをコピー
+// コードだけコピー
+async function copyCodeOnly(){
+  const code = document.getElementById('group-invite-code').textContent.trim();
+  try{
+    await navigator.clipboard.writeText(code);
+    const btn = document.getElementById('copy-code-only-btn');
+    if(btn){ btn.textContent = 'コピー済！'; btn.style.background='var(--p)'; btn.style.color='#fff'; }
+    setTimeout(()=>{
+      if(btn){ btn.textContent='コードだけコピー'; btn.style.background=''; btn.style.color=''; }
+    }, 2000);
+    showToast(`招待コード「${code}」をコピーしました`);
+    gaEvent('group_invite_copy_code', {});
+  }catch(e){
+    showToast('コピーできませんでした');
+  }
+}
+
 async function copyInviteCode(){
   const code = document.getElementById('group-invite-code').textContent;
   const groupName = _groupData?.name || 'グループ';
   const appUrl = 'https://jonekun429.github.io/subly-for-Family/app.html';
 
   const shareText = `【Subly グループ招待】
-
 「${groupName}」に招待します！
 
-▼ すでにSublyを使っている方
-① あなたのSublyアプリを開く
-② 左上メニュー →「グループ」
-③ 招待コードを入力：${code}
+招待コード：${code}
 
-▼ Sublyを使っていない方
-① 下のURLからSublyを開く
-${appUrl}
-
-② アカウントを新規登録
-
-③ 左上メニュー →「グループ」→
-　 招待コードを入力：${code}`;
+${appUrl}`;
 
   // Web Share API（iOS/Android）が使えれば共有シートを表示
   if(navigator.share){
@@ -6233,6 +6287,48 @@ if(document.readyState==='loading'){
 } else {
   waitAndInit();
 }
+// ウェルカムバックポップアップ（前回から1日以上経過した場合）
+async function _checkWelcomeBack(){
+  const last = await Store.get('lastOpenDate');
+  const today = new Date().toDateString();
+  if(last && last !== today){
+    const diffMs = new Date() - new Date(last);
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    if(diffDays >= 1){
+      // 更新が近いサブスクを確認
+      const soon = subs.filter(s=>{
+        if(s.paused||s.canceled||s.freq==='単発（買い切り）') return false;
+        const np = nextPayDate(s);
+        if(!np) return false;
+        const diff = Math.round((np - new Date()) / 86400000);
+        return diff >= 0 && diff <= 7;
+      }).sort((a,b)=>{ const na=nextPayDate(a),nb=nextPayDate(b); return na-nb; });
+
+      let msg = `${diffDays}日ぶりですね！`;
+      if(soon.length){
+        msg += `<br><br><b style="color:var(--p)">${soon.length}件</b>のサブスクが7日以内に更新されます。`;
+        msg += `<div style="margin-top:10px;font-size:13px;color:var(--ts)">`;
+        soon.slice(0,3).forEach(s=>{
+          const np = nextPayDate(s);
+          const diff = Math.round((np - new Date()) / 86400000);
+          msg += `<div style="padding:4px 0;border-bottom:1px solid var(--bd)">・${s.name} <span style="color:var(--p);font-weight:700">${diff===0?'今日':diff+'日後'}</span> ¥${s.price.toLocaleString()}</div>`;
+        });
+        msg += `</div>`;
+      }
+      showDialog({
+        icon:'',
+        title:'おかえりなさい',
+        msg:`<div style="line-height:1.8">${msg}</div>`,
+        buttons:[
+          {label:'確認する', cls:'ok', onClick:()=>goto('list')},
+          {label:'閉じる', cls:'cancel'}
+        ]
+      });
+    }
+  }
+  await Store.set('lastOpenDate', today);
+}
+
 // 手動更新（ボタン押下時）
 async function _manualRefresh(){
   const btn = document.getElementById('reload-btn');
