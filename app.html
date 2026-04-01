@@ -1087,23 +1087,18 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
     <div class="s-sec">データリセット</div>
     <div class="s-grp">
+      <div id="s-withdraw-link" class="s-row" onclick="deleteAccount()" style="display:flex">
+        <div class="s-ico" style="background:#FEE2E2"><svg width="18" height="18" viewBox="0 0 24 24" fill="#C06060"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg></div>
+        <div class="s-body"><div class="s-title" style="color:var(--dn)">退会する</div><div class="s-sub">アカウントとデータを削除します</div></div>
+        <span class="s-arr">›</span>
+      </div>
       <div class="s-row" onclick="resetAll()">
         <div class="s-ico" style="background:#FEE2E2"><svg width="18" height="18" viewBox="0 0 24 24" fill="#C06060"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></div>
         <div class="s-body"><div class="s-title" style="color:var(--dn)">全データを削除</div><div class="s-sub">この操作は元に戻せません</div></div>
         <span class="s-arr">›</span>
       </div>
     </div>
-    <div style="padding:4px 18px 16px;text-align:center;font-size:12px;color:var(--ts)">Subly v1.0</div>
-    <!-- 退会ボタン（ログイン中のみ表示） -->
-    <div id="s-withdraw-link" style="display:none">
-      <div class="s-grp" style="margin-bottom:24px">
-        <div class="s-row" onclick="deleteAccount()">
-          <div class="s-ico" style="background:#FEE2E2"><svg width="18" height="18" viewBox="0 0 24 24" fill="#C06060"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg></div>
-          <div class="s-body"><div class="s-title" style="color:var(--dn)">退会する</div><div class="s-sub">アカウントとデータを削除します</div></div>
-          <span class="s-arr">›</span>
-        </div>
-      </div>
-    </div>
+    <div style="padding:4px 18px 24px;text-align:center;font-size:12px;color:var(--ts)">Subly v1.0</div>
   </div>
 </div>
 
@@ -3385,7 +3380,7 @@ window._onAuthChanged = async (user) => {
     _updateNewBadges(); // ログイン時にNEWバッジを消す
     // 退会ボタンを確実に表示
     const wdLink = document.getElementById('s-withdraw-link');
-    if(wdLink) wdLink.style.display = 'block';
+    if(wdLink) wdLink.style.display = 'flex';
     // グループ状態を確認してタブ更新（完了後にダッシュボードを再描画）
     await _loadGroupForDashboard();
     // グループデータ込みでダッシュボードを再描画
@@ -3456,7 +3451,7 @@ function _updateAuthUI(user){
 
     // 設定画面の退会リンクを表示
     const wdLink = document.getElementById('s-withdraw-link');
-    if(wdLink) wdLink.style.display = 'block';
+    if(wdLink) wdLink.style.display = 'flex';
 
     // ドロワー：ログイン済みはグループ通常ボタンを表示、参加ボタン非表示
     const hdGroupBtn = document.getElementById('hd-group-btn');
@@ -3479,11 +3474,11 @@ function _updateAuthUI(user){
     const wdLink2 = document.getElementById('s-withdraw-link');
     if(wdLink2) wdLink2.style.display = 'none';
 
-    // ドロワー：未ログインはグループ通常ボタンを隠して招待参加ボタンを表示
+    // ドロワー：未ログインでもグループを作るボタンは常に表示
     const hdGroupBtn2 = document.getElementById('hd-group-btn');
     const hdGroupJoinBtn2 = document.getElementById('hd-group-join-btn');
-    if(hdGroupBtn2) hdGroupBtn2.style.display = 'none';
-    if(hdGroupJoinBtn2) hdGroupJoinBtn2.style.display = '';
+    if(hdGroupBtn2) hdGroupBtn2.style.display = '';
+    if(hdGroupJoinBtn2) hdGroupJoinBtn2.style.display = 'none';
   }
 }
 
@@ -3717,9 +3712,21 @@ function _withdrawStep3(user){
 
           // ローカルクリア
           subs = [];
+          _groupId = null;
+          _groupData = null;
+          _groupMembersData = [];
           await Store.set('subsData', '[]');
+          _updateAuthUI(null);
+          _updateNewBadges();
+          _updateGroupTabs();
+          // ドロワーのグループボタンを未ログイン状態に確実に切替
+          const hdGrpBtn = document.getElementById('hd-group-btn');
+          const hdGrpJoinBtn = document.getElementById('hd-group-join-btn');
+          if(hdGrpBtn) hdGrpBtn.style.display = 'none';
+          if(hdGrpJoinBtn) hdGrpJoinBtn.style.display = '';
           closeSettings();
           renderDashboard();
+          renderList();
           gaEvent('account_deleted', {});
 
           // STEP4：完了
