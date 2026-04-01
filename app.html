@@ -2862,7 +2862,9 @@ async function checkUpcomingPayments(){
   box.insertBefore(banner, box.firstChild);
 }
 
+let _dlgSeq = 0;
 function showDialog({icon='', title='', msg='', buttons=[], closable=false, onClose=null, btnColumn=false}){
+  _dlgSeq++;
   document.getElementById('dlg-icon').innerHTML=icon||'';
   document.getElementById('dlg-ttl').textContent=title;
   document.getElementById('dlg-msg').innerHTML = typeof msg === 'string' ? msg : '';
@@ -2873,7 +2875,15 @@ function showDialog({icon='', title='', msg='', buttons=[], closable=false, onCl
     const el=document.createElement('button');
     el.className='dlg-btn '+(b.cls||'ok');
     el.textContent=b.label;
-    el.onclick=()=>{ closeDialog(); b.onClick&&b.onClick(); };
+    el.onclick=async ()=>{
+      const seqBefore = _dlgSeq;
+      if(b.onClick){
+        const result = await b.onClick();
+        if(result === false) return;
+      }
+      // onClick中に新しいshowDialogが呼ばれていたら閉じない
+      if(_dlgSeq === seqBefore) closeDialog();
+    };
     btns.appendChild(el);
   });
   const closeBtn=document.getElementById('dlg-close');
@@ -3696,15 +3706,18 @@ function _withdrawStep2(user){
   });
 }
 
-// 退会 STEP3：パスワード認証
+// 退会 STEP3：メール＆パスワード認証
 function _withdrawStep3(user){
+  const currentEmail = window._fbAuth?.currentUser?.email || '';
   showDialog({
     icon:'',
-    title:'パスワードを入力して退会',
+    title:'本人確認して退会',
     msg:`<div style="text-align:left">
-      <div style="font-size:13px;color:var(--ts);margin-bottom:14px;line-height:1.7">
-        本人確認のため、登録したパスワードを入力してください。
+      <div style="font-size:13px;color:var(--ts);margin-bottom:12px;line-height:1.7">
+        登録したメールアドレスとパスワードを入力してください。
       </div>
+      <input type="email" id="dlg-delete-email" placeholder="メールアドレス" value="${currentEmail}"
+        style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none;margin-bottom:8px">
       <input type="password" id="dlg-delete-pw" placeholder="パスワード"
         style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
       <div id="dlg-delete-err" style="display:none;margin-top:8px;font-size:12px;color:var(--dn)"></div>
@@ -3712,36 +3725,31 @@ function _withdrawStep3(user){
     buttons:[
       {label:'キャンセル', cls:'cancel'},
       {label:'退会を確定する', cls:'danger', onClick: async ()=>{
-        // ★ closeDialog()がonClickの前に呼ばれるので、事前に値を取得
-        // （showDialogのボタンは closeDialog() → onClick() の順で実行される）
-        const savedPw = window._withdrawPw || '';
-        const savedUser = user;
-        window._withdrawPw = null;
-
-        if(!savedPw){
-          // パスワード未入力 → ダイアログを再表示
-          _withdrawStep3(savedUser);
-          setTimeout(()=>{
-            const errEl = document.getElementById('dlg-delete-err');
-            if(errEl){ errEl.textContent='パスワードを入力してください'; errEl.style.display='block'; }
-          }, 100);
-          return;
+        const email = document.getElementById('dlg-delete-email')?.value?.trim();
+        const pw = document.getElementById('dlg-delete-pw')?.value;
+        const errEl = document.getElementById('dlg-delete-err');
+        if(!email || !pw){
+          if(errEl){ errEl.textContent='メールアドレスとパスワードを入力してください'; errEl.style.display='block'; }
+          return false;
         }
         try{
           const { reauthenticateWithCredential, EmailAuthProvider, deleteUser, doc, getDoc, setDoc, deleteDoc, collection, getDocs, writeBatch } = window._fbFns;
-          const credential = EmailAuthProvider.credential(savedUser.email, savedPw);
-          await reauthenticateWithCredential(user, credential);
+          const currentUser = window._fbAuth.currentUser;
+          if(!currentUser){ throw { code:'no-user', message:'ログインセッションが切れました。再ログインしてください。'}; }
+          const credential = EmailAuthProvider.credential(email, pw);
+          await reauthenticateWithCredential(currentUser, credential);
 
-          // ★ まずリスナーを全て停止（削除中の再書き込み防止）
+          const uid = currentUser.uid;
+
+          // リスナー停止（削除中の再書き込み防止）
           _stopNotificationListener();
-          window._fbUser = null; // save()経由のFirestore書き戻し防止
 
           // グループからの退出処理
           if(_groupId){
             try{
               const groupSnap = await getDoc(doc(window._fbDb, 'groups', _groupId));
               if(groupSnap.exists()){
-                const memberUids = (groupSnap.data().memberUids||[]).filter(uid=>uid!==user.uid);
+                const memberUids = (groupSnap.data().memberUids||[]).filter(u=>u!==uid);
                 if(memberUids.length === 0){
                   await deleteDoc(doc(window._fbDb,'groups',_groupId));
                 } else {
@@ -3753,15 +3761,18 @@ function _withdrawStep3(user){
 
           // Firestoreデータ削除（サブスク + 通知 + ユーザードキュメント）
           const batch = writeBatch(window._fbDb);
-          const subsSnap = await getDocs(collection(window._fbDb, 'users', user.uid, 'subs'));
+          const subsSnap = await getDocs(collection(window._fbDb, 'users', uid, 'subs'));
           subsSnap.docs.forEach(d => batch.delete(d.ref));
-          const notifSnap = await getDocs(collection(window._fbDb, 'users', user.uid, 'notifications'));
+          const notifSnap = await getDocs(collection(window._fbDb, 'users', uid, 'notifications'));
           notifSnap.docs.forEach(d => batch.delete(d.ref));
-          batch.delete(doc(window._fbDb, 'users', user.uid));
+          batch.delete(doc(window._fbDb, 'users', uid));
           await batch.commit();
 
+          // ★ Firestore削除完了後に_fbUserをクリア（これより前はAuth認証が必要）
+          window._fbUser = null;
+
           // Firebase Auth削除
-          await deleteUser(user);
+          await deleteUser(currentUser);
 
           // ローカルクリア
           subs = [];
@@ -3805,30 +3816,26 @@ function _withdrawStep3(user){
           });
 
         }catch(e){
-          // エラー時: _fbUserを復元してSTEP3を再表示
-          window._fbUser = savedUser;
+          // エラー時: _fbUserを復元
+          window._fbUser = window._fbAuth?.currentUser || user;
           const msgs = {
-            'auth/wrong-password': 'パスワードが違います',
-            'auth/invalid-credential': 'パスワードが違います',
+            'auth/wrong-password': 'メールアドレスまたはパスワードが違います',
+            'auth/invalid-credential': 'メールアドレスまたはパスワードが違います',
+            'auth/user-mismatch': 'ログイン中のアカウントと一致しません',
+            'auth/invalid-email': 'メールアドレスの形式が正しくありません',
             'auth/too-many-requests': 'しばらく待ってから再試行してください',
+            'no-user': 'ログインセッションが切れました。再ログインしてください。',
           };
-          const msg = msgs[e.code] || '退会に失敗しました: ' + e.message;
-          _withdrawStep3(savedUser);
-          setTimeout(()=>{
-            const errEl = document.getElementById('dlg-delete-err');
-            if(errEl){ errEl.textContent = msg; errEl.style.display = 'block'; }
-          }, 100);
+          const msg = msgs[e.code] || '退会に失敗しました: ' + (e.message || e);
+          console.error('退会エラー:', e);
+          const errEl = document.getElementById('dlg-delete-err');
+          if(errEl){ errEl.textContent = msg; errEl.style.display = 'block'; }
+          return false;
         }
       }}
     ]
   });
-  setTimeout(()=>{
-    const pwEl = document.getElementById('dlg-delete-pw');
-    if(pwEl){
-      pwEl.focus();
-      pwEl.addEventListener('input', ()=>{ window._withdrawPw = pwEl.value; });
-    }
-  }, 200);
+  setTimeout(()=> document.getElementById('dlg-delete-pw')?.focus(), 200);
 }
 
 function _showAuthError(code){
