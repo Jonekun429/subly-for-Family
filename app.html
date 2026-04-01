@@ -1972,8 +1972,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   <!-- ③ カレンダー -->
   <div id="pg-calendar" class="page">
     <!-- ヘッダー：月ナビ -->
-    <!-- グループタブ（グループ参加時のみ表示） -->
-    <div id="cal-group-tabs" style="display:none;gap:7px;margin-bottom:8px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none"></div>
     <div class="cal-hdr">
       <button class="cal-nav" onclick="calMove(-1)" aria-label="前の月">
         <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
@@ -1983,6 +1981,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
       </button>
     </div>
+    <!-- グループタブ（グループ参加時のみ表示） -->
+    <div id="cal-group-tabs" style="display:none;gap:7px;margin-bottom:8px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none"></div>
     <!-- フィルター -->
     <div class="cal-filters">
       <button class="cal-fb on" id="cf-all" onclick="setCalFilter('all')">全件</button>
