@@ -508,10 +508,10 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 /* ── トースト通知 ── */
 .toast{position:fixed;bottom:calc(var(--nh) + env(safe-area-inset-bottom,0px) + 14px);left:50%;transform:translateX(-50%) translateY(10px);background:rgba(43,56,48,.9);color:#fff;font-size:15px;font-weight:600;padding:10px 20px;border-radius:24px;z-index:9000;opacity:0;transition:opacity .2s,transform .2s;white-space:nowrap;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.overlay{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .18s ease;overflow:hidden;touch-action:pan-y}
+.overlay{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .18s ease;overflow:hidden}
 .overlay.hidden{display:none}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.sheet{background:var(--card);border-radius:18px 18px 0 0;max-height:85vh;overflow-y:scroll;-webkit-overflow-scrolling:touch;touch-action:pan-y;animation:fadeUp .24s ease;padding-bottom:calc(env(safe-area-inset-bottom) + 60px);width:calc(100% - 16px);max-width:480px}
+.sheet{background:var(--card);border-radius:18px 18px 0 0;max-height:85vh;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;animation:fadeUp .24s ease;padding-bottom:calc(env(safe-area-inset-bottom) + 60px);width:calc(100% - 16px);max-width:480px}
 .sheet-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 12px;border-bottom:1px solid var(--bd);position:sticky;top:0;background:var(--card);z-index:1}
 .sheet-ttl{font-size:15px;font-weight:700}
 .sheet-close{width:28px;height:28px;border-radius:50%;background:var(--bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--ts)}
@@ -3052,6 +3052,7 @@ function closeSavingHints(){ document.getElementById('saving-hints-ov').classLis
 
 function openSettings(){
   document.getElementById('settings-ov').classList.remove('hidden');
+  document.body.style.overflow='hidden';
   _updateAuthUI(window._fbUser || null);
   // プロフィールサブテキスト更新
   if(window._fbUser && window._fbDb && window._fbFns){
@@ -3062,23 +3063,22 @@ function openSettings(){
         const sub = document.getElementById('s-profile-sub');
         if(sub){
           const parts = [d.ageGroup, d.occupation].filter(Boolean);
-          sub.textContent = parts.length ? parts.join(' · ') : '未設定';
+          sub.textContent = parts.join(' · ') || '未設定';
         }
       }
     }).catch(()=>{});
   }
 }
-function closeSettings(){document.getElementById('settings-ov').classList.add('hidden')}
+function closeSettings(){document.getElementById('settings-ov').classList.add('hidden');document.body.style.overflow='';}
 
-/* --- overlay背景タッチでの裏側スクロール防止 + sheet内スクロール許可 --- */
-(function(){
-  document.querySelectorAll('.overlay').forEach(ov => {
-    ov.addEventListener('touchmove', function(e){
-      const sheet = ov.querySelector('.sheet');
-      if(!sheet || !sheet.contains(e.target)) { e.preventDefault(); }
-    }, {passive:false});
-  });
-})();
+/* iOS Safari: overlay背景のタッチスクロールを防止し、sheet内のスクロールだけ許可 */
+document.addEventListener('touchmove', function(e){
+  const ov = document.querySelector('.overlay:not(.hidden)');
+  if(!ov) return;
+  const sheet = ov.querySelector('.sheet');
+  if(sheet && sheet.contains(e.target)) return; // sheet内は許可
+  e.preventDefault();
+}, {passive:false});
 
 let _hwPage = 0;
 function openHowto(){
@@ -3719,14 +3719,35 @@ function _withdrawStep3(user){
           return;
         }
         try{
-          const { reauthenticateWithCredential, EmailAuthProvider, deleteUser, doc, collection, getDocs } = window._fbFns;
+          const { reauthenticateWithCredential, EmailAuthProvider, deleteUser, doc, getDoc, setDoc, deleteDoc, collection, getDocs, writeBatch } = window._fbFns;
           const credential = EmailAuthProvider.credential(user.email, pw);
           await reauthenticateWithCredential(user, credential);
 
-          // Firestoreデータ削除
+          // ★ まずリスナーを全て停止（削除中の再書き込み防止）
+          _stopNotificationListener();
+          window._fbUser = null; // save()経由のFirestore書き戻し防止
+
+          // グループからの退出処理
+          if(_groupId){
+            try{
+              const groupSnap = await getDoc(doc(window._fbDb, 'groups', _groupId));
+              if(groupSnap.exists()){
+                const memberUids = (groupSnap.data().memberUids||[]).filter(uid=>uid!==user.uid);
+                if(memberUids.length === 0){
+                  await deleteDoc(doc(window._fbDb,'groups',_groupId));
+                } else {
+                  await setDoc(doc(window._fbDb,'groups',_groupId), { memberUids }, { merge:true });
+                }
+              }
+            }catch(ge){ console.warn('グループ退出エラー:', ge); }
+          }
+
+          // Firestoreデータ削除（サブスク + 通知 + ユーザードキュメント）
+          const batch = writeBatch(window._fbDb);
           const subsSnap = await getDocs(collection(window._fbDb, 'users', user.uid, 'subs'));
-          const batch = window._fbFns.writeBatch(window._fbDb);
           subsSnap.docs.forEach(d => batch.delete(d.ref));
+          const notifSnap = await getDocs(collection(window._fbDb, 'users', user.uid, 'notifications'));
+          notifSnap.docs.forEach(d => batch.delete(d.ref));
           batch.delete(doc(window._fbDb, 'users', user.uid));
           await batch.commit();
 
