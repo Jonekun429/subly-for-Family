@@ -982,6 +982,19 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <span class="s-arr">›</span>
       </div>
     </div>
+    <div class="s-sec">グループ</div>
+    <div class="s-grp">
+      <div id="s-group-row" class="s-row" onclick="closeSettings();setTimeout(_onGroupMenuTap,200)" style="align-items:center">
+        <div class="s-ico" style="background:#EDF4F2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+        </div>
+        <div class="s-body">
+          <div class="s-title" id="s-group-title">グループを作る</div>
+          <div class="s-sub" id="s-group-sub">家族・カップルで共有</div>
+        </div>
+        <span class="s-arr">›</span>
+      </div>
+    </div>
     <div class="s-sec">外観</div>
     <div class="s-grp">
       <div style="padding:14px 16px">
@@ -4224,6 +4237,8 @@ async function editGroupName(){
         document.getElementById('group-display-name').textContent = newName;
         const lbl = document.getElementById('hd-group-btn-lbl');
         if(lbl) lbl.textContent = newName;
+        const sGrpTitle = document.getElementById('s-group-title');
+        if(sGrpTitle) sGrpTitle.textContent = newName;
         const grpName = document.getElementById('summary-group-name');
         if(grpName) grpName.textContent = newName;
         showToast(`グループ名を「${newName}」に変更しました`);
@@ -4371,6 +4386,11 @@ async function joinGroupByCode(codeArg){
         const sub = document.getElementById('hd-group-btn-sub');
         if(lbl) lbl.textContent = _groupData?.name || 'グループ';
         if(sub) sub.textContent = `メンバー ${(_groupData?.memberUids||[]).length}人`;
+        // 設定画面のグループ表示も更新
+        const sGrpTitle2 = document.getElementById('s-group-title');
+        const sGrpSub2 = document.getElementById('s-group-sub');
+        if(sGrpTitle2) sGrpTitle2.textContent = _groupData?.name || 'グループ';
+        if(sGrpSub2) sGrpSub2.textContent = `メンバー ${(_groupData?.memberUids||[]).length}人`;
         renderDashboard();
         goto('dashboard');
       }}]
@@ -4426,6 +4446,11 @@ async function leaveGroup(){
           const sub = document.getElementById('hd-group-btn-sub');
           if(lbl) lbl.textContent = 'グループを作る';
           if(sub) sub.textContent = '家族・カップルで共有';
+          // 設定画面のグループ表示もリセット
+          const sGrpTitle3 = document.getElementById('s-group-title');
+          const sGrpSub3 = document.getElementById('s-group-sub');
+          if(sGrpTitle3) sGrpTitle3.textContent = 'グループを作る';
+          if(sGrpSub3) sGrpSub3.textContent = '家族・カップルで共有';
           // サマリのグループヘッダーも非表示
           const grpHeader = document.getElementById('summary-group-header');
           if(grpHeader) grpHeader.style.display = 'none';
@@ -4628,6 +4653,11 @@ async function _loadGroupForDashboard(){
     const sub = document.getElementById('hd-group-btn-sub');
     if(lbl) lbl.textContent = _groupData.name || 'グループ';
     if(sub) sub.textContent = `メンバー ${memberUids.length}人`;
+    // 設定画面のグループ表示も更新
+    const sGrpTitle = document.getElementById('s-group-title');
+    const sGrpSub = document.getElementById('s-group-sub');
+    if(sGrpTitle) sGrpTitle.textContent = _groupData.name || 'グループ';
+    if(sGrpSub) sGrpSub.textContent = `メンバー ${memberUids.length}人`;
 
     _groupInitialized = true; // 初回ロード完了
     // 明細一覧も更新
