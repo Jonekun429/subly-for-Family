@@ -1415,16 +1415,65 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   </div>
 </div>
 
+<!-- プロフィール編集モーダル -->
+<div class="dlg-ov hidden" id="profile-ov" onclick="if(event.target===this)closeProfileModal()">
+  <div class="dlg" style="max-width:340px;width:92%">
+    <div style="font-size:16px;font-weight:700;color:var(--tx);margin-bottom:4px">年齢層・職業</div>
+    <div style="font-size:12px;color:var(--ts);margin-bottom:16px">任意で設定できます</div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:12px;font-weight:700;color:var(--ts);margin-bottom:8px;letter-spacing:.5px">年齢層</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <button onclick="_profileSelectAge('10代')" id="s-age-btn-10代" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">10代</button>
+        <button onclick="_profileSelectAge('20代')" id="s-age-btn-20代" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">20代</button>
+        <button onclick="_profileSelectAge('30代')" id="s-age-btn-30代" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">30代</button>
+        <button onclick="_profileSelectAge('40代')" id="s-age-btn-40代" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">40代</button>
+        <button onclick="_profileSelectAge('50代以上')" id="s-age-btn-50代以上" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">50代以上</button>
+      </div>
+    </div>
+    <div style="margin-bottom:20px">
+      <div style="font-size:12px;font-weight:700;color:var(--ts);margin-bottom:8px;letter-spacing:.5px">職業</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        <button onclick="_profileSelectOcc('学生')" id="s-occ-btn-学生" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">学生</button>
+        <button onclick="_profileSelectOcc('会社員')" id="s-occ-btn-会社員" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">会社員</button>
+        <button onclick="_profileSelectOcc('主婦・主夫')" id="s-occ-btn-主婦主夫" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">主婦・主夫</button>
+        <button onclick="_profileSelectOcc('自営業・フリーランス')" id="s-occ-btn-自営業フリーランス" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">自営業・フリーランス</button>
+        <button onclick="_profileSelectOcc('その他')" id="s-occ-btn-その他" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">その他</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px">
+      <button onclick="closeProfileModal()" style="flex:1;padding:12px;background:var(--bg);color:var(--ts);border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">キャンセル</button>
+      <button onclick="saveProfileModal()" style="flex:1;padding:12px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">保存</button>
+    </div>
+  </div>
+</div>
+
 <!-- ニックネーム編集モーダル -->
 <div class="dlg-ov hidden" id="nickname-ov" onclick="if(event.target===this)closeNicknameModal()">
   <div class="dlg" style="max-width:320px;width:90%">
-    <div style="font-size:16px;font-weight:700;color:var(--tx);margin-bottom:6px">ニックネームを設定</div>
-    <div style="font-size:13px;color:var(--ts);margin-bottom:16px;line-height:1.5">端末内にのみ保存されます。</div>
-    <input id="nickname-input" type="text" maxlength="20" placeholder="例：田中 太郎"
+    <div style="font-size:16px;font-weight:700;color:var(--tx);margin-bottom:6px">プロフィールを設定</div>
+    <div style="font-size:12px;color:var(--ts);margin-bottom:14px;line-height:1.5">年齢層・職業は任意です</div>
+    <div style="font-size:12px;font-weight:700;color:var(--ts);margin-bottom:6px;letter-spacing:.5px">ニックネーム</div>
+    <input id="nickname-input" type="text" maxlength="20" placeholder="例：けいちゃん"
       style="width:100%;padding:12px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:15px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none"
       oninput="this.style.borderColor=this.value?'var(--p)':'var(--bd)'">
-    <div style="font-size:11px;color:var(--ts);margin-top:6px;text-align:right" id="nickname-count">0 / 20</div>
-    <div style="display:flex;gap:10px;margin-top:16px">
+    <div style="font-size:11px;color:var(--ts);margin-top:4px;text-align:right;margin-bottom:14px" id="nickname-count">0 / 20</div>
+    <div style="font-size:12px;font-weight:700;color:var(--ts);margin-bottom:8px;letter-spacing:.5px">年齢層</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">
+      <button onclick="_profileSelectAge('10代')" id="s-age-btn-10代" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">10代</button>
+      <button onclick="_profileSelectAge('20代')" id="s-age-btn-20代" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">20代</button>
+      <button onclick="_profileSelectAge('30代')" id="s-age-btn-30代" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">30代</button>
+      <button onclick="_profileSelectAge('40代')" id="s-age-btn-40代" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">40代</button>
+      <button onclick="_profileSelectAge('50代以上')" id="s-age-btn-50代以上" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">50代以上</button>
+    </div>
+    <div style="font-size:12px;font-weight:700;color:var(--ts);margin-bottom:8px;letter-spacing:.5px">職業</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px">
+      <button onclick="_profileSelectOcc('学生')" id="s-occ-btn-学生" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">学生</button>
+      <button onclick="_profileSelectOcc('会社員')" id="s-occ-btn-会社員" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">会社員</button>
+      <button onclick="_profileSelectOcc('主婦・主夫')" id="s-occ-btn-主婦主夫" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">主婦・主夫</button>
+      <button onclick="_profileSelectOcc('自営業・フリーランス')" id="s-occ-btn-自営業フリーランス" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">自営業・フリーランス</button>
+      <button onclick="_profileSelectOcc('その他')" id="s-occ-btn-その他" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">その他</button>
+    </div>
+    <div style="display:flex;gap:10px">
       <button onclick="closeNicknameModal()" style="flex:1;padding:12px;background:var(--bg);color:var(--ts);border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">キャンセル</button>
       <button onclick="saveNickname()" style="flex:1;padding:12px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">保存</button>
     </div>
@@ -1923,6 +1972,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   <!-- ③ カレンダー -->
   <div id="pg-calendar" class="page">
     <!-- ヘッダー：月ナビ -->
+    <!-- グループタブ（グループ参加時のみ表示） -->
+    <div id="cal-group-tabs" style="display:none;gap:7px;margin-bottom:8px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none"></div>
     <div class="cal-hdr">
       <button class="cal-nav" onclick="calMove(-1)" aria-label="前の月">
         <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
@@ -2090,6 +2141,38 @@ const Store = (function(){
 let subs = [];
 
 let myChart=null, editId=null, calYear, calMonth, calFilter='all';
+let _calGroupTab = 'all'; // 'all' | uid（自分 or メンバー）
+
+function _updateCalGroupTabs(){
+  const wrap = document.getElementById('cal-group-tabs');
+  if(!wrap) return;
+  if(!_groupId || !_groupMembersData.length){
+    wrap.style.display = 'none';
+    _calGroupTab = 'all';
+    return;
+  }
+  wrap.style.display = 'flex';
+  const myUid = window._fbUser?.uid;
+  const tabs = [
+    { key:'all', label:'全体' },
+    { key: myUid, label:'自分' },
+    ..._groupMembersData.filter(m=>m.uid!==myUid).map(m=>({ key:m.uid, label:m.nickname||'メンバー' }))
+  ];
+  wrap.innerHTML = tabs.map(t=>`
+    <button onclick="_setCalGroupTab('${t.key}')"
+      style="padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;font-family:inherit;border:none;cursor:pointer;white-space:nowrap;flex-shrink:0;
+      background:${_calGroupTab===t.key?'var(--p)':'var(--bg)'};
+      color:${_calGroupTab===t.key?'#fff':'var(--ts)'};
+      border:1.5px solid ${_calGroupTab===t.key?'var(--p)':'var(--bd)'}">
+      ${t.label}
+    </button>`).join('');
+}
+
+function _setCalGroupTab(key){
+  _calGroupTab = key;
+  _updateCalGroupTabs();
+  renderCalendar();
+}
 let inclOt = false;
 let chartMode = 'month'; // 'month' or 'year'
 let satOpen=true;
@@ -2520,7 +2603,7 @@ function goto(page, filterCat=null){
     }
     renderList();
   }
-  else if(page==='calendar') renderCalendar();
+  else if(page==='calendar'){ _updateCalGroupTabs(); renderCalendar(); }
   else if(page==='add'){
     // editSubから呼ばれる場合はSTEP2をそのまま使うので、editIdがないときだけSTEP1に戻す
     if(!editId){
@@ -2815,7 +2898,7 @@ function showDialog({icon='', title='', msg='', buttons=[], closable=false, onCl
   document.getElementById('dlg-msg').innerHTML = typeof msg === 'string' ? msg : '';
   const btns=document.getElementById('dlg-btns');
   btns.innerHTML='';
-  btns.style.flexDirection = btnColumn ? 'column' : '';
+  btns.style.flexDirection = btnColumn ? 'column' : 'row';
   buttons.forEach(b=>{
     const el=document.createElement('button');
     el.className='dlg-btn '+(b.cls||'ok');
@@ -3005,9 +3088,22 @@ function openSettings(){
     if(wdLink) wdLink.style.display = window._fbUser ? 'block' : 'none';
   };
   applyWithdraw();
-  // Firebase認証の確定を待って再チェック
   setTimeout(applyWithdraw, 500);
   _updateAuthUI(window._fbUser || null);
+  // プロフィールサブテキスト更新
+  if(window._fbUser && window._fbDb && window._fbFns){
+    const { doc, getDoc } = window._fbFns;
+    getDoc(doc(window._fbDb,'users',window._fbUser.uid)).then(snap => {
+      if(snap.exists()){
+        const d = snap.data();
+        const sub = document.getElementById('s-profile-sub');
+        if(sub){
+          const parts = [d.ageGroup, d.occupation].filter(Boolean);
+          sub.textContent = parts.length ? parts.join(' · ') : '未設定';
+        }
+      }
+    }).catch(()=>{});
+  }
 }
 function closeSettings(){document.getElementById('settings-ov').classList.add('hidden')}
 let _hwPage = 0;
@@ -3116,15 +3212,31 @@ function _updateNicknameDisplay(){
   if(hdEl){ hdEl.textContent = text; hdEl.style.color = _nickname ? '#fff' : 'rgba(255,255,255,.6)'; }
 }
 
-function openNicknameModal(){
+async function openNicknameModal(){
   const input = document.getElementById('nickname-input');
   const count = document.getElementById('nickname-count');
   input.value = _nickname;
   count.textContent = `${_nickname.length} / 20`;
   input.style.borderColor = _nickname ? 'var(--p)' : 'var(--bd)';
   input.oninput = () => { count.textContent = `${input.value.length} / 20`; input.style.borderColor = input.value ? 'var(--p)' : 'var(--bd)'; };
+  // 年齢・職業の現在値を読み込んで反映
+  _profileAge = ''; _profileOcc = '';
+  if(window._fbUser && window._fbDb && window._fbFns){
+    try{
+      const { doc, getDoc } = window._fbFns;
+      const snap = await getDoc(doc(window._fbDb,'users',window._fbUser.uid));
+      if(snap.exists()){
+        _profileAge = snap.data().ageGroup || '';
+        _profileOcc = snap.data().occupation || '';
+      }
+    }catch(e){}
+  }
   document.getElementById('nickname-ov').classList.remove('hidden');
-  setTimeout(() => input.focus(), 100);
+  setTimeout(()=>{
+    if(_profileAge) _profileSelectAge(_profileAge);
+    if(_profileOcc) _profileSelectOcc(_profileOcc);
+    input.focus();
+  }, 100);
 }
 
 // グループメニュータップ：ログイン済みはopenGroupModal、未ログインはFreeJoinModal
@@ -3185,6 +3297,68 @@ function togglePwVisibility(inputId, btn){
     : `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>`;
 }
 
+let _profileAge = '';
+let _profileOcc = '';
+
+async function openProfileModal(){
+  // 現在の値をFirestoreから取得して選択状態を反映
+  _profileAge = ''; _profileOcc = '';
+  if(window._fbUser && window._fbDb && window._fbFns){
+    try{
+      const { doc, getDoc } = window._fbFns;
+      const snap = await getDoc(doc(window._fbDb,'users',window._fbUser.uid));
+      if(snap.exists()){
+        _profileAge = snap.data().ageGroup || '';
+        _profileOcc = snap.data().occupation || '';
+      }
+    }catch(e){}
+  }
+  document.getElementById('profile-ov').classList.remove('hidden');
+  // 選択状態を反映
+  setTimeout(()=>{
+    if(_profileAge) _profileSelectAge(_profileAge);
+    if(_profileOcc) _profileSelectOcc(_profileOcc);
+  }, 50);
+}
+
+function closeProfileModal(){
+  document.getElementById('profile-ov').classList.add('hidden');
+}
+
+function _profileSelectAge(val){
+  _profileAge = val;
+  ['10代','20代','30代','40代','50代以上'].forEach(a => {
+    const btn = document.getElementById('s-age-btn-'+a);
+    if(btn){ btn.style.background = a===val?'var(--p)':'var(--bg)'; btn.style.color = a===val?'#fff':'var(--ts)'; btn.style.borderColor = a===val?'var(--p)':'var(--bd)'; }
+  });
+}
+
+function _profileSelectOcc(val){
+  _profileOcc = val;
+  const idMap = {'学生':'学生','会社員':'会社員','主婦・主夫':'主婦主夫','自営業・フリーランス':'自営業フリーランス','その他':'その他'};
+  Object.keys(idMap).forEach(o => {
+    const btn = document.getElementById('s-occ-btn-'+idMap[o]);
+    if(btn){ btn.style.background = o===val?'var(--p)':'var(--bg)'; btn.style.color = o===val?'#fff':'var(--ts)'; btn.style.borderColor = o===val?'var(--p)':'var(--bd)'; }
+  });
+}
+
+async function saveProfileModal(){
+  if(window._fbUser && window._fbDb && window._fbFns){
+    try{
+      const { doc, setDoc } = window._fbFns;
+      await setDoc(doc(window._fbDb,'users',window._fbUser.uid), { ageGroup: _profileAge, occupation: _profileOcc }, { merge:true });
+    }catch(e){ console.error('profile save:', e); }
+  }
+  // 設定画面のサブテキスト更新
+  const sub = document.getElementById('s-profile-sub');
+  if(sub){
+    const parts = [_profileAge, _profileOcc].filter(Boolean);
+    sub.textContent = parts.length ? parts.join(' · ') : '未設定';
+  }
+  closeProfileModal();
+  showToast('プロフィールを保存しました');
+}
+
 function closeNicknameModal(){
   document.getElementById('nickname-ov').classList.add('hidden');
 }
@@ -3207,7 +3381,10 @@ async function saveNickname(){
   if(window._fbUser && window._fbDb && window._fbFns){
     try{
       const { doc, setDoc } = window._fbFns;
-      await setDoc(doc(window._fbDb,'users',window._fbUser.uid), { nickname: val||'' }, { merge:true });
+      const update = { nickname: val||'' };
+      if(_profileAge) update.ageGroup = _profileAge;
+      if(_profileOcc) update.occupation = _profileOcc;
+      await setDoc(doc(window._fbDb,'users',window._fbUser.uid), update, { merge:true });
     }catch(e){ console.error('Firestore nickname保存失敗:', e); }
   }
 
@@ -3740,15 +3917,38 @@ function _showSignupComplete(user){
         <div style="background:var(--pl);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--pd);line-height:1.7">
           💡 メニュー →「グループ」から作成できます
         </div>
-      </div>`
+      </div>`,
+      // スライド3：プロフィール入力
+      '<div style="padding:20px 8px 8px">' +
+        '<div style="text-align:center;margin-bottom:16px">' +
+          '<div style="font-size:17px;font-weight:800;color:var(--tx);margin-bottom:6px">プロフィールを教えてください</div>' +
+          '<div style="font-size:13px;color:var(--ts)">あなたに合った情報をお届けします（任意）</div>' +
+        '</div>' +
+        '<div style="margin-bottom:14px">' +
+          '<div style="font-size:12px;font-weight:700;color:var(--ts);margin-bottom:8px;letter-spacing:.5px">年齢層</div>' +
+          '<div style="display:flex;flex-wrap:wrap;gap:8px">' +
+            ['10代','20代','30代','40代','50代以上'].map(a =>
+              '<button onclick="window._selectAge(\''+a+'\')" id="age-btn-'+a+'" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">'+a+'</button>'
+            ).join('') +
+          '</div>' +
+        '</div>' +
+        '<div>' +
+          '<div style="font-size:12px;font-weight:700;color:var(--ts);margin-bottom:8px;letter-spacing:.5px">職業</div>' +
+          '<div style="display:flex;flex-wrap:wrap;gap:8px">' +
+            ['学生','会社員','主婦・主夫','自営業・フリーランス','その他'].map(o =>
+              '<button onclick="window._selectOccupation(\''+o+'\')" id="occ-btn-'+o.replace(/[・]/g,'')+'" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">'+o+'</button>'
+            ).join('') +
+          '</div>' +
+        '</div>' +
+      '</div>'
     ];
 
     // ドット
-    const dotsHtml = [0,1,2].map(i =>
+    const dotsHtml = [0,1,2,3].map(i =>
       '<div style="width:'+(i===_proSlide?'24px':'8px')+';height:8px;border-radius:4px;background:'+(i===_proSlide?'var(--p)':'var(--bd)')+';transition:all .3s"></div>'
     ).join('');
 
-    const isLast = _proSlide === 2;
+    const isLast = _proSlide === 3;
 
     box.innerHTML = `
       <div style="max-height:80vh;overflow-y:auto">
@@ -3763,9 +3963,40 @@ function _showSignupComplete(user){
       </div>`;
   }
 
-  window._proSlideNext = function(){
-    if(_proSlide < 2){ _proSlide++; _renderProSlide(); }
-    else { closeAuthModal(); }
+  let _selectedAge = '';
+  let _selectedOcc = '';
+
+  window._selectAge = function(val){
+    _selectedAge = val;
+    ['10代','20代','30代','40代','50代以上'].forEach(a => {
+      const btn = document.getElementById('age-btn-'+a);
+      if(btn){ btn.style.background = a===val ? 'var(--p)' : 'var(--bg)'; btn.style.color = a===val ? '#fff' : 'var(--ts)'; btn.style.borderColor = a===val ? 'var(--p)' : 'var(--bd)'; }
+    });
+  };
+
+  window._selectOccupation = function(val){
+    _selectedOcc = val;
+    ['学生','会社員','主婦・主夫','自営業・フリーランス','その他'].forEach(o => {
+      const btn = document.getElementById('occ-btn-'+o.replace(/[・]/g,''));
+      if(btn){ btn.style.background = o===val ? 'var(--p)' : 'var(--bg)'; btn.style.color = o===val ? '#fff' : 'var(--ts)'; btn.style.borderColor = o===val ? 'var(--p)' : 'var(--bd)'; }
+    });
+  };
+
+  window._proSlideNext = async function(){
+    if(_proSlide < 3){ _proSlide++; _renderProSlide(); }
+    else {
+      // プロフィールをFirestoreに保存
+      if((_selectedAge || _selectedOcc) && window._fbUser && window._fbDb && window._fbFns){
+        try{
+          const { doc, setDoc } = window._fbFns;
+          const update = {};
+          if(_selectedAge) update.ageGroup = _selectedAge;
+          if(_selectedOcc) update.occupation = _selectedOcc;
+          await setDoc(doc(window._fbDb,'users',window._fbUser.uid), update, { merge:true });
+        }catch(e){ console.error('profile save error:', e); }
+      }
+      closeAuthModal();
+    }
   };
 
   _renderProSlide();
@@ -4351,6 +4582,7 @@ async function _fetchGroupSubs(){
 function _updateGroupTabs(){
   const tabArea = document.getElementById('group-dashboard-tabs');
   if(!tabArea) return;
+  _updateCalGroupTabs(); // カレンダータブも同時更新
   if(!_groupId){
     tabArea.style.display = 'none';
     const nameEl = document.getElementById('group-tab-name');
@@ -5210,7 +5442,29 @@ function renderCalendar(){
   const y=calYear, m=calMonth;
   document.getElementById('cal-label').textContent=`${y}年${m+1}月`;
 
-  let target=subs.filter(s=>s.freq!=='単発（買い切り）'&&!s.canceled);
+  // グループタブに応じてデータソースを決定
+  const myUid = window._fbUser?.uid;
+  let target = [];
+  let isAllTab = _calGroupTab === 'all';
+
+  if(!_groupId || _calGroupTab === 'all' || _calGroupTab === myUid || !_calGroupTab){
+    // 自分のサブスク
+    let mySubs = subs.filter(s=>s.freq!=='単発（買い切り）'&&!s.canceled);
+    mySubs = mySubs.map(s=>({...s, _ownerUid: myUid}));
+    if(_calGroupTab === 'all' && _groupId){
+      // 全体：自分＋メンバー全員
+      const others = Object.values(_groupSubsCache).flat()
+        .filter(s=>s._ownerUid!==myUid&&s.freq!=='単発（買い切り）'&&!s.canceled);
+      target = [...mySubs, ...others];
+    } else {
+      target = mySubs;
+    }
+  } else {
+    // 特定メンバー
+    target = (_groupSubsCache[_calGroupTab]||[])
+      .filter(s=>s.freq!=='単発（買い切り）'&&!s.canceled);
+  }
+
   if(calFilter==='warn') target=target.filter(s=>s.sat===1);
 
   // 休止中は「今月以降」非表示（今月中に休止した場合も含め翌月から除外）
@@ -5308,7 +5562,13 @@ function renderCalendar(){
         chip.style.borderLeft=`2px solid ${color}`;
         chip.style.color=color;
         const shortName=sub.name.length>6?sub.name.slice(0,5)+'…':sub.name;
-        chip.textContent=shortName;
+        // 全体タブ時：オーナーカラードット表示
+        if(isAllTab && _groupId && sub._ownerUid){
+          const ownerColor = sub._ownerUid===myUid ? '#5a9e94' : '#e8a020';
+          chip.innerHTML = `<span style="display:inline-block;width:5px;height:5px;border-radius:50%;background:${ownerColor};margin-right:3px;vertical-align:middle;flex-shrink:0"></span>${shortName}`;
+        } else {
+          chip.textContent=shortName;
+        }
         cell.appendChild(chip);
       });
       if(evs.length > maxChips){
