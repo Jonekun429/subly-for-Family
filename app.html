@@ -495,7 +495,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 /* ── カスタム確認ダイアログ ── */
 .dlg-ov{position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .15s ease}
 .dlg-ov.hidden{display:none}
-.dlg{background:var(--card);border-radius:18px;padding:26px 22px 20px;max-width:320px;width:100%;box-shadow:0 12px 40px rgba(0,0,0,.18);animation:fadeUp .18s ease;position:relative}
+.dlg{background:var(--card);border-radius:18px;padding:26px 22px 20px;max-width:320px;width:100%;box-shadow:0 12px 40px rgba(0,0,0,.18);animation:fadeUp .18s ease;position:relative;max-height:85vh;overflow-y:auto}
 .dlg-icon{font-size:32px;text-align:center;margin-bottom:10px}
 .dlg-ttl{font-size:clamp(13px,3.5vw,15px);font-weight:700;text-align:center;margin-bottom:8px;color:var(--tx)}
 .dlg-msg{font-size:14px;color:var(--ts);text-align:center;line-height:1.7;margin-bottom:20px}
@@ -977,6 +977,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <div class="s-body">
           <div class="s-title" id="s-nickname-display" style="color:var(--tx)">名前を設定</div>
           <div class="s-sub" id="s-plan-display">Subly Free</div>
+          <div class="s-sub" id="s-profile-sub" style="margin-top:1px"></div>
         </div>
         <span class="s-arr">›</span>
       </div>
@@ -1414,38 +1415,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   </div>
 </div>
 
-<!-- プロフィール編集モーダル -->
-<div class="dlg-ov hidden" id="profile-ov" onclick="if(event.target===this)closeProfileModal()">
-  <div class="dlg" style="max-width:340px;width:92%">
-    <div style="font-size:16px;font-weight:700;color:var(--tx);margin-bottom:4px">年齢層・職業</div>
-    <div style="font-size:12px;color:var(--ts);margin-bottom:16px">任意で設定できます</div>
-    <div style="margin-bottom:16px">
-      <div style="font-size:12px;font-weight:700;color:var(--ts);margin-bottom:8px;letter-spacing:.5px">年齢層</div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px">
-        <button onclick="_profileSelectAge('10代')" id="s-age-btn-10代" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">10代</button>
-        <button onclick="_profileSelectAge('20代')" id="s-age-btn-20代" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">20代</button>
-        <button onclick="_profileSelectAge('30代')" id="s-age-btn-30代" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">30代</button>
-        <button onclick="_profileSelectAge('40代')" id="s-age-btn-40代" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">40代</button>
-        <button onclick="_profileSelectAge('50代以上')" id="s-age-btn-50代以上" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">50代以上</button>
-      </div>
-    </div>
-    <div style="margin-bottom:20px">
-      <div style="font-size:12px;font-weight:700;color:var(--ts);margin-bottom:8px;letter-spacing:.5px">職業</div>
-      <div style="display:flex;flex-wrap:wrap;gap:8px">
-        <button onclick="_profileSelectOcc('学生')" id="s-occ-btn-学生" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">学生</button>
-        <button onclick="_profileSelectOcc('会社員')" id="s-occ-btn-会社員" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">会社員</button>
-        <button onclick="_profileSelectOcc('主婦・主夫')" id="s-occ-btn-主婦主夫" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">主婦・主夫</button>
-        <button onclick="_profileSelectOcc('自営業・フリーランス')" id="s-occ-btn-自営業フリーランス" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">自営業・フリーランス</button>
-        <button onclick="_profileSelectOcc('その他')" id="s-occ-btn-その他" style="padding:7px 16px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer">その他</button>
-      </div>
-    </div>
-    <div style="display:flex;gap:10px">
-      <button onclick="closeProfileModal()" style="flex:1;padding:12px;background:var(--bg);color:var(--ts);border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">キャンセル</button>
-      <button onclick="saveProfileModal()" style="flex:1;padding:12px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">保存</button>
-    </div>
-  </div>
-</div>
-
 <!-- ニックネーム編集モーダル -->
 <div class="dlg-ov hidden" id="nickname-ov" onclick="if(event.target===this)closeNicknameModal()">
   <div class="dlg" style="max-width:320px;width:90%">
@@ -1458,19 +1427,19 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     <div style="font-size:11px;color:var(--ts);margin-top:4px;text-align:right;margin-bottom:14px" id="nickname-count">0 / 20</div>
     <div style="font-size:12px;font-weight:700;color:var(--ts);margin-bottom:8px;letter-spacing:.5px">年齢層</div>
     <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">
-      <button onclick="_profileSelectAge('10代')" id="s-age-btn-10代" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">10代</button>
-      <button onclick="_profileSelectAge('20代')" id="s-age-btn-20代" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">20代</button>
-      <button onclick="_profileSelectAge('30代')" id="s-age-btn-30代" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">30代</button>
-      <button onclick="_profileSelectAge('40代')" id="s-age-btn-40代" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">40代</button>
-      <button onclick="_profileSelectAge('50代以上')" id="s-age-btn-50代以上" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">50代以上</button>
+      <button onclick="_profileSelectAge('10代')" id="nick-age-btn-10代" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">10代</button>
+      <button onclick="_profileSelectAge('20代')" id="nick-age-btn-20代" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">20代</button>
+      <button onclick="_profileSelectAge('30代')" id="nick-age-btn-30代" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">30代</button>
+      <button onclick="_profileSelectAge('40代')" id="nick-age-btn-40代" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">40代</button>
+      <button onclick="_profileSelectAge('50代以上')" id="nick-age-btn-50代以上" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">50代以上</button>
     </div>
     <div style="font-size:12px;font-weight:700;color:var(--ts);margin-bottom:8px;letter-spacing:.5px">職業</div>
     <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px">
-      <button onclick="_profileSelectOcc('学生')" id="s-occ-btn-学生" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">学生</button>
-      <button onclick="_profileSelectOcc('会社員')" id="s-occ-btn-会社員" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">会社員</button>
-      <button onclick="_profileSelectOcc('主婦・主夫')" id="s-occ-btn-主婦主夫" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">主婦・主夫</button>
-      <button onclick="_profileSelectOcc('自営業・フリーランス')" id="s-occ-btn-自営業フリーランス" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">自営業・フリーランス</button>
-      <button onclick="_profileSelectOcc('その他')" id="s-occ-btn-その他" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">その他</button>
+      <button onclick="_profileSelectOcc('学生')" id="nick-occ-btn-学生" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">学生</button>
+      <button onclick="_profileSelectOcc('会社員')" id="nick-occ-btn-会社員" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">会社員</button>
+      <button onclick="_profileSelectOcc('主婦・主夫')" id="nick-occ-btn-主婦主夫" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">主婦・主夫</button>
+      <button onclick="_profileSelectOcc('自営業・フリーランス')" id="nick-occ-btn-自営業フリーランス" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">自営業・フリーランス</button>
+      <button onclick="_profileSelectOcc('その他')" id="nick-occ-btn-その他" style="padding:6px 14px;border-radius:20px;border:1.5px solid var(--bd);background:var(--bg);color:var(--ts);font-size:12px;font-weight:600;font-family:inherit;cursor:pointer">その他</button>
     </div>
     <div style="display:flex;gap:10px">
       <button onclick="closeNicknameModal()" style="flex:1;padding:12px;background:var(--bg);color:var(--ts);border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">キャンセル</button>
@@ -2553,7 +2522,7 @@ function findCampaign(name) {
  * @param {string} serviceName - 実際のサービス名
  */
 function showSavingHint(campaign, serviceName) {
-  gaEvent('saving_hint_view', { service_name: serviceName, campaign_name: campaign.name });
+  gaEvent('saving_hint_view', { campaign_name: campaign.name });
   showDialog({
     icon: '',
     title: `${serviceName} を安くできるかも`,
@@ -3081,13 +3050,6 @@ function closeSavingHints(){ document.getElementById('saving-hints-ov').classLis
 
 function openSettings(){
   document.getElementById('settings-ov').classList.remove('hidden');
-  // 退会ボタンをログイン状態に応じて確実に制御
-  const applyWithdraw = () => {
-    const wdLink = document.getElementById('s-withdraw-link');
-    if(wdLink) wdLink.style.display = window._fbUser ? 'block' : 'none';
-  };
-  applyWithdraw();
-  setTimeout(applyWithdraw, 500);
   _updateAuthUI(window._fbUser || null);
   // プロフィールサブテキスト更新
   if(window._fbUser && window._fbDb && window._fbFns){
@@ -3299,35 +3261,10 @@ function togglePwVisibility(inputId, btn){
 let _profileAge = '';
 let _profileOcc = '';
 
-async function openProfileModal(){
-  // 現在の値をFirestoreから取得して選択状態を反映
-  _profileAge = ''; _profileOcc = '';
-  if(window._fbUser && window._fbDb && window._fbFns){
-    try{
-      const { doc, getDoc } = window._fbFns;
-      const snap = await getDoc(doc(window._fbDb,'users',window._fbUser.uid));
-      if(snap.exists()){
-        _profileAge = snap.data().ageGroup || '';
-        _profileOcc = snap.data().occupation || '';
-      }
-    }catch(e){}
-  }
-  document.getElementById('profile-ov').classList.remove('hidden');
-  // 選択状態を反映
-  setTimeout(()=>{
-    if(_profileAge) _profileSelectAge(_profileAge);
-    if(_profileOcc) _profileSelectOcc(_profileOcc);
-  }, 50);
-}
-
-function closeProfileModal(){
-  document.getElementById('profile-ov').classList.add('hidden');
-}
-
 function _profileSelectAge(val){
   _profileAge = val;
   ['10代','20代','30代','40代','50代以上'].forEach(a => {
-    const btn = document.getElementById('s-age-btn-'+a);
+    const btn = document.getElementById('nick-age-btn-'+a);
     if(btn){ btn.style.background = a===val?'var(--p)':'var(--bg)'; btn.style.color = a===val?'#fff':'var(--ts)'; btn.style.borderColor = a===val?'var(--p)':'var(--bd)'; }
   });
 }
@@ -3336,26 +3273,9 @@ function _profileSelectOcc(val){
   _profileOcc = val;
   const idMap = {'学生':'学生','会社員':'会社員','主婦・主夫':'主婦主夫','自営業・フリーランス':'自営業フリーランス','その他':'その他'};
   Object.keys(idMap).forEach(o => {
-    const btn = document.getElementById('s-occ-btn-'+idMap[o]);
+    const btn = document.getElementById('nick-occ-btn-'+idMap[o]);
     if(btn){ btn.style.background = o===val?'var(--p)':'var(--bg)'; btn.style.color = o===val?'#fff':'var(--ts)'; btn.style.borderColor = o===val?'var(--p)':'var(--bd)'; }
   });
-}
-
-async function saveProfileModal(){
-  if(window._fbUser && window._fbDb && window._fbFns){
-    try{
-      const { doc, setDoc } = window._fbFns;
-      await setDoc(doc(window._fbDb,'users',window._fbUser.uid), { ageGroup: _profileAge, occupation: _profileOcc }, { merge:true });
-    }catch(e){ console.error('profile save:', e); }
-  }
-  // 設定画面のサブテキスト更新
-  const sub = document.getElementById('s-profile-sub');
-  if(sub){
-    const parts = [_profileAge, _profileOcc].filter(Boolean);
-    sub.textContent = parts.length ? parts.join(' · ') : '未設定';
-  }
-  closeProfileModal();
-  showToast('プロフィールを保存しました');
 }
 
 function closeNicknameModal(){
@@ -4363,7 +4283,7 @@ async function createGroup(){
   _groupData = groupData;
   await _renderGroupJoined();
   _dismissGroupNewBadge();
-  gaEvent('group_create', { group_name: name });
+  gaEvent('group_create', {});
   showToast(`「${name}」を作成しました`);
 }
 
@@ -4421,7 +4341,7 @@ async function joinGroupByCode(codeArg){
     _groupId = groupDoc.id;
     _groupData = { ...groupData, memberUids: [...memberUids, user.uid] };
 
-    gaEvent('group_join', { code });
+    gaEvent('group_join', {});
     _dismissGroupNewBadge();
     // 参加通知をメンバーに送る
     await _notifyGroupMembers(groupDoc.id, _nickname || user.displayName || 'メンバー');
@@ -5089,7 +5009,7 @@ function drawChart(obj){
             const i=els[0].index;
             _setCenterSelected(labels[i], data[i], total, colors[i]);
             _setLegendActive(i);
-            gaEvent('chart_category_tap', { category: labels[i], amount: data[i], period: chartMode });
+            gaEvent('chart_category_tap', { period: chartMode });
           },
           onHover(_,els){
             canvas.style.cursor=els.length?'pointer':'default';
@@ -5119,7 +5039,7 @@ function drawChart(obj){
       if(myChart){ myChart.setDatasetVisibility(0,true); myChart.update(); }
       // 凡例タップで明細をその場に展開
       _showLegendDetail(cat, legendBox, row, i);
-      gaEvent('legend_tap', { category: cat });
+      gaEvent('legend_tap', {});
     };
     legendBox.appendChild(row);
   });
@@ -5331,7 +5251,7 @@ async function _dismissAlert(cat, el){
   const todayYM = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
   await Store.set(_alertStoreKey(cat), todayYM);
   if(el) el.remove();
-  gaEvent('alert_dismissed', { category: cat });
+  gaEvent('alert_dismissed', {});
 }
 
 
@@ -5872,7 +5792,7 @@ function openPayerBulkPopup(){
 function renderList(){
   const cat=document.getElementById('fl-cat').value;
   const sort=document.getElementById('fl-sort').value;
-  if(cat !== 'all') gaEvent('filter_used', { category: cat, sort: sort });
+  if(cat !== 'all') gaEvent('filter_used', {});
 
   // グループフィルター適用
   let baseList = subs;
@@ -5899,9 +5819,9 @@ function renderList(){
   } else if(cat==='all'){
     list=baseList.filter(s=>!s.canceled);
   } else if(cat==='その他'){
-    list=subs.filter(s=>!catMap[s.cat]&&!s.canceled);
+    list=baseList.filter(s=>!catMap[s.cat]&&!s.canceled);
   } else {
-    list=subs.filter(s=>s.cat===cat&&!s.canceled);
+    list=baseList.filter(s=>s.cat===cat&&!s.canceled);
   }
   // 満足度フィルター（sat-bandタップ時）
   if(currentSatFilter!==null) list=list.filter(s=>s.sat===currentSatFilter);
@@ -6010,7 +5930,7 @@ function renderList(){
       document.querySelectorAll('.sub-actions.open').forEach(a=>a.classList.remove('open'));
       if(!isOpen){
         actions.classList.add('open');
-        gaEvent('detail_expand', { service_name: s.name, category: s.cat });
+        gaEvent('detail_expand', {});
       }
     };
     wrapper.onclick=toggleActions;
@@ -6119,7 +6039,7 @@ function buildQItems(cat){
           opt.className='plan-opt';
           opt.innerHTML=`<span class="plan-opt-lbl">${plan.label}</span><span class="plan-opt-prc">¥${plan.price.toLocaleString()} / ${item.freq}</span>`;
           opt.onclick=()=>{
-            gaEvent('quick_add_tap', { service_name: item.name, category: cat, price: plan.price, freq: item.freq });
+            gaEvent('quick_add_tap', { freq: item.freq });
             fillForm({name:item.name,price:plan.price,freq:item.freq},cat);
             panel.classList.remove('open'); panel.innerHTML=''; panel.dataset.item='';
           };
@@ -6130,7 +6050,7 @@ function buildQItems(cat){
       };
     }else{
       btn.onclick=()=>{
-        gaEvent('quick_add_tap', { service_name: item.name, category: cat, price: item.price, freq: item.freq });
+        gaEvent('quick_add_tap', { freq: item.freq });
         fillForm({name:item.name,price:item.price,freq:item.freq},cat);
       };
     }
@@ -6219,13 +6139,13 @@ async function submitForm(){
     backToStep1();
     goto('dashboard');
 
-    gaEvent('subscription_updated', { category: cat, price: price, freq: freq, has_payer: !!payer });
+    gaEvent('subscription_updated', { freq: freq, has_payer: !!payer });
     showToast('更新しました');
   } else {
     subs.push({id:Date.now(),name,cat,price,freq,date,memo,payment,payer,sat,cancelUrl,paused:false});
     await save();
 
-    gaEvent('subscription_added', { category: cat, price: price, freq: freq, total_count: subs.length, has_payer: !!payer });
+    gaEvent('subscription_added', { freq: freq, total_count: subs.length, has_payer: !!payer });
     // 初回登録後は手順バナーを非表示
     document.getElementById('how-to-box').style.display='none';
     // 登録完了 → 続けて追加 or ホームへ のダイアログ
@@ -6268,7 +6188,7 @@ function resetForm(){
 function editSub(id){
   const s=subs.find(x=>x.id===id);if(!s)return;
   editId=id;
-  gaEvent('edit_start', { service_name: s.name, category: s.cat });
+  gaEvent('edit_start', {});
   goto('add');
   setTimeout(()=>{
     // STEP2を表示
@@ -6321,7 +6241,7 @@ function openCancelUrl(){
 function searchCancelUrl(name, cat){
   const q=encodeURIComponent(name+' 解約');
   window.open('https://www.google.com/search?q='+q,'_blank');
-  gaEvent('search_cancel_url',{service_name:name, category:cat});
+  gaEvent('search_cancel_url',{});
 }
 // 編集フォームの検索ボタン用
 function searchCancelUrlFromForm(){
@@ -6338,7 +6258,7 @@ async function togglePauseFromForm(){
   s.paused = !s.paused;
   if(s.paused){ s.pausedDate = new Date().toISOString().slice(0,10); }
   else { delete s.pausedDate; }
-  gaEvent('pause_toggle', { action: s.paused ? 'pause' : 'resume', category: s.cat });
+  gaEvent('pause_toggle', { action: s.paused ? 'pause' : 'resume' });
   await save();
   // ボタンのラベルを更新
   const pauseBtn = document.getElementById('btn-pause-toggle');
@@ -6390,7 +6310,7 @@ async function cancelSub(id){
         await save();
         renderDashboard();
         renderList();
-        gaEvent('subscription_canceled', { service_name: s.name, category: s.cat });
+        gaEvent('subscription_canceled', {});
         showToast(`${s.name} を解約済にしました`);
       }}
     ]
@@ -6405,7 +6325,7 @@ async function restoreSub(id){
   await save();
   renderDashboard();
   renderList();
-  gaEvent('subscription_restored', { service_name: s.name, category: s.cat });
+  gaEvent('subscription_restored', {});
   showToast(`${s.name} を復元しました`);
 }
 
@@ -6420,7 +6340,7 @@ async function delSub(id){
       {label:'キャンセル', cls:'cancel'},
       {label:'削除する', cls:'danger', onClick: async ()=>{
         subs=subs.filter(s=>s.id!==id);
-        gaEvent('subscription_deleted', { service_name: name });
+        gaEvent('subscription_deleted', {});
         await save(); renderList();
         showToast(`${name}を削除しました`);
       }}
@@ -6706,7 +6626,7 @@ async function checkProNudge(force){
 
 function nudgeTap(name, cat){
   closeNudge();
-  gaEvent('nudge_tap', { service_name: name, category: cat });
+  gaEvent('nudge_tap', {});
   setTimeout(function(){
     goto('add');
     setTimeout(function(){
