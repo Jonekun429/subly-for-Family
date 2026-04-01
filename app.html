@@ -511,16 +511,24 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .overlay{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .18s ease;overflow:hidden}
 .overlay.hidden{display:none}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.sheet{background:var(--card);border-radius:18px 18px 0 0;max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;animation:fadeUp .24s ease;padding-bottom:calc(env(safe-area-inset-bottom) + 20px);width:calc(100% - 16px);max-width:480px}
+.sheet{background:var(--card);border-radius:18px 18px 0 0;max-height:85vh;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;animation:fadeUp .24s ease;padding-bottom:calc(env(safe-area-inset-bottom) + 20px);width:calc(100% - 16px);max-width:480px}
+/* 設定パネル専用（フルスクリーン・確実にスクロール） */
+#settings-ov{display:none;position:fixed;inset:0;z-index:850;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;animation:settSlide .25s ease}
+#settings-ov.open{display:block}
+@keyframes settSlide{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.sett-hdr{position:sticky;top:0;z-index:2;background:var(--card);display:flex;align-items:center;justify-content:space-between;padding:14px 18px;padding-top:max(14px,calc(env(safe-area-inset-top) + 8px));border-bottom:1px solid var(--bd);box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.sett-hdr-ttl{font-size:16px;font-weight:700}
+.sett-close{width:30px;height:30px;border-radius:50%;background:var(--bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ts)}
+.sett-body{max-width:480px;margin:0 auto;padding:8px 0 calc(env(safe-area-inset-bottom) + 40px)}
 .sheet-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;border-bottom:1px solid var(--bd);position:sticky;top:0;background:var(--card);z-index:1}
 .sheet-ttl{font-size:15px;font-weight:700}
 .sheet-close{width:28px;height:28px;border-radius:50%;background:var(--bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--ts)}
-.s-sec{font-size:11px;font-weight:700;color:var(--ts);letter-spacing:1px;text-transform:uppercase;padding:12px 20px 4px}
-.s-grp{margin:0 16px 6px;background:var(--card);border-radius:14px;overflow:hidden;box-shadow:var(--sh)}
-.s-row{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--bd);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .12s}
+.s-sec{font-size:11px;font-weight:700;color:var(--ts);letter-spacing:1px;text-transform:uppercase;padding:14px 20px 6px}
+.s-grp{margin:0 14px 8px;background:var(--card);border-radius:14px;overflow:hidden;box-shadow:var(--sh)}
+.s-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--bd);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .12s}
 .s-row:last-child{border-bottom:none}
 .s-row:active{background:var(--pl)}
-.s-ico{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.s-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .s-body{flex:1}
 .s-title{font-size:15px;font-weight:600;color:var(--tx)}
 .s-sub{font-size:12px;color:var(--ts);margin-top:1px}
@@ -911,6 +919,28 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 </nav>
 
 <!-- カスタム確認ダイアログ -->
+<!-- 収入設定モーダル -->
+<div class="dlg-ov hidden" id="income-ov" onclick="if(event.target===this)closeIncomeModal()">
+  <div class="dlg" style="max-width:300px">
+    <div class="dlg-ttl">手取り収入を設定</div>
+    <div class="dlg-msg" style="margin-bottom:14px">
+      <input type="tel" id="income-input" placeholder="¥ 月の手取りを入力" inputmode="numeric"
+        style="width:100%;padding:12px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:20px;font-weight:700;font-family:inherit;color:var(--tx);background:var(--bg);outline:none;text-align:center;box-sizing:border-box">
+      <div style="display:flex;align-items:center;justify-content:center;gap:4px;font-size:10px;color:var(--ts);margin-top:8px">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="var(--p)"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/></svg>
+        端末内にのみ保存・サーバー送信なし
+      </div>
+    </div>
+    <div class="dlg-btns">
+      <button class="dlg-btn cancel" onclick="closeIncomeModal()">キャンセル</button>
+      <button class="dlg-btn ok" onclick="saveIncome()">保存</button>
+    </div>
+    <div style="text-align:center;margin-top:6px">
+      <button onclick="clearIncome()" style="background:none;border:none;font-size:11px;color:var(--dn);cursor:pointer;font-family:inherit;padding:4px">設定を解除する</button>
+    </div>
+  </div>
+</div>
+
 <div class="dlg-ov hidden" id="dlg-ov">
   <div class="dlg">
     <button id="dlg-close" onclick="closeDialog()" style="display:none;position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:var(--bg);border:none;cursor:pointer;font-size:15px;color:var(--ts);align-items:center;justify-content:center">✕</button>
@@ -929,16 +959,17 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 </div>
 
 <!-- 設定パネル -->
-<div class="overlay hidden" id="settings-ov" onclick="if(event.target===this)closeSettings()">
-  <div class="sheet">
-    <div class="sheet-hdr">
-      <span class="sheet-ttl" id="settings-ttl"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg> 設定</span>
-      <button class="sheet-close" onclick="closeSettings()">✕</button>
-    </div>
+<!-- 設定パネル（フルスクリーン） -->
+<div id="settings-ov">
+  <div class="sett-hdr">
+    <span class="sett-hdr-ttl">設定</span>
+    <button class="sett-close" onclick="closeSettings()">✕</button>
+  </div>
+  <div class="sett-body">
     <div class="s-sec">プロフィール</div>
     <div class="s-grp">
       <!-- ログイン中の表示 -->
-      <div id="s-auth-logged-in" style="display:none;padding:10px 16px;border-bottom:1px solid var(--bd)">
+      <div id="s-auth-logged-in" style="display:none;padding:12px 16px;border-bottom:1px solid var(--bd)">
         <div style="display:flex;align-items:center;gap:10px">
           <div id="s-auth-avatar" style="width:38px;height:38px;border-radius:50%;background:var(--p);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;font-size:16px;font-weight:700;color:#fff">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
@@ -946,7 +977,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
           <div style="flex:1;min-width:0">
             <div style="font-size:15px;font-weight:700;color:var(--tx)" id="s-auth-name">—</div>
             <div style="font-size:12px;color:var(--ts);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="s-auth-email">—</div>
-            <div style="margin-top:4px;display:inline-flex;align-items:center;gap:4px;background:var(--pl);border-radius:20px;padding:2px 8px">
+            <div style="margin-top:3px;display:inline-flex;align-items:center;gap:4px;background:var(--pl);border-radius:20px;padding:2px 8px">
               <div style="width:6px;height:6px;border-radius:50%;background:#4ADE80"></div>
               <span style="font-size:11px;font-weight:700;color:var(--p)" id="s-auth-plan-badge">Subly Pro ✓</span>
             </div>
@@ -965,7 +996,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         </div>
         <span class="s-arr">›</span>
       </div>
-      <!-- ニックネーム編集（共通） -->
+      <!-- ニックネーム編集 -->
       <div class="s-row" onclick="openNicknameModal()" style="align-items:center">
         <div class="s-ico" style="background:#EDF4F2">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
@@ -978,6 +1009,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <span class="s-arr">›</span>
       </div>
     </div>
+
     <div class="s-sec">グループ</div>
     <div class="s-grp">
       <div id="s-group-row" class="s-row" onclick="closeSettings();setTimeout(_onGroupMenuTap,200)" style="align-items:center">
@@ -991,6 +1023,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <span class="s-arr">›</span>
       </div>
     </div>
+
     <div class="s-sec">外観</div>
     <div class="s-grp">
       <div style="padding:10px 14px">
@@ -999,34 +1032,17 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
           <div class="s-title">テーマ</div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4px">
-          <button class="s-theme-btn" onclick="setTheme('light')"  id="th-light"  data-theme="light">
-            <div class="s-theme-dot" style="background:#F5F5F0;border:2.5px solid #5C8E84"></div>
-            <span>ライト</span>
-          </button>
-          <button class="s-theme-btn" onclick="setTheme('ocean')"  id="th-ocean"  data-theme="ocean">
-            <div class="s-theme-dot" style="background:#F0F5FA;border:2.5px solid #4A90D0"></div>
-            <span>オーシャン</span>
-          </button>
-          <button class="s-theme-btn" onclick="setTheme('pastel')" id="th-pastel" data-theme="pastel">
-            <div class="s-theme-dot" style="background:linear-gradient(135deg,#F5E6F0,#E8F0FA,#FFF0F5);border:2.5px solid #E8A0BF"></div>
-            <span>パステル</span>
-          </button>
-          <button class="s-theme-btn" onclick="setTheme('dark')"   id="th-dark"   data-theme="dark">
-            <div class="s-theme-dot" style="background:#121816;border:2.5px solid #6BA99F"></div>
-            <span>ダーク</span>
-          </button>
-          <button class="s-theme-btn" onclick="setTheme('night')"  id="th-night"  data-theme="night">
-            <div class="s-theme-dot" style="background:#0E1525;border:2.5px solid #5B8DEF"></div>
-            <span>ナイト</span>
-          </button>
-          <button class="s-theme-btn" onclick="setTheme('purple')" id="th-purple" data-theme="purple">
-            <div class="s-theme-dot" style="background:#1A0E2E;border:2.5px solid #A78BFA"></div>
-            <span>パープル</span>
-          </button>
+          <button class="s-theme-btn" onclick="setTheme('light')"  id="th-light"  data-theme="light"><div class="s-theme-dot" style="background:#F5F5F0;border:2.5px solid #5C8E84"></div><span>ライト</span></button>
+          <button class="s-theme-btn" onclick="setTheme('ocean')"  id="th-ocean"  data-theme="ocean"><div class="s-theme-dot" style="background:#F0F5FA;border:2.5px solid #4A90D0"></div><span>オーシャン</span></button>
+          <button class="s-theme-btn" onclick="setTheme('pastel')" id="th-pastel" data-theme="pastel"><div class="s-theme-dot" style="background:linear-gradient(135deg,#F5E6F0,#E8F0FA,#FFF0F5);border:2.5px solid #E8A0BF"></div><span>パステル</span></button>
+          <button class="s-theme-btn" onclick="setTheme('dark')"   id="th-dark"   data-theme="dark"><div class="s-theme-dot" style="background:#121816;border:2.5px solid #6BA99F"></div><span>ダーク</span></button>
+          <button class="s-theme-btn" onclick="setTheme('night')"  id="th-night"  data-theme="night"><div class="s-theme-dot" style="background:#0E1525;border:2.5px solid #5B8DEF"></div><span>ナイト</span></button>
+          <button class="s-theme-btn" onclick="setTheme('purple')" id="th-purple" data-theme="purple"><div class="s-theme-dot" style="background:#1A0E2E;border:2.5px solid #A78BFA"></div><span>パープル</span></button>
         </div>
       </div>
     </div>
-    <div class="s-sec">設定</div>
+
+    <div class="s-sec">通知</div>
     <div class="s-grp">
       <div class="s-row" onclick="openNotifySettings()">
         <div class="s-ico" style="background:#EDF4F2"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg></div>
@@ -1034,6 +1050,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <span class="s-arr">›</span>
       </div>
     </div>
+
     <div class="s-sec">データ管理</div>
     <div class="s-grp">
       <div class="s-row" onclick="exportCSV()">
@@ -1047,45 +1064,41 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <span class="s-arr">›</span>
       </div>
     </div>
+
     <div class="s-sec">ヘルプ</div>
     <div class="s-grp">
       <div class="s-row" onclick="openGuide()">
         <div class="s-ico" style="background:#EEF2FF"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg></div>
-        <div class="s-body"><div class="s-title">機種変更ガイド</div><div class="s-sub">データの引き継ぎ方法を確認</div></div>
+        <div class="s-body"><div class="s-title">機種変更ガイド</div><div class="s-sub">引き継ぎ方法を確認</div></div>
         <span class="s-arr">›</span>
       </div>
       <div class="s-row" onclick="openHowto()">
         <div class="s-ico" style="background:#F0FDF4"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg></div>
-        <div class="s-body"><div class="s-title">使い方を見る</div><div class="s-sub">各画面の使い方を確認</div></div>
+        <div class="s-body"><div class="s-title">使い方を見る</div><div class="s-sub">Sublyの基本的な使い方</div></div>
         <span class="s-arr">›</span>
       </div>
     </div>
-    <div class="s-sec">節約のヒント</div>
+
+    <div class="s-sec">その他</div>
     <div class="s-grp">
       <div class="s-row" onclick="closeSettings();setTimeout(openSavingHints,150)">
         <div class="s-ico" style="background:#FFF8EE"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
         <div class="s-body"><div class="s-title">節約のヒント一覧</div><div class="s-sub">解約引き留めキャンペーン情報</div></div>
         <span class="s-arr">›</span>
       </div>
-    </div>
-    <div class="s-sec">友達に紹介する</div>
-    <div class="s-grp">
       <div class="s-row" onclick="closeSettings();setTimeout(openShare,150)">
         <div class="s-ico" style="background:#EEF6FF"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg></div>
         <div class="s-body"><div class="s-title">友達に紹介する</div><div class="s-sub">QRコード・LINE・URLコピー</div></div>
         <span class="s-arr">›</span>
       </div>
-    </div>
-    <div class="s-sec">サポート</div>
-    <div class="s-grp">
-      <div class="s-row" onclick="openExternalLink('https://docs.google.com/forms/d/e/1FAIpQLSdP2gYFQDWnTMXbiLsXFV7i3y70phIT1Wu7HiIkt9Xjl8tZ4g/viewform?usp=dialog')">
-        <div class="s-ico" style="background:#EEF6FF"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg></div>
-        <div class="s-body"><div class="s-title">機能リクエスト</div><div class="s-sub">ご要望をお聞かせください</div></div>
+      <div class="s-row" onclick="openExternalLink('https://docs.google.com/forms/d/e/1FAIpQLSecie4ubn9sDlzdoQUWvzcEoK0O46dmQhghSr3VmLpsS-Coww/viewform?usp=publish-editor')">
+        <div class="s-ico" style="background:#EEF6FF"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
+        <div class="s-body"><div class="s-title">お問い合わせ</div><div class="s-sub">不具合・ご要望はこちら</div></div>
         <span class="s-arr">›</span>
       </div>
-      <div class="s-row" onclick="openExternalLink('https://docs.google.com/forms/d/e/1FAIpQLSecie4ubn9sDlzdoQUWvzcEoK0O46dmQhghSr3VmLpsS-Coww/viewform?usp=publish-editor')">
-        <div class="s-ico" style="background:#FFF8EE"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
-        <div class="s-body"><div class="s-title">お問い合わせ</div><div class="s-sub">不具合・ご意見はこちら</div></div>
+      <div id="s-withdraw-link" class="s-row" onclick="deleteAccount()" style="display:flex;align-items:center">
+        <div class="s-ico" style="background:#FEE2E2"><svg width="18" height="18" viewBox="0 0 24 24" fill="#C06060"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></div>
+        <div class="s-body"><div class="s-title" style="color:var(--dn)">退会する</div><div class="s-sub">アカウントとデータを削除します</div></div>
         <span class="s-arr">›</span>
       </div>
       <div class="s-row" onclick="openPrivacy()">
@@ -1093,19 +1106,9 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <div class="s-body"><div class="s-title">プライバシーポリシー</div><div class="s-sub">データの取り扱いについて</div></div>
         <span class="s-arr">›</span>
       </div>
-
     </div>
 
-    <div class="s-sec">アカウント削除</div>
-    <div class="s-grp">
-      <div id="s-withdraw-link" class="s-row" onclick="deleteAccount()" style="display:flex;align-items:center">
-        <div class="s-ico" style="background:#FEE2E2"><svg width="18" height="18" viewBox="0 0 24 24" fill="#C06060"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></div>
-        <div class="s-body"><div class="s-title" style="color:var(--dn)">退会する</div><div class="s-sub">アカウントとデータを削除します</div></div>
-        <span class="s-arr">›</span>
-      </div>
-    </div>
-
-    <div style="padding:4px 18px 12px;text-align:center;font-size:11px;color:var(--ts)">Subly v1.0</div>
+    <div style="padding:8px 18px 16px;text-align:center;font-size:11px;color:var(--ts)">Subly v1.0</div>
   </div>
 </div>
 
@@ -1745,6 +1748,28 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
           <button onclick="goto('list')" style="margin-left:auto;background:none;border:none;font-size:12px;font-weight:700;color:var(--p);cursor:pointer;font-family:inherit;padding:0">明細を見る
             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
           </button>
+        </div>
+        <!-- ★ 収入セクション -->
+        <div id="income-cta" style="margin-top:12px;border-top:1px solid var(--bd);padding-top:10px">
+          <div onclick="openIncomeModal()" style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--pl);border-radius:10px;cursor:pointer;border:1.5px dashed rgba(92,142,132,.3)">
+            <div style="width:26px;height:26px;border-radius:7px;background:var(--card);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="var(--p)"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+            </div>
+            <div style="flex:1"><div style="font-size:12px;font-weight:700;color:var(--pd)">収入を設定する（任意）</div><div style="font-size:10px;color:var(--ts);margin-top:1px">家計のバランスがひと目でわかります</div></div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--ts)"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+          </div>
+        </div>
+        <div id="income-bar-section" style="display:none;margin-top:12px;border-top:1px solid var(--bd);padding-top:10px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+            <div style="display:flex;align-items:center;gap:5px">
+              <div id="income-ico" style="width:20px;height:20px;border-radius:5px;background:var(--pl);display:flex;align-items:center;justify-content:center"><svg width="11" height="11" viewBox="0 0 24 24" fill="var(--p)"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
+              <span style="font-size:11px;font-weight:600;color:var(--ts)">手取り</span>
+              <span id="income-val" style="font-size:13px;font-weight:800;color:var(--pd)"></span>
+            </div>
+            <button onclick="openIncomeModal()" style="background:none;border:none;font-size:11px;font-weight:600;color:var(--p);cursor:pointer;font-family:inherit;padding:2px 6px;border-radius:6px">変更</button>
+          </div>
+          <div style="background:var(--bg);border-radius:5px;overflow:hidden;height:7px;margin-bottom:5px"><div id="income-bar" style="height:100%;border-radius:5px;transition:width .8s ease"></div></div>
+          <div id="income-msg" style="font-size:11px;color:var(--ts);text-align:center"></div>
         </div>
       </div>
     </div>
@@ -3061,10 +3086,10 @@ function openSavingHints(){
 function closeSavingHints(){ document.getElementById('saving-hints-ov').classList.add('hidden'); }
 
 function openSettings(){
-  document.getElementById('settings-ov').classList.remove('hidden');
-  document.body.style.overflow='hidden';
+  const el = document.getElementById('settings-ov');
+  el.classList.add('open');
+  el.scrollTop = 0;
   _updateAuthUI(window._fbUser || null);
-  // プロフィールサブテキスト更新
   if(window._fbUser && window._fbDb && window._fbFns){
     const { doc, getDoc } = window._fbFns;
     getDoc(doc(window._fbDb,'users',window._fbUser.uid)).then(snap => {
@@ -3079,16 +3104,7 @@ function openSettings(){
     }).catch(()=>{});
   }
 }
-function closeSettings(){document.getElementById('settings-ov').classList.add('hidden');document.body.style.overflow='';}
-
-/* iOS Safari: overlay背景のタッチスクロールを防止し、sheet内のスクロールだけ許可 */
-document.addEventListener('touchmove', function(e){
-  const ov = document.querySelector('.overlay:not(.hidden)');
-  if(!ov) return;
-  const sheet = ov.querySelector('.sheet');
-  if(sheet && sheet.contains(e.target)) return; // sheet内は許可
-  e.preventDefault();
-}, {passive:false});
+function closeSettings(){document.getElementById('settings-ov').classList.remove('open');}
 
 let _hwPage = 0;
 function openHowto(){
@@ -3145,9 +3161,10 @@ function openExternalLink(url){
 // visibilitychange: 外部ページから戻ったときオーバーレイをリセット
 document.addEventListener('visibilitychange', () => {
   if(document.visibilityState === 'visible'){
-    ['settings-ov','guide-ov','howto-ov','sat-popup-ov','nudge-ov'].forEach(id => {
+    ['guide-ov','howto-ov','sat-popup-ov','nudge-ov'].forEach(id => {
       document.getElementById(id)?.classList.add('hidden');
     });
+    document.getElementById('settings-ov')?.classList.remove('open');
     closeHdrop();
   }
 });
@@ -4987,6 +5004,77 @@ function setChartMode(mode){
   renderDashboard();
 }
 
+/* ============================================================
+   収入設定（端末内のみ保存）
+============================================================ */
+function openIncomeModal(){
+  document.getElementById('income-ov').classList.remove('hidden');
+  const inp = document.getElementById('income-input');
+  const saved = localStorage.getItem('subly_income');
+  inp.value = saved || '';
+  setTimeout(()=>inp.focus(), 200);
+}
+function closeIncomeModal(){ document.getElementById('income-ov').classList.add('hidden'); }
+function saveIncome(){
+  const raw = document.getElementById('income-input').value.replace(/\D/g,'');
+  const v = parseInt(raw, 10);
+  if(!v){ return; }
+  localStorage.setItem('subly_income', String(v));
+  closeIncomeModal();
+  renderDashboard();
+}
+function clearIncome(){
+  localStorage.removeItem('subly_income');
+  closeIncomeModal();
+  renderDashboard();
+}
+function _updateIncomeBar(monthlyExpense){
+  const saved = localStorage.getItem('subly_income');
+  const cta = document.getElementById('income-cta');
+  const bar = document.getElementById('income-bar-section');
+  if(!saved || !parseInt(saved,10)){
+    if(cta) cta.style.display = '';
+    if(bar) bar.style.display = 'none';
+    return;
+  }
+  const income = parseInt(saved, 10);
+  if(cta) cta.style.display = 'none';
+  if(bar) bar.style.display = '';
+  const pct = income > 0 ? ((monthlyExpense / income) * 100) : 0;
+  const remain = income - monthlyExpense;
+  // 表示更新
+  const valEl = document.getElementById('income-val');
+  const barEl = document.getElementById('income-bar');
+  const msgEl = document.getElementById('income-msg');
+  const icoEl = document.getElementById('income-ico');
+  if(valEl) valEl.textContent = '¥' + income.toLocaleString();
+  if(barEl){
+    barEl.style.width = Math.max(0, Math.min(100, 100 - pct)).toFixed(1) + '%';
+    if(pct > 20){ barEl.style.background = 'linear-gradient(90deg,var(--dn),#A04040)'; }
+    else if(pct > 10){ barEl.style.background = 'linear-gradient(90deg,#E8A04A,#D4923A)'; }
+    else { barEl.style.background = 'linear-gradient(90deg,var(--p),var(--pd))'; }
+  }
+  if(icoEl){
+    if(pct > 20){ icoEl.style.background = '#FEE2E2'; icoEl.querySelector('svg').setAttribute('fill','var(--dn)'); }
+    else if(pct > 10){ icoEl.style.background = '#FFF8EE'; icoEl.querySelector('svg').setAttribute('fill','#B8860B'); }
+    else { icoEl.style.background = 'var(--pl)'; icoEl.querySelector('svg').setAttribute('fill','var(--p)'); }
+  }
+  if(msgEl){
+    const pctStr = pct.toFixed(1) + '%';
+    const remainStr = '¥' + remain.toLocaleString();
+    if(pct > 20){
+      msgEl.innerHTML = 'サブスク比率 <strong style="color:var(--dn)">' + pctStr + '</strong>　残り <strong style="color:var(--dn)">' + remainStr + '</strong>';
+      if(valEl) valEl.style.color = 'var(--dn)';
+    } else if(pct > 10){
+      msgEl.innerHTML = 'サブスク比率 <strong style="color:#B8860B">' + pctStr + '</strong>　残り <strong style="color:#B8860B">' + remainStr + '</strong>';
+      if(valEl) valEl.style.color = '#B8860B';
+    } else {
+      msgEl.innerHTML = 'サブスク比率 <strong style="color:var(--pd)">' + pctStr + '</strong>　残り <strong style="color:var(--pd)">' + remainStr + '</strong>';
+      if(valEl) valEl.style.color = 'var(--pd)';
+    }
+  }
+}
+
 function renderDashboard(){
   // グループフィルター適用：全員 or 特定メンバー
   const myUid = window._fbUser?.uid;
@@ -5031,6 +5119,8 @@ function renderDashboard(){
   // 件数：タブに連動
   const activeCnt = targetSubs.filter(s=>s.freq!=='単発（買い切り）'&&!s.paused&&!s.canceled).length;
   document.getElementById('sub-total-count').textContent = activeCnt + '件';
+  // 収入バー更新
+  _updateIncomeBar(monthly);
   // グループ名ヘッダー表示
   const grpHeader = document.getElementById('summary-group-header');
   const grpName = document.getElementById('summary-group-name');
