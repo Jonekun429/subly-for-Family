@@ -3400,9 +3400,9 @@ window._onAuthChanged = async (user) => {
     _updateAuthUI(null);
     _updateNewBadges();
     _stopNotificationListener();
-    // 退会ボタンを薄く（未ログインは使用不可）
+    // 退会ボタン（未ログインでも表示）
     const wdLink = document.getElementById('s-withdraw-link');
-    if(wdLink){ wdLink.style.opacity='0.35'; wdLink.style.pointerEvents='none'; }
+    if(wdLink){ wdLink.style.display='flex'; wdLink.style.opacity='0.35'; wdLink.style.pointerEvents='none'; }
     renderDashboard();
     renderList();
   }
@@ -3450,9 +3450,10 @@ function _updateAuthUI(user){
     if(planEl)   planEl.textContent   = 'Subly Pro ✓';
     if(hdPlanEl) hdPlanEl.textContent = 'Subly Pro ✓';
 
-    // 設定画面の退会リンク：Proは通常表示、Freeは薄く
+    // 設定画面の退会リンク：ログイン済みは通常表示
     const wdLink = document.getElementById('s-withdraw-link');
     if(wdLink){
+      wdLink.style.display = 'flex';
       wdLink.style.opacity = '1';
       wdLink.style.pointerEvents = 'auto';
     }
@@ -3474,9 +3475,10 @@ function _updateAuthUI(user){
     if(planEl)   planEl.textContent   = 'Subly Free';
     if(hdPlanEl) hdPlanEl.textContent = 'Subly Free';
 
-    // 設定画面の退会リンクを非表示
+    // 設定画面の退会リンク（未ログインは薄く表示）
     const wdLink2 = document.getElementById('s-withdraw-link');
     if(wdLink2){
+      wdLink2.style.display = 'flex';
       wdLink2.style.opacity = '0.35';
       wdLink2.style.pointerEvents = 'none';
     }
@@ -3733,7 +3735,7 @@ function _withdrawStep3(user){
           if(hdGrpJoinBtn) hdGrpJoinBtn.style.display = 'none';
           // 退会ボタンを薄く
           const wdLinkD = document.getElementById('s-withdraw-link');
-          if(wdLinkD){ wdLinkD.style.opacity='0.35'; wdLinkD.style.pointerEvents='none'; }
+          if(wdLinkD){ wdLinkD.style.display='flex'; wdLinkD.style.opacity='0.35'; wdLinkD.style.pointerEvents='none'; }
           closeSettings();
           renderDashboard();
           renderList();
