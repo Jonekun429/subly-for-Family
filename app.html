@@ -3712,15 +3712,24 @@ function _withdrawStep3(user){
     buttons:[
       {label:'キャンセル', cls:'cancel'},
       {label:'退会を確定する', cls:'danger', onClick: async ()=>{
-        const pw = document.getElementById('dlg-delete-pw')?.value;
-        const errEl = document.getElementById('dlg-delete-err');
-        if(!pw){
-          if(errEl){ errEl.textContent='パスワードを入力してください'; errEl.style.display='block'; }
+        // ★ closeDialog()がonClickの前に呼ばれるので、事前に値を取得
+        // （showDialogのボタンは closeDialog() → onClick() の順で実行される）
+        const savedPw = window._withdrawPw || '';
+        const savedUser = user;
+        window._withdrawPw = null;
+
+        if(!savedPw){
+          // パスワード未入力 → ダイアログを再表示
+          _withdrawStep3(savedUser);
+          setTimeout(()=>{
+            const errEl = document.getElementById('dlg-delete-err');
+            if(errEl){ errEl.textContent='パスワードを入力してください'; errEl.style.display='block'; }
+          }, 100);
           return;
         }
         try{
           const { reauthenticateWithCredential, EmailAuthProvider, deleteUser, doc, getDoc, setDoc, deleteDoc, collection, getDocs, writeBatch } = window._fbFns;
-          const credential = EmailAuthProvider.credential(user.email, pw);
+          const credential = EmailAuthProvider.credential(savedUser.email, savedPw);
           await reauthenticateWithCredential(user, credential);
 
           // ★ まずリスナーを全て停止（削除中の再書き込み防止）
@@ -3796,20 +3805,30 @@ function _withdrawStep3(user){
           });
 
         }catch(e){
+          // エラー時: _fbUserを復元してSTEP3を再表示
+          window._fbUser = savedUser;
           const msgs = {
             'auth/wrong-password': 'パスワードが違います',
             'auth/invalid-credential': 'パスワードが違います',
             'auth/too-many-requests': 'しばらく待ってから再試行してください',
           };
           const msg = msgs[e.code] || '退会に失敗しました: ' + e.message;
-          document.getElementById('dlg-ov').classList.remove('hidden');
-          const errEl = document.getElementById('dlg-delete-err');
-          if(errEl){ errEl.textContent = msg; errEl.style.display = 'block'; }
+          _withdrawStep3(savedUser);
+          setTimeout(()=>{
+            const errEl = document.getElementById('dlg-delete-err');
+            if(errEl){ errEl.textContent = msg; errEl.style.display = 'block'; }
+          }, 100);
         }
       }}
     ]
   });
-  setTimeout(()=> document.getElementById('dlg-delete-pw')?.focus(), 200);
+  setTimeout(()=>{
+    const pwEl = document.getElementById('dlg-delete-pw');
+    if(pwEl){
+      pwEl.focus();
+      pwEl.addEventListener('input', ()=>{ window._withdrawPw = pwEl.value; });
+    }
+  }, 200);
 }
 
 function _showAuthError(code){
