@@ -414,12 +414,24 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .sub-price{font-size:15px;font-weight:700;color:var(--p);white-space:nowrap}
 .sub-freq{font-size:14px;color:var(--ts)}
 /* 展開ボタン行（タップで展開） */
-.sub-actions{display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--bd);gap:7px;justify-content:flex-end}
+.sub-actions{display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--bd);align-items:center;gap:8px}
 .sub-actions.open{display:flex}
 .btn-e{padding:5px 14px;font-size:14px;font-weight:700;border-radius:6px;cursor:pointer;border:1.5px solid var(--p);background:#fff;color:var(--p);font-family:inherit}
 .btn-d{padding:5px 14px;font-size:14px;font-weight:700;border-radius:6px;cursor:pointer;border:1.5px solid var(--dn);background:#fff;color:var(--dn);font-family:inherit}
 .btn-pause{padding:5px 14px;font-size:14px;font-weight:700;border-radius:6px;cursor:pointer;border:1.5px solid var(--ts);background:#fff;color:var(--ts);font-family:inherit}
 .btn-pause.active{border-color:var(--p);color:var(--p)}
+/* A案アクション */
+.act-btn{display:inline-flex;align-items:center;gap:4px;padding:7px 12px;border-radius:8px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;border:none;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.act-btn.edit{background:var(--pl);color:var(--pd)}
+.act-btn.pause{background:#FFF8EE;color:#B8860B}
+.act-btn.search{background:none;color:var(--ts);font-size:11px;padding:4px 6px}
+.act-more-wrap{margin-left:auto;position:relative;flex-shrink:0}
+.act-more{width:32px;height:32px;border-radius:50%;background:var(--bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ts);-webkit-tap-highlight-color:transparent}
+.act-menu{position:absolute;right:0;bottom:40px;background:var(--card);border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.15);border:1px solid var(--bd);overflow:hidden;min-width:150px;z-index:10;display:none}
+.act-menu.open{display:block}
+.act-menu button{display:block;width:100%;text-align:left;padding:10px 16px;font-size:13px;font-weight:600;font-family:inherit;border:none;background:none;cursor:pointer;color:var(--tx);border-bottom:1px solid var(--bd)}
+.act-menu button:last-child{border-bottom:none}
+.act-menu button.danger{color:var(--dn)}
 .empty{text-align:center;padding:36px 16px;color:var(--ts);font-size:15px;line-height:2}
 
 /* ── 追加フォーム ── */
@@ -471,9 +483,12 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 /* 手動フォーム */
 .f-row{margin-bottom:12px}
 .f-row label{display:block;font-size:14px;font-weight:700;color:var(--ts);margin-bottom:5px}
-.f-row input,.f-row select{width:100%;padding:10px 11px;border:1.5px solid var(--bd);border-radius:9px;font-size:14px;font-family:inherit;background:var(--card);color:var(--tx);-webkit-appearance:none;transition:border-color .2s}
+.f-row input,.f-row select{width:100%;padding:10px 11px;border:1.5px solid var(--bd);border-radius:9px;font-size:14px;font-family:inherit;background:var(--card);color:var(--tx);-webkit-appearance:none;transition:border-color .2s,background .2s}
 .f-row input:focus,.f-row select:focus{outline:none;border-color:var(--p);background:var(--card)}
 .f-row input::placeholder{color:var(--ts);font-style:italic}
+/* 必須項目：薄い背景色 */
+.f-row input.f-required,.f-row select.f-required{background:#FAFAF5}
+.f-row input.f-required.f-filled,.f-row select.f-required.f-filled{background:var(--card)}
 .f-row select{background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%237E928C"><path d="M7 10l5 5 5-5z"/></svg>');background-repeat:no-repeat;background-position:right 9px center;padding-right:28px}
 .f-2col{display:grid;grid-template-columns:3fr 2fr;gap:9px}
 
@@ -1908,8 +1923,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </button>
 
       <div class="f-row">
-        <label>サービス名</label>
-        <input type="text" id="f-name" placeholder="例：Netflix、ジム代..." maxlength="40">
+        <label>サービス名 <span style="color:var(--dn);font-size:11px">*必須</span></label>
+        <input type="text" id="f-name" class="f-required" placeholder="例：Netflix、ジム代..." maxlength="40" oninput="this.classList.toggle('f-filled',!!this.value.trim())">
       </div>
       <div class="f-row">
         <label>カテゴリ</label>
@@ -1924,7 +1939,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
           <option value="習い事">習い事</option>
           <option value="通信費">通信費</option>
           <option value="保険">保険</option>
-          <option value="ローン">ローン</option>
+          <option value="ローン・家賃">ローン・家賃</option>
           <option value="その他">その他</option>
         </select>
         <div class="custom-cat-wrap hidden" id="custom-cat-wrap">
@@ -1933,8 +1948,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
       <div class="f-2col">
         <div class="f-row" style="margin-bottom:0">
-          <label>料金（税込）</label>
-          <input type="number" id="f-price" placeholder="0" min="0">
+          <label>料金（税込）<span style="color:var(--dn);font-size:11px">*必須</span></label>
+          <input type="number" id="f-price" class="f-required" placeholder="0" min="0" oninput="this.classList.toggle('f-filled',!!this.value)">
         </div>
         <div class="f-row" style="margin-bottom:0">
           <label>支払い頻度</label>
@@ -1949,8 +1964,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         </div>
       </div>
       <div class="f-row" style="margin-top:12px">
-        <label>更新日（次の支払い予定日）</label>
-        <input type="date" id="f-date">
+        <label>更新日（次の支払い予定日）<span style="color:var(--dn);font-size:11px">*必須</span></label>
+        <input type="date" id="f-date" class="f-required" oninput="this.classList.toggle('f-filled',!!this.value)">
       </div>
       <div class="f-row">
         <label>メモ（任意）</label>
@@ -2314,14 +2329,14 @@ const qData={
   "動画・配信":[
     {name:"Amazon Prime",       price:600,  freq:"月額"},
     {name:"Netflix", plans:[
-      {label:"広告あり",         price:790},
-      {label:"スタンダード",     price:1490},
-      {label:"プレミアム",       price:1980}
+      {label:"広告あり",         price:890},
+      {label:"スタンダード",     price:1590},
+      {label:"プレミアム",       price:2290}
     ], freq:"月額"},
     {name:"YouTube Premium",    price:1280, freq:"月額"},
     {name:"Disney+", plans:[
-      {label:"スタンダード",     price:990},
-      {label:"プレミアム",       price:1320}
+      {label:"スタンダード",     price:1250},
+      {label:"プレミアム",       price:1670}
     ], freq:"月額"},
     {name:"U-NEXT",             price:2189, freq:"月額"},
     {name:"Hulu",               price:1026, freq:"月額"},
@@ -2331,16 +2346,16 @@ const qData={
   ],
   "音楽":[
     {name:"Spotify", plans:[
-      {label:"個人",             price:980},
-      {label:"ファミリー",       price:1580},
-      {label:"学生",             price:480}
+      {label:"個人",             price:1080},
+      {label:"ファミリー",       price:1880},
+      {label:"学生",             price:580}
     ], freq:"月額"},
     {name:"Apple Music", plans:[
       {label:"個人",             price:1080},
       {label:"ファミリー",       price:1680},
       {label:"学生",             price:580}
     ], freq:"月額"},
-    {name:"YouTube Music",      price:980,  freq:"月額"},
+    {name:"YouTube Music",      price:1080, freq:"月額"},
     {name:"Amazon Music UL",    price:980,  freq:"月額"},
     {name:"LINE MUSIC",         price:980,  freq:"月額"}
   ],
@@ -2386,9 +2401,6 @@ const qData={
       {label:"ファミリー（月割）",    price:417},
       {label:"個人エキスパンション（月割）", price:542}
     ], freq:"月額"},
-    {name:"ポケモンHome", plans:[
-      {label:"プレミアムプラン（年額）", price:2000}
-    ], freq:"年額"},
     {name:"PlayStation Plus", plans:[
       {label:"エッセンシャル",   price:850},
       {label:"エクストラ",       price:1300},
@@ -2401,13 +2413,9 @@ const qData={
     {name:"ジムメンバーシップ", price:8000, freq:"月額"},
     {name:"スポーツクラブ",     price:6000, freq:"月額"},
     {name:"オンラインヨガ",     price:3000, freq:"月額"},
-    {name:"ライザップオンライン",price:9800, freq:"月額"},
     {name:"Apple Fitness+",    price:1200, freq:"月額"}
   ],
   "金融・年会費":[
-    {name:"楽天カード（無料）",          price:0,     freq:"年額"},
-    {name:"三井住友カード NL（無料）",   price:0,     freq:"年額"},
-    {name:"エポスカード（無料）",        price:0,     freq:"年額"},
     {name:"三井住友ゴールド NL",         price:5500,  freq:"年額"},
     {name:"楽天プレミアムカード",        price:11000, freq:"年額"},
     {name:"JCBゴールド",                price:11000, freq:"年額"},
@@ -2437,7 +2445,10 @@ const qData={
     ], freq:"月額"},
     {name:"スマホ代（格安SIM）",         price:1500,  freq:"月額"},
     {name:"固定回線（光回線）",          price:5000,  freq:"月額"},
-    {name:"NHK受信料",                  price:1100,  freq:"月額"}
+    {name:"NHK受信料", plans:[
+      {label:"地上契約",         price:1100},
+      {label:"衛星契約",         price:1950}
+    ], freq:"月額"}
   ],
   "保険":[
     {name:"生命保険", plans:[
@@ -2455,7 +2466,10 @@ const qData={
       {label:"4,000円コース",    price:4000}
     ], freq:"月額"}
   ],
-  "ローン":[
+  "ローン・家賃":[
+    {name:"家賃",                       price:0,     freq:"月額"},
+    {name:"駐車場代",                   price:0,     freq:"月額"},
+    {name:"管理費・共益費",             price:0,     freq:"月額"},
     {name:"住宅ローン", plans:[
       {label:"変動金利（目安）",  price:70000},
       {label:"固定金利（目安）",  price:85000}
@@ -3459,34 +3473,35 @@ async function saveNickname(){
 // 認証状態変化のコールバック
 window._onAuthChanged = async (user) => {
   if(user){
+    window._fbUser = user;
     // ログイン済み → Firestoreからデータ読み込み
-    gaEvent('login', { method: user.providerData[0]?.providerId || 'unknown' });
     await _loadFromFirestore(user.uid);
     _updateAuthUI(user);
-    _updateNewBadges(); // ログイン時にNEWバッジを消す
-    // グループ状態を確認してタブ更新（完了後にダッシュボードを再描画）
+    _updateNewBadges();
     await _loadGroupForDashboard();
-    // グループデータ込みでダッシュボードを再描画
     renderDashboard();
-    // pending招待コードのチェック
     await _checkPendingInvite();
-    // ウェルカムバックポップアップ
     setTimeout(()=>_checkWelcomeBack(), 1500);
-    // リアルタイム通知リスナー開始（onSnapshotで既読チェックも兼ねる）
     _startNotificationListener(user.uid);
   } else {
-    // 未ログイン → データを非表示にする（LocalStorageには残す）
-    subs = [];
+    window._fbUser = null;
+    // 未ログイン時：ローカルのsubsデータは消さず保持
+    // （起動時にinit()で読み込んだデータを維持する）
     _groupId = null;
     _groupData = null;
     _updateAuthUI(null);
     _updateNewBadges();
     _stopNotificationListener();
-    // 退会ボタン（未ログインでも表示）
     const wdLink = document.getElementById('s-withdraw-link');
     if(wdLink){ wdLink.style.display='flex'; wdLink.style.opacity='0.35'; wdLink.style.pointerEvents='none'; }
-    renderDashboard();
-    renderList();
+    // ログアウト操作時のみsubsをクリアしてダッシュボードを再描画
+    // （_logoutCleanフラグが立っている場合のみ）
+    if(window._logoutClean){
+      window._logoutClean = false;
+      subs = [];
+      renderDashboard();
+      renderList();
+    }
   }
 };
 
@@ -3681,6 +3696,33 @@ async function submitAuth(){
 
 async function logoutFirebase(){
   if(!window._fbAuth || !window._fbFns) return;
+
+  // グループ加入中はログアウトをブロック
+  if(_groupId){
+    showDialog({
+      icon:'⚠️',
+      title:'ログアウトできません',
+      msg:`<div style="text-align:center">
+        <div style="font-size:13px;color:var(--ts);margin-bottom:14px;line-height:1.7">
+          グループに加入中のため、<br>ログアウトすることができません。
+        </div>
+        <div style="background:#FEF3E2;border:1px solid #F5D9A8;border-radius:12px;padding:12px 14px;text-align:left;font-size:12px;line-height:1.8;color:#8B6914;display:flex;gap:8px;align-items:flex-start">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#E8A04A" style="flex-shrink:0;margin-top:2px"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+          <div>グループに加入した状態でログアウトすると、他のメンバーのデータに影響が出る可能性があります。<br><br><strong style="color:#6B4C00">先にグループから退出</strong>してからログアウトしてください。</div>
+        </div>
+      </div>`,
+      buttons:[
+        {label:'グループ設定を開く', cls:'ok', onClick:()=>{
+          closeSettings();
+          setTimeout(openGroupModal, 200);
+        }},
+        {label:'閉じる', cls:'cancel'}
+      ],
+      btnColumn: true
+    });
+    return;
+  }
+
   showDialog({
     icon:'',
     title:'ログアウトしますか？',
@@ -3695,6 +3737,7 @@ async function logoutFirebase(){
     </div>`,
     buttons:[
       {label:'ログアウト', cls:'ok', onClick: async ()=>{
+        window._logoutClean = true;
         await window._fbFns.signOut(window._fbAuth);
         closeSettings();
         showToast('ログアウトしました');
@@ -4124,9 +4167,16 @@ async function _loadFromFirestore(uid){
     // サブスクデータ
     const subsSnap = await getDocs(collection(window._fbDb, 'users', uid, 'subs'));
     if(!subsSnap.empty){
-      subs = subsSnap.docs.map(d => d.data());
-      await save(); // LocalStorageにも反映
+      const firestoreSubs = subsSnap.docs.map(d => d.data());
+      // Firestoreにデータがある場合のみ上書き
+      subs = firestoreSubs;
+      await Store.set('subsData', JSON.stringify(subs));
       updateFilterCounts();
+    }
+    // Firestoreが空の場合はローカルのsubsデータをそのまま保持
+    // （初回ログイン時はローカルデータをFirestoreに同期する）
+    if(subsSnap.empty && subs.length > 0){
+      await _migrateSubsToFirestore(uid);
     }
   }catch(e){
     console.error('Firestore読み込みエラー:', e);
@@ -4336,6 +4386,9 @@ async function _renderGroupJoined(){
 async function editGroupName(){
   if(!_groupId || !window._fbDb || !window._fbFns) return;
   const current = _groupData?.name || '';
+  // グループ管理モーダルを閉じてから名前変更ダイアログを表示
+  closeGroupModal();
+  setTimeout(()=>{
   showDialog({
     icon:'',
     title:'グループ名を変更',
@@ -4364,6 +4417,7 @@ async function editGroupName(){
     ]
   });
   setTimeout(()=>{ document.getElementById('dlg-group-name-input')?.focus(); }, 200);
+  }, 200);
 }
 
 // 招待コードを再発行（24時間リセット）
@@ -5059,7 +5113,9 @@ function saveIncome(){
   const v = parseInt(raw, 10);
   if(!v){ return; }
   localStorage.setItem('subly_income', String(v));
-  gaEvent('income_set', { has_income: true });
+  // 金額レンジでGA4送信（プライバシー配慮）
+  const range = v < 150000 ? '~15万' : v < 200000 ? '15~20万' : v < 250000 ? '20~25万' : v < 300000 ? '25~30万' : v < 400000 ? '30~40万' : v < 500000 ? '40~50万' : '50万~';
+  gaEvent('income_set', { has_income: true, income_range: range, income_amount: v });
   closeIncomeModal();
   renderDashboard();
 }
@@ -6104,20 +6160,24 @@ function renderList(){
         <button class="btn-e" onclick="restoreSub(${s.id});event.stopPropagation()" style="border-color:var(--p);color:var(--p)">▶ 復元</button>
         <button class="btn-d" onclick="delSub(${s.id});event.stopPropagation()">完全削除</button>`;
     } else {
-      const pauseLabel=s.paused?'再開':'休止';
-      const pauseCls=s.paused?'btn-pause active':'btn-pause';
-      const cancelBtnHtml = s.cancelUrl
-        ? `<button class="btn-e" onclick="window.open('${s.cancelUrl}','_blank');event.stopPropagation()" style="border-color:var(--ts);color:var(--ts)"><svg width='12' height='12' viewBox='0 0 24 24' fill='currentColor'><path d='M17 7h-4v2h4c1.65 0 3 1.35 3 3s-1.35 3-3 3h-4v2h4c2.76 0 5-2.24 5-5s-2.24-5-5-5zm-6 8H7c-1.65 0-3-1.35-3-3s1.35-3 3-3h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-2zm1-4h-4v2h4v-2z'/></svg> 解約ページ</button>`
-        : `<button class="btn-e" onclick="searchCancelUrl('${s.name.replace(/'/g,"\\'").replace(/"/g,'&quot;')}','${(s.cat||'').replace(/'/g,"\\'").replace(/"/g,'&quot;')}');event.stopPropagation()" style="border-color:var(--ts);color:var(--ts)"><svg width='12' height='12' viewBox='0 0 24 24' fill='currentColor'><path d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/></svg> 解約方法を検索</button>`;
+      const pauseLabel=s.paused?'再開する':'休止にする';
+      const searchHtml = s.cancelUrl
+        ? `<button class="act-btn search" onclick="window.open('${s.cancelUrl}','_blank');event.stopPropagation()"><svg width='11' height='11' viewBox='0 0 24 24' fill='currentColor'><path d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/></svg> 解約方法を探す</button>`
+        : `<button class="act-btn search" onclick="searchCancelUrl('${s.name.replace(/'/g,"\\'").replace(/"/g,'&quot;')}','${(s.cat||'').replace(/'/g,"\\'").replace(/"/g,'&quot;')}');event.stopPropagation()"><svg width='11' height='11' viewBox='0 0 24 24' fill='currentColor'><path d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/></svg> 解約方法を探す</button>`;
       actions.innerHTML=`
-        <button class="btn-e" onclick="editSub(${s.id});event.stopPropagation()">編集</button>
-        <button class="${pauseCls}" onclick="togglePause(${s.id});event.stopPropagation()">${pauseLabel}</button>
-        ${cancelBtnHtml}
-        <button class="btn-e" onclick="cancelSub(${s.id});event.stopPropagation()" style="border-color:#E67E22;color:#E67E22">解約</button>
-        <button class="btn-d" onclick="delSub(${s.id});event.stopPropagation()">削除</button>`;
+        <button class="act-btn edit" onclick="editSub(${s.id});event.stopPropagation()"><svg width='12' height='12' viewBox='0 0 24 24' fill='currentColor'><path d='M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z'/></svg> 編集</button>
+        ${searchHtml}
+        <div class="act-more-wrap">
+          <button class="act-more" onclick="_toggleActMenu(event,this.parentElement)">⋯</button>
+          <div class="act-menu">
+            <button onclick="togglePause(${s.id});event.stopPropagation()">${pauseLabel}</button>
+            <button onclick="cancelSub(${s.id});event.stopPropagation()">解約済みにする</button>
+            <button class="danger" onclick="delSub(${s.id});event.stopPropagation()">削除</button>
+          </div>
+        </div>`;
     }
     const wrapper=document.createElement('div');
-    wrapper.style.cssText='background:var(--card);border-radius:10px;padding:11px 13px;margin-bottom:7px;box-shadow:var(--sh);transition:box-shadow .12s;overflow:hidden;position:relative';
+    wrapper.style.cssText='background:var(--card);border-radius:10px;padding:11px 13px;margin-bottom:7px;box-shadow:var(--sh);transition:box-shadow .12s;overflow:visible;position:relative';
     wrapper.appendChild(row);
 
     // 他メンバーのサブスクはアクション非表示
@@ -6168,7 +6228,7 @@ function buildQuickAdd(){
   if(tabs.children.length)return; // 初回のみ構築
 
   // カテゴリ表示順（使いやすい順）
-  const CAT_ORDER=['動画・配信','音楽','仕事・ツール','通信費','健康・フィットネス','ゲーム','電子書籍・雑誌','金融・年会費','習い事','保険','ローン','その他'];
+  const CAT_ORDER=['動画・配信','音楽','仕事・ツール','通信費','健康・フィットネス','ゲーム','電子書籍・雑誌','金融・年会費','習い事','保険','ローン・家賃','その他'];
   const orderedCats=CAT_ORDER.filter(c=>qData[c]);
 
   orderedCats.forEach((cat,i)=>{
@@ -6177,6 +6237,7 @@ function buildQuickAdd(){
     t.type='button';t.className='cat-tab'+(i===0?' on':'');t.textContent=cat;
     t.style.setProperty('--tab-color',color);
     t.onclick=()=>{
+      gaEvent('quick_cat_tap', { category: cat });
       document.querySelectorAll('.cat-tab').forEach(x=>{x.classList.remove('on');});
       t.classList.add('on');
       buildQItems(cat);
@@ -6240,7 +6301,7 @@ function buildQItems(cat){
           opt.className='plan-opt';
           opt.innerHTML=`<span class="plan-opt-lbl">${plan.label}</span><span class="plan-opt-prc">¥${plan.price.toLocaleString()} / ${item.freq}</span>`;
           opt.onclick=()=>{
-            gaEvent('quick_add_tap', { freq: item.freq });
+            gaEvent('quick_add_tap', { service_name: item.name, plan: plan.label, category: cat, freq: item.freq });
             fillForm({name:item.name,price:plan.price,freq:item.freq},cat);
             panel.classList.remove('open'); panel.innerHTML=''; panel.dataset.item='';
           };
@@ -6251,7 +6312,7 @@ function buildQItems(cat){
       };
     }else{
       btn.onclick=()=>{
-        gaEvent('quick_add_tap', { freq: item.freq });
+        gaEvent('quick_add_tap', { service_name: item.name, category: cat, freq: item.freq });
         fillForm({name:item.name,price:item.price,freq:item.freq},cat);
       };
     }
@@ -6281,6 +6342,10 @@ function openManualForm(item, cat){
     document.getElementById('f-cat').value=catMap[cat]?cat:'その他';
     document.getElementById('f-price').value=item.price||0;
     document.getElementById('f-freq').value=item.freq||'月額';
+    // 必須項目のf-filledクラスを更新
+    const fn=document.getElementById('f-name'); fn.classList.toggle('f-filled',!!fn.value.trim());
+    const fp=document.getElementById('f-price'); fp.classList.toggle('f-filled',!!fp.value && fp.value!=='0');
+    const fd=document.getElementById('f-date'); fd.classList.toggle('f-filled',!!fd.value);
   } else {
     // 手入力ボタン：フォームをリセットして空に
     resetForm();
@@ -6325,6 +6390,7 @@ async function submitForm(){
   const satEl=document.querySelectorAll('.star-btn.on');
   const sat=satEl.length;
   if(!name){ showAlert('','サービス名を入力してください','サービス名は必須です'); return}
+  if(!price){ showAlert('','金額を入力してください','月額や年額などの金額を入力してください'); return}
   if(!date){ showAlert('','次回支払日を入力してください','次の支払い予定日を入力してください'); return}
   if(subs.length>=MAX&&!editId){ showAlert('','登録上限です',`登録できるサブスクは${MAX}件までです`); return}
 
@@ -6340,20 +6406,42 @@ async function submitForm(){
     backToStep1();
     goto('dashboard');
 
-    gaEvent('subscription_updated', { freq: freq, has_payer: !!payer });
-    showToast('更新しました');
+    gaEvent('subscription_updated', {
+      service_name: name,
+      category: cat,
+      price: price,
+      freq: freq,
+      payment: payment || 'なし',
+      has_payer: !!payer,
+      has_memo: !!memo,
+      satisfaction: sat
+    });
+    showToast(window._fbUser ? '更新しました（クラウド保存済み）' : '更新しました（自動保存済み）');
   } else {
     subs.push({id:Date.now(),name,cat,price,freq,date,memo,payment,payer,sat,cancelUrl,paused:false});
     await save();
 
-    gaEvent('subscription_added', { freq: freq, total_count: subs.length, has_payer: !!payer });
+    gaEvent('subscription_added', {
+      service_name: name,
+      category: cat,
+      price: price,
+      freq: freq,
+      payment: payment || 'なし',
+      has_payer: !!payer,
+      has_memo: !!memo,
+      satisfaction: sat,
+      total_count: subs.length
+    });
     // 初回登録後は手順バナーを非表示
     document.getElementById('how-to-box').style.display='none';
     // 登録完了 → 続けて追加 or ホームへ のダイアログ
+    const saveLabel = window._fbUser
+      ? '<div style="display:inline-flex;align-items:center;gap:4px;background:var(--pl);border-radius:20px;padding:3px 12px;font-size:12px;font-weight:600;color:var(--pd);margin-top:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="var(--pd)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>クラウドに自動保存済み</div>'
+      : '<div style="display:inline-flex;align-items:center;gap:4px;background:var(--pl);border-radius:20px;padding:3px 12px;font-size:12px;font-weight:600;color:var(--pd);margin-top:6px"><svg width="12" height="12" viewBox="0 0 24 24" fill="var(--pd)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>端末に自動保存済み</div>';
     showDialog({
       icon:'',
       title:`「${name}」を登録しました`,
-      msg:`現在 ${subs.length} 件登録中`,
+      msg:`現在 ${subs.length} 件登録中${saveLabel}`,
       buttons:[
         {label:'続けて追加', cls:'ok', onClick:()=>{
           resetForm();
@@ -6384,6 +6472,10 @@ function resetForm(){
   document.querySelectorAll('.star-btn').forEach(b=>b.classList.remove('on'));
   document.getElementById('f-payer').value='';
   document.getElementById('f-payment').value='';
+  // 必須項目の背景色リセット
+  document.querySelectorAll('.f-required').forEach(el=>{
+    el.classList.remove('f-filled');
+  });
 }
 
 function editSub(id){
@@ -6417,6 +6509,11 @@ function editSub(id){
     }
     document.getElementById('btn-submit').textContent='更新する';
     document.getElementById('btn-cancel').style.display='block';
+    // 必須項目のf-filledクラスを更新
+    document.querySelectorAll('.f-required').forEach(el=>{
+      const filled = el.type==='date' ? !!el.value : !!el.value.trim();
+      el.classList.toggle('f-filled', filled);
+    });
     // 編集時のみ休止ボタンを表示
     const pauseBtn = document.getElementById('btn-pause-toggle');
     pauseBtn.style.display='block';
@@ -6429,11 +6526,20 @@ function editSub(id){
 function toggleUrlBtn(){
   const v=document.getElementById('f-url').value.trim();
   document.getElementById('url-btn').style.display=v?'block':'none';
-  // URLが空のときだけ検索ボタンを表示（サービス名があれば）
   const name=document.getElementById('f-name').value.trim();
   const searchBtn=document.getElementById('url-search-btn');
   if(searchBtn) searchBtn.style.display=(!v && name)?'block':'none';
 }
+
+// 三点メニュー開閉
+function _toggleActMenu(e,wrap){
+  e.stopPropagation();
+  const menu = wrap.querySelector('.act-menu');
+  if(!menu) return;
+  document.querySelectorAll('.act-menu.open').forEach(m=>{ if(m!==menu) m.classList.remove('open'); });
+  menu.classList.toggle('open');
+}
+document.addEventListener('click',()=>{ document.querySelectorAll('.act-menu.open').forEach(m=>m.classList.remove('open')); });
 function openCancelUrl(){
   const url=document.getElementById('f-url').value.trim();
   if(url) window.open(url,'_blank');
@@ -6809,18 +6915,22 @@ async function closeNudge(){
 
 async function closeProNudge(){
   document.getElementById('pro-nudge-ov').classList.add('hidden');
-  await Store.set('proNudgeDismissed', '1');
-  gaEvent('pro_nudge_dismissed', {});
+  const count = subs.length;
+  await Store.set('proNudgeDismissed_' + count, '1');
+  gaEvent('pro_nudge_dismissed', { sub_count: count });
 }
 
 // Proプラン誘導ポップアップ：未ログインユーザーに表示
 // タイミング：サブスク3件登録後 / グループメニュータップ時
 async function checkProNudge(force){
   if(window._fbUser) return; // ログイン済みは不要
-  const dismissed = await Store.get('proNudgeDismissed');
-  if(dismissed) return;
   const count = subs.length;
-  if(!force && count < 3) return;
+  // 3, 5, 10, 15, 20件のタイミングで表示
+  const triggers = [3, 5, 10, 15, 20];
+  if(!force && !triggers.includes(count)) return;
+  const key = 'proNudgeDismissed_' + count;
+  const dismissed = await Store.get(key);
+  if(dismissed) return;
   document.getElementById('pro-nudge-ov').classList.remove('hidden');
   gaEvent('pro_nudge_shown', { sub_count: count, force: !!force });
 }
