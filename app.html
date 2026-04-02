@@ -542,28 +542,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .s-theme-btn.on span{color:var(--p)}
 .hd-theme-dot,.s-theme-dot{width:22px;height:22px;border-radius:50%;flex-shrink:0}
 
-/* ── インタラクティブチュートリアル ── */
-.itut-ring{position:fixed;pointer-events:none;z-index:9800;border-radius:14px}
-.itut-ring::before,.itut-ring::after{content:'';position:absolute;inset:-5px;border-radius:inherit;border:2.5px solid var(--p);opacity:0;animation:itut-wave 1.4s ease-out infinite}
-.itut-ring::after{animation-delay:.35s}
-@keyframes itut-wave{0%{transform:scale(.96);opacity:.7}100%{transform:scale(1.2);opacity:0}}
-.itut-tip{position:fixed;z-index:9810;background:var(--card);border-radius:14px;padding:12px 16px;box-shadow:0 6px 24px rgba(0,0,0,.15);border:1.5px solid var(--p);max-width:260px;animation:itut-pop .25s ease}
-.itut-tip.hidden{display:none}
-@keyframes itut-pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.itut-tip-step{font-size:10px;font-weight:700;color:var(--p);margin-bottom:2px}
-.itut-tip-text{font-size:14px;font-weight:700;color:var(--tx);line-height:1.5}
-.itut-tip-sub{font-size:11px;color:var(--ts);line-height:1.5;margin-top:3px}
-.itut-tip::after{content:'';position:absolute;width:12px;height:12px;background:var(--card);border:1.5px solid var(--p);transform:rotate(45deg)}
-.itut-tip.arrow-down::after{bottom:-7px;left:50%;margin-left:-6px;border-top:none;border-left:none}
-.itut-tip.arrow-up::after{top:-7px;left:50%;margin-left:-6px;border-bottom:none;border-right:none}
-.itut-dots{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 68px);left:50%;transform:translateX(-50%);z-index:9810;display:flex;gap:6px;background:rgba(255,255,255,.92);padding:5px 12px;border-radius:20px;box-shadow:0 2px 10px rgba(0,0,0,.1)}
-.itut-dots.hidden{display:none}
-.itut-dot{width:7px;height:7px;border-radius:50%;background:var(--bd);transition:all .3s}
-.itut-dot.on{background:var(--p);width:18px;border-radius:4px}
-.itut-dot.done{background:var(--p)}
-.itut-skip{position:fixed;top:max(14px,env(safe-area-inset-top));right:16px;z-index:9810;background:rgba(255,255,255,.9);border:1px solid var(--bd);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;color:var(--ts);cursor:pointer;font-family:inherit;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.itut-skip.hidden{display:none}
-
 /* ── 使い方ガイド（スライド型モーダル） ── */
 .howto-ov{position:fixed;inset:0;z-index:9300;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:24px;animation:fadeIn .18s ease}
 .howto-ov.hidden{display:none}
@@ -1341,9 +1319,22 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <div class="ob-ttl">登録は<em>タップするだけ</em></div>
       </div>
       <div class="ob-body">
-        <div class="ob-li"><div class="ob-li-dot"></div>人気サービスはカテゴリから選ぶだけ</div>
-        <div class="ob-li"><div class="ob-li-dot"></div>金額が自動入力されるので手間なし</div>
-        <div class="ob-li"><div class="ob-li-dot"></div>リストにないサービスも追加できる</div>
+        <!-- 画面イメージ -->
+        <div style="background:var(--bg);border-radius:12px;border:1.5px solid #e0e5e2;padding:12px;margin-bottom:10px">
+          <div style="font-size:10px;color:var(--ts);text-align:center;margin-bottom:6px">▼ 登録画面イメージ</div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">
+            <span style="padding:3px 10px;border-radius:14px;border:1.5px solid var(--p);background:var(--pl);font-size:10px;font-weight:600;color:var(--pd)">Netflix</span>
+            <span style="padding:3px 10px;border-radius:14px;border:1.5px solid #ddd;font-size:10px;font-weight:600;color:var(--ts)">Spotify</span>
+            <span style="padding:3px 10px;border-radius:14px;border:1.5px solid #ddd;font-size:10px;font-weight:600;color:var(--ts)">YouTube</span>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:6px 10px;border:1px solid #e8e8e8">
+            <div style="font-size:9px;color:var(--ts)">サービス名</div>
+            <div style="font-size:13px;font-weight:700">Netflix</div>
+            <div style="font-size:9px;color:var(--ts);margin-top:2px">¥1,490 ・ 月額 ・ 15日更新</div>
+          </div>
+        </div>
+        <div class="ob-li"><div class="ob-li-dot"></div>人気サービスは選ぶだけで自動入力</div>
+        <div class="ob-li"><div class="ob-li-dot"></div>リストにないサービスも手動で追加OK</div>
       </div>
       <div class="ob-dots" style="margin-top:auto">
         <div class="ob-dot" onclick="obGoto(0)"></div><div class="ob-dot on" onclick="obGoto(1)"></div><div class="ob-dot" onclick="obGoto(2)"></div><div class="ob-dot" onclick="obGoto(3)"></div>
@@ -1362,10 +1353,20 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <div class="ob-ttl">アカウント登録で<em>複数端末に対応</em></div>
       </div>
       <div class="ob-body">
-        <div class="ob-li"><div class="ob-li-dot"></div>無料でアカウントを作成するだけ</div>
-        <div class="ob-li"><div class="ob-li-dot"></div>データがクラウドに自動同期される</div>
-        <div class="ob-li"><div class="ob-li-dot"></div>スマホ・PC・タブレットで確認可能</div>
+        <!-- 画面イメージ -->
+        <div style="background:var(--bg);border-radius:12px;border:1.5px solid #e0e5e2;padding:12px;margin-bottom:10px;text-align:center">
+          <div style="font-size:10px;color:var(--ts);margin-bottom:8px">▼ データ同期イメージ</div>
+          <div style="display:flex;align-items:center;justify-content:center;gap:8px">
+            <div style="text-align:center"><div style="font-size:24px">📱</div><div style="font-size:9px;color:var(--ts);margin-top:2px">スマホ</div></div>
+            <div style="font-size:14px;color:var(--p)">⇄</div>
+            <div style="background:var(--pl);border-radius:8px;padding:6px 12px"><div style="font-size:10px;font-weight:700;color:var(--pd)">☁️ クラウド</div></div>
+            <div style="font-size:14px;color:var(--p)">⇄</div>
+            <div style="text-align:center"><div style="font-size:24px">💻</div><div style="font-size:9px;color:var(--ts);margin-top:2px">PC</div></div>
+          </div>
+        </div>
+        <div class="ob-li"><div class="ob-li-dot"></div>無料でアカウント作成するだけ</div>
         <div class="ob-li"><div class="ob-li-dot"></div>機種変更してもデータが消えない</div>
+        <div class="ob-li"><div class="ob-li-dot"></div>スマホ・PC・タブレットで確認可能</div>
       </div>
       <div class="ob-dots" style="margin-top:auto">
         <div class="ob-dot" onclick="obGoto(0)"></div><div class="ob-dot" onclick="obGoto(1)"></div><div class="ob-dot on" onclick="obGoto(2)"></div><div class="ob-dot" onclick="obGoto(3)"></div>
@@ -1384,8 +1385,21 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <div class="ob-ttl">家族と<em>一緒に管理</em>できる</div>
       </div>
       <div class="ob-body">
-        <div class="ob-li"><div class="ob-li-dot"></div>招待コードを共有するだけで参加できる</div>
-        <div class="ob-li"><div class="ob-li-dot"></div>家族・カップルの支出をまとめて把握</div>
+        <!-- 画面イメージ -->
+        <div style="background:var(--bg);border-radius:12px;border:1.5px solid #e0e5e2;padding:12px;margin-bottom:10px">
+          <div style="font-size:10px;color:var(--ts);text-align:center;margin-bottom:6px">▼ グループ画面イメージ</div>
+          <div style="display:flex;gap:6px;margin-bottom:6px">
+            <span style="padding:3px 12px;border-radius:14px;background:var(--p);font-size:10px;font-weight:700;color:#fff">全体 3</span>
+            <span style="padding:3px 12px;border-radius:14px;background:#e8e8e8;font-size:10px;font-weight:600;color:var(--ts)">自分 2</span>
+            <span style="padding:3px 12px;border-radius:14px;background:#e8e8e8;font-size:10px;font-weight:600;color:var(--ts)">パートナー 1</span>
+          </div>
+          <div style="background:#fff;border-radius:8px;padding:6px 10px;border:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between">
+            <div><div style="font-size:10px;color:var(--ts)">月額合計</div><div style="font-size:16px;font-weight:800"><span style="color:var(--p)">¥</span>8,970</div></div>
+            <div style="font-size:9px;color:var(--ts)">年額 ¥107,640</div>
+          </div>
+        </div>
+        <div class="ob-li"><div class="ob-li-dot"></div>招待コードを共有するだけで参加</div>
+        <div class="ob-li"><div class="ob-li-dot"></div>家族の支出をまとめて把握できる</div>
         <div class="ob-hint">
           <p>ホーム画面に追加すると便利です</p>
           <div class="ob-hint-row"><span class="ob-hint-badge">i</span>Safari → 共有 →「ホーム画面に追加」</div>
@@ -4969,7 +4983,7 @@ function obGoto(n){
   const skipBtn=document.getElementById('ob-skip');
   if(!slides) return;
   slides.style.transform=`translateX(${-n*25}%)`;
-  dots.forEach((d,i)=>d.classList.toggle('on',i===n));
+  dots.forEach((d,i)=>d.classList.toggle('on',i%4===n));
   const isLast=(n===3);
   if(nextBtn) nextBtn.textContent=isLast?'はじめる':'次へ';
   if(skipBtn) skipBtn.style.display=isLast?'none':'';
@@ -4982,253 +4996,7 @@ async function closeOb(){
   document.getElementById('ob-ov').classList.add('hidden');
   await Store.set('onboarded','1');
   gaEvent('onboarding_complete', { method: 'completed' });
-  // オンボーディング完了 → インタラクティブチュートリアル開始
-  setTimeout(_itutStart, 400);
 }
-
-/* ============================================================
-   インタラクティブチュートリアル（実画面ガイド）
-   STEP1: 登録タップ → 定番から選ぶ → 登録する → いい感じ！
-   STEP2: ☰タップ → 名前を設定 → 保存 → 完了！
-============================================================ */
-let _itutPhase = -1; // 0=STEP1, 1=STEP2
-let _itutSub = 0;    // サブステップ
-let _itutRingEl = null;
-let _itutActive = false;
-
-function _itutStart(){
-  Store.get('itutDone').then(v=>{
-    if(v) return;
-    if(subs.length > 0){ Store.set('itutDone','1'); return; }
-    _itutActive = true;
-    _itutPhase = -1;
-    _itutSub = 0;
-    document.getElementById('itut-dots').classList.remove('hidden');
-    document.getElementById('itut-skip').classList.remove('hidden');
-    _itutNextPhase();
-  });
-}
-
-function _itutNextPhase(){
-  _itutPhase++;
-  _itutSub = 0;
-  _itutUpdateDots();
-  if(_itutPhase >= 2){
-    _itutFinish();
-    return;
-  }
-  _itutShowSub();
-}
-
-function _itutNextSub(){
-  _itutClear();
-  _itutSub++;
-  _itutShowSub();
-}
-
-function _itutShowSub(){
-  _itutClear();
-  if(_itutPhase === 0){
-    // STEP1: サブスク登録
-    if(_itutSub === 0) _itutGuide('nb-add', '1/2', '「登録」をタップ', 'サブスクを追加してみましょう', 'down');
-    else if(_itutSub === 1) _itutGuideQuery('#quick-chips', '1/2', '定番から選んでみよう', 'タップで自動入力されます', 'up');
-    else if(_itutSub === 2) _itutGuide('btn-submit', '1/2', '「登録する」をタップ', '1件目のサブスクが保存されます', 'up');
-    else if(_itutSub === 3){
-      // いい感じ！表示
-      _itutClear();
-      goto('dashboard');
-      setTimeout(()=>{
-        showToast('いい感じ！🎉 1件登録できました');
-        gaEvent('itut_step1_done',{});
-        setTimeout(_itutNextPhase, 1500);
-      }, 500);
-    }
-  } else if(_itutPhase === 1){
-    // STEP2: プロフィール
-    if(_itutSub === 0) _itutGuide('hdr-hamburger', '2/2', '☰ メニューを開こう', 'プロフィールを設定します', 'down');
-    else if(_itutSub === 1) _itutGuideByText('名前を設定', '2/2', '「名前を設定」をタップ', 'ニックネームを入力しましょう', 'up');
-    else if(_itutSub === 2) _itutGuideQuery('#nickname-ov .btn-submit, #nickname-ov button[onclick*="saveNickname"]', '2/2', '「保存する」をタップ', 'これで完了です！', 'up');
-    else if(_itutSub === 3){
-      _itutClear();
-      setTimeout(_itutNextPhase, 300);
-    }
-  }
-}
-
-function _itutGuide(id, step, text, sub, arrow){
-  setTimeout(()=>{
-    const el = document.getElementById(id);
-    if(!el) return;
-    _itutShowRingAndTip(el, step, text, sub, arrow);
-  }, 250);
-}
-
-function _itutGuideQuery(selector, step, text, sub, arrow){
-  setTimeout(()=>{
-    const el = document.querySelector(selector);
-    if(!el) return;
-    _itutShowRingAndTip(el, step, text, sub, arrow);
-  }, 250);
-}
-
-function _itutGuideByText(textContent, step, text, sub, arrow){
-  setTimeout(()=>{
-    // ドロワー内からテキストで要素を探す
-    const hdrop = document.getElementById('hdrop');
-    if(!hdrop) return;
-    const rows = hdrop.querySelectorAll('.hd-row');
-    let found = null;
-    for(const r of rows){
-      if(r.textContent.includes(textContent)){found=r;break;}
-    }
-    if(!found) return;
-    _itutShowRingAndTip(found, step, text, sub, arrow);
-  }, 300);
-}
-
-function _itutShowRingAndTip(el, step, text, sub, arrow){
-  const rect = el.getBoundingClientRect();
-  // リング
-  _itutRingEl = document.createElement('div');
-  _itutRingEl.className='itut-ring';
-  const pad=4;
-  _itutRingEl.style.cssText=`left:${rect.left-pad}px;top:${rect.top-pad}px;width:${rect.width+pad*2}px;height:${rect.height+pad*2}px;border-radius:${getComputedStyle(el).borderRadius||'12px'}`;
-  document.body.appendChild(_itutRingEl);
-
-  // 吹き出し
-  const tip=document.getElementById('itut-tip');
-  tip.classList.remove('hidden');
-  document.getElementById('itut-step').textContent='STEP '+step;
-  document.getElementById('itut-text').textContent=text;
-  document.getElementById('itut-sub').textContent=sub;
-  tip.className='itut-tip arrow-'+arrow;
-  if(arrow==='down'){
-    tip.style.bottom=(window.innerHeight-rect.top+12)+'px';
-    tip.style.top='auto';
-  } else {
-    tip.style.top=(rect.bottom+12)+'px';
-    tip.style.bottom='auto';
-  }
-  tip.style.left=Math.min(Math.max(rect.left+rect.width/2,140),window.innerWidth-140)+'px';
-  tip.style.transform='translateX(-50%)';
-}
-
-function _itutUpdateDots(){
-  for(let i=0;i<2;i++){
-    const d=document.getElementById('itut-d'+i);
-    if(!d) continue;
-    d.className='itut-dot'+(i<_itutPhase?' done':'')+(i===_itutPhase?' on':'');
-  }
-}
-
-function _itutClear(){
-  if(_itutRingEl){_itutRingEl.remove();_itutRingEl=null;}
-  const tip=document.getElementById('itut-tip');
-  if(tip) tip.classList.add('hidden');
-}
-
-function _itutFinish(){
-  _itutClear();
-  _itutActive = false;
-  document.getElementById('itut-dots').classList.add('hidden');
-  document.getElementById('itut-skip').classList.add('hidden');
-  Store.set('itutDone','1');
-  gaEvent('itut_complete',{});
-  showToast('チュートリアル完了！🎉');
-}
-
-function _itutSkip(){
-  _itutClear();
-  _itutActive = false;
-  document.getElementById('itut-dots').classList.add('hidden');
-  document.getElementById('itut-skip').classList.add('hidden');
-  Store.set('itutDone','1');
-  gaEvent('itut_skip',{phase:_itutPhase, sub:_itutSub});
-}
-
-// ── イベントフック ──
-// 「登録」ナビタップ → STEP1-sub0完了
-(function(){
-  const orig = window.gotoAdd;
-  if(orig){
-    window.gotoAdd = function(){
-      orig.apply(this,arguments);
-      if(_itutActive && _itutPhase===0 && _itutSub===0) _itutNextSub();
-    };
-  }
-})();
-
-// かんたん登録チップ選択 → STEP1-sub1完了
-(function(){
-  const origFill = window._fillQuickAdd;
-  // quick-chipsのクリックを監視
-  document.addEventListener('click', e=>{
-    if(!_itutActive || _itutPhase!==0 || _itutSub!==1) return;
-    const chip = e.target.closest('.q-chip, [onclick*="fillQuick"], [onclick*="quickAdd"]');
-    if(chip){
-      setTimeout(()=> _itutNextSub(), 400);
-    }
-  }, true);
-})();
-
-// 登録フォーム送信 → STEP1-sub2完了
-(function(){
-  const origSubmit = window.submitForm;
-  if(origSubmit){
-    window.submitForm = async function(){
-      await origSubmit.apply(this,arguments);
-      if(_itutActive && _itutPhase===0 && _itutSub===2 && subs.length>0){
-        _itutSub=3;
-        _itutShowSub();
-      }
-    };
-  }
-})();
-
-// ハンバーガーメニュー開閉 → STEP2-sub0完了
-(function(){
-  const orig = window.toggleHdrop;
-  if(orig){
-    window.toggleHdrop = function(e){
-      orig.call(this,e);
-      if(_itutActive && _itutPhase===1 && _itutSub===0){
-        const hdrop=document.getElementById('hdrop');
-        if(hdrop && hdrop.classList.contains('open')){
-          setTimeout(_itutNextSub, 400);
-        }
-      }
-    };
-  }
-})();
-
-// ニックネームモーダル表示 → STEP2-sub1完了
-(function(){
-  const orig = window.openNicknameModal;
-  if(orig){
-    window.openNicknameModal = function(){
-      orig.apply(this,arguments);
-      if(_itutActive && _itutPhase===1 && _itutSub===1){
-        setTimeout(_itutNextSub, 400);
-      }
-    };
-  }
-})();
-
-// ニックネーム保存 → STEP2-sub2完了
-(function(){
-  const orig = window.saveNickname;
-  if(orig){
-    window.saveNickname = async function(){
-      await orig.apply(this,arguments);
-      if(_itutActive && _itutPhase===1 && _itutSub===2 && _nickname){
-        _itutSub=3;
-        _itutShowSub();
-      }
-    };
-  }
-})();
-
-
 
 /* ============================================================
    保存
@@ -5938,7 +5706,7 @@ function renderCalendar(){
       }
       // 件数が多い場合は金額を非表示（スペースが足りない）
       if(evs.length <= maxChips + 1){
-        const dayTotal=evs.reduce((a,s)=>a+moFromSub(s),0);
+        const dayTotal=evs.reduce((a,s)=>a+s.price,0);
         if(dayTotal > 0){
           const amtEl=document.createElement('div');
           amtEl.className='cal-day-amt';
@@ -5964,14 +5732,14 @@ function renderCalendar(){
 function showCalDetail(y,m,d,evs){
   const DOW=['日','月','火','水','木','金','土'];
   const dow=new Date(y,m,d).getDay();
-  const dayTotal=evs.reduce((a,sub)=>a+moFromSub(sub),0);
+  const dayTotal=evs.reduce((a,sub)=>a+sub.price,0);
   gaEvent('calendar_day_tap', { date: `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`, event_count: evs.length });
 
   const sheet=document.getElementById('cal-sheet');
   const body=document.getElementById('cal-sheet-body');
 
   body.innerHTML=`<div class="cal-detail-hdr">
-    <div class="cal-detail-title">${m+1}月${d}日（${DOW[dow]}）${dayTotal>0?' · ¥'+dayTotal.toLocaleString()+'／月':''}</div>
+    <div class="cal-detail-title">${m+1}月${d}日（${DOW[dow]}）${dayTotal>0?' · ¥'+dayTotal.toLocaleString():''}</div>
     <button class="cal-detail-close" onclick="closeCalSheet()">✕</button>
   </div>`;
 
@@ -7231,17 +6999,6 @@ window.addEventListener('resize',()=>{
   <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--ts)"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
 </button>
 
-<!-- インタラクティブチュートリアル -->
-<div class="itut-tip hidden" id="itut-tip">
-  <div class="itut-tip-step" id="itut-step"></div>
-  <div class="itut-tip-text" id="itut-text"></div>
-  <div class="itut-tip-sub" id="itut-sub"></div>
-</div>
-<div class="itut-dots hidden" id="itut-dots">
-  <div class="itut-dot" id="itut-d0"></div>
-  <div class="itut-dot" id="itut-d1"></div>
-</div>
-<button class="itut-skip hidden" id="itut-skip" onclick="_itutSkip()">スキップ</button>
 
 </body>
 </html>
