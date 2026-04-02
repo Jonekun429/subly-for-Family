@@ -3089,6 +3089,7 @@ function openSettings(){
   const el = document.getElementById('settings-ov');
   el.classList.add('open');
   el.scrollTop = 0;
+  gaEvent('settings_open', {});
   _updateAuthUI(window._fbUser || null);
   if(window._fbUser && window._fbDb && window._fbFns){
     const { doc, getDoc } = window._fbFns;
@@ -5012,6 +5013,7 @@ function openIncomeModal(){
   const inp = document.getElementById('income-input');
   const saved = localStorage.getItem('subly_income');
   inp.value = saved || '';
+  gaEvent('income_modal_open', { has_existing: !!saved });
   setTimeout(()=>inp.focus(), 200);
 }
 function closeIncomeModal(){ document.getElementById('income-ov').classList.add('hidden'); }
@@ -5020,11 +5022,13 @@ function saveIncome(){
   const v = parseInt(raw, 10);
   if(!v){ return; }
   localStorage.setItem('subly_income', String(v));
+  gaEvent('income_set', { has_income: true });
   closeIncomeModal();
   renderDashboard();
 }
 function clearIncome(){
   localStorage.removeItem('subly_income');
+  gaEvent('income_clear', {});
   closeIncomeModal();
   renderDashboard();
 }
@@ -6841,9 +6845,11 @@ async function init(){
   if(typeof gtag === 'function'){
     gtag('set', 'user_properties', {
       app_open_count: appOpenCount,
-      subs_count: subs.length
+      subs_count: subs.length,
+      has_income: !!localStorage.getItem('subly_income')
     });
   }
+  gaEvent('app_open', { open_count: appOpenCount, subs_count: subs.length });
 
   // Web版: 月初の見直しバナー表示（onboarding後に少し遅らせて表示）
   _initChartSwipe();
@@ -6887,6 +6893,7 @@ async function _checkWelcomeBack(){
       }).sort((a,b)=>{ const na=nextPayDate(a),nb=nextPayDate(b); return na-nb; });
 
       let msg = `${diffDays}日ぶりですね！`;
+      gaEvent('welcome_back', { days_since_last: diffDays, upcoming_renewals: soon.length });
       if(soon.length){
         msg += `<br><br><b style="color:var(--p)">${soon.length}件</b>のサブスクが7日以内に更新されます。`;
         msg += `<div style="margin-top:10px;font-size:13px;color:var(--ts)">`;
