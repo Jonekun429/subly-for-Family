@@ -1876,6 +1876,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
     <button onclick="_completeSupporterSignup()" style="width:100%;padding:14px;border-radius:12px;font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:inherit;margin-bottom:4px;background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;box-shadow:0 4px 12px rgba(92,142,132,.3)">登録を行う</button>
     <div style="font-size:10px;color:var(--ts);line-height:1.6;margin-bottom:10px">※ 登録後に決済画面に移ります</div>
+    <button onclick="_closeSupporterSignup();setTimeout(()=>{openAuthModal('login')},200)" style="width:100%;padding:8px;border:none;background:none;font-size:12px;color:var(--p);cursor:pointer;font-family:inherit;text-decoration:underline;margin-bottom:6px">既にアカウントをお持ちの方はログイン</button>
     <button onclick="_closeSupporterSignup();setTimeout(_showPlanModal,200)" style="width:100%;padding:10px;border:none;background:none;font-size:13px;color:var(--ts);cursor:pointer;font-family:inherit">プラン選択に戻る</button>
     <div style="font-size:10px;color:var(--ts);line-height:1.6;margin-top:4px">※ 登録月・解約月の日割り計算はありません</div>
   </div>
@@ -1911,7 +1912,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         2週間トライアル無料
       </div>
     </div>
-    <div style="padding:16px 16px 100px">
+    <div style="padding:16px 16px 160px">
       <!-- 比較表 -->
       <div style="background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--bd);margin-bottom:16px;box-shadow:var(--sh)">
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--bg)">
