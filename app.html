@@ -3469,15 +3469,14 @@ async function saveNickname(){
 window._onAuthChanged = async (user) => {
   if(user){
     window._fbUser = user;
-    // ログイン済み → Firestoreからデータ読み込み
-    const prevCount = subs.length;
     const prevJson = JSON.stringify(subs);
     await _loadFromFirestore(user.uid);
     _updateAuthUI(user);
     _updateNewBadges();
     await _loadGroupForDashboard();
-    // データが変わった場合、またはグループ読み込み後のみ再描画
-    if(JSON.stringify(subs) !== prevJson || _groupId){
+    // グループ未加入でデータが変わった場合のみ再描画
+    // （グループ加入中はonSnapshotコールバック内で描画される）
+    if(!_groupId && JSON.stringify(subs) !== prevJson){
       renderDashboard();
     }
     await _checkPendingInvite();
@@ -4602,7 +4601,7 @@ async function leaveGroup(){
             if(memberUids.length === 0){
               // 最後の1人 → グループ自体を削除
               await deleteDoc(doc(window._fbDb,'groups',_groupId));
-              showToast('グループを解体しました');
+              showToast('グループを退会しました');
             } else {
               await setDoc(doc(window._fbDb,'groups',_groupId), { memberUids }, { merge:true });
               showToast('グループから退出しました');
@@ -4816,8 +4815,9 @@ async function _loadGroupForDashboard(){
     // 全メンバーのサブスクを取得
     await _fetchGroupSubs();
     _updateGroupTabs();
-    // 初回ロード中は_onAuthChangedがrenderDashboardを呼ぶので重複を避ける
-    if(_groupInitialized) renderDashboard();
+    // 初回・以降ともダッシュボードを再描画
+    renderDashboard();
+    _groupInitialized = true;
 
     // ドロワー・設定のグループ表示を更新
     const lbl = document.getElementById('hd-group-btn-lbl');
@@ -6978,7 +6978,12 @@ async function init(){
   if(inclOt) document.getElementById('ot-note').style.display='block';
 
   if(!onboarded) showOnboarding();
-  goto('dashboard');
+  // 初期ページ表示（renderDashboardはFirebase Auth完了後に1回だけ呼ぶ）
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.getElementById('pg-dashboard').classList.add('on');
+  document.querySelectorAll('.nb').forEach(n=>n.classList.remove('on'));
+  document.getElementById('nb-dashboard')?.classList.add('on');
+  renderDashboard();
   updateFilterCounts();
 
   // ── リピーター追跡：起動回数・登録件数をユーザープロパティにセット ──
