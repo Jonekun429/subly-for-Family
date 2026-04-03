@@ -2381,6 +2381,10 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
             支払い者を一括更新
           </button>
+          <button id="ls-group-vis-btn" class="ls-sat-btn" onclick="_openGroupVisBulk()" style="display:none;margin-top:8px;border-color:var(--ts);color:var(--ts)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>
+            グループ公開を管理
+          </button>
         </div>
       </div>
     </div>
@@ -6505,6 +6509,9 @@ function renderList(){
   const cat=document.getElementById('fl-cat').value;
   const sort=document.getElementById('fl-sort').value;
   if(cat !== 'all') gaEvent('filter_used', {});
+  // グループ公開管理ボタンの表示制御
+  const grpVisBtn = document.getElementById('ls-group-vis-btn');
+  if(grpVisBtn) grpVisBtn.style.display = _groupId ? '' : 'none';
 
   // グループフィルター適用
   let baseList = subs;
@@ -7053,6 +7060,35 @@ async function _checkAcctPopup(){
     btnColumn: true
   });
   gaEvent('acct_popup_shown', { count: 5 });
+}
+
+// グループ公開/非公開の切替（明細一覧から）
+// グループ公開一括管理ポップアップ
+function _openGroupVisBulk(){
+  const activeSubs = subs.filter(s=>!s.canceled);
+  if(!activeSubs.length){ showToast('登録中のサブスクがありません'); return; }
+  let html = '<div style="max-height:50vh;overflow-y:auto;-webkit-overflow-scrolling:touch">';
+  activeSubs.forEach(s=>{
+    const isPublic = s.groupPublic !== false;
+    html += `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd)">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.groupPublic===false?'🔒 ':''}${s.name}</div>
+        <div style="font-size:11px;color:var(--ts)">¥${s.price.toLocaleString()}/${s.freq==='年額'?'年':'月'}</div>
+      </div>
+      <button onclick="_toggleGroupPublic(${s.id});setTimeout(_openGroupVisBulk,300)" style="width:44px;height:24px;border-radius:12px;background:${isPublic?'var(--p)':'var(--bd)'};border:none;position:relative;cursor:pointer;flex-shrink:0;transition:background .2s">
+        <span style="position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:2px;left:${isPublic?'22px':'2px'};transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.15)"></span>
+      </button>
+    </div>`;
+  });
+  html += '</div>';
+  const privateCount = activeSubs.filter(s=>s.groupPublic===false).length;
+  showDialog({
+    icon:'',
+    title:'グループ公開を管理',
+    msg:`<div style="font-size:12px;color:var(--ts);margin-bottom:10px;text-align:center">非公開にしたサブスクはグループメンバーに表示されません${privateCount?' <strong style="color:var(--dn)">（非公開: '+privateCount+'件）</strong>':''}</div>${html}`,
+    buttons:[{label:'閉じる', cls:'ok'}]
+  });
+  gaEvent('group_vis_bulk_open', { total: activeSubs.length, private: privateCount });
 }
 
 // グループ公開/非公開の切替（明細一覧から）
