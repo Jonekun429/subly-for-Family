@@ -2044,7 +2044,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px">
           <div>
             <div style="font-size:11px;font-weight:700;color:var(--ts);letter-spacing:.5px;margin-bottom:4px">月額合計</div>
-            <div id="ttl-m" style="font-size:clamp(28px,8vw,34px);font-weight:800;color:var(--tx);line-height:1"><sup style="font-size:55%;color:var(--p);font-weight:700">¥</sup>0</div>
+            <div id="ttl-m" style="font-size:clamp(32px,9vw,40px);font-weight:800;color:var(--tx);line-height:1"><sup style="font-size:55%;color:var(--p);font-weight:700">¥</sup>0</div>
           </div>
           <div style="text-align:right">
             <div style="font-size:11px;font-weight:700;color:var(--ts);letter-spacing:.5px;margin-bottom:4px">年額合計</div>
@@ -3927,6 +3927,9 @@ function _updateAuthUI(user){
     const hdGroupJoinBtn = document.getElementById('hd-group-join-btn');
     if(hdGroupBtn) hdGroupBtn.style.display = '';
     if(hdGroupJoinBtn) hdGroupJoinBtn.style.display = 'none';
+    // ダッシュボードのアカウント訴求バナーを非表示
+    const acctBanner = document.getElementById('acct-banner');
+    if(acctBanner) acctBanner.style.display = 'none';
 
   } else {
     // 未ログイン
@@ -5992,9 +5995,23 @@ function checkAlerts(targetSubs){
   section.className='card';
   section.style.marginTop='8px';
 
+  const body=document.createElement('div');
+  body.id='warn-section-body';
+
   const hdr=document.createElement('div');
-  hdr.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-bottom:10px';
-  hdr.innerHTML=`<span class="card-ttl" style="margin-bottom:0;color:var(--dn)"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--dn)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> 一度休止を検討してみましょう</span><span style="font-size:13px;color:var(--ts)">${warns.length}件</span>`;
+  hdr.style.cssText='display:flex;align-items:center;justify-content:space-between;cursor:pointer;-webkit-tap-highlight-color:transparent';
+  hdr.innerHTML=`<span class="card-ttl" style="margin-bottom:0;color:var(--dn)"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--dn)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> 一度休止を検討してみましょう</span><span style="display:flex;align-items:center;gap:6px"><span style="font-size:13px;color:var(--ts)">${warns.length}件</span><span id="warn-arrow" style="font-size:12px;color:var(--ts);transition:transform .2s">▲</span></span>`;
+  hdr.onclick=()=>{
+    const b=document.getElementById('warn-section-body');
+    const arrow=document.getElementById('warn-arrow');
+    if(b.style.display==='none'){
+      b.style.display='';
+      arrow.textContent='▲';
+    } else {
+      b.style.display='none';
+      arrow.textContent='▼';
+    }
+  };
   section.appendChild(hdr);
 
   warns.forEach(s=>{
@@ -6018,10 +6035,11 @@ function checkAlerts(targetSubs){
         }
       </div>`;
     row.onclick=()=>editSub(s.id);
-    section.appendChild(row);
+    body.appendChild(row);
   });
   // 最後の行のborder-bottomを削除
-  section.querySelector('div[style*="border-bottom"]:last-of-type')?.style.setProperty('border-bottom','none');
+  body.querySelector('div[style*="border-bottom"]:last-of-type')?.style.setProperty('border-bottom','none');
+  section.appendChild(body);
   const warnSection=document.getElementById('warn-section');
   if(warnSection){ warnSection.innerHTML=''; warnSection.appendChild(section); }
 }
@@ -7013,11 +7031,13 @@ function toggleUrlBtn(){
 // ============================================================
 // A案: ダッシュボードバナー
 async function _checkAcctBanner(){
-  if(window._fbUser) return; // ログイン済みは不要
+  if(window._fbUser) { document.getElementById('acct-banner').style.display='none'; return; }
+  if(_isSupporterMember) { document.getElementById('acct-banner').style.display='none'; return; }
   if(subs.length < 3) return;
+  // Firebase認証がまだ完了していない可能性がある場合はスキップ
+  if(window._fbAuth && window._fbAuth.currentUser) { document.getElementById('acct-banner').style.display='none'; return; }
   const dismissed = await Store.get('acctBannerDismissed');
   if(dismissed){
-    // 1週間後にリマインド
     const ts = parseInt(dismissed);
     if(ts && Date.now() - ts < 7*24*60*60*1000) return;
   }
@@ -7956,9 +7976,14 @@ async function init(){
   if(onboarded) setTimeout(()=>checkUpcomingPayments(), 1200);
   // 応援会員プラン誘導（未ログイン・3件以上登録済みの場合）
   if(onboarded) setTimeout(()=>checkProNudge(), 2500);
-  // 起動時の件数超過チェック（CSVインポート等で6件超えている場合）
-  if(onboarded && !_isSupporterMember && subs.length > FREE_LIMIT){
-    setTimeout(_showLimitPopup, 3000);
+  // 起動時の件数超過チェック（Firestore読み込み完了後に実行）
+  // _onAuthChanged → _loadFromFirestore で _isSupporterMember が復元された後にチェック
+  if(onboarded){
+    setTimeout(()=>{
+      if(!_isSupporterMember && subs.length > FREE_LIMIT){
+        _showLimitPopup();
+      }
+    }, 5000); // Firestore読み込み完了を待つため十分な遅延
   }
 }
 
