@@ -1627,7 +1627,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         </button>
         <div id="group-create-area" style="display:none;margin-top:12px">
           <div style="font-size:12px;color:var(--ts);margin-bottom:8px;line-height:1.6">グループを作成して招待コードをメンバーに共有しましょう。</div>
-          <input type="text" id="group-name-input" placeholder="グループ名（例：田中家）" maxlength="20"
+          <input type="text" id="group-name-input" placeholder="グループ名（例：田中家）" maxlength="20" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
             style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none;margin-bottom:8px">
           <button onclick="createGroup()" style="width:100%;padding:13px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">グループを作成する</button>
         </div>
@@ -4869,15 +4869,35 @@ async function createGroup(){
     inviteExpiredAt: expiredAt
   };
 
-  await setDoc(doc(window._fbDb, 'groups', groupId), groupData);
-  await setDoc(doc(window._fbDb, 'users', user.uid), { groupId }, { merge: true });
+  try{
+    await setDoc(doc(window._fbDb, 'groups', groupId), groupData);
+    await setDoc(doc(window._fbDb, 'users', user.uid), { groupId }, { merge: true });
 
-  _groupId = groupId;
-  _groupData = groupData;
-  await _renderGroupJoined();
-  _dismissGroupNewBadge();
-  gaEvent('group_create', {});
-  showToast(`「${name}」を作成しました`);
+    _groupId = groupId;
+    _groupData = groupData;
+    await _renderGroupJoined();
+    _dismissGroupNewBadge();
+
+    // ドロワー・設定画面のグループ表示を更新
+    const lbl = document.getElementById('hd-group-btn-lbl');
+    const sub = document.getElementById('hd-group-btn-sub');
+    if(lbl) lbl.textContent = name;
+    if(sub) sub.textContent = 'メンバー 1人';
+    const sGrpTitle = document.getElementById('s-group-title');
+    const sGrpSub = document.getElementById('s-group-sub');
+    if(sGrpTitle) sGrpTitle.textContent = name;
+    if(sGrpSub) sGrpSub.textContent = 'メンバー 1人';
+
+    // ダッシュボードのグループ表示を更新
+    await _loadGroupForDashboard();
+    renderDashboard();
+
+    gaEvent('group_create', {});
+    showToast(`「${name}」を作成しました`);
+  }catch(e){
+    console.error('グループ作成エラー:', e);
+    showToast('エラーが発生しました: ' + e.message);
+  }
 }
 
 // 招待コードで参加
