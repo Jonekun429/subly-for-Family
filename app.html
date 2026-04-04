@@ -3716,19 +3716,9 @@ function _updatePayerField(){
   const sel = document.getElementById('f-payer');
   const bulkBtn = document.getElementById('ls-payer-bulk-btn');
   if(row && sel){
-    if(_nickname){
-      row.style.display = '';
-      const cur = sel.value;
-      sel.innerHTML = '<option value="">指定しない</option>';
-      const opt = document.createElement('option');
-      opt.value = _nickname;
-      opt.text = _nickname;
-      sel.appendChild(opt);
-      if(cur && [...sel.options].some(o => o.value === cur)) sel.value = cur;
-    } else {
-      row.style.display = 'none';
-      sel.value = '';
-    }
+    // 支払い者フィールドは廃止（プロフィール機能で代替）
+    row.style.display = 'none';
+    sel.value = '';
   }
   // 一括更新ボタンの表示制御（支払い者一括は廃止）
   if(bulkBtn) bulkBtn.style.display = 'none';
@@ -4976,8 +4966,10 @@ async function _loadGroupState(){
       _groupData = groupSnap.data();
       await _renderGroupJoined();
     } else {
-      // グループが存在しない（削除済み）
+      // グループが存在しない（削除済み）→ FirestoreのgroupIdもクリア
       _groupId = null;
+      const { setDoc: sd } = window._fbFns;
+      try{ await sd(doc(window._fbDb, 'users', user.uid), { groupId: null }, { merge: true }); }catch(e){}
       _renderGroupNone();
     }
   } else {
@@ -5142,7 +5134,7 @@ async function createGroup(){
 
   // Firestore確認（念のため）
   const userSnap = await getDoc(doc(window._fbDb, 'users', user.uid));
-  if(userSnap.exists() && userSnap.data().groupId){
+  if(userSnap.exists() && userSnap.data().groupId && userSnap.data().groupId.length > 0){
     const existingGid = userSnap.data().groupId;
     const existingGSnap = await getDoc(doc(window._fbDb, 'groups', existingGid));
     if(existingGSnap.exists()){
@@ -5153,7 +5145,7 @@ async function createGroup(){
       return;
     } else {
       // 古いgroupIdをクリア
-      await setDoc(doc(window._fbDb, 'users', user.uid), { groupId: '' }, { merge: true });
+      await setDoc(doc(window._fbDb, 'users', user.uid), { groupId: null }, { merge: true });
       _groupId = null;
       _groupData = null;
     }
@@ -5219,7 +5211,7 @@ async function joinGroupByCode(codeArg){
 
     // すでに参加済みか確認
     const userSnap = await getDoc(doc(window._fbDb, 'users', user.uid));
-    if(userSnap.exists() && userSnap.data().groupId){
+    if(userSnap.exists() && userSnap.data().groupId && userSnap.data().groupId.length > 0){
       // 既にグループに参加中 → そのグループIDと今回の招待コードのグループが同じか確認
       const existingGroupId = userSnap.data().groupId;
       const existingGroupSnap = await getDoc(doc(window._fbDb, 'groups', existingGroupId));
@@ -5231,7 +5223,7 @@ async function joinGroupByCode(codeArg){
         return;
       } else {
         // 古いgroupIdが残っているが実際のグループは削除されている → クリアして続行
-        await setDoc(doc(window._fbDb, 'users', user.uid), { groupId: '' }, { merge: true });
+        await setDoc(doc(window._fbDb, 'users', user.uid), { groupId: null }, { merge: true });
         _groupId = null;
         _groupData = null;
       }
@@ -5344,7 +5336,7 @@ async function leaveGroup(){
               showToast('グループから退出しました');
             }
           }
-          await setDoc(doc(window._fbDb,'users',user.uid), { groupId:'' }, { merge:true });
+          await setDoc(doc(window._fbDb,'users',user.uid), { groupId:null }, { merge:true });
           _groupId = null; _groupData = null; _groupMembersData = [];
           _groupSubsCache = {};
           _currentGroupFilter = 'all';
