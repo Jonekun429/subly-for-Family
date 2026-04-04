@@ -2,13 +2,15 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="0;url=https://jonekun429.github.io/Subscription/app.html">
-<script>
-  // クエリパラメータ（?invite=XXXXXXなど）も引き継ぐ
-  const params = window.location.search;
-  window.location.replace('https://jonekun429.github.io/Subscription/app.html' + params);
-</script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Subly - サブスク管理アプリ</title>
+<script>
+  var params = window.location.search || '';
+  var repo = window.location.pathname.split('/')[1] || '';
+  var base = window.location.origin + '/' + repo + '/app.html';
+  window.location.replace(base + params);
+</script>
+<meta http-equiv="refresh" content="1;url=app.html">
 </head>
 <body></body>
 </html>
