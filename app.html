@@ -5143,9 +5143,20 @@ async function createGroup(){
   // Firestore確認（念のため）
   const userSnap = await getDoc(doc(window._fbDb, 'users', user.uid));
   if(userSnap.exists() && userSnap.data().groupId){
-    showToast('すでにグループに参加しています');
-    await _loadGroupState();
-    return;
+    const existingGid = userSnap.data().groupId;
+    const existingGSnap = await getDoc(doc(window._fbDb, 'groups', existingGid));
+    if(existingGSnap.exists()){
+      showToast('すでに「' + (existingGSnap.data().name||'グループ') + '」に参加中です');
+      _groupId = existingGid;
+      _groupData = existingGSnap.data();
+      await _loadGroupState();
+      return;
+    } else {
+      // 古いgroupIdをクリア
+      await setDoc(doc(window._fbDb, 'users', user.uid), { groupId: '' }, { merge: true });
+      _groupId = null;
+      _groupData = null;
+    }
   }
 
   const groupId = 'grp_' + Date.now();
@@ -5209,9 +5220,21 @@ async function joinGroupByCode(codeArg){
     // すでに参加済みか確認
     const userSnap = await getDoc(doc(window._fbDb, 'users', user.uid));
     if(userSnap.exists() && userSnap.data().groupId){
-      showToast('すでにグループに参加しています');
-      await _loadGroupState();
-      return;
+      // 既にグループに参加中 → そのグループIDと今回の招待コードのグループが同じか確認
+      const existingGroupId = userSnap.data().groupId;
+      const existingGroupSnap = await getDoc(doc(window._fbDb, 'groups', existingGroupId));
+      if(existingGroupSnap.exists()){
+        showToast('すでに「' + (existingGroupSnap.data().name||'グループ') + '」に参加中です');
+        _groupId = existingGroupId;
+        _groupData = existingGroupSnap.data();
+        await _loadGroupState();
+        return;
+      } else {
+        // 古いgroupIdが残っているが実際のグループは削除されている → クリアして続行
+        await setDoc(doc(window._fbDb, 'users', user.uid), { groupId: '' }, { merge: true });
+        _groupId = null;
+        _groupData = null;
+      }
     }
 
     // 招待コードからグループを検索
