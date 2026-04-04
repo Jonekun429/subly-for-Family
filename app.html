@@ -558,9 +558,9 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .sett-hdr-ttl{font-size:16px;font-weight:700}
 .sett-close{width:30px;height:30px;border-radius:50%;background:var(--bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ts)}
 .sett-body{max-width:480px;margin:0 auto;padding:8px 0 calc(env(safe-area-inset-bottom) + 40px)}
-.sheet-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px 10px;border-bottom:1px solid var(--bd);position:sticky;top:0;background:var(--card);z-index:1}
+.sheet-hdr{display:flex;align-items:center;justify-content:space-between;padding:18px 18px 10px;padding-top:max(18px, env(safe-area-inset-top, 0px));border-bottom:1px solid var(--bd);position:sticky;top:0;background:var(--card);z-index:1}
 .sheet-ttl{font-size:15px;font-weight:700}
-.sheet-close{width:28px;height:28px;border-radius:50%;background:var(--bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--ts)}
+.sheet-close{width:32px;height:32px;border-radius:50%;background:var(--bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ts);-webkit-tap-highlight-color:transparent}
 .s-sec{font-size:11px;font-weight:700;color:var(--ts);letter-spacing:1px;text-transform:uppercase;padding:14px 20px 6px}
 .s-grp{margin:0 14px 8px;background:var(--card);border-radius:14px;overflow:hidden;box-shadow:var(--sh)}
 .s-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--bd);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background .12s}
@@ -1956,6 +1956,10 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <div style="display:flex;align-items:center;gap:6px;padding:2px 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pd)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg><span>招待コードで<strong>かんたん共有</strong></span></div>
       <div style="display:flex;align-items:center;gap:6px;padding:2px 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pd)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg><span>メンバーのサブスクを<strong>一覧で確認</strong></span></div>
       <div style="display:flex;align-items:center;gap:6px;padding:2px 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pd)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg><span>グループ全体の<strong>支出合計</strong>がわかる</span></div>
+      <div style="background:linear-gradient(135deg,#F0F4FF,#E8EEF8);border-radius:10px;padding:10px 12px;margin-top:8px;border:1px solid #D8E0F0">
+        <div style="font-size:12px;font-weight:700;color:#3A5BA0;display:flex;align-items:center;gap:4px;margin-bottom:3px">🔒 非公開機能で安心</div>
+        <div style="font-size:11px;color:#5A6E8A;line-height:1.6">見られたくないサブスクは<strong>非公開</strong>にできます。プライバシーは守られます。</div>
+      </div>
     </div>
     <div id="group-intro-btns"></div>
   </div>
@@ -2057,11 +2061,13 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
           <div style="padding:8px 6px;font-size:11px;font-weight:700;text-align:center;color:var(--ts)">無料会員</div>
           <div style="padding:8px 6px;font-size:11px;font-weight:700;text-align:center;color:#fff;background:var(--p)">応援会員</div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:8px 6px;font-size:11px;font-weight:600;padding-left:12px">アカウント作成</div><div style="padding:8px 6px;text-align:center;color:var(--p);font-weight:700">&#10003;</div><div style="padding:8px 6px;text-align:center;color:var(--p);font-weight:700;background:rgba(92,142,132,.04)">&#10003;</div></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:8px 6px;font-size:11px;font-weight:600;padding-left:12px">サブスク登録</div><div style="padding:8px 6px;text-align:center;font-size:11px">6件まで</div><div style="padding:8px 6px;text-align:center;color:var(--p);font-weight:700;font-size:11px;background:rgba(92,142,132,.04)">無制限</div></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:8px 6px;font-size:11px;font-weight:600;padding-left:12px">グループ機能</div><div style="padding:8px 6px;text-align:center;color:var(--bd);font-size:14px">&#10005;</div><div style="padding:8px 6px;text-align:center;color:var(--p);font-weight:700;background:rgba(92,142,132,.04)">&#10003;</div></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:8px 6px;font-size:11px;font-weight:600;padding-left:12px">グラフ・カレンダー</div><div style="padding:8px 6px;text-align:center;color:var(--p);font-weight:700">&#10003;</div><div style="padding:8px 6px;text-align:center;color:var(--p);font-weight:700;background:rgba(92,142,132,.04)">&#10003;</div></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:8px 6px;font-size:11px;font-weight:600;padding-left:12px">クラウド同期</div><div style="padding:8px 6px;text-align:center;color:var(--p);font-weight:700">&#10003;</div><div style="padding:8px 6px;text-align:center;color:var(--p);font-weight:700;background:rgba(92,142,132,.04)">&#10003;</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:8px 6px;font-size:11px;font-weight:600;padding-left:12px">アカウント作成</div><div style="padding:8px 6px;text-align:center;color:var(--p);font-size:12px">⭕</div><div style="padding:8px 6px;text-align:center;color:var(--p);font-weight:800;font-size:15px;background:rgba(92,142,132,.04)">⭕</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:8px 6px;font-size:11px;font-weight:600;padding-left:12px">サブスク登録</div><div style="padding:8px 6px;text-align:center;font-size:11px;font-weight:700;color:var(--ts)">6件まで</div><div style="padding:8px 6px;text-align:center;color:var(--pd);font-weight:700;font-size:11px;background:rgba(92,142,132,.04)">無制限</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:8px 6px;font-size:11px;font-weight:600;padding-left:12px">グループ機能</div><div style="padding:8px 6px;text-align:center;color:#ccc;font-size:12px">❌</div><div style="padding:8px 6px;text-align:center;color:var(--p);font-weight:800;font-size:15px;background:rgba(92,142,132,.04)">⭕</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:8px 6px;font-size:11px;font-weight:600;padding-left:12px">非公開機能</div><div style="padding:8px 6px;text-align:center;color:#ccc;font-size:12px">❌</div><div style="padding:8px 6px;text-align:center;color:var(--p);font-weight:800;font-size:15px;background:rgba(92,142,132,.04)">⭕</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:8px 6px;font-size:11px;font-weight:600;padding-left:12px">グラフ・カレンダー</div><div style="padding:8px 6px;text-align:center;color:var(--p);font-size:12px">⭕</div><div style="padding:8px 6px;text-align:center;color:var(--p);font-weight:800;font-size:15px;background:rgba(92,142,132,.04)">⭕</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:8px 6px;font-size:11px;font-weight:600;padding-left:12px">クラウド同期</div><div style="padding:8px 6px;text-align:center;color:var(--p);font-size:12px">⭕</div><div style="padding:8px 6px;text-align:center;color:var(--p);font-weight:800;font-size:15px;background:rgba(92,142,132,.04)">⭕</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:8px 6px;font-size:11px;font-weight:600;padding-left:12px">テーマ変更</div><div style="padding:8px 6px;text-align:center;color:var(--p);font-size:12px">⭕</div><div style="padding:8px 6px;text-align:center;color:var(--p);font-weight:800;font-size:15px;background:rgba(92,142,132,.04)">⭕</div></div>
       </div>
       <!-- プラン選択 -->
       <div style="font-size:13px;font-weight:700;color:var(--ts);margin-bottom:10px">応援の気持ちでプランを選べます</div>
@@ -3830,8 +3836,9 @@ function _showSupporterNudge(){
           <div style="padding:6px;font-size:10px;font-weight:700;color:#fff;background:var(--p)">応援</div>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:6px;font-size:10px;font-weight:600;text-align:left;padding-left:10px">登録数</div><div style="padding:6px;font-size:10px;text-align:center">6件</div><div style="padding:6px;font-size:10px;text-align:center;color:var(--p);font-weight:700;background:rgba(92,142,132,.04)">無制限</div></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:6px;font-size:10px;font-weight:600;text-align:left;padding-left:10px">グループ</div><div style="padding:6px;font-size:10px;text-align:center;color:var(--bd)">✕</div><div style="padding:6px;font-size:10px;text-align:center;color:var(--p);font-weight:700;background:rgba(92,142,132,.04)">✓</div></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:6px;font-size:10px;font-weight:600;text-align:left;padding-left:10px">グラフ</div><div style="padding:6px;font-size:10px;text-align:center;color:var(--p);font-weight:700">✓</div><div style="padding:6px;font-size:10px;text-align:center;color:var(--p);font-weight:700;background:rgba(92,142,132,.04)">✓</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:6px;font-size:10px;font-weight:600;text-align:left;padding-left:10px">グループ</div><div style="padding:6px;font-size:12px;text-align:center;color:#ccc;font-size:12px">❌</div><div style="padding:6px;font-size:12px;text-align:center;color:var(--p);font-weight:700;font-size:12px;background:rgba(92,142,132,.04)">⭕</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:6px;font-size:10px;font-weight:600;text-align:left;padding-left:10px">非公開</div><div style="padding:6px;font-size:12px;text-align:center;color:#ccc;font-size:12px">❌</div><div style="padding:6px;font-size:12px;text-align:center;color:var(--p);font-weight:700;font-size:12px;background:rgba(92,142,132,.04)">⭕</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:6px;font-size:10px;font-weight:600;text-align:left;padding-left:10px">グラフ</div><div style="padding:6px;font-size:12px;text-align:center;color:var(--p);font-weight:800">⭕</div><div style="padding:6px;font-size:12px;text-align:center;color:var(--p);font-weight:700;font-size:12px;background:rgba(92,142,132,.04)">⭕</div></div>
       </div>
       <div style="display:inline-flex;align-items:center;gap:4px;background:#FFF8EE;border:1px solid #F5D9A8;border-radius:10px;padding:5px 12px;font-size:11px;font-weight:600;color:#8B6914;margin-bottom:4px">¥300〜/月・2週間無料トライアル付き</div>
     </div>`,
@@ -5139,6 +5146,8 @@ async function createGroup(){
 
     gaEvent('group_create', {});
     showToast(`「${name}」を作成しました`);
+    // 非公開機能のご案内（1回だけ）
+    setTimeout(_showPrivacyFeaturePopup, 800);
   }catch(e){
     console.error('グループ作成エラー:', e);
     showToast('エラーが発生しました: ' + e.message);
@@ -5228,6 +5237,8 @@ async function joinGroupByCode(codeArg){
         if(sGrpSub2) sGrpSub2.textContent = `メンバー ${(_groupData?.memberUids||[]).length}人`;
         renderDashboard();
         goto('dashboard');
+        // 非公開機能のご案内（1回だけ）
+        setTimeout(_showPrivacyFeaturePopup, 500);
       }}]
     });
 
@@ -7494,6 +7505,29 @@ function _viewDoc(type){
   document.getElementById('terms-page-footer').style.display = 'none'; // 閲覧時は「確認しました」ボタン非表示
   document.getElementById('terms-page-ov').classList.remove('hidden');
   gaEvent(type === 'terms' ? 'terms_viewed' : 'privacy_viewed', { mode: 'view' });
+}
+
+// 非公開機能のご案内ポップアップ（グループ参加/作成時に1回だけ）
+async function _showPrivacyFeaturePopup(){
+  const shown = await Store.get('groupPrivacyShown');
+  if(shown) return;
+  await Store.set('groupPrivacyShown', '1');
+  const lockSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="var(--ts)" style="vertical-align:middle;margin-right:2px"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/></svg>';
+  showDialog({
+    icon:`<svg width="32" height="32" viewBox="0 0 24 24" fill="var(--p)"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/></svg>`,
+    title:'見せたくないサブスクを隠せます',
+    msg:`<div style="text-align:left;font-size:13px;color:var(--ts);line-height:1.8;margin-bottom:12px">
+      グループメンバーに<strong style="color:var(--tx)">見せたくないサブスク</strong>は非公開に設定できます。
+    </div>
+    <div style="background:var(--bg);border-radius:10px;padding:12px;text-align:left">
+      <div style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:12px"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--p)" style="flex-shrink:0"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> 登録時に「グループに公開」をOFF</div>
+      <div style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:12px"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--p)" style="flex-shrink:0"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg> 明細の「⋯」から切り替え</div>
+      <div style="display:flex;align-items:center;gap:8px;padding:4px 0;font-size:12px"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--p)" style="flex-shrink:0"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-2h5v2zm5-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> サマリーから一括管理</div>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--ts);text-align:left;line-height:1.6">${lockSvg} 非公開のサブスクは他のメンバーから見えません。</div>`,
+    buttons:[{label:'OK', cls:'ok'}]
+  });
+  gaEvent('privacy_feature_popup_shown', {});
 }
 
 // ============================================================
