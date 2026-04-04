@@ -4589,11 +4589,14 @@ function _showAuthError(code){
   if(!msg) return;
   const el = document.getElementById('auth-error');
 
-  // no-account / already-exists / email-already-in-use はボタン付きエラーに
-  if(code === 'no-account'){
+  // no-account / already-exists / email-already-in-use / invalid-credential はボタン付きエラーに
+  if(code === 'no-account' || code === 'auth/user-not-found'){
     el.innerHTML = `${msg}<br><button onclick="switchAuthTab('signup')" style="margin-top:8px;font-size:12px;font-weight:700;color:var(--p);background:none;border:none;cursor:pointer;text-decoration:underline">新規登録はこちら →</button>`;
   } else if(code === 'already-exists' || code === 'auth/email-already-in-use'){
     el.innerHTML = `このメールアドレスは登録済みです。<br><button onclick="switchAuthTab('login')" style="margin-top:8px;font-size:12px;font-weight:700;color:var(--p);background:none;border:none;cursor:pointer;text-decoration:underline">ログインはこちら →</button>`;
+  } else if(code === 'auth/invalid-credential'){
+    const isLogin = _authMode === 'login';
+    el.innerHTML = `メールアドレスまたはパスワードが違います。<br><button onclick="switchAuthTab('${isLogin?'signup':'login'}')" style="margin-top:8px;font-size:12px;font-weight:700;color:var(--p);background:none;border:none;cursor:pointer;text-decoration:underline">${isLogin?'新規登録はこちら →':'ログインはこちら →'}</button>`;
   } else {
     el.textContent = msg;
   }
@@ -5383,14 +5386,15 @@ async function copyCodeOnly(){
 async function copyInviteCode(){
   const code = document.getElementById('group-invite-code').textContent;
   const groupName = _groupData?.name || 'グループ';
-  const appUrl = 'https://jonekun429.github.io/Subscription/app.html';
+  const inviteUrl = `https://jonekun429.github.io/Subscription/?invite=${code}`;
 
   const shareText = `【Subly グループ招待】
 「${groupName}」に招待します！
 
-招待コード：${code}
+下のリンクをタップして参加できます。
+${inviteUrl}
 
-${appUrl}`;
+招待コード：${code}`;
 
   // Web Share API（iOS/Android）が使えれば共有シートを表示
   if(navigator.share){
@@ -8461,8 +8465,9 @@ function _processImportFile(file){
       showDialog({icon:'',title:'読み込みエラー',msg:'インポートできるデータが見つかりませんでした。',buttons:[{label:'OK',cls:'ok'}]});
       return;
     }
-    // 無料会員の件数制限チェック（インポート前にブロック）
-    if(!_isSupporterMember && imported.length > FREE_LIMIT){
+    // 無料会員の件数制限チェック（インポート後の合計件数でチェック）
+    const totalAfterImport = imported.length;
+    if(!_isSupporterMember && totalAfterImport > FREE_LIMIT){
       showDialog({
         icon:'',
         title:'インポートできません',
