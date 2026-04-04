@@ -5386,15 +5386,13 @@ async function copyCodeOnly(){
 async function copyInviteCode(){
   const code = document.getElementById('group-invite-code').textContent;
   const groupName = _groupData?.name || 'グループ';
-  const inviteUrl = `https://jonekun429.github.io/Subscription/?invite=${code}`;
 
   const shareText = `【Subly グループ招待】
 「${groupName}」に招待します！
 
-下のリンクをタップして参加できます。
-${inviteUrl}
+招待コード：${code}
 
-招待コード：${code}`;
+Sublyアプリを開いて、グループ画面からこのコードを入力してください。`;
 
   // Web Share API（iOS/Android）が使えれば共有シートを表示
   if(navigator.share){
