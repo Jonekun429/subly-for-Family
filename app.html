@@ -548,6 +548,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .overlay{position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .18s ease;overflow:hidden}
 .overlay.hidden{display:none}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pullSpin{to{transform:rotate(360deg)}}
 .sheet{background:var(--card);border-radius:18px 18px 0 0;max-height:85vh;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;animation:fadeUp .24s ease;padding-bottom:calc(env(safe-area-inset-bottom) + 20px);width:calc(100% - 16px);max-width:480px}
 /* 設定パネル専用（フルスクリーン・確実にスクロール） */
 .sett-card{width:100%;height:100%;display:flex;flex-direction:column}
@@ -1279,8 +1280,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <div class="howto-slide-desc">明細一覧の上部にある<b>件数バー（▲）</b>をタップするとサマリーが開きます。</div>
         <div style="margin-top:10px">
           <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f5f5f5"><span style="font-size:16px">⭐</span><div><div style="font-size:13px;font-weight:700">満足度を一括更新</div><div style="font-size:11px;color:var(--ts)">全サブスクの満足度をまとめて設定</div></div></div>
-          <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f5f5f5"><span style="font-size:16px">👤</span><div><div style="font-size:13px;font-weight:700">支払い者を一括更新</div><div style="font-size:11px;color:var(--ts)">誰が払っているかをまとめて設定</div></div></div>
-          <div style="display:flex;align-items:center;gap:8px;padding:6px 0"><span style="font-size:16px">🔒</span><div><div style="font-size:13px;font-weight:700">グループ公開を管理</div><div style="font-size:11px;color:var(--ts)">公開/非公開を一括で切り替え</div></div></div>
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 0"><span style="font-size:16px">🔒</span><div><div style="font-size:13px;font-weight:700">公開 / 非公開の設定</div><div style="font-size:11px;color:var(--ts)">公開/非公開を一括で切り替え</div></div></div>
         </div>
       </div>
       <!-- STEP 5: カレンダー -->
@@ -1319,7 +1319,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <div style="margin-top:10px">
           <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f5f5f5"><span style="font-size:16px">📝</span><div><div style="font-size:13px;font-weight:700">登録時にON/OFF</div><div style="font-size:11px;color:var(--ts)">「グループに公開」トグルをOFFにするだけ</div></div></div>
           <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f5f5f5"><span style="font-size:16px">⋯</span><div><div style="font-size:13px;font-weight:700">あとからワンタップ切替</div><div style="font-size:11px;color:var(--ts)">明細の「⋯」→「🔒 非公開にする」</div></div></div>
-          <div style="display:flex;align-items:center;gap:8px;padding:6px 0"><span style="font-size:16px">📋</span><div><div style="font-size:13px;font-weight:700">一括で管理</div><div style="font-size:11px;color:var(--ts)">サマリー→「グループ公開を管理」</div></div></div>
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 0"><span style="font-size:16px">📋</span><div><div style="font-size:13px;font-weight:700">一括で管理</div><div style="font-size:11px;color:var(--ts)">サマリーから一括で設定</div></div></div>
         </div>
         <div class="howto-slide-tip"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> 非公開サブスクは 🔒 アイコンが付き、他メンバーからは完全に見えません。</div>
       </div>
@@ -1339,6 +1339,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
           <div style="display:flex;align-items:center;gap:6px;padding:4px 0;font-size:12px"><span>♾️</span><b>登録無制限</b><span style="color:var(--ts);margin-left:4px">無料は6件まで</span></div>
           <div style="display:flex;align-items:center;gap:6px;padding:4px 0;font-size:12px"><span>👥</span><b>グループ機能</b><span style="color:var(--ts);margin-left:4px">家族・カップルで管理</span></div>
           <div style="display:flex;align-items:center;gap:6px;padding:4px 0;font-size:12px"><span>☁️</span><b>クラウド同期</b><span style="color:var(--ts);margin-left:4px">機種変更でも安心</span></div>
+          <div style="display:flex;align-items:center;gap:6px;padding:4px 0;font-size:12px"><span>📱</span><b>どの端末でもOK</b><span style="color:var(--ts);margin-left:4px">iPhone・Android・PC共通</span></div>
           <div style="display:flex;align-items:center;gap:6px;padding:4px 0;font-size:12px"><span>📱</span><b>全端末対応</b><span style="color:var(--ts);margin-left:4px">iPhone・Android・PC</span></div>
           <div style="display:flex;align-items:center;gap:6px;padding:4px 0;font-size:12px"><span>📱</span><b>どの端末でもOK</b><span style="color:var(--ts);margin-left:4px">1アカウントで全端末対応</span></div>
         </div>
@@ -1395,6 +1396,30 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         CSVインポート
       </button>
     </div>
+  </div>
+</div>
+
+<!-- 既存ユーザー向け利用規約同意ポップアップ -->
+<div class="dlg-ov hidden" id="existing-consent-ov" style="z-index:950">
+  <div class="dlg" style="max-width:340px;width:90%;padding:24px">
+    <div style="text-align:center;margin-bottom:12px">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="var(--p)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+    </div>
+    <div style="text-align:center;font-size:17px;font-weight:800;margin-bottom:6px">利用規約が更新されました</div>
+    <div style="text-align:left;font-size:13px;color:var(--ts);line-height:1.8;margin-bottom:14px">引き続きSublyをご利用いただくには、利用規約とプライバシーポリシーへの同意が必要です。</div>
+    <div id="ex-terms-card" onclick="_openConsentDoc('terms')" style="background:var(--card);border:2px solid var(--bd);border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:10px;-webkit-tap-highlight-color:transparent">
+      <div style="width:32px;height:32px;border-radius:8px;background:var(--pl);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="var(--p)"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:700">利用規約</div><div style="font-size:10px;color:var(--ts)" id="ex-terms-sub">タップして確認</div></div>
+      <div style="width:20px;height:20px;border-radius:50%;border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0" id="ex-terms-check"></div>
+    </div>
+    <div id="ex-privacy-card" onclick="_openConsentDoc('privacy')" style="background:var(--card);border:2px solid var(--bd);border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:10px;-webkit-tap-highlight-color:transparent">
+      <div style="width:32px;height:32px;border-radius:8px;background:#F0F4FF;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="#4A90D0"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/></svg></div>
+      <div style="flex:1"><div style="font-size:13px;font-weight:700">プライバシーポリシー</div><div style="font-size:10px;color:var(--ts)" id="ex-privacy-sub">タップして確認</div></div>
+      <div style="width:20px;height:20px;border-radius:50%;border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0" id="ex-privacy-check"></div>
+    </div>
+    <div style="font-size:10px;color:var(--ts);text-align:center;margin:8px 0 12px">両方確認すると「同意する」がタップできます</div>
+    <button id="ex-agree-btn" onclick="_agreeExistingConsent()" disabled style="width:100%;padding:14px;border-radius:12px;font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:inherit;background:var(--bd);color:var(--ts)">同意する</button>
+    <div style="text-align:center;font-size:10px;color:var(--ts);margin-top:6px">同意いただけない場合、本サービスはご利用いただけません。</div>
   </div>
 </div>
 
@@ -2028,6 +2053,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--p)" style="vertical-align:middle;margin-right:4px"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>翌月の更新日から新しい金額が適用されます<br>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--p)" style="vertical-align:middle;margin-right:4px"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>プラン変更・解約はいつでもOK<br>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--p)" style="vertical-align:middle;margin-right:4px"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>1アカウントでiPhone・Android・PC全対応<br>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--p)" style="vertical-align:middle;margin-right:4px"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>iPhone・Android・PC、どの端末でも1アカウントでOK<br>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="#E8A04A" style="vertical-align:middle;margin-right:4px"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><span style="color:var(--tx);font-weight:600">プラン変更は月に1回までとなります</span>
       </div>
     </div>
@@ -2159,6 +2185,11 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
   <!-- ① ホーム -->
   <div id="pg-dashboard" class="page on">
+    <!-- プルダウン更新インジケーター -->
+    <div id="pull-indicator" style="display:flex;align-items:center;justify-content:center;gap:8px;height:0;overflow:hidden;transition:height .2s;background:var(--bg)">
+      <div id="pull-spinner" style="width:20px;height:20px;border-radius:50%;border:2.5px solid var(--bd);border-top-color:var(--p)"></div>
+      <div id="pull-text" style="font-size:12px;color:var(--ts);font-weight:600">下に引っ張って更新</div>
+    </div>
     <!-- グループタブ（グループ参加時のみ表示） -->
     <div id="group-tab-name" style="display:none;font-size:11px;font-weight:700;color:var(--ts);letter-spacing:.5px;margin-bottom:6px"></div>
     <div id="group-dashboard-tabs" style="display:none;gap:7px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none"></div>
@@ -2533,7 +2564,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
           </button>
           <button id="ls-group-vis-btn" class="ls-sat-btn" onclick="_openGroupVisBulk()" style="display:none;margin-top:8px;border-color:var(--ts);color:var(--ts)">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>
-            グループ公開を管理
+            公開 / 非公開の設定
           </button>
         </div>
       </div>
@@ -3699,8 +3730,8 @@ function _updatePayerField(){
       sel.value = '';
     }
   }
-  // 一括更新ボタンの表示制御
-  if(bulkBtn) bulkBtn.style.display = _nickname ? '' : 'none';
+  // 一括更新ボタンの表示制御（支払い者一括は廃止）
+  if(bulkBtn) bulkBtn.style.display = 'none';
 }
 
 function _updateNicknameDisplay(){
@@ -5772,6 +5803,66 @@ function toggleSat(){
 
 // チャートスワイプ（左→年額、右→月額）
 function _initChartSwipe(){
+
+// ── プルダウン更新（Pull to Refresh） ──
+let _pullStartY = 0;
+let _pulling = false;
+let _pullRefreshing = false;
+function _initPullToRefresh(){
+  const dashboard = document.getElementById('pg-dashboard');
+  if(!dashboard) return;
+  dashboard.addEventListener('touchstart', (e)=>{
+    if(window.scrollY <= 0 && !_pullRefreshing){
+      _pullStartY = e.touches[0].clientY;
+      _pulling = true;
+    }
+  }, {passive:true});
+  dashboard.addEventListener('touchmove', (e)=>{
+    if(!_pulling || _pullRefreshing) return;
+    const diff = e.touches[0].clientY - _pullStartY;
+    const indicator = document.getElementById('pull-indicator');
+    const text = document.getElementById('pull-text');
+    if(diff > 10 && window.scrollY <= 0){
+      indicator.style.height = Math.min(diff * 0.5, 50) + 'px';
+      text.textContent = diff > 80 ? '離すと更新' : '下に引っ張って更新';
+    }
+  }, {passive:true});
+  dashboard.addEventListener('touchend', ()=>{
+    if(!_pulling || _pullRefreshing) return;
+    _pulling = false;
+    const indicator = document.getElementById('pull-indicator');
+    const text = document.getElementById('pull-text');
+    const spinner = document.getElementById('pull-spinner');
+    if(parseInt(indicator.style.height) >= 40){
+      // 更新実行
+      _pullRefreshing = true;
+      indicator.style.height = '50px';
+      text.textContent = '更新中...';
+      spinner.style.animation = 'pullSpin .6s linear infinite';
+      _doPullRefresh().then(()=>{
+        indicator.style.height = '0';
+        spinner.style.animation = '';
+        text.textContent = '下に引っ張って更新';
+        _pullRefreshing = false;
+        showToast('データを更新しました');
+      });
+    } else {
+      indicator.style.height = '0';
+    }
+  }, {passive:true});
+}
+async function _doPullRefresh(){
+  // Firestoreから再読み込み
+  if(window._fbUser && window._fbDb && window._fbFns){
+    try{ await _loadFromFirestore(window._fbUser.uid); }catch(e){ console.error('pull refresh error:', e); }
+  }
+  renderDashboard();
+  renderList();
+  gaEvent('pull_refresh', {});
+  return new Promise(r=>setTimeout(r, 500));
+}
+
+
   const el=document.getElementById('chart-swipe');
   if(!el)return;
   let _sx=0,_sy=0;
@@ -7372,16 +7463,16 @@ async function _checkAcctPopup(){
 function _openGroupVisBulk(){
   const activeSubs = subs.filter(s=>!s.canceled);
   if(!activeSubs.length){ showToast('登録中のサブスクがありません'); return; }
-  let html = '<div style="max-height:50vh;overflow-y:auto;-webkit-overflow-scrolling:touch">';
+  let html = '<div id="gvis-list" style="max-height:50vh;overflow-y:auto;-webkit-overflow-scrolling:touch">';
   activeSubs.forEach(s=>{
     const isPublic = s.groupPublic !== false;
-    html += `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd)">
+    html += `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd)" id="gvis-row-${s.id}">
       <div style="flex:1;min-width:0">
-        <div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.groupPublic===false?'🔒 ':''}${s.name}</div>
+        <div style="font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" id="gvis-name-${s.id}">${s.groupPublic===false?'🔒 ':''}${s.name}</div>
         <div style="font-size:11px;color:var(--ts)">¥${s.price.toLocaleString()}/${s.freq==='年額'?'年':'月'}</div>
       </div>
-      <button onclick="_toggleGroupPublic(${s.id});setTimeout(_openGroupVisBulk,300)" style="width:44px;height:24px;border-radius:12px;background:${isPublic?'var(--p)':'var(--bd)'};border:none;position:relative;cursor:pointer;flex-shrink:0;transition:background .2s">
-        <span style="position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:2px;left:${isPublic?'22px':'2px'};transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.15)"></span>
+      <button onclick="_toggleGroupPublicInline(${s.id})" id="gvis-btn-${s.id}" style="width:44px;height:24px;border-radius:12px;background:${isPublic?'var(--p)':'var(--bd)'};border:none;position:relative;cursor:pointer;flex-shrink:0;transition:background .2s">
+        <span id="gvis-knob-${s.id}" style="position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:2px;left:${isPublic?'22px':'2px'};transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.15)"></span>
       </button>
     </div>`;
   });
@@ -7389,11 +7480,41 @@ function _openGroupVisBulk(){
   const privateCount = activeSubs.filter(s=>s.groupPublic===false).length;
   showDialog({
     icon:'',
-    title:'グループ公開を管理',
-    msg:`<div style="font-size:12px;color:var(--ts);margin-bottom:10px;text-align:center">非公開にしたサブスクはグループメンバーに表示されません${privateCount?' <strong style="color:var(--dn)">（非公開: '+privateCount+'件）</strong>':''}</div>${html}`,
+    title:'公開 / 非公開の設定',
+    msg:`<div style="font-size:12px;color:var(--ts);margin-bottom:10px;text-align:center" id="gvis-summary">非公開にしたサブスクはグループメンバーに表示されません${privateCount?' <strong style="color:var(--dn)">（非公開: '+privateCount+'件）</strong>':''}</div>${html}`,
     buttons:[{label:'閉じる', cls:'ok'}]
   });
   gaEvent('group_vis_bulk_open', { total: activeSubs.length, private: privateCount });
+}
+
+// インラインでトグル（ダイアログを再描画せずにスクロール位置を保持）
+async function _toggleGroupPublicInline(id){
+  const s = subs.find(x=>x.id===id);
+  if(!s) return;
+  const wasPublic = s.groupPublic !== false;
+  s.groupPublic = !wasPublic;
+  await save();
+  // UIだけ更新（ダイアログは閉じない）
+  const btn = document.getElementById('gvis-btn-'+id);
+  const knob = document.getElementById('gvis-knob-'+id);
+  const nameEl = document.getElementById('gvis-name-'+id);
+  if(btn) btn.style.background = s.groupPublic!==false ? 'var(--p)' : 'var(--bd)';
+  if(knob) knob.style.left = s.groupPublic!==false ? '22px' : '2px';
+  if(nameEl) nameEl.innerHTML = (s.groupPublic===false?'🔒 ':'')+s.name;
+  // サマリーの非公開件数を更新
+  const activeSubs = subs.filter(x=>!x.canceled);
+  const privateCount = activeSubs.filter(x=>x.groupPublic===false).length;
+  const summary = document.getElementById('gvis-summary');
+  if(summary) summary.innerHTML = '非公開にしたサブスクはグループメンバーに表示されません'+(privateCount?' <strong style="color:var(--dn)">（非公開: '+privateCount+'件）</strong>':'');
+  showToast(wasPublic ? '🔒 非公開にしました' : '公開しました');
+  // スクロール位置を保持してリスト再描画
+  const listPage = document.getElementById('pg-list');
+  const scrollY = listPage ? listPage.scrollTop || window.scrollY : 0;
+  renderList();
+  requestAnimationFrame(()=>{
+    if(listPage) listPage.scrollTop = scrollY;
+    window.scrollTo(0, scrollY);
+  });
 }
 
 // グループ公開/非公開の切替（明細一覧から）
@@ -7418,6 +7539,22 @@ const _PRIVACY_TEXT = `<h3 style="font-size:14px;font-weight:700;color:var(--pd)
 let _consentConfirmed = { terms: false, privacy: false };
 let _consentCurrentDoc = '';
 let _consentMode = 'consent'; // 'consent' or 'view'
+
+// 既存ユーザー向け同意ポップアップ
+function _showExistingConsentPopup(){
+  _consentConfirmed = { terms: false, privacy: false };
+  _consentMode = 'consent';
+  document.getElementById('existing-consent-ov').classList.remove('hidden');
+  gaEvent('existing_consent_shown', {});
+}
+
+async function _agreeExistingConsent(){
+  if(!_consentConfirmed.terms || !_consentConfirmed.privacy) return;
+  await Store.set('termsAgreed', new Date().toISOString());
+  document.getElementById('existing-consent-ov').classList.add('hidden');
+  gaEvent('terms_agreed', { timestamp: new Date().toISOString(), source: 'existing_user' });
+  showToast('同意ありがとうございます');
+}
 
 function _showConsentScreen(){
   _consentConfirmed = { terms: false, privacy: false };
@@ -7480,6 +7617,27 @@ function _confirmConsentDoc(){
   if(obBtn && _consentConfirmed.terms && _consentConfirmed.privacy){
     obBtn.disabled = false;
     obBtn.style.opacity = '1';
+  }
+  // 既存ユーザー向けポップアップのカード更新
+  const exCard = document.getElementById('ex-'+type+'-card');
+  if(exCard){
+    exCard.style.borderColor = 'var(--p)';
+    exCard.style.background = 'var(--pl)';
+  }
+  const exSub = document.getElementById('ex-'+type+'-sub');
+  if(exSub){ exSub.textContent = '確認済み'; exSub.style.color = 'var(--pd)'; }
+  const exCheck = document.getElementById('ex-'+type+'-check');
+  if(exCheck){
+    exCheck.style.borderColor = 'var(--p)';
+    exCheck.style.background = 'var(--p)';
+    exCheck.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="#fff"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+  }
+  const exBtn = document.getElementById('ex-agree-btn');
+  if(exBtn && _consentConfirmed.terms && _consentConfirmed.privacy){
+    exBtn.disabled = false;
+    exBtn.style.background = 'linear-gradient(135deg,var(--p),var(--pd))';
+    exBtn.style.color = '#fff';
+    exBtn.style.boxShadow = '0 4px 12px rgba(92,142,132,.3)';
   }
 }
 
@@ -8537,6 +8695,11 @@ async function init(){
   if(inclOt) document.getElementById('ot-note').style.display='block';
 
   if(!onboarded) showOnboarding();
+  // 既存ユーザー向け：オンボーディング済みだがtermsAgreed未設定なら同意ポップアップ
+  if(onboarded){
+    const termsAgreed = await Store.get('termsAgreed');
+    if(!termsAgreed) setTimeout(_showExistingConsentPopup, 500);
+  }
   // 初期ページ表示（renderDashboardはFirebase Auth完了後に1回だけ呼ぶ）
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   document.getElementById('pg-dashboard').classList.add('on');
@@ -8560,6 +8723,7 @@ async function init(){
 
   // Web版: 月初の見直しバナー表示（onboarding後に少し遅らせて表示）
   _initChartSwipe();
+  _initPullToRefresh();
   if(onboarded) setTimeout(()=>checkUpcomingPayments(), 1200);
   // 応援会員プラン誘導（未ログイン・3件以上登録済みの場合）
   if(onboarded) setTimeout(()=>checkProNudge(), 2500);
