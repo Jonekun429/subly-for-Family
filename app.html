@@ -587,8 +587,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .howto-dots{display:flex;gap:8px;justify-content:center;padding:20px 0 0}
 .howto-dot{width:8px;height:8px;border-radius:50%;background:#D1D5DB;transition:all .25s}
 .howto-dot.on{background:var(--p);width:24px;border-radius:4px}
-.howto-slides{display:flex;width:500%;transition:transform .35s cubic-bezier(.4,0,.2,1)}
-.howto-slide{width:20%;padding:20px 28px 28px;box-sizing:border-box;flex-shrink:0}
+.howto-slides{display:flex;width:800%;transition:transform .35s cubic-bezier(.4,0,.2,1)}
+.howto-slide{width:12.5%;padding:20px 28px 28px;box-sizing:border-box;flex-shrink:0}
 .howto-step-lbl{font-size:12px;font-weight:700;color:var(--p);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px}
 .howto-slide-icon{width:52px;height:52px;border-radius:16px;background:var(--pl);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:14px;flex-shrink:0}
 .howto-slide-ttl{font-size:22px;font-weight:800;color:#1a1a1a;line-height:1.3;margin-bottom:14px}
@@ -701,7 +701,10 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
    */
   function gaEvent(eventName, params) {
     if (typeof gtag !== 'function') return;
-    gtag('event', eventName, params || {});
+    const p = params || {};
+    // 会員IDがあれば自動付与
+    if(window._memberId) p.member_id = window._memberId;
+    gtag('event', eventName, p);
   }
 </script>
 
@@ -845,10 +848,12 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
     <!-- 設定 -->
     <div class="hd-sec">設定</div>
+    <!-- 更新日通知（未実装のため非表示）
     <button class="hd-row" onclick="closeHdrop();gaEvent('menu_tap',{item:'notify_settings'});setTimeout(openNotifySettings,150)">
       <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg></div>
       <div><div class="hd-lbl">更新日通知</div><div class="hd-sub" id="hd-notify-sub">タップして設定</div></div>
     </button>
+    -->
         <div style="padding:12px 20px">
       <div class="hd-lbl" style="margin-bottom:10px">テーマ</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px" id="hd-theme-grid">
@@ -925,9 +930,9 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="rgba(255,255,255,.6)"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></div>
       <div><div class="hd-lbl">退会する</div><div class="hd-sub">アカウントとデータを削除</div></div>
     </button>
-    <button class="hd-row" onclick="closeHdrop();gaEvent('menu_tap',{item:'privacy'});setTimeout(openPrivacy,150)">
+    <button class="hd-row" onclick="closeHdrop();gaEvent('menu_tap',{item:'terms_privacy'});setTimeout(openTermsPrivacy,150)">
       <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/></svg></div>
-      <div><div class="hd-lbl">プライバシーポリシー</div><div class="hd-sub">データの取り扱いについて</div></div>
+      <div><div class="hd-lbl">利用規約・プライバシーポリシー</div><div class="hd-sub">規約の確認</div></div>
     </button>
   </div>
 </div>
@@ -1097,6 +1102,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
     </div>
 
+    <!-- 通知（未実装のため非表示）
     <div class="s-sec">通知</div>
     <div class="s-grp">
       <div class="s-row" onclick="openNotifySettings()">
@@ -1105,6 +1111,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <span class="s-arr">›</span>
       </div>
     </div>
+    -->
 
     <div class="s-sec">データ管理</div>
     <div class="s-grp">
@@ -1234,53 +1241,106 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <div class="howto-dot" id="hwdot-2"></div>
       <div class="howto-dot" id="hwdot-3"></div>
       <div class="howto-dot" id="hwdot-4"></div>
+      <div class="howto-dot" id="hwdot-5"></div>
+      <div class="howto-dot" id="hwdot-6"></div>
+      <div class="howto-dot" id="hwdot-7"></div>
     </div>
     <!-- スライド -->
     <div class="howto-slides" id="howto-slides">
       <!-- STEP 1: ホーム -->
       <div class="howto-slide">
-        <div class="howto-step-lbl">STEP 1 / 5</div>
-        <div class="howto-slide-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+        <div class="howto-step-lbl">STEP 1 / 8</div>
+        <div class="howto-slide-icon" style="background:var(--pl)"><svg width="28" height="28" viewBox="0 0 24 24" fill="var(--pd)"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
         <div class="howto-slide-ttl">ホーム画面の見方</div>
-        <div class="howto-slide-desc">月額・年間の支出合計と、カテゴリ別グラフが確認できます。グラフをタップすると詳細に絞り込めます。</div>
-        <div class="howto-slide-tip"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> 満足度★1〜3のサブスクは下部の「解約検討」リストに自動で表示されます。</div>
+        <div class="howto-slide-desc">月額・年間の<b>支出合計</b>と、カテゴリ別の<b>円グラフ</b>が一目で確認できます。グラフの色をタップすると、そのカテゴリだけに絞り込めます。</div>
+        <div class="howto-slide-tip"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> 収入を設定すると「サブスク比率」も表示されます。ドロワー（≡）→ 収入を設定してみましょう。</div>
       </div>
       <!-- STEP 2: 登録 -->
       <div class="howto-slide">
-        <div class="howto-step-lbl">STEP 2 / 5</div>
-        <div class="howto-slide-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg></div>
+        <div class="howto-step-lbl">STEP 2 / 8</div>
+        <div class="howto-slide-icon" style="background:#E8F5E9"><svg width="28" height="28" viewBox="0 0 24 24" fill="#2E7D32"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg></div>
         <div class="howto-slide-ttl">サブスクを登録する</div>
-        <div class="howto-slide-desc">Netflix・Spotifyなど人気サービスはカテゴリタブから選ぶだけ。リストにないものは「自分で入力」から追加できます。</div>
-        <div class="howto-slide-tip"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> スマホ代・保険・ローンなど「固定費」も登録すると家計全体が見えてきます。</div>
+        <div class="howto-slide-desc">Netflix・Spotifyなど<b>定番サービス</b>はカテゴリタブから選ぶだけ。金額が自動で入ります。リストにないものは「<b>自分で入力して登録</b>」から追加できます。</div>
+        <div class="howto-slide-tip"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> スマホ代・保険・ローンなど「固定費」も登録すると、家計全体の支出が見えてきます。</div>
       </div>
-      <!-- STEP 3: カレンダー -->
+      <!-- STEP 3: 明細一覧 -->
       <div class="howto-slide">
-        <div class="howto-step-lbl">STEP 3 / 5</div>
-        <div class="howto-slide-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg></div>
-        <div class="howto-slide-ttl">カレンダーで支払日確認</div>
-        <div class="howto-slide-desc">各サブスクの次回支払日がカレンダーに表示されます。日付をタップするとその日の詳細が確認できます。</div>
-        <div class="howto-slide-tip"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> 「要見直し」フィルターで満足度が低いサブスクだけ表示できます。</div>
-      </div>
-      <!-- STEP 4: 明細 -->
-      <div class="howto-slide">
-        <div class="howto-step-lbl">STEP 4 / 5</div>
-        <div class="howto-slide-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-2h5v2zm5-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
+        <div class="howto-step-lbl">STEP 3 / 8</div>
+        <div class="howto-slide-icon" style="background:#E3F2FD"><svg width="28" height="28" viewBox="0 0 24 24" fill="#1565C0"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H7v-2h5v2zm5-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
         <div class="howto-slide-ttl">明細一覧で管理する</div>
-        <div class="howto-slide-desc">カテゴリ・金額順・満足度順で絞り込みができます。タップで編集・休止・削除、左スワイプでも操作できます。</div>
-        <div class="howto-slide-tip"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> 上部のサマリーを開くと「満足度を一括更新」がまとめてできます。</div>
+        <div class="howto-slide-desc">登録したサブスクを<b>カテゴリ・金額・満足度</b>で並べ替えできます。カードをタップすると<b>編集・休止・削除</b>のメニューが開きます。「⋯」ボタンからさらに詳しい操作ができます。</div>
+        <div class="howto-slide-tip"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> 満足度★1のサブスクはホーム下部の「休止を検討してみましょう」に自動表示されます。</div>
       </div>
-      <!-- STEP 5: Free/Pro・グループ -->
+      <!-- STEP 4: 便利な一括管理 -->
       <div class="howto-slide">
-        <div class="howto-step-lbl">STEP 5 / 5</div>
-        <div class="howto-slide-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="var(--p)"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
-        <div class="howto-slide-ttl">応援会員プランと無料プランの違い</div>
-        <div class="howto-slide-desc">
-          <b>無料プラン</b>（未ログイン）<br>
-          端末のみにデータを保存。<br><br>
-          <b>応援会員プラン</b>（アカウント登録）<br>
-          データがクラウドに同期され複数端末で利用可能。グループを作成して家族・カップルとサブスクをまとめて管理できます。
+        <div class="howto-step-lbl">STEP 4 / 8</div>
+        <div class="howto-slide-icon" style="background:#FFF8EE;font-size:26px">⚡</div>
+        <div class="howto-slide-ttl">まとめて設定できる便利機能</div>
+        <div class="howto-slide-desc">明細一覧の上部にある<b>件数バー（▲）</b>をタップするとサマリーが開きます。</div>
+        <div style="margin-top:10px">
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f5f5f5"><span style="font-size:16px">⭐</span><div><div style="font-size:13px;font-weight:700">満足度を一括更新</div><div style="font-size:11px;color:var(--ts)">全サブスクの満足度をまとめて設定</div></div></div>
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f5f5f5"><span style="font-size:16px">👤</span><div><div style="font-size:13px;font-weight:700">支払い者を一括更新</div><div style="font-size:11px;color:var(--ts)">誰が払っているかをまとめて設定</div></div></div>
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 0"><span style="font-size:16px">🔒</span><div><div style="font-size:13px;font-weight:700">グループ公開を管理</div><div style="font-size:11px;color:var(--ts)">公開/非公開を一括で切り替え</div></div></div>
         </div>
-        <div class="howto-slide-tip">メニュー →「グループ」からグループを作成し、招待コードを共有するだけで参加できます。</div>
+      </div>
+      <!-- STEP 5: カレンダー -->
+      <div class="howto-slide">
+        <div class="howto-step-lbl">STEP 5 / 8</div>
+        <div class="howto-slide-icon" style="background:#FFF0E6"><svg width="28" height="28" viewBox="0 0 24 24" fill="#E65100"><path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg></div>
+        <div class="howto-slide-ttl">カレンダーで支払日を確認</div>
+        <div class="howto-slide-desc">各サブスクの<b>次回支払日</b>がカレンダーに表示されます。日付をタップすると、その日に引き落とされるサブスクの<b>名前・金額・カテゴリ</b>が確認できます。</div>
+        <div class="howto-slide-tip"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> 月間の支払い合計と、今月の残りの支出もカレンダー上部に表示されます。</div>
+      </div>
+      <!-- STEP 6: 解約締切日 -->
+      <div class="howto-slide">
+        <div class="howto-step-lbl">STEP 6 / 8</div>
+        <div class="howto-slide-icon" style="background:#FFF0F0;font-size:26px">📅</div>
+        <div class="howto-slide-ttl">解約し忘れを防ぐ</div>
+        <div class="howto-slide-desc">満足度<b>★1</b>（ほぼ使っていない）のサブスクは、更新日の<b>14日前</b>に「解約締切日」としてカレンダーに<span style="color:#C06060;font-weight:700">赤く</span>表示されます。</div>
+        <div style="background:var(--bg);border-radius:10px;padding:10px;margin-top:10px">
+          <div style="display:flex;gap:6px;justify-content:center;margin-bottom:6px">
+            <div style="width:30px;height:30px;border-radius:6px;background:#FFF0F0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#C06060">16</div>
+            <div style="width:30px;height:30px;border-radius:6px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">…</div>
+            <div style="width:30px;height:30px;border-radius:6px;background:var(--pl);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--pd)">30</div>
+          </div>
+          <div style="display:flex;gap:6px;font-size:10px">
+            <div style="flex:1;background:#FFF0F0;border:1px solid #F5C5C5;border-radius:6px;padding:5px 6px;color:#C06060"><b>⚠️ 16日</b> 解約締切</div>
+            <div style="flex:1;background:var(--pl);border-radius:6px;padding:5px 6px;color:var(--pd)"><b>📺 30日</b> 更新日</div>
+          </div>
+        </div>
+        <div class="howto-slide-tip"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> 「引き落とされてから気づいた…」を防げます。</div>
+      </div>
+      <!-- STEP 7: グループ非公開 -->
+      <div class="howto-slide">
+        <div class="howto-step-lbl">STEP 7 / 8</div>
+        <div class="howto-slide-icon" style="background:#F0F4FF;font-size:26px">🔒</div>
+        <div class="howto-slide-ttl">グループの非公開機能</div>
+        <div class="howto-slide-desc">家族やカップルで共有していても、<b>見られたくないサブスク</b>は非公開にできます。</div>
+        <div style="margin-top:10px">
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f5f5f5"><span style="font-size:16px">📝</span><div><div style="font-size:13px;font-weight:700">登録時にON/OFF</div><div style="font-size:11px;color:var(--ts)">「グループに公開」トグルをOFFにするだけ</div></div></div>
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f5f5f5"><span style="font-size:16px">⋯</span><div><div style="font-size:13px;font-weight:700">あとからワンタップ切替</div><div style="font-size:11px;color:var(--ts)">明細の「⋯」→「🔒 非公開にする」</div></div></div>
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 0"><span style="font-size:16px">📋</span><div><div style="font-size:13px;font-weight:700">一括で管理</div><div style="font-size:11px;color:var(--ts)">サマリー→「グループ公開を管理」</div></div></div>
+        </div>
+        <div class="howto-slide-tip"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> 非公開サブスクは 🔒 アイコンが付き、他メンバーからは完全に見えません。</div>
+      </div>
+      <!-- STEP 8: 応援会員プラン -->
+      <div class="howto-slide">
+        <div class="howto-step-lbl">STEP 8 / 8</div>
+        <div class="howto-slide-icon" style="background:var(--pl);font-size:26px">🌿</div>
+        <div class="howto-slide-ttl">応援会員プラン</div>
+        <div class="howto-slide-desc">応援の気持ちで、便利な機能を解放できます。全プラン<b>同じ機能</b>です。</div>
+        <div style="margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px">
+          <div style="background:var(--bg);border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:6px;font-size:12px"><span>🌰</span><b>どんぐり</b><span style="margin-left:auto;color:var(--ts)">¥300</span></div>
+          <div style="background:var(--pl);border:1px solid var(--p);border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:6px;font-size:12px;color:var(--pd)"><span>🥜</span><b>くるみ</b><span style="font-size:9px;background:var(--p);color:#fff;padding:1px 5px;border-radius:6px;margin-left:2px">人気</span><span style="margin-left:auto">¥500</span></div>
+          <div style="background:var(--bg);border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:6px;font-size:12px"><span>🍁</span><b>もみじ</b><span style="margin-left:auto;color:var(--ts)">¥800</span></div>
+          <div style="background:var(--bg);border-radius:8px;padding:6px 10px;display:flex;align-items:center;gap:6px;font-size:12px"><span>🌳</span><b>もりのき</b><span style="margin-left:auto;color:var(--ts)">¥1,000</span></div>
+        </div>
+        <div style="margin-top:10px">
+          <div style="display:flex;align-items:center;gap:6px;padding:4px 0;font-size:12px"><span>♾️</span><b>登録無制限</b><span style="color:var(--ts);margin-left:4px">無料は6件まで</span></div>
+          <div style="display:flex;align-items:center;gap:6px;padding:4px 0;font-size:12px"><span>👥</span><b>グループ機能</b><span style="color:var(--ts);margin-left:4px">家族・カップルで管理</span></div>
+          <div style="display:flex;align-items:center;gap:6px;padding:4px 0;font-size:12px"><span>☁️</span><b>クラウド同期</b><span style="color:var(--ts);margin-left:4px">機種変更でも安心</span></div>
+        </div>
+        <div class="howto-slide-tip"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> 2週間の無料トライアル付き。プラン変更・解約はいつでもOK。</div>
       </div>
     </div>
     <!-- フッター -->
@@ -1293,48 +1353,89 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
 <!-- 機種変更ガイド -->
 <div class="overlay hidden" id="guide-ov" onclick="if(event.target===this)closeGuide()">
-  <div class="sheet">
+  <div class="sheet" style="max-height:88vh">
     <div class="sheet-hdr">
-      <span class="sheet-ttl"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg> 機種変更ガイド</span>
+      <span class="sheet-ttl"><svg width="16" height="16" viewBox="0 0 24 24" fill="var(--p)" style="vertical-align:middle;margin-right:4px"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg> 機種変更ガイド</span>
       <button class="sheet-close" onclick="closeGuide()">✕</button>
     </div>
     <div class="guide-body">
-      <div class="guide-note" style="margin-bottom:20px">
-        <strong>Sublyのデータはお使いの端末に保存されています。</strong><br>
-        旧端末でエクスポート → ファイルを転送 → 新端末でインポート、の順に進めてください。
+      <!-- ログイン済みの案内 -->
+      <div style="background:#E8F5E9;border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:#2E7D32;line-height:1.7">
+        <strong>✅ アカウント登録済みなら簡単！</strong><br>
+        新しい端末でSublyを開き、同じアカウントでログインするだけでデータが復元されます。
       </div>
-      <p style="font-size:13px;font-weight:700;margin-bottom:14px"><svg width="14" height="14" viewBox="0 0 24 24" fill="#5C8E84"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg> 機種変更の手順</p>
+      <!-- 未ログインの案内 -->
+      <div style="background:#FFF8EE;border:1px solid #F5D9A8;border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:13px;color:#8B6914;line-height:1.7">
+        <strong>⚠ 未ログインの場合</strong><br>
+        データは端末にのみ保存されています。以下のCSV転送で引き継いでください。
+      </div>
+      <p style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--tx)">📋 CSV転送で引き継ぐ方法</p>
       <div class="guide-step">
         <div class="guide-num">1</div>
-        <div><h4>旧端末でCSVエクスポート</h4><p>設定 → CSVエクスポートをタップして保存。ファイルはメール等で転送してください。</p></div>
+        <div><h4>旧端末でCSVエクスポート</h4><p>設定 → CSVエクスポートをタップして保存。</p></div>
       </div>
       <div class="guide-step">
         <div class="guide-num">2</div>
-        <div><h4>新端末でSublyを開く</h4><p>新しい端末のブラウザで同じHTMLファイルを開きます。</p></div>
+        <div><h4>ファイルを新端末に転送</h4><p>AirDrop・メール・LINE等でCSVファイルを送ります。</p></div>
       </div>
       <div class="guide-step">
         <div class="guide-num">3</div>
-        <div><h4>CSVインポート</h4><p>設定 → CSVインポートをタップして保存したCSVファイルを選択。</p></div>
-      </div>
-      <div class="guide-step">
-        <div class="guide-num">4</div>
-        <div><h4>データを確認</h4><p>ホームやカレンダーでデータが正しく読み込まれているか確認してください。</p></div>
-      </div>
-      <div class="guide-note">
-        <strong><svg width="14" height="14" viewBox="0 0 24 24" fill="#5C8E84"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg> ホーム画面に追加する方法：</strong><br>
-        iPhoneはSafariで開き「共有 → ホーム画面に追加」。<br>
-        Androidはメニューから「ホーム画面に追加」。
+        <div><h4>新端末でインポート</h4><p>Sublyを開き、設定 → CSVインポートでファイルを選択。</p></div>
       </div>
     </div>
-    <div style="padding:0 16px 20px;display:flex;flex-direction:column;gap:10px">
+    <div style="padding:0 16px 16px;display:flex;flex-direction:column;gap:8px">
       <button class="btn-submit" onclick="closeGuide();setTimeout(exportCSV,150)" style="background:var(--p)">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M19 9h-4V3H9v6H5l7 7 7-7zm-8 2V5h2v6h1.17L12 13.17 9.83 11H11zm-6 7h14v2H5v-2z"/></svg>
-        旧端末：今すぐエクスポート
+        今すぐエクスポート
       </button>
       <button class="btn-submit" onclick="closeGuide();setTimeout(importCSVPicker,150)" style="background:var(--ts)">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
-        新端末：今すぐインポート
+        CSVインポート
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- 利用規約同意画面（初回起動時） -->
+<div class="dlg-ov hidden" id="consent-ov" style="overflow-y:auto;padding:0;align-items:flex-start;justify-content:center;z-index:950">
+  <div style="width:100%;max-width:440px;margin:0 auto;background:#fff;min-height:100vh;display:flex;flex-direction:column">
+    <div style="background:linear-gradient(135deg,var(--p),var(--pd));padding:36px 24px 28px;text-align:center">
+      <div style="width:60px;height:60px;border-radius:16px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;overflow:hidden;border:2px solid rgba(255,255,255,.3)"><img src="https://jonekun429.github.io/Subscription/icon-192.png" alt="" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display='none'"></div>
+      <div style="font-size:22px;font-weight:800;color:#fff;letter-spacing:2px">Subly</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.8);margin-top:4px">サブスク管理アプリ</div>
+    </div>
+    <div style="flex:1;padding:24px">
+      <div style="font-size:16px;font-weight:800;color:var(--tx);margin-bottom:6px">ご利用にあたって</div>
+      <div style="font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:20px">Sublyをご利用いただくには、以下の規約をご確認のうえ同意してください。</div>
+      <div id="consent-terms-card" onclick="_openConsentDoc('terms')" style="background:var(--card);border:2px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:all .15s;-webkit-tap-highlight-color:transparent">
+        <div style="width:40px;height:40px;border-radius:10px;background:var(--pl);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="22" height="22" viewBox="0 0 24 24" fill="var(--p)"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div>
+        <div style="flex:1"><div style="font-size:14px;font-weight:700">利用規約</div><div style="font-size:11px;color:var(--ts);margin-top:2px" id="consent-terms-sub">タップして確認してください</div></div>
+        <div style="width:24px;height:24px;border-radius:50%;border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0" id="consent-terms-check"></div>
+      </div>
+      <div id="consent-privacy-card" onclick="_openConsentDoc('privacy')" style="background:var(--card);border:2px solid var(--bd);border-radius:14px;padding:16px;margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:14px;transition:all .15s;-webkit-tap-highlight-color:transparent">
+        <div style="width:40px;height:40px;border-radius:10px;background:#F0F4FF;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="22" height="22" viewBox="0 0 24 24" fill="#4A90D0"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/></svg></div>
+        <div style="flex:1"><div style="font-size:14px;font-weight:700">プライバシーポリシー</div><div style="font-size:11px;color:var(--ts);margin-top:2px" id="consent-privacy-sub">タップして確認してください</div></div>
+        <div style="width:24px;height:24px;border-radius:50%;border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0" id="consent-privacy-check"></div>
+      </div>
+      <div style="margin-top:16px;font-size:12px;color:var(--ts);line-height:1.7;text-align:center">両方の規約を確認すると<br>「同意して始める」がタップできます。</div>
+    </div>
+    <div style="padding:0 24px 32px">
+      <button id="consent-agree-btn" onclick="_agreeConsent()" disabled style="width:100%;padding:16px;border-radius:14px;font-size:16px;font-weight:800;border:none;cursor:pointer;font-family:inherit;background:var(--bd);color:var(--ts)">同意して始める</button>
+      <div style="text-align:center;font-size:11px;color:var(--ts);margin-top:10px">同意いただけない場合、本サービスはご利用いただけません。</div>
+    </div>
+  </div>
+</div>
+
+<!-- 利用規約・プラポリ全画面ページ（同意用＋メニューから閲覧用） -->
+<div class="dlg-ov hidden" id="terms-page-ov" style="overflow-y:auto;padding:0;align-items:flex-start;justify-content:center;z-index:960">
+  <div style="width:100%;max-width:440px;margin:0 auto;background:var(--bg);min-height:100vh;display:flex;flex-direction:column">
+    <div style="background:var(--p);padding:14px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10">
+      <button onclick="_closeTermsPage()" style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.15);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button>
+      <div style="font-size:16px;font-weight:800;color:#fff" id="terms-page-title">利用規約</div>
+    </div>
+    <div id="terms-page-content" style="flex:1;padding:20px 24px 120px;font-size:13px;color:var(--tx);line-height:2;background:#fff"></div>
+    <div id="terms-page-footer" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--bd);padding:12px 24px calc(env(safe-area-inset-bottom,0px) + 16px);z-index:50">
+      <button onclick="_confirmConsentDoc()" style="width:100%;max-width:440px;margin:0 auto;display:block;padding:15px;border-radius:12px;font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:inherit;background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;box-shadow:0 4px 12px rgba(92,142,132,.3)">確認しました</button>
     </div>
   </div>
 </div>
@@ -1436,37 +1537,31 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     <!-- ページ4: グループ機能 -->
     <div class="ob-slide" style="width:25%">
       <div class="ob-header">
-        <div class="ob-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="rgba(255,255,255,.95)"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
-        <div class="ob-badge">応援会員</div>
-        <div class="ob-ttl">家族と<em>一緒に管理</em>できる</div>
+        <div class="ob-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="rgba(255,255,255,.95)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div>
+        <div class="ob-badge">ご利用にあたって</div>
+        <div class="ob-ttl">規約に<em>同意して</em>はじめよう</div>
       </div>
       <div class="ob-body">
-        <!-- 画面イメージ -->
-        <div style="background:var(--bg);border-radius:12px;border:1.5px solid #e0e5e2;padding:12px;margin-bottom:10px">
-          <div style="font-size:10px;color:var(--ts);text-align:center;margin-bottom:6px">▼ グループ画面イメージ</div>
-          <div style="display:flex;gap:6px;margin-bottom:6px">
-            <span style="padding:3px 12px;border-radius:14px;background:var(--p);font-size:10px;font-weight:700;color:#fff">全体 3</span>
-            <span style="padding:3px 12px;border-radius:14px;background:#e8e8e8;font-size:10px;font-weight:600;color:var(--ts)">自分 2</span>
-            <span style="padding:3px 12px;border-radius:14px;background:#e8e8e8;font-size:10px;font-weight:600;color:var(--ts)">パートナー 1</span>
-          </div>
-          <div style="background:#fff;border-radius:8px;padding:6px 10px;border:1px solid #e8e8e8;display:flex;align-items:center;justify-content:space-between">
-            <div><div style="font-size:10px;color:var(--ts)">月額合計</div><div style="font-size:16px;font-weight:800"><span style="color:var(--p)">¥</span>8,970</div></div>
-            <div style="font-size:9px;color:var(--ts)">年額 ¥107,640</div>
-          </div>
+        <div style="font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:12px">Sublyをご利用いただくには、以下の規約をご確認のうえ同意してください。</div>
+        <!-- 利用規約カード -->
+        <div id="ob-terms-card" onclick="_openConsentDoc('terms')" style="background:var(--card);border:2px solid var(--bd);border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:10px;-webkit-tap-highlight-color:transparent">
+          <div style="width:32px;height:32px;border-radius:8px;background:var(--pl);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="var(--p)"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg></div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:700">利用規約</div><div style="font-size:10px;color:var(--ts);margin-top:1px" id="ob-terms-sub">タップして確認</div></div>
+          <div style="width:20px;height:20px;border-radius:50%;border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0" id="ob-terms-check"></div>
         </div>
-        <div class="ob-li"><div class="ob-li-dot"></div>招待コードを共有するだけで参加</div>
-        <div class="ob-li"><div class="ob-li-dot"></div>家族の支出をまとめて把握できる</div>
-        <div class="ob-hint">
-          <p>ホーム画面に追加すると便利です</p>
-          <div class="ob-hint-row"><span class="ob-hint-badge">i</span>Safari → 共有 →「ホーム画面に追加」</div>
-          <div class="ob-hint-row"><span class="ob-hint-badge">A</span>Chrome → メニュー →「ホーム画面に追加」</div>
+        <!-- プライバシーポリシーカード -->
+        <div id="ob-privacy-card" onclick="_openConsentDoc('privacy')" style="background:var(--card);border:2px solid var(--bd);border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:10px;-webkit-tap-highlight-color:transparent">
+          <div style="width:32px;height:32px;border-radius:8px;background:#F0F4FF;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="#4A90D0"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/></svg></div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:700">プライバシーポリシー</div><div style="font-size:10px;color:var(--ts);margin-top:1px" id="ob-privacy-sub">タップして確認</div></div>
+          <div style="width:20px;height:20px;border-radius:50%;border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0" id="ob-privacy-check"></div>
         </div>
+        <div style="font-size:10px;color:var(--ts);text-align:center;line-height:1.6;margin-top:4px">両方確認すると「同意してはじめる」がタップできます</div>
       </div>
       <div class="ob-dots" style="margin-top:auto">
         <div class="ob-dot" onclick="obGoto(0)"></div><div class="ob-dot" onclick="obGoto(1)"></div><div class="ob-dot" onclick="obGoto(2)"></div><div class="ob-dot on" onclick="obGoto(3)"></div>
       </div>
       <div class="ob-footer">
-        <button class="ob-btn-next" onclick="obNext()" style="flex:1">はじめる</button>
+        <button class="ob-btn-next" id="ob-agree-btn" onclick="_obAgreeAndClose()" disabled style="flex:1;opacity:.5">同意してはじめる</button>
       </div>
     </div>
 
@@ -1517,6 +1612,23 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   <div class="dlg" style="max-width:320px;width:90%">
     <div style="font-size:16px;font-weight:700;color:var(--tx);margin-bottom:6px">プロフィールを設定</div>
     <div style="font-size:12px;color:var(--ts);margin-bottom:14px;line-height:1.5">年齢層・職業は任意です</div>
+    <!-- 会員IDカード -->
+    <div id="profile-member-id-card" style="display:none;background:var(--bg);border-radius:10px;padding:12px 14px;margin-bottom:14px;display:none">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="flex:1">
+          <div style="font-size:11px;font-weight:600;color:var(--ts)">あなたの会員ID</div>
+          <div id="profile-member-id" style="font-size:16px;font-weight:800;color:var(--pd);font-family:'Courier New',monospace;letter-spacing:2px;margin-top:2px"></div>
+        </div>
+        <button onclick="_copyMemberId()" id="member-id-copy-btn" style="background:var(--pl);border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;color:var(--pd);cursor:pointer;font-family:inherit;flex-shrink:0">コピー</button>
+      </div>
+      <div style="font-size:10px;color:var(--ts);margin-top:6px;line-height:1.5">お問い合わせ時の本人確認に使用します。メアドの代わりにIDをお伝えください。</div>
+    </div>
+    <!-- 会員履歴 -->
+    <div id="profile-plan-history" style="display:none;background:var(--bg);border-radius:10px;padding:12px 14px;margin-bottom:14px">
+      <div style="font-size:11px;font-weight:700;color:var(--ts);margin-bottom:8px">会員履歴</div>
+      <div id="profile-plan-history-list"></div>
+      <div id="profile-plan-tenure" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--bd);font-size:12px;color:var(--tx)"></div>
+    </div>
     <div style="font-size:12px;font-weight:700;color:var(--ts);margin-bottom:6px;letter-spacing:.5px">ニックネーム</div>
     <input id="nickname-input" type="text" maxlength="20" placeholder="例：サブリー"
       style="width:100%;padding:12px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:15px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none"
@@ -1875,7 +1987,12 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     <!-- パスワード -->
     <div id="ss-password-row" style="text-align:left;margin-bottom:16px">
       <label style="font-size:12px;font-weight:600;color:var(--ts);display:block;margin-bottom:4px">パスワード（8文字以上）</label>
-      <input type="password" id="ss-password" placeholder="英数字・大文字を含む8文字以上" style="width:100%;padding:10px 12px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--card)">
+      <div style="position:relative">
+        <input type="password" id="ss-password" placeholder="英数字・大文字を含む8文字以上" style="width:100%;padding:10px 44px 10px 12px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--card);box-sizing:border-box">
+        <button type="button" onclick="togglePwVisibility('ss-password',this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:0;color:var(--ts);display:flex;align-items:center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+        </button>
+      </div>
     </div>
     <button onclick="_completeSupporterSignup()" style="width:100%;padding:14px;border-radius:12px;font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:inherit;margin-bottom:4px;background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;box-shadow:0 4px 12px rgba(92,142,132,.3)">登録を行う</button>
     <div style="font-size:10px;color:var(--ts);line-height:1.6;margin-bottom:10px">※ 登録後に決済画面に移ります</div>
@@ -1903,7 +2020,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <div style="background:var(--card);border-radius:12px;padding:14px 16px;box-shadow:var(--sh);font-size:12px;color:var(--ts);line-height:2">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--p)" style="vertical-align:middle;margin-right:4px"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>全プラン機能は同じ・応援の気持ちで選べます<br>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--p)" style="vertical-align:middle;margin-right:4px"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>翌月の更新日から新しい金額が適用されます<br>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--p)" style="vertical-align:middle;margin-right:4px"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>プラン変更・解約はいつでもOK
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--p)" style="vertical-align:middle;margin-right:4px"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>プラン変更・解約はいつでもOK<br>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#E8A04A" style="vertical-align:middle;margin-right:4px"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg><span style="color:var(--tx);font-weight:600">プラン変更は月に1回までとなります</span>
       </div>
     </div>
     <div style="position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--bd);padding:12px 16px calc(env(safe-area-inset-bottom,0px) + 12px);z-index:50">
@@ -2520,6 +2638,18 @@ let satOpen=true;
 const MAX=200;
 const FREE_LIMIT=6; // 無料会員の登録上限（GA4平均を基に調整）
 let _isSupporterMember = false; // 応援会員フラグ（将来Stripe連携）
+let _memberId = ''; // 会員ID（SBL-XXXXXX）
+function _copyMemberId(){
+  if(!_memberId) return;
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(_memberId);
+  } else {
+    const t=document.createElement('textarea');t.value=_memberId;document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);
+  }
+  const btn=document.getElementById('member-id-copy-btn');
+  if(btn){btn.textContent='コピー済み';setTimeout(()=>btn.textContent='コピー',1500);}
+  showToast('会員IDをコピーしました');
+}
 let _supporterPlanName = ''; // プラン名（どんぐり/くるみ等）
 let _supporterPlanPrice = 0;
 const PLAN_EMOJI = {どんぐり:'🌰',くるみ:'🥜',もみじ:'🍁',もりのき:'🌳'};
@@ -3474,18 +3604,18 @@ function openHowto(){
 }
 function closeHowto(){ document.getElementById('howto-ov').classList.add('hidden'); }
 function howtoNext(){
-  if(_hwPage < 4){ _hwPage++; _hwRender(); }
+  if(_hwPage < 7){ _hwPage++; _hwRender(); }
   else { closeHowto(); }
 }
 function _hwRender(){
   const slides = document.getElementById('howto-slides');
-  if(slides) slides.style.transform = `translateX(${-_hwPage * 20}%)`;
-  for(let i=0;i<5;i++){
+  if(slides) slides.style.transform = `translateX(${-_hwPage * 12.5}%)`;
+  for(let i=0;i<8;i++){
     const d = document.getElementById('hwdot-'+i);
     if(d) d.classList.toggle('on', i===_hwPage);
   }
   const btn = document.getElementById('howto-btn-next');
-  if(btn) btn.textContent = _hwPage === 4 ? 'はじめる' : '次へ';
+  if(btn) btn.textContent = _hwPage === 7 ? 'はじめる' : '次へ';
   gaEvent('howto_step',{step:_hwPage+1});
 }
 function openGuide(){document.getElementById('guide-ov').classList.remove('hidden');gaEvent('guide_open',{})}
@@ -3589,6 +3719,56 @@ async function openNicknameModal(){
     }catch(e){}
   }
   document.getElementById('nickname-ov').classList.remove('hidden');
+  // 会員IDカードの表示
+  const idCard = document.getElementById('profile-member-id-card');
+  const idEl = document.getElementById('profile-member-id');
+  if(idCard && _memberId){
+    idEl.textContent = _memberId;
+    idCard.style.display = 'block';
+  } else if(idCard){
+    idCard.style.display = 'none';
+  }
+  // 会員履歴の表示
+  const historyEl = document.getElementById('profile-plan-history');
+  if(historyEl && window._fbUser && window._fbDb && window._fbFns){
+    try{
+      const { doc, getDoc } = window._fbFns;
+      const snap = await getDoc(doc(window._fbDb,'users',window._fbUser.uid));
+      if(snap.exists()){
+        const data = snap.data();
+        const history = data.planHistory || [];
+        if(history.length > 0){
+          historyEl.style.display = 'block';
+          const listEl = document.getElementById('profile-plan-history-list');
+          // 各プランの月数を集計
+          const planMonths = {};
+          history.forEach(h=>{
+            const start = new Date(h.startDate);
+            const end = h.endDate ? new Date(h.endDate) : new Date();
+            const months = Math.max(1, Math.round((end - start) / (1000*60*60*24*30)));
+            planMonths[h.plan] = (planMonths[h.plan]||0) + months;
+          });
+          // 表示
+          listEl.innerHTML = Object.entries(planMonths).map(([plan,months])=>{
+            const emoji = PLAN_EMOJI[plan] || '';
+            return `<div style="display:flex;align-items:center;gap:6px;padding:3px 0;font-size:12px"><span>${emoji}</span><span style="font-weight:700">${plan}会員</span><span style="margin-left:auto;color:var(--pd);font-weight:700">${months}ヶ月</span></div>`;
+          }).join('');
+          // 在籍期間
+          const tenureEl = document.getElementById('profile-plan-tenure');
+          const firstDate = new Date(history[0].startDate);
+          const totalMonths = Math.round((new Date() - firstDate) / (1000*60*60*24*30));
+          const years = Math.floor(totalMonths / 12);
+          const remMonths = totalMonths % 12;
+          const tenureStr = years > 0 ? `${years}年${remMonths}ヶ月` : `${remMonths}ヶ月`;
+          tenureEl.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-weight:700">在籍期間</span><span style="font-size:16px;font-weight:800;color:var(--pd)">${tenureStr}</span></div><div style="font-size:10px;color:var(--ts);margin-top:2px">登録日：${firstDate.getFullYear()}/${String(firstDate.getMonth()+1).padStart(2,'0')}/${String(firstDate.getDate()).padStart(2,'0')}</div>`;
+        } else {
+          historyEl.style.display = 'none';
+        }
+      }
+    }catch(e){ console.error('planHistory load error:', e); }
+  } else if(historyEl){
+    historyEl.style.display = 'none';
+  }
   setTimeout(()=>{
     if(_profileAge) _profileSelectAge(_profileAge);
     if(_profileOcc) _profileSelectOcc(_profileOcc);
@@ -4146,6 +4326,21 @@ async function deleteAccount(){
   const user = window._fbUser;
   if(!user){ showToast('ログインしていません'); return; }
 
+  // グループ加入中は退会をブロック
+  if(_groupId){
+    showDialog({
+      icon:'⚠️',
+      title:'グループに参加中です',
+      msg:'<div style="font-size:13px;color:var(--ts);line-height:1.7;text-align:center">退会するには先にグループから退出してください。<br><br>グループの設定はドロワーの「グループ」から行えます。</div>',
+      buttons:[
+        {label:'グループ設定を開く', cls:'ok', onClick:()=>{ setTimeout(openGroupModal, 200); }},
+        {label:'閉じる', cls:'cancel'}
+      ],
+      btnColumn: true
+    });
+    return;
+  }
+
   // STEP1：警告＋バックアップ促し
   showDialog({
     icon:'',
@@ -4211,8 +4406,13 @@ function _withdrawStep3(user){
       </div>
       <input type="email" id="dlg-delete-email" placeholder="メールアドレス" value="${currentEmail}"
         style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none;margin-bottom:8px">
-      <input type="password" id="dlg-delete-pw" placeholder="パスワード"
-        style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
+      <div style="position:relative">
+        <input type="password" id="dlg-delete-pw" placeholder="パスワード"
+          style="width:100%;padding:11px 44px 11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
+        <button type="button" onclick="togglePwVisibility('dlg-delete-pw',this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:0;color:var(--ts);display:flex;align-items:center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+        </button>
+      </div>
       <div id="dlg-delete-err" style="display:none;margin-top:8px;font-size:12px;color:var(--dn)"></div>
     </div>`,
     buttons:[
@@ -4519,15 +4719,22 @@ async function _ensureUserDoc(user){
     const ref = doc(window._fbDb, 'users', user.uid);
     const snap = await getDoc(ref);
     if(!snap.exists()){
+      // 会員ID自動生成（SBL-XXXXXX）
+      const memberId = 'SBL-' + Array.from({length:6}, ()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random()*32)]).join('');
       // 新規：Firestoreにユーザードキュメントを作成
       const userData = {
         nickname: _nickname || user.displayName || '',
         plan: 'pro',
         supporterPlan: _isSupporterMember ? (_selectedPlan?.name || 'free') : 'free',
         createdAt: new Date().toISOString(),
-        email: user.email || ''
+        email: user.email || '',
+        memberId: memberId
       };
       await setDoc(ref, userData);
+      _memberId = memberId;
+      window._memberId = memberId;
+      // GA4にuser_idを設定
+      if(typeof gtag === 'function') gtag('set', { user_id: memberId });
       // サブスクデータも移行
       if(subs.length > 0) await _migrateSubsToFirestore(user.uid);
     } else {
@@ -4535,6 +4742,14 @@ async function _ensureUserDoc(user){
       const data = snap.data();
       if(data.nickname){ _nickname = data.nickname; _updateNicknameDisplay(); }
       _isSupporterMember = !!(data.supporterPlan && data.supporterPlan !== 'free');
+      _memberId = data.memberId || '';
+      // 既存ユーザーでmemberIdがない場合は生成して保存
+      if(!_memberId){
+        _memberId = 'SBL-' + Array.from({length:6}, ()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random()*32)]).join('');
+        await setDoc(ref, { memberId: _memberId }, { merge: true });
+      }
+      window._memberId = _memberId;
+      if(typeof gtag === 'function') gtag('set', { user_id: _memberId });
     }
   }catch(e){
     console.error('_ensureUserDoc エラー:', e);
@@ -5145,10 +5360,16 @@ async function _fetchGroupSubs(){
   if(!_groupMembersData.length){ _groupSubsCache={}; return; }
   const { collection, getDocs } = window._fbFns;
   _groupSubsCache = {};
+  const myUid = window._fbUser?.uid;
   for(const member of _groupMembersData){
     try{
       const snap = await getDocs(collection(window._fbDb,'users',member.uid,'subs'));
-      _groupSubsCache[member.uid] = snap.docs.map(d=>({ ...d.data(), _ownerUid: member.uid, _ownerNickname: member.nickname||'名前未設定' }));
+      let memberSubs = snap.docs.map(d=>({ ...d.data(), _ownerUid: member.uid, _ownerNickname: member.nickname||'名前未設定' }));
+      // 他メンバーの非公開サブスクを除外（自分のは表示）
+      if(member.uid !== myUid){
+        memberSubs = memberSubs.filter(s => s.groupPublic !== false);
+      }
+      _groupSubsCache[member.uid] = memberSubs;
     }catch(e){
       console.error(`メンバー ${member.uid} のサブスク取得失敗:`, e.message);
       _groupSubsCache[member.uid] = [];
@@ -5493,9 +5714,16 @@ function obGoto(n){
 }
 function obNext(){
   if(_obPage<3){ obGoto(_obPage+1); }
-  else { closeOb(); }
+  // 4ページ目は同意ボタンでのみ閉じる（obNextでは閉じない）
 }
 async function closeOb(){
+  // 利用規約に同意していなければ閉じられない
+  const agreed = await Store.get('termsAgreed');
+  if(!agreed){
+    showToast('利用規約への同意が必要です');
+    obGoto(3); // 最終ページへ移動
+    return;
+  }
   document.getElementById('ob-ov').classList.add('hidden');
   await Store.set('onboarded','1');
   gaEvent('onboarding_complete', { method: 'completed' });
@@ -6133,7 +6361,7 @@ function renderCalendar(){
 
   const lastDay=new Date(y,m+1,0).getDate();
   const events={};
-  const deadlines={}; // 解約締切日（★1のサブスク、更新日2日前）
+  const deadlines={}; // 解約締切日（★1のサブスク、更新日14日前）
   const calMonthStart = new Date(y, m, 1);
   const calMonthEnd   = new Date(y, m+1, 0);
   target.forEach(s=>{
@@ -6146,10 +6374,14 @@ function renderCalendar(){
     if(np.getFullYear()===y && np.getMonth()===m){
       const day = Math.min(np.getDate(), lastDay);
       (events[day]=events[day]||[]).push(s);
-      // ★1（ほぼ使っていない）のサブスクは更新日2日前を解約締切に
-      if(s.sat===1 && day > 2){
-        const dlDay = day - 2;
+      // ★1（ほぼ使っていない）のサブスクは更新日14日前を解約締切に
+      if(s.sat===1){
+        let dlDay = day - 14;
+        // 前月にまたがる場合は今月には表示しない
+        if(dlDay < 1) dlDay = null;
+        if(dlDay){
         (deadlines[dlDay]=deadlines[dlDay]||[]).push({...s, _payDay:day});
+        }
       }
     }
   });
@@ -6291,7 +6523,7 @@ function showCalDetail(y,m,d,evs,dls){
       <div class="cal-detail-ico" style="background:#FFF0F0;font-size:18px">⚠️</div>
       <div class="cal-detail-info">
         <div class="cal-detail-name" style="color:#C06060">${s.name} — 解約締切</div>
-        <div class="cal-detail-amt" style="color:#C06060">更新日 ${m+1}/${s._payDay} の2日前 · 満足度★1</div>
+        <div class="cal-detail-amt" style="color:#C06060">更新日 ${m+1}/${s._payDay} の14日前 · 満足度★1</div>
         <div style="margin-top:4px"><a href="#" onclick="searchCancelUrl('${s.name.replace(/'/g,"\\'")}');event.preventDefault();event.stopPropagation()" style="color:#C06060;font-size:11px;font-weight:600;text-decoration:underline">解約方法を確認 →</a></div>
       </div>`;
     body.appendChild(row);
@@ -6674,7 +6906,7 @@ function renderList(){
           <div class="act-menu">
             <button onclick="togglePause(${s.id});event.stopPropagation()">${pauseLabel}</button>
             <button onclick="cancelSub(${s.id});event.stopPropagation()">解約済みにする</button>
-            ${_groupId ? `<button onclick="_toggleGroupPublic(${s.id});event.stopPropagation()">${s.groupPublic===false?'👁 グループに公開する':'🔒 グループに非公開にする'}</button>` : ''}
+            ${_groupId ? `<button onclick="_toggleGroupPublic(${s.id});event.stopPropagation()">${s.groupPublic===false?'<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg> グループに公開する':'🔒 グループに非公開にする'}</button>` : ''}
             <button class="danger" onclick="delSub(${s.id});event.stopPropagation()">削除</button>
           </div>
         </div>`;
@@ -7141,8 +7373,127 @@ async function _toggleGroupPublic(id){
   s.groupPublic = !wasPublic;
   await save();
   renderList();
-  showToast(wasPublic ? '🔒 「'+s.name+'」をグループに非公開にしました' : '👁 「'+s.name+'」をグループに公開しました');
+  showToast(wasPublic ? '🔒 「'+s.name+'」をグループに非公開にしました' : '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg> 「'+s.name+'」をグループに公開しました');
   gaEvent('group_visibility_toggled', { name: s.name, public: !wasPublic });
+}
+
+// ============================================================
+//   利用規約・プライバシーポリシー同意フロー
+// ============================================================
+const _TERMS_TEXT = `<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:0 0 6px">第1条（サービスの内容）</h3>Subly（以下「本サービス」）は、サブスクリプションの支出管理を目的としたWebアプリケーションです。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">第2条（利用条件）</h3>本サービスは無料でご利用いただけます。応援会員プランは月額課金制です。未成年の方は保護者の同意を得たうえでご利用ください。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">第3条（アカウント）</h3>アカウント登録時に提供いただいた情報は正確かつ最新のものである必要があります。アカウントの管理責任はユーザーにあります。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">第4条（データの取り扱い）</h3>未ログイン時のデータは端末のLocalStorageに保存されます。アカウント登録時はFirebase（Google Cloud Platform）上に保存されます。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">第5条（禁止事項）</h3>不正アクセス、リバースエンジニアリング、商用目的での無断利用、他のユーザーへの迷惑行為、法令に違反する行為を禁止します。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">第6条（知的財産権）</h3>本サービスに関する著作権、商標権その他の知的財産権は運営者に帰属します。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">第7条（免責事項）</h3>本サービスの利用により生じた損害について、運営者は一切の責任を負いません。データのバックアップはユーザーの責任で行ってください。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">第8条（規約の変更）</h3>本規約は予告なく変更する場合があります。変更後の利用をもって同意とみなします。<div style="margin-top:20px;padding-top:14px;border-top:1px solid var(--bd);font-size:12px;color:var(--ts)">制定日：2026年4月4日</div>`;
+
+const _PRIVACY_TEXT = `<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:0 0 6px">1. 収集する情報</h3><b>アカウント情報：</b>メールアドレス、ニックネーム、年齢層・職業（任意）<br><b>サービス利用情報：</b>サブスクリプション情報、満足度、グループ情報<br><b>利用状況データ：</b>Google Analytics 4による匿名の利用統計<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">2. 利用目的</h3>サービスの提供・運営・改善、ユーザーサポート、利用状況の分析・統計。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">3. 第三者への提供</h3>収集した個人情報を第三者に提供・販売することはありません。法令に基づく場合およびサービス運営に必要な業務委託先（Firebase/Google Cloud Platform）を除きます。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">4. データの保管</h3>Firebase（Google Cloud Platform）のサーバーに保存されます。未ログイン時は端末のLocalStorageに保存されサーバーには送信されません。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">5. データの削除</h3>アカウント退会時にすべてのデータが削除されます。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">6. セキュリティ</h3>Firebase Authenticationによる認証、Firestoreセキュリティルールによるアクセス制御を実施しています。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">7. お問い合わせ</h3>アプリ内の「お問い合わせ」からお願いいたします。<div style="margin-top:20px;padding-top:14px;border-top:1px solid var(--bd);font-size:12px;color:var(--ts)">制定日：2026年4月4日</div>`;
+
+let _consentConfirmed = { terms: false, privacy: false };
+let _consentCurrentDoc = '';
+let _consentMode = 'consent'; // 'consent' or 'view'
+
+function _showConsentScreen(){
+  _consentConfirmed = { terms: false, privacy: false };
+  document.getElementById('consent-ov').classList.remove('hidden');
+  gaEvent('consent_screen_shown', {});
+}
+
+function _openConsentDoc(type){
+  _consentCurrentDoc = type;
+  _consentMode = 'consent';
+  document.getElementById('terms-page-title').textContent = type === 'terms' ? '利用規約' : 'プライバシーポリシー';
+  document.getElementById('terms-page-content').innerHTML = type === 'terms' ? _TERMS_TEXT : _PRIVACY_TEXT;
+  document.getElementById('terms-page-footer').style.display = 'block';
+  document.getElementById('terms-page-ov').classList.remove('hidden');
+  gaEvent(type === 'terms' ? 'terms_viewed' : 'privacy_viewed', { mode: 'consent' });
+}
+
+function _confirmConsentDoc(){
+  const type = _consentCurrentDoc;
+  _consentConfirmed[type] = true;
+  _closeTermsPage();
+  // 同意画面のカードを確認済みに（standalone同意画面）
+  const card = document.getElementById('consent-'+type+'-card');
+  if(card){
+    card.style.borderColor = 'var(--p)';
+    card.style.background = 'var(--pl)';
+  }
+  const sub = document.getElementById('consent-'+type+'-sub');
+  if(sub) sub.textContent = '確認済み ✓';
+  const check = document.getElementById('consent-'+type+'-check');
+  if(check){
+    check.style.borderColor = 'var(--p)';
+    check.style.background = 'var(--p)';
+    check.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+  }
+  // オンボーディング内のカードも更新
+  const obCard = document.getElementById('ob-'+type+'-card');
+  if(obCard){
+    obCard.style.borderColor = 'var(--p)';
+    obCard.style.background = 'var(--pl)';
+  }
+  const obSub = document.getElementById('ob-'+type+'-sub');
+  if(obSub) obSub.textContent = '確認済み ✓';
+  const obCheck = document.getElementById('ob-'+type+'-check');
+  if(obCheck){
+    obCheck.style.borderColor = 'var(--p)';
+    obCheck.style.background = 'var(--p)';
+    obCheck.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="#fff"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+  }
+  // 両方確認したらボタン有効化（standalone）
+  const btn = document.getElementById('consent-agree-btn');
+  if(btn && _consentConfirmed.terms && _consentConfirmed.privacy){
+    btn.disabled = false;
+    btn.style.background = 'linear-gradient(135deg,var(--p),var(--pd))';
+    btn.style.color = '#fff';
+    btn.style.boxShadow = '0 4px 12px rgba(92,142,132,.3)';
+  }
+  // オンボーディング内のボタン有効化
+  const obBtn = document.getElementById('ob-agree-btn');
+  if(obBtn && _consentConfirmed.terms && _consentConfirmed.privacy){
+    obBtn.disabled = false;
+    obBtn.style.opacity = '1';
+  }
+}
+
+async function _agreeConsent(){
+  if(!_consentConfirmed.terms || !_consentConfirmed.privacy) return;
+  await Store.set('termsAgreed', new Date().toISOString());
+  document.getElementById('consent-ov').classList.add('hidden');
+  gaEvent('terms_agreed', { timestamp: new Date().toISOString() });
+}
+
+async function _obAgreeAndClose(){
+  if(!_consentConfirmed.terms || !_consentConfirmed.privacy) return;
+  await Store.set('termsAgreed', new Date().toISOString());
+  gaEvent('terms_agreed', { timestamp: new Date().toISOString(), source: 'onboarding' });
+  closeOb();
+}
+
+function _closeTermsPage(){
+  document.getElementById('terms-page-ov').classList.add('hidden');
+}
+
+// ハンバーガーメニューから閲覧用
+function openTermsPrivacy(){
+  _consentMode = 'view';
+  showDialog({
+    icon:'',
+    title:'利用規約・プライバシーポリシー',
+    msg:'確認したい規約を選んでください。',
+    buttons:[
+      {label:'利用規約', cls:'ok', onClick:()=>{ _viewDoc('terms'); }},
+      {label:'プライバシーポリシー', cls:'ok', onClick:()=>{ _viewDoc('privacy'); }},
+      {label:'閉じる', cls:'cancel'}
+    ],
+    btnColumn: true
+  });
+}
+
+function _viewDoc(type){
+  _consentCurrentDoc = type;
+  _consentMode = 'view';
+  document.getElementById('terms-page-title').textContent = type === 'terms' ? '利用規約' : 'プライバシーポリシー';
+  document.getElementById('terms-page-content').innerHTML = type === 'terms' ? _TERMS_TEXT : _PRIVACY_TEXT;
+  document.getElementById('terms-page-footer').style.display = 'none'; // 閲覧時は「確認しました」ボタン非表示
+  document.getElementById('terms-page-ov').classList.remove('hidden');
+  gaEvent(type === 'terms' ? 'terms_viewed' : 'privacy_viewed', { mode: 'view' });
 }
 
 // ============================================================
@@ -7240,6 +7591,35 @@ function _closePlanChange(){
 
 async function _confirmPlanChange(){
   if(!_pcSelected) return;
+
+  // 月1回制限チェック
+  if(window._fbUser && window._fbDb && window._fbFns){
+    try{
+      const { doc, getDoc } = window._fbFns;
+      const userSnap = await getDoc(doc(window._fbDb, 'users', window._fbUser.uid));
+      if(userSnap.exists()){
+        const data = userSnap.data();
+        if(data.planChangedAt){
+          const lastChanged = new Date(data.planChangedAt);
+          const now = new Date();
+          // 同じ月に変更済みならブロック
+          if(lastChanged.getFullYear() === now.getFullYear() && lastChanged.getMonth() === now.getMonth()){
+            _closePlanChange();
+            setTimeout(()=>{
+              showDialog({
+                icon:'📅',
+                title:'今月はすでにプラン変更済みです',
+                msg:'<div style="text-align:center;font-size:13px;color:var(--ts);line-height:1.7">プラン変更は月に1度のみとなります。<br>翌月に再度プラン変更をお願いします。</div>',
+                buttons:[{label:'OK', cls:'ok'}]
+              });
+            }, 200);
+            return;
+          }
+        }
+      }
+    }catch(e){ console.error('planChange check error:', e); }
+  }
+
   const oldPlan = _supporterPlanName;
   const oldPrice = _supporterPlanPrice;
   const newPlan = _pcSelected;
@@ -7268,10 +7648,23 @@ async function _confirmPlanChange(){
         {label:'変更を確定する', cls:'ok', onClick: async ()=>{
           try{
             if(window._fbUser && window._fbDb && window._fbFns){
-              const { doc, setDoc } = window._fbFns;
-              await setDoc(doc(window._fbDb, 'users', window._fbUser.uid), {
+              const { doc, setDoc, getDoc, arrayUnion } = window._fbFns;
+              const userRef = doc(window._fbDb, 'users', window._fbUser.uid);
+              // 旧プランの終了日を記録し、新プランの開始を追加
+              const now = new Date().toISOString();
+              const snap = await getDoc(userRef);
+              let history = (snap.exists() && snap.data().planHistory) || [];
+              // 旧プランの終了日を設定
+              if(history.length > 0 && !history[history.length-1].endDate){
+                history[history.length-1].endDate = now;
+              }
+              // 新プランを追加
+              history.push({ plan: newPlan.name, price: newPlan.price, startDate: now, endDate: null });
+              await setDoc(userRef, {
                 supporterPlan: newPlan.name,
-                supporterPrice: newPlan.price
+                supporterPrice: newPlan.price,
+                planChangedAt: now,
+                planHistory: history
               }, { merge: true });
             }
             _supporterPlanName = newPlan.name;
@@ -7479,10 +7872,12 @@ async function _completeSupporterSignup(){
     _supporterPlanName = _selectedPlan.name;
     _supporterPlanPrice = _selectedPlan.price;
     const { doc, setDoc } = window._fbFns;
+    const now = new Date().toISOString();
     await setDoc(doc(window._fbDb, 'users', user.uid), {
       supporterPlan: _selectedPlan.name,
       supporterPrice: _selectedPlan.price,
-      nickname: _nickname
+      nickname: _nickname,
+      planHistory: [{ plan: _selectedPlan.name, price: _selectedPlan.price, startDate: now, endDate: null }]
     }, { merge: true });
     _updateNicknameDisplay();
     _updatePayerField();
@@ -7889,6 +8284,58 @@ function parseCSVLine(line){
 ============================================================ */
 // 時間帯に応じてダーク/ライトを決定（18:00〜6:00はダーク）
 // 6テーマの定義
+
+// テーマごとのカテゴリカラー
+const CAT_THEME_COLORS = {
+  light: {
+    "動画・配信":"#E05C5C","音楽":"#2A9D8F","電子書籍・雑誌":"#E9A400","仕事・ツール":"#4A7EC8",
+    "ゲーム":"#9B59B6","健康・フィットネス":"#27AE60","金融・年会費":"#F39C12","習い事":"#16A085",
+    "通信費":"#2980B9","保険":"#8E44AD","ローン":"#C0392B","ローン・家賃":"#C0392B","その他":"#7F8C8D"
+  },
+  ocean: {
+    "動画・配信":"#5B8DBE","音楽":"#3AAFA9","電子書籍・雑誌":"#F0B67F","仕事・ツール":"#6C9BD2",
+    "ゲーム":"#8E7CC3","健康・フィットネス":"#5BAE8F","金融・年会費":"#DDA15E","習い事":"#4DADA8",
+    "通信費":"#5093C7","保険":"#7E6DAF","ローン":"#CC7E6E","ローン・家賃":"#CC7E6E","その他":"#8FA7B5"
+  },
+  pastel: {
+    "動画・配信":"#F2918B","音楽":"#7ECAC0","電子書籍・雑誌":"#F5CB7A","仕事・ツール":"#8BB5E0",
+    "ゲーム":"#C4A6DE","健康・フィットネス":"#7FCD98","金融・年会費":"#F5C87A","習い事":"#7ECAC0",
+    "通信費":"#7ABAEB","保険":"#B899D4","ローン":"#E8A090","ローン・家賃":"#E8A090","その他":"#B0BEC5"
+  },
+  dark: {
+    "動画・配信":"#E06060","音楽":"#2DB5A5","電子書籍・雑誌":"#E8A830","仕事・ツール":"#5090D0",
+    "ゲーム":"#A06CC0","健康・フィットネス":"#30B868","金融・年会費":"#E8A830","習い事":"#20A898",
+    "通信費":"#3898D8","保険":"#9058B8","ローン":"#D05040","ローン・家賃":"#D05040","その他":"#889098"
+  },
+  night: {
+    "動画・配信":"#C85858","音楽":"#28A098","電子書籍・雑誌":"#D09828","仕事・ツール":"#4880B8",
+    "ゲーム":"#9060B0","健康・フィットネス":"#28A858","金融・年会費":"#D09828","習い事":"#189888",
+    "通信費":"#3088C8","保険":"#8050A8","ローン":"#B84838","ローン・家賃":"#B84838","その他":"#788088"
+  },
+  purple: {
+    "動画・配信":"#D87090","音楽":"#60B8B0","電子書籍・雑誌":"#E0B050","仕事・ツール":"#7898D0",
+    "ゲーム":"#B080D8","健康・フィットネス":"#58C080","金融・年会費":"#D8A848","習い事":"#50B0A8",
+    "通信費":"#6090C8","保険":"#A070C8","ローン":"#D06868","ローン・家賃":"#D06868","その他":"#9098A0"
+  }
+};
+
+function _applyCatThemeColors(themeName){
+  const colors = CAT_THEME_COLORS[themeName] || CAT_THEME_COLORS.light;
+  Object.keys(catMap).forEach(cat => {
+    if(colors[cat]) catMap[cat].color = colors[cat];
+  });
+  // カテゴリタブの色も更新
+  document.querySelectorAll('.cat-tab').forEach(tab => {
+    const cat = tab.dataset.cat;
+    if(cat && colors[cat]) tab.style.setProperty('--tab-color', colors[cat]);
+  });
+  // サービスカードの左バー色も更新
+  document.querySelectorAll('.q-btn').forEach(btn => {
+    const cat = document.querySelector('.cat-tab.on')?.dataset?.cat;
+    if(cat && colors[cat]) btn.style.setProperty('--qc', colors[cat]);
+  });
+}
+
 const THEMES = {
   light:  { cls: 'theme-light',  dark: false },
   ocean:  { cls: 'theme-ocean',  dark: false },
@@ -7913,6 +8360,11 @@ function setTheme(mode, track=true){
   });
 
   Store.set('subly_theme', mode);
+  // テーマに合わせてカテゴリカラーを更新
+  _applyCatThemeColors(mode);
+  // ダッシュボードとリストを再描画
+  if(typeof renderDashboard === 'function') renderDashboard();
+  if(typeof renderList === 'function') renderList();
   if(track) gaEvent('theme_change', { theme_name: mode });
 }
 
