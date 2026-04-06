@@ -783,7 +783,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 <body>
 <!-- ヘッダー（スマホ） -->
 <header class="hdr">
-  <span class="hdr-title" onclick="goto('dashboard')" style="cursor:pointer">Subly</span>
+  <span class="hdr-title" onclick="_refreshDashboard()" style="cursor:pointer">Subly</span>
   <button class="hdr-hamburger" id="hdr-hamburger" onclick="toggleHdrop(event)" aria-label="メニュー">
     <span></span><span></span><span></span>
   </button>
@@ -3312,6 +3312,18 @@ function showSavingHint(campaign, serviceName) {
    ナビ
 ============================================================ */
 function goto(page, filterCat=null){
+
+// Sublyタイトルタップで強制リフレッシュ
+async function _refreshDashboard(){
+  if(window._fbUser && window._fbDb){
+    showToast('更新中...');
+    try{
+      await _loadFromFirestore(window._fbUser.uid);
+    }catch(e){ console.error('Refresh error:', e); }
+  }
+  goto('dashboard');
+  showToast('更新しました');
+}
   ['dashboard','add','calendar','list'].forEach(p=>{
     document.getElementById('pg-'+p).classList.remove('on');
     const nb=document.getElementById('nb-'+p);
