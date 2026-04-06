@@ -72,7 +72,7 @@
   --pd:   #D4789E;
   --pl:   #FFF0F5;
   --bg:   #F8F4F9;
-  --card: rgba(255,255,255,.85);
+  --card: #fff;
   --tx:   #4A3B5C;
   --ts:   #8A7A9A;
   --bd:   #E8DDF0;
@@ -2495,6 +2495,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     <div id="cat-alert-box" style="margin-top:8px"></div>
     <!-- 解約検討カード（満足度★1〜3） -->
     <div id="warn-section"></div>
+    <!-- 保存安心感UI -->
+    <div id="save-status" style="display:none;text-align:center;padding:12px 0 8px;font-size:11px;color:var(--ts)"></div>
   </div>
 
   <!-- ② 追加 -->
@@ -6470,6 +6472,19 @@ function renderDashboard(){
   renderSatChart(targetSubs);
   checkAlerts(targetSubs);
   _checkAcctBanner();
+  // 保存安心感UI
+  const saveEl = document.getElementById('save-status');
+  if(saveEl){
+    if(window._fbUser){
+      saveEl.style.display = 'block';
+      saveEl.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="var(--p)" style="vertical-align:middle;margin-right:3px"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>クラウドに自動保存済み';
+    } else if(subs.length > 0){
+      saveEl.style.display = 'block';
+      saveEl.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="var(--ts)" style="vertical-align:middle;margin-right:3px"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>端末に自動保存済み';
+    } else {
+      saveEl.style.display = 'none';
+    }
+  }
 }
 
 function drawChart(obj){
@@ -8021,11 +8036,29 @@ function _openConsentDoc(type){
   _consentMode = 'consent';
   document.getElementById('terms-page-title').textContent = type === 'terms' ? '利用規約' : 'プライバシーポリシー';
   document.getElementById('terms-page-content').innerHTML = type === 'terms' ? _TERMS_TEXT : _PRIVACY_TEXT;
-  document.getElementById('terms-page-footer').style.display = 'block';
+  const footer = document.getElementById('terms-page-footer');
+  const confirmBtn = footer.querySelector('button');
+  footer.style.display = 'block';
+  confirmBtn.disabled = true;
+  confirmBtn.style.opacity = '0.4';
+  confirmBtn.textContent = '↓ 最後までスクロールしてください';
+  confirmBtn.style.background = 'var(--ts)';
   const ov = document.getElementById('terms-page-ov');
   ov.classList.remove('hidden');
-  // iOS Safari対策: 表示後にスクロール位置を確実にリセット
   requestAnimationFrame(()=>{ ov.scrollTop = 0; });
+  const _onScroll = ()=>{
+    const scrollTop = ov.scrollTop;
+    const scrollHeight = ov.scrollHeight;
+    const clientHeight = ov.clientHeight;
+    if(scrollTop + clientHeight >= scrollHeight - 60){
+      confirmBtn.disabled = false;
+      confirmBtn.style.opacity = '1';
+      confirmBtn.textContent = '確認しました';
+      confirmBtn.style.background = 'linear-gradient(135deg,var(--p),var(--pd))';
+      ov.removeEventListener('scroll', _onScroll);
+    }
+  };
+  ov.addEventListener('scroll', _onScroll);
   gaEvent(type === 'terms' ? 'terms_viewed' : 'privacy_viewed', { mode: 'consent' });
 }
 
