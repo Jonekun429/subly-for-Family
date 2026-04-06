@@ -1688,6 +1688,13 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </button>
     </div>
     <div id="auth-pw-hint" style="display:none;font-size:11px;color:var(--ts);margin-bottom:8px;padding:0 2px">英数字・大文字を含む8文字以上</div>
+    <!-- 無料プランの説明（新規登録タブのみ表示） -->
+    <div id="auth-free-info" style="display:none;background:var(--pl);border-radius:10px;padding:10px 14px;margin-bottom:12px;text-align:left;font-size:11px;color:var(--pd);line-height:1.7">
+      <div style="display:flex;align-items:center;gap:5px;padding:2px 0"><svg width="12" height="12" viewBox="0 0 24 24" fill="var(--pd)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>サブスクを<strong>6件</strong>まで無料で管理</div>
+      <div style="display:flex;align-items:center;gap:5px;padding:2px 0"><svg width="12" height="12" viewBox="0 0 24 24" fill="var(--pd)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>データを<strong>クラウドに自動保存</strong></div>
+      <div style="display:flex;align-items:center;gap:5px;padding:2px 0"><svg width="12" height="12" viewBox="0 0 24 24" fill="var(--pd)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>スマホ・PC・タブレットで<strong>どこでも確認</strong></div>
+      <div style="display:flex;align-items:center;gap:5px;padding:2px 0"><svg width="12" height="12" viewBox="0 0 24 24" fill="var(--pd)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>グラフ・カレンダーで<strong>支出を見える化</strong></div>
+    </div>
     <!-- パスワードを忘れた（ログインタブのみ表示） -->
     <div id="auth-forgot-wrap" style="text-align:right;margin-bottom:14px">
       <button onclick="sendPasswordReset()" style="background:none;border:none;font-size:12px;color:var(--ts);cursor:pointer;font-family:inherit;text-decoration:underline">パスワードを忘れた方はこちら</button>
@@ -4562,6 +4569,9 @@ function switchAuthTab(tab){
   // パスワードヒントは新規登録タブのみ表示
   const pwHint = document.getElementById('auth-pw-hint');
   if(pwHint) pwHint.style.display = isLogin ? 'none' : 'block';
+  // 無料プラン説明は新規登録タブのみ表示
+  const freeInfo = document.getElementById('auth-free-info');
+  if(freeInfo) freeInfo.style.display = isLogin ? 'none' : 'block';
 }
 
 // パスワードリセットメール送信
@@ -4744,7 +4754,7 @@ async function deleteAccount(){
     </div>`,
     buttons:[
       {label:'戻る', cls:'cancel'},
-      {label:'バックアップ完了 →', cls:'ok', onClick: async ()=>{
+      {label:'バックアップ →', cls:'ok', onClick: async ()=>{
         // CSV自動DL
         await exportCSV();
         // 少し待ってからSTEP2へ
