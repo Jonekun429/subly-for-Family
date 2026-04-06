@@ -8379,6 +8379,8 @@ function _startCancelFlow(){
             // 解約前にproPurchasedを再確認（安全策）
             const snap = await getDoc(userRef);
             if(snap.exists() && snap.data().proPurchased) _proPurchased = true;
+            console.log('[Cancel] proPurchased from Firestore:', snap.exists() ? snap.data().proPurchased : 'no doc');
+            console.log('[Cancel] _proPurchased variable:', _proPurchased);
             await setDoc(userRef, {
               supporterPlan: 'free',
               supporterPrice: 0
@@ -8388,8 +8390,12 @@ function _startCancelFlow(){
           _supporterPlanName = '';
           _supporterPlanPrice = 0;
           _updateAuthUI(window._fbUser);
-          showToast('応援会員を解約しました');
-          gaEvent('supporter_cancelled', {});
+          if(_proPurchased){
+            showToast('応援会員を解約しました。Subly Proは引き続きご利用いただけます。');
+          } else {
+            showToast('応援会員を解約しました');
+          }
+          gaEvent('supporter_cancelled', { pro_purchased: _proPurchased });
         }catch(e){
           showToast('エラー: ' + e.message);
         }
@@ -8512,6 +8518,9 @@ function _proceedPlan(){
                 proPurchased: true,
                 proPurchasedAt: new Date().toISOString()
               }, { merge: true });
+              console.log('[Pro Purchase] Firestore updated: proPurchased=true for', window._fbUser.uid);
+            } else {
+              console.warn('[Pro Purchase] Firestore not available, only local flag set');
             }
             _updateAuthUI(window._fbUser);
             gaEvent('pro_purchased', { price: 980 });
