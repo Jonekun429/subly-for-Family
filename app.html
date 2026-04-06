@@ -3311,8 +3311,6 @@ function showSavingHint(campaign, serviceName) {
 /* ============================================================
    ナビ
 ============================================================ */
-function goto(page, filterCat=null){
-
 // Sublyタイトルタップで強制リフレッシュ
 async function _refreshDashboard(){
   if(window._fbUser && window._fbDb){
@@ -3324,6 +3322,8 @@ async function _refreshDashboard(){
   goto('dashboard');
   showToast('更新しました');
 }
+
+function goto(page, filterCat=null){
   ['dashboard','add','calendar','list'].forEach(p=>{
     document.getElementById('pg-'+p).classList.remove('on');
     const nb=document.getElementById('nb-'+p);
@@ -8030,6 +8030,11 @@ function _confirmConsentDoc(){
   const type = _consentCurrentDoc;
   _consentConfirmed[type] = true;
   _closeTermsPage();
+  // viewモードの場合はここで終了
+  if(_consentMode === 'view'){
+    showToast('確認しました');
+    return;
+  }
   // 同意画面のカードを確認済みに（standalone同意画面）
   const card = document.getElementById('consent-'+type+'-card');
   if(card){
@@ -8134,8 +8139,30 @@ function _viewDoc(type){
   _consentMode = 'view';
   document.getElementById('terms-page-title').textContent = type === 'terms' ? '利用規約' : 'プライバシーポリシー';
   document.getElementById('terms-page-content').innerHTML = type === 'terms' ? _TERMS_TEXT : _PRIVACY_TEXT;
-  document.getElementById('terms-page-footer').style.display = 'none'; // 閲覧時は「確認しました」ボタン非表示
-  document.getElementById('terms-page-ov').classList.remove('hidden');
+  const footer = document.getElementById('terms-page-footer');
+  const confirmBtn = footer.querySelector('button');
+  // 初期状態：フッター表示するが無効化
+  footer.style.display = 'block';
+  confirmBtn.disabled = true;
+  confirmBtn.style.opacity = '0.4';
+  confirmBtn.textContent = '↓ 最後までスクロールしてください';
+  confirmBtn.style.background = 'var(--ts)';
+  const ov = document.getElementById('terms-page-ov');
+  ov.classList.remove('hidden');
+  // スクロール監視
+  const _onScroll = ()=>{
+    const scrollTop = ov.scrollTop;
+    const scrollHeight = ov.scrollHeight;
+    const clientHeight = ov.clientHeight;
+    if(scrollTop + clientHeight >= scrollHeight - 60){
+      confirmBtn.disabled = false;
+      confirmBtn.style.opacity = '1';
+      confirmBtn.textContent = '確認しました';
+      confirmBtn.style.background = 'linear-gradient(135deg,var(--p),var(--pd))';
+      ov.removeEventListener('scroll', _onScroll);
+    }
+  };
+  ov.addEventListener('scroll', _onScroll);
   gaEvent(type === 'terms' ? 'terms_viewed' : 'privacy_viewed', { mode: 'view' });
 }
 
