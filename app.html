@@ -3313,14 +3313,17 @@ function showSavingHint(campaign, serviceName) {
 ============================================================ */
 // Sublyタイトルタップで強制リフレッシュ
 async function _refreshDashboard(){
-  if(window._fbUser && window._fbDb){
-    showToast('更新中...');
+  showToast('更新中...');
+  if(window._fbUser && window._fbDb && window._fbFns){
     try{
       await _loadFromFirestore(window._fbUser.uid);
     }catch(e){ console.error('Refresh error:', e); }
   }
+  renderDashboard();
+  renderList();
   goto('dashboard');
-  showToast('更新しました');
+  showToast('データを更新しました');
+  gaEvent('header_refresh', {});
 }
 
 function goto(page, filterCat=null){
