@@ -5189,9 +5189,22 @@ async function _ensureUserDoc(user){
 
 // LocalStorage → Firestore 移行
 async function _migrateSubsToFirestore(uid){
-  if(!subs.length || !window._fbDb || !window._fbFns) return;
-  const { doc, writeBatch } = window._fbFns;
+  if(!window._fbDb || !window._fbFns) return;
+  const { doc, writeBatch, collection, getDocs } = window._fbFns;
   const batch = writeBatch(window._fbDb);
+
+  // Firestoreの既存ドキュメントを取得して、削除されたものをbatch.deleteで消す
+  try {
+    const subsSnap = await getDocs(collection(window._fbDb, 'users', uid, 'subs'));
+    const currentIds = new Set(subs.map(s => String(s.id)));
+    subsSnap.docs.forEach(d => {
+      if (!currentIds.has(d.id)) {
+        batch.delete(d.ref); // ローカルに存在しないものは削除
+      }
+    });
+  } catch(e) { console.error('Firestore同期チェックエラー:', e); }
+
+  // 現在のsubsをupsert
   subs.forEach(s => {
     const ref = doc(window._fbDb, 'users', uid, 'subs', String(s.id));
     batch.set(ref, s);
@@ -6781,7 +6794,7 @@ function checkAlerts(targetSubs){
       const more  = savingSubs.length > 3 ? `ほか${savingSubs.length - 3}件` : '';
       banner.innerHTML = `
         <button class="alert-x" onclick="Store.set('savingBannerDismissed','1');this.parentNode.remove()" style="color:#1A6B5A">✕</button>
-        <div style="font-size:13px;font-weight:700;color:#1A6B5A;margin-bottom:6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M21 7.28V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .89-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-2.28A2 2 0 0 0 22 15V9a2 2 0 0 0-1-1.72zM20 9v6h-7V9h7zM5 19V5h14v2h-6c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h6v2H5z"/><circle cx="16" cy="12" r="1.5"/></svg> 安くできるかもしれないサブスクがあります</div>
+        <div style="font-size:13px;font-weight:700;color:#1A6B5A;margin-bottom:6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M21 7.28V5c0-1.1-.9-2-2-2H5c-1.11 0-2 .89-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-2.28A2 2 0 0 0 22 15V9a2 2 0 0 0-1-1.72zM20 9v6h-7V9h7zM5 19V5h14v2h-6c-1.1 0-2 .9-2 2v6c0 1.1.9 2 2 2h6v2H5z"/><circle cx="16" cy="12" r="1.5"/></svg> 💰 割引キャンペーンが使えるサブスクがあります</div>
         <div style="font-size:12px;color:#2B5A4A;line-height:1.6">${names}${more} は解約しようとすると割引キャンペーンが表示されることがあります。</div>
         <div style="font-size:11px;color:#5A8A7A;margin-top:6px">詳細はメニュー →「節約のヒント」から確認できます</div>`;
       box.insertBefore(banner, box.firstChild);
@@ -6824,7 +6837,7 @@ function checkAlerts(targetSubs){
 
   const hdr=document.createElement('div');
   hdr.style.cssText='display:flex;align-items:center;justify-content:space-between;cursor:pointer;-webkit-tap-highlight-color:transparent';
-  hdr.innerHTML=`<span class="card-ttl" style="margin-bottom:0;color:var(--dn)"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--dn)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> 一度休止を検討してみましょう</span><span style="display:flex;align-items:center;gap:6px"><span style="font-size:13px;color:var(--ts)">${warns.length}件</span><span id="warn-arrow" style="font-size:12px;color:var(--ts);transition:transform .2s">▲</span></span>`;
+  hdr.innerHTML=`<span class="card-ttl" style="margin-bottom:0;color:var(--dn)"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--dn)"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> ⚠️ ほとんど使っていないサブスクがあります</span><span style="display:flex;align-items:center;gap:6px"><span style="font-size:13px;color:var(--ts)">${warns.length}件</span><span id="warn-arrow" style="font-size:12px;color:var(--ts);transition:transform .2s">▲</span></span>`;
   hdr.onclick=()=>{
     const b=document.getElementById('warn-section-body');
     const arrow=document.getElementById('warn-arrow');
