@@ -2112,14 +2112,16 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
     <div style="font-size:17px;font-weight:800;margin-bottom:2px">Subly Pro を登録</div>
     <div style="font-size:13px;color:#E09030;font-weight:700;margin-bottom:14px">¥980（税込・買い切り）</div>
-    <!-- アカウント情報 -->
+    <!-- アカウント情報（新規登録モード） -->
     <div id="ps-form-section" style="background:var(--bg);border-radius:12px;padding:14px;margin-bottom:14px;text-align:left">
-      <div style="font-size:12px;font-weight:700;color:var(--tx);margin-bottom:10px;display:flex;align-items:center;gap:6px">
+      <div id="ps-form-title" style="font-size:12px;font-weight:700;color:var(--tx);margin-bottom:10px;display:flex;align-items:center;gap:6px">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pd)"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
         アカウント情報
       </div>
-      <label style="font-size:12px;font-weight:600;color:var(--ts);display:block;margin-bottom:4px">ニックネーム</label>
-      <input type="text" id="ps-nickname" placeholder="例：サブリー" maxlength="20" style="width:100%;padding:10px 12px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--card);margin-bottom:8px">
+      <div id="ps-nickname-row">
+        <label style="font-size:12px;font-weight:600;color:var(--ts);display:block;margin-bottom:4px">ニックネーム</label>
+        <input type="text" id="ps-nickname" placeholder="例：サブリー" maxlength="20" style="width:100%;padding:10px 12px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--card);margin-bottom:8px">
+      </div>
       <label style="font-size:12px;font-weight:600;color:var(--ts);display:block;margin-bottom:4px">メールアドレス</label>
       <input type="email" id="ps-email" placeholder="example@mail.com" style="width:100%;padding:10px 12px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--card);margin-bottom:8px">
       <label style="font-size:12px;font-weight:600;color:var(--ts);display:block;margin-bottom:4px">パスワード（8文字以上）</label>
@@ -2144,7 +2146,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
     <button id="ps-submit-btn" onclick="_completeProSignup()" style="width:100%;padding:15px;border-radius:12px;font-size:16px;font-weight:700;border:none;cursor:pointer;font-family:inherit;margin-bottom:4px;background:linear-gradient(135deg,#E09030,#F0AD4E);color:#fff;box-shadow:0 4px 12px rgba(224,144,48,.3)">アカウント登録して購入する</button>
     <div style="font-size:10px;color:var(--ts);line-height:1.5;margin-bottom:8px">※ 決済機能は現在準備中です（テスト中）</div>
-    <button onclick="_closeProSignup();setTimeout(()=>{openAuthModal('login')},200)" style="width:100%;padding:8px;border:none;background:none;font-size:12px;color:var(--p);cursor:pointer;font-family:inherit;text-decoration:underline;margin-bottom:6px">既にアカウントをお持ちの方はログイン</button>
+    <button id="ps-toggle-link" onclick="_toggleProMode()" style="width:100%;padding:8px;border:none;background:none;font-size:12px;color:#E09030;cursor:pointer;font-family:inherit;text-decoration:underline;margin-bottom:6px">既にアカウントをお持ちの方はこちら</button>
     <button onclick="_closeProSignup()" style="width:100%;padding:8px;border:none;background:none;font-size:12px;color:var(--ts);cursor:pointer;font-family:inherit">キャンセル</button>
   </div>
 </div>
@@ -8645,9 +8647,13 @@ function _startProPurchase(){
     if(formSection) formSection.style.display = 'none';
     if(submitBtn) submitBtn.textContent = '購入する';
   } else {
-    // 未ログイン → フォーム表示
+    // 未ログイン → フォーム表示（新規登録モードにリセット）
+    _proSignupMode = 'signup';
     if(formSection) formSection.style.display = '';
     if(submitBtn) submitBtn.textContent = 'アカウント登録して購入する';
+    document.getElementById('ps-nickname-row').style.display = '';
+    document.getElementById('ps-form-title').innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pd)"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg> アカウント情報';
+    document.getElementById('ps-toggle-link').textContent = '既にアカウントをお持ちの方はこちら';
     document.getElementById('ps-nickname').value = '';
     document.getElementById('ps-email').value = '';
     document.getElementById('ps-password').value = '';
@@ -8657,32 +8663,57 @@ function _startProPurchase(){
 
 function _closeProSignup(){
   document.getElementById('pro-signup-ov').classList.add('hidden');
+  window._proSignupMode = 'signup'; // リセット
+}
+let _proSignupMode = 'signup';
+function _toggleProMode(){
+  if(_proSignupMode === 'signup'){
+    _proSignupMode = 'login';
+    document.getElementById('ps-nickname-row').style.display = 'none';
+    document.getElementById('ps-form-title').innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="#E09030"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"/></svg> ログインして購入';
+    document.getElementById('ps-submit-btn').textContent = 'ログインして購入する';
+    document.getElementById('ps-toggle-link').textContent = '新規登録はこちら';
+  } else {
+    _proSignupMode = 'signup';
+    document.getElementById('ps-nickname-row').style.display = '';
+    document.getElementById('ps-form-title').innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pd)"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg> アカウント情報';
+    document.getElementById('ps-submit-btn').textContent = 'アカウント登録して購入する';
+    document.getElementById('ps-toggle-link').textContent = '既にアカウントをお持ちの方はこちら';
+  }
 }
 async function _completeProSignup(){
   const nickname = document.getElementById('ps-nickname').value.trim();
   const password = document.getElementById('ps-password').value;
   const email = document.getElementById('ps-email').value.trim();
   const existingUser = window._fbUser;
+  const isLogin = _proSignupMode === 'login';
 
-  if(!nickname){ showToast('ニックネームを入力してください'); return; }
+  if(!isLogin && !existingUser && !nickname){ showToast('ニックネームを入力してください'); return; }
   if(!existingUser){
     if(!email){ showToast('メールアドレスを入力してください'); return; }
-    if(!password || password.length < 8){ showToast('パスワードは8文字以上で入力してください'); return; }
-    if(!/[A-Z]/.test(password)){ showToast('パスワードに大文字（A〜Z）を1文字以上含めてください'); return; }
+    if(!password){ showToast('パスワードを入力してください'); return; }
+    if(!isLogin && password.length < 8){ showToast('パスワードは8文字以上で入力してください'); return; }
+    if(!isLogin && !/[A-Z]/.test(password)){ showToast('パスワードに大文字（A〜Z）を1文字以上含めてください'); return; }
   }
   const btn = document.getElementById('ps-submit-btn');
   btn.disabled = true; btn.textContent = '処理中...';
   try{
     if(!window._fbAuth || !window._fbFns){
       showToast('認証機能の読み込み中です。少し待ってから再度お試しください');
-      btn.disabled = false; btn.textContent = 'アカウント登録して購入する';
+      btn.disabled = false; btn.textContent = isLogin ? 'ログインして購入する' : 'アカウント登録して購入する';
       return;
     }
     let user;
     if(existingUser){
       user = existingUser;
       if(nickname) _nickname = nickname;
+    } else if(isLogin){
+      // ログインモード
+      const result = await window._fbFns.signInWithEmailAndPassword(window._fbAuth, email, password);
+      user = result.user;
+      await _ensureUserDoc(user);
     } else {
+      // 新規登録モード
       const result = await window._fbFns.createUserWithEmailAndPassword(window._fbAuth, email, password);
       user = result.user;
       if(nickname) _nickname = nickname;
@@ -8728,7 +8759,7 @@ async function _completeProSignup(){
     };
     showToast(msgs[e.code] || 'エラー: ' + (e.message || e.code));
   }finally{
-    btn.disabled = false; btn.textContent = 'アカウント登録して購入する';
+    btn.disabled = false; btn.textContent = _proSignupMode === 'login' ? 'ログインして購入する' : 'アカウント登録して購入する';
   }
 }
 
