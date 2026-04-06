@@ -2096,34 +2096,48 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 </div>
 
 
-<!-- Pro買い切り 説明画面 -->
-<div class="dlg-ov hidden" id="pro-signup-ov" onclick="if(event.target===this)_closeProSignup()">
-  <div class="dlg" style="max-width:360px;padding:28px 22px 22px;text-align:center;position:relative">
+<!-- Pro買い切り 登録＋決済画面 -->
+<div class="dlg-ov hidden" id="pro-signup-ov" onclick="if(event.target===this)_closeProSignup()" style="overflow-y:auto;align-items:flex-start;justify-content:center">
+  <div class="dlg" style="max-width:360px;padding:28px 22px 22px;text-align:center;position:relative;margin:20px auto">
     <button onclick="_closeProSignup()" style="position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:var(--bg);border:none;cursor:pointer;font-size:14px;color:var(--ts)">✕</button>
-    <div style="width:56px;height:56px;border-radius:50%;background:rgba(240,173,78,.1);margin:0 auto 12px;display:flex;align-items:center;justify-content:center">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="#E09030"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.1-9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2H8.9z"/></svg>
+    <div style="width:48px;height:48px;border-radius:50%;background:rgba(240,173,78,.1);margin:0 auto 10px;display:flex;align-items:center;justify-content:center">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="#E09030"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.1-9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2H8.9z"/></svg>
     </div>
-    <div style="font-size:18px;font-weight:800;margin-bottom:4px">Subly Pro</div>
-    <div style="font-size:13px;color:var(--ts);margin-bottom:14px">
-      <span style="font-weight:700;color:var(--pd)">¥980（税込・買い切り）</span>
-      <span style="color:var(--ts)">· 永久利用 · 月額なし</span>
-    </div>
-    <!-- Free vs Pro 比較表 -->
-    <div style="background:var(--card);border-radius:10px;overflow:hidden;border:1px solid var(--bd);margin-bottom:14px;box-shadow:var(--sh)">
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--bg)">
-        <div style="padding:8px 6px;font-size:10px;font-weight:700;text-align:center;color:var(--ts)"></div>
-        <div style="padding:8px 6px;font-size:10px;font-weight:700;text-align:center;color:var(--ts)">無料会員</div>
-        <div style="padding:8px 6px;font-size:10px;font-weight:700;text-align:center;color:#fff;background:rgba(224,144,48,.85)">Pro</div>
+    <div style="font-size:17px;font-weight:800;margin-bottom:2px">Subly Pro を登録</div>
+    <div style="font-size:13px;color:#E09030;font-weight:700;margin-bottom:14px">¥980（税込・買い切り）</div>
+    <!-- アカウント情報 -->
+    <div id="ps-form-section" style="background:var(--bg);border-radius:12px;padding:14px;margin-bottom:14px;text-align:left">
+      <div style="font-size:12px;font-weight:700;color:var(--tx);margin-bottom:10px;display:flex;align-items:center;gap:6px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pd)"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+        アカウント情報
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:7px 6px;font-size:10px;font-weight:600;padding-left:10px">サブスク登録</div><div style="padding:7px 6px;text-align:center;font-size:10px;font-weight:700;color:var(--ts)">6件まで</div><div style="padding:7px 6px;text-align:center;font-size:10px;font-weight:800;color:#E09030;background:rgba(240,173,78,.04)">無制限</div></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:7px 6px;font-size:10px;font-weight:600;padding-left:10px;white-space:nowrap">グラフ/カレンダー</div><div style="padding:7px 6px;text-align:center;color:var(--p);font-size:13px">⭕</div><div style="padding:7px 6px;text-align:center;color:var(--p);font-size:13px;background:rgba(240,173,78,.04)">⭕</div></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:7px 6px;font-size:10px;font-weight:600;padding-left:10px">クラウド同期</div><div style="padding:7px 6px;text-align:center;color:var(--p);font-size:13px">⭕</div><div style="padding:7px 6px;text-align:center;color:var(--p);font-size:13px;background:rgba(240,173,78,.04)">⭕</div></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:7px 6px;font-size:10px;font-weight:600;padding-left:10px">テーマ変更</div><div style="padding:7px 6px;text-align:center;color:var(--p);font-size:13px">⭕</div><div style="padding:7px 6px;text-align:center;color:var(--p);font-size:13px;background:rgba(240,173,78,.04)">⭕</div></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid var(--bd)"><div style="padding:7px 6px;font-size:10px;font-weight:600;padding-left:10px">全端末で利用</div><div style="padding:7px 6px;text-align:center;color:var(--p);font-size:13px">⭕</div><div style="padding:7px 6px;text-align:center;color:var(--p);font-size:13px;background:rgba(240,173,78,.04)">⭕</div></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border-top:2px solid var(--bd)"><div style="padding:7px 6px;font-size:10px;font-weight:800;padding-left:10px">価格</div><div style="padding:7px 6px;text-align:center;font-weight:800;font-size:12px">¥0</div><div style="padding:7px 6px;text-align:center;font-weight:900;font-size:12px;color:#E09030;background:rgba(240,173,78,.04)">¥980</div></div>
+      <label style="font-size:12px;font-weight:600;color:var(--ts);display:block;margin-bottom:4px">ニックネーム</label>
+      <input type="text" id="ps-nickname" placeholder="例：サブリー" maxlength="20" style="width:100%;padding:10px 12px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--card);margin-bottom:8px">
+      <label style="font-size:12px;font-weight:600;color:var(--ts);display:block;margin-bottom:4px">メールアドレス</label>
+      <input type="email" id="ps-email" placeholder="example@mail.com" style="width:100%;padding:10px 12px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--card);margin-bottom:8px">
+      <label style="font-size:12px;font-weight:600;color:var(--ts);display:block;margin-bottom:4px">パスワード（8文字以上）</label>
+      <div style="position:relative">
+        <input type="password" id="ps-password" placeholder="英数字・大文字を含む8文字以上" style="width:100%;padding:10px 44px 10px 12px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--card);box-sizing:border-box">
+        <button type="button" onclick="togglePwVisibility('ps-password',this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:0;color:var(--ts);display:flex;align-items:center">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+        </button>
+      </div>
     </div>
-    <button onclick="_closeProSignup();window._pendingProPurchase=true;setTimeout(()=>{openAuthModal('signup')},200)" style="width:100%;padding:14px;border-radius:12px;font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:inherit;margin-bottom:8px;background:linear-gradient(135deg,#E09030,#F0AD4E);color:#fff;box-shadow:0 4px 12px rgba(224,144,48,.3)">Subly Pro を登録する</button>
-    <button onclick="_closeProSignup();window._pendingProPurchase=true;setTimeout(()=>{openAuthModal('login')},200)" style="width:100%;padding:8px;border:none;background:none;font-size:12px;color:var(--p);cursor:pointer;font-family:inherit;text-decoration:underline;margin-bottom:6px">既にアカウントをお持ちの方はログイン</button>
+    <!-- 購入内容 -->
+    <div style="background:rgba(240,173,78,.04);border:1.5px solid rgba(240,173,78,.2);border-radius:12px;padding:12px 14px;margin-bottom:14px;text-align:left">
+      <div style="font-size:12px;font-weight:700;color:#8B6914;margin-bottom:6px;display:flex;align-items:center;gap:6px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#E09030"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"/></svg>
+        購入内容
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:13px;color:var(--tx);font-weight:600">Subly Pro（買い切り）</span>
+        <span style="font-size:16px;font-weight:900;color:#E09030">¥980</span>
+      </div>
+      <div style="font-size:10px;color:var(--ts);margin-top:4px">登録無制限・永久利用・月額なし</div>
+    </div>
+    <button id="ps-submit-btn" onclick="_completeProSignup()" style="width:100%;padding:15px;border-radius:12px;font-size:16px;font-weight:700;border:none;cursor:pointer;font-family:inherit;margin-bottom:4px;background:linear-gradient(135deg,#E09030,#F0AD4E);color:#fff;box-shadow:0 4px 12px rgba(224,144,48,.3)">アカウント登録して購入する</button>
+    <div style="font-size:10px;color:var(--ts);line-height:1.5;margin-bottom:8px">※ 決済機能は現在準備中です（テスト中）</div>
+    <button onclick="_closeProSignup();setTimeout(()=>{openAuthModal('login')},200)" style="width:100%;padding:8px;border:none;background:none;font-size:12px;color:var(--p);cursor:pointer;font-family:inherit;text-decoration:underline;margin-bottom:6px">既にアカウントをお持ちの方はログイン</button>
     <button onclick="_closeProSignup()" style="width:100%;padding:8px;border:none;background:none;font-size:12px;color:var(--ts);cursor:pointer;font-family:inherit">キャンセル</button>
   </div>
 </div>
@@ -8422,7 +8436,20 @@ function _startCancelFlow(){
           _supporterPlanPrice = 0;
           _updateAuthUI(window._fbUser);
           if(_proPurchased){
-            showToast('応援会員を解約しました。Subly Proは引き続きご利用いただけます。');
+            setTimeout(()=>{
+              showDialog({
+                icon:'',
+                title:'応援会員を解約しました',
+                msg:`<div style="text-align:center;font-size:13px;color:var(--ts);line-height:1.8">
+                  <div style="background:rgba(240,173,78,.06);border:1px solid rgba(240,173,78,.15);border-radius:10px;padding:12px 14px;margin-bottom:10px;font-size:12px;color:#8B6914;line-height:1.7">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="#E09030" style="vertical-align:middle;margin-right:3px"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"/></svg>
+                    <strong>Subly Pro</strong>は引き続き<br>ご利用いただけます
+                  </div>
+                  登録数は無制限のままです。
+                </div>`,
+                buttons:[{label:'OK', cls:'ok'}]
+              });
+            }, 200);
           } else {
             showToast('応援会員を解約しました');
           }
@@ -8600,15 +8627,22 @@ function _proceedPlan(){
   gaEvent('plan_selected', { plan: _selectedPlan.name, price: _selectedPlan.price, type: 'supporter' });
 }
 function _startProPurchase(){
-  if(window._fbUser){
-    // ログイン済み → 直接購入フロー
-    _selectedPlan = {name:'Pro', price:980};
-    _selectedType = 'pro';
-    _proceedPlan();
+  const existingUser = window._fbUser;
+  const formSection = document.getElementById('ps-form-section');
+  const submitBtn = document.getElementById('ps-submit-btn');
+  if(existingUser){
+    // ログイン済み → フォーム非表示、ボタンテキスト変更
+    if(formSection) formSection.style.display = 'none';
+    if(submitBtn) submitBtn.textContent = '購入する';
   } else {
-    // 未ログイン → Pro説明画面を表示
-    document.getElementById('pro-signup-ov').classList.remove('hidden');
+    // 未ログイン → フォーム表示
+    if(formSection) formSection.style.display = '';
+    if(submitBtn) submitBtn.textContent = 'アカウント登録して購入する';
+    document.getElementById('ps-nickname').value = '';
+    document.getElementById('ps-email').value = '';
+    document.getElementById('ps-password').value = '';
   }
+  document.getElementById('pro-signup-ov').classList.remove('hidden');
 }
 
 function _closeProSignup(){
@@ -8644,7 +8678,7 @@ async function _completeProSignup(){
       if(nickname) _nickname = nickname;
       await _ensureUserDoc(user);
     }
-    // Pro買い切りフラグ + Firestore更新
+    // Pro買い切りフラグ + Firestore更新（1ステップで完了）
     _proPurchased = true;
     const { doc, setDoc } = window._fbFns;
     await setDoc(doc(window._fbDb, 'users', user.uid), {
@@ -8652,52 +8686,37 @@ async function _completeProSignup(){
       proPurchasedAt: new Date().toISOString(),
       nickname: _nickname
     }, { merge: true });
+    console.log('[Pro Purchase] Firestore updated: proPurchased=true for', user.uid);
     _updateNicknameDisplay();
     _updatePayerField();
     _updateAuthUI(user);
     _closeProSignup();
     gaEvent('pro_purchased', { price: 980, was_free: !!existingUser });
-
-    // 決済画面（将来Stripe）
+    // 即座に完了ダイアログ
     setTimeout(()=>{
       showDialog({
         icon:'',
-        title:'Subly Pro を購入',
-        msg:`<div style="text-align:center;font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:10px">
-          <div style="width:48px;height:48px;border-radius:14px;background:rgba(240,173,78,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 10px">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="#E09030"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.1-9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2H8.9z"/></svg>
+        title:'Subly Pro を購入しました！',
+        msg:`<div style="text-align:center">
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(240,173,78,.12);display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="#E09030"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.1-9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2H8.9z"/></svg>
           </div>
-          <strong style="color:var(--tx);font-size:15px">¥980（税込・買い切り）</strong><br><br>
-          登録数が無制限になります。<br>一度の購入で永久に使えます。
-        </div>
-        <div style="background:rgba(240,173,78,.08);border:1px solid rgba(240,173,78,.2);border-radius:10px;padding:10px 14px;font-size:12px;color:#8B6914;line-height:1.7;text-align:center">
-          決済機能は現在準備中です。<br>本番ではここでStripe決済画面が表示されます。
+          <div style="font-size:15px;font-weight:700;color:var(--tx);margin-bottom:8px">登録数が無制限になりました</div>
+          <div style="font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:14px">サブスクをいくつでも登録できます。<br>この購入は永久に有効です。</div>
+          <div style="background:rgba(240,173,78,.08);border:1px solid rgba(240,173,78,.2);border-radius:10px;padding:10px 14px;font-size:12px;color:#8B6914;line-height:1.7;text-align:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="#E09030" style="vertical-align:middle;margin-right:4px"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>クラウドに自動保存済み</div>
         </div>`,
-        buttons:[{label:'購入する（テスト）', cls:'ok', onClick:()=>{
-          setTimeout(()=>{
-            showDialog({
-              icon:'',
-              title:'Subly Pro を購入しました！',
-              msg:`<div style="text-align:center">
-                <div style="width:56px;height:56px;border-radius:50%;background:rgba(240,173,78,.12);display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="#E09030"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.1-9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2H8.9z"/></svg>
-                </div>
-                <div style="font-size:15px;font-weight:700;color:var(--tx);margin-bottom:8px">登録数が無制限になりました</div>
-                <div style="font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:14px">
-                  サブスクをいくつでも登録できます。<br>この購入は永久に有効です。
-                </div>
-                <div style="background:rgba(240,173,78,.08);border:1px solid rgba(240,173,78,.2);border-radius:10px;padding:10px 14px;font-size:12px;color:#8B6914;line-height:1.7;text-align:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="#E09030" style="vertical-align:middle;margin-right:4px"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>クラウドに自動保存済み</div>
-              </div>`,
-              buttons:[{label:'OK', cls:'ok'}]
-            });
-          }, 200);
-        }}]
+        buttons:[{label:'OK', cls:'ok'}]
       });
-    }, 200);
+    }, 300);
   }catch(e){
     console.error('Pro signup error:', e);
-    const msg = e.code === 'auth/email-already-in-use' ? 'このメールアドレスは既に使われています' : e.message;
-    showToast(msg);
+    const msgs = {
+      'auth/email-already-in-use': 'このメールアドレスは既に使われています',
+      'auth/invalid-email': 'メールアドレスの形式が正しくありません',
+      'auth/weak-password': 'パスワードは8文字以上で入力してください',
+      'auth/too-many-requests': 'しばらく待ってから再試行してください',
+    };
+    showToast(msgs[e.code] || 'エラー: ' + (e.message || e.code));
   }finally{
     btn.disabled = false; btn.textContent = 'アカウント登録して購入する';
   }
