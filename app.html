@@ -1026,7 +1026,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
             <div style="font-size:12px;color:var(--ts);overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="s-auth-email">—</div>
             <div style="margin-top:3px;display:inline-flex;align-items:center;gap:4px;background:var(--pl);border-radius:20px;padding:2px 8px">
               <div style="width:6px;height:6px;border-radius:50%;background:#4ADE80"></div>
-              <span style="font-size:11px;font-weight:700;color:var(--p)" id="s-auth-plan-badge">応援会員 ✓</span>
+              <span style="font-size:11px;font-weight:700;color:var(--p)" id="s-auth-plan-badge">Subly Free</span>
             </div>
           </div>
           <button onclick="logoutFirebase()" style="flex-shrink:0;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;color:var(--ts);font-family:inherit;cursor:pointer;white-space:nowrap">ログアウト</button>
@@ -2810,7 +2810,11 @@ function _copyMemberId(){
 let _supporterPlanName = ''; // プラン名（どんぐり/くるみ等）
 let _supporterPlanPrice = 0;
 const PLAN_EMOJI = {どんぐり:'🌰',くるみ:'🥜',もみじ:'🍁',もりのき:'🌳'};
-function _getPlanLabel(){ return _supporterPlanName ? (PLAN_EMOJI[_supporterPlanName]||'') + ' ' + _supporterPlanName + '会員' : '無料会員'; }
+function _getPlanLabel(){
+  if(_isSupporterMember && _supporterPlanName) return (PLAN_EMOJI[_supporterPlanName]||'') + ' ' + _supporterPlanName + '会員';
+  if(_proPurchased) return 'Subly Pro';
+  return 'Subly Free';
+}
 const today=new Date();
 calYear=today.getFullYear(); calMonth=today.getMonth();
 
@@ -5047,7 +5051,8 @@ function openAuthModal(tab){
   const user = window._fbUser;
   if(user && !tab){
     // ログイン済み → 無料会員なら応援誘導つきメニュー
-    if(!_isSupporterMember){
+    if(!_isSupporterMember && !_proPurchased){
+      // 無料会員
       closeHdrop();
       showDialog({
         icon:'',
@@ -5056,8 +5061,26 @@ function openAuthModal(tab){
           現在<strong style="color:var(--tx)">無料会員</strong>です
         </div>`,
         buttons:[
-          {label:'応援会員にアップグレード', cls:'ok', onClick:()=>{ setTimeout(_showPlanModal, 200); }},
+          {label:'¥980で無制限にする', cls:'ok', onClick:()=>{ setTimeout(_startProPurchase, 200); }},
+          {label:'応援会員プランを見る', cls:'cancel', onClick:()=>{ setTimeout(_showPlanModal, 200); }},
           {label:'ログアウト', cls:'cancel', onClick:()=>{ logoutFirebase(); }},
+          {label:'閉じる', cls:'cancel'}
+        ],
+        btnColumn: true
+      });
+    } else if(_proPurchased && !_isSupporterMember){
+      // Pro会員（応援未加入）
+      closeHdrop();
+      showDialog({
+        icon:'',
+        title: _nickname || 'アカウント',
+        msg:`<div style="text-align:center;font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:10px">
+          現在<strong style="color:#E09030">Subly Pro</strong>（買い切り）
+        </div>`,
+        buttons:[
+          {label:'応援会員プランを見る', cls:'ok', onClick:()=>{ setTimeout(_showPlanModal, 200); }},
+          {label:'ログアウト', cls:'cancel', onClick:()=>{ logoutFirebase(); }},
+          {label:'閉じる', cls:'cancel'}
         ],
         btnColumn: true
       });
@@ -8159,9 +8182,9 @@ function _startCancelFlow(){
   // グループ加入中チェック
   if(_groupId){
     showDialog({
-      icon:'⚠️',
+      icon:'',
       title:'グループに参加中です',
-      msg:'応援会員を解約するには、先にグループから退出してください。',
+      msg:'<div style="text-align:center;font-size:13px;color:var(--ts);line-height:1.7">応援会員を解約するには、先にグループから退出してください。</div>',
       buttons:[
         {label:'グループ設定を開く', cls:'ok', onClick:()=>{ setTimeout(openGroupModal, 200); }},
         {label:'閉じる', cls:'cancel'}
@@ -8170,26 +8193,39 @@ function _startCancelFlow(){
     });
     return;
   }
-  // 件数超過チェック
+  // 買い切り済みかどうかで分岐メッセージ
+  const hasProBuyout = _proPurchased;
   const overCount = subs.length > FREE_LIMIT ? subs.length - FREE_LIMIT : 0;
-  const overMsg = overCount > 0
-    ? `<div style="background:#FFF0F0;border:1px solid #F5C5C5;border-radius:10px;padding:10px 14px;font-size:12px;color:#C06060;line-height:1.7;margin-bottom:10px;text-align:left">
-        ⚠ 現在${subs.length}件登録中です。解約後は無料プラン（${FREE_LIMIT}件まで）になるため、新規登録はできなくなります。既存データは保持されます。
+  const afterPlanMsg = hasProBuyout
+    ? `<div style="background:rgba(240,173,78,.06);border:1px solid rgba(240,173,78,.15);border-radius:10px;padding:10px 14px;font-size:12px;color:#8B6914;line-height:1.7;margin-bottom:10px;text-align:left">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="#E09030" style="vertical-align:middle;margin-right:3px"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"/></svg>
+        <strong>Subly Pro（買い切り）</strong>は有効なため、登録数は<strong>無制限のまま</strong>です。登録済みデータもそのまま引き継がれます。
       </div>`
-    : '';
+    : (overCount > 0
+      ? `<div style="background:#FFF0F0;border:1px solid #F5C5C5;border-radius:10px;padding:10px 14px;font-size:12px;color:#C06060;line-height:1.7;margin-bottom:10px;text-align:left">
+          現在${subs.length}件登録中です。解約後は無料プラン（${FREE_LIMIT}件まで）になるため、新規登録はできなくなります。既存データは保持されます。
+        </div>`
+      : '');
+  const noteItems = hasProBuyout
+    ? `・グラフ・カレンダーは引き続き使えます<br>
+       ・登録数は無制限のままです<br>
+       ・データは削除されません<br>
+       ・グループ機能は使えなくなります<br>
+       ・非表示・アーカイブは使えなくなります`
+    : `・グラフ・カレンダーは引き続き使えます<br>
+       ・データは削除されません<br>
+       ・グループ機能は使えなくなります<br>
+       ・登録は${FREE_LIMIT}件までに制限されます`;
   showDialog({
     icon:'',
     title:'応援会員を解約しますか？',
     msg:`<div style="text-align:center;font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:10px">
       現在：${_getPlanLabel()}（¥${_supporterPlanPrice.toLocaleString()}/月）<br><br>
-      解約すると次回更新日以降、<br>無料会員に戻ります。
+      解約すると次回更新日以降、<br>${hasProBuyout ? 'Subly Pro会員' : '無料会員'}に戻ります。
     </div>
-    ${overMsg}
+    ${afterPlanMsg}
     <div style="background:var(--bg);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--ts);line-height:1.7;text-align:left">
-      ・グラフ・カレンダーは引き続き使えます<br>
-      ・データは削除されません<br>
-      ・グループ機能は使えなくなります<br>
-      ・登録は${FREE_LIMIT}件までに制限されます
+      ${noteItems}
     </div>`,
     buttons:[
       {label:'解約する', cls:'cancel', onClick: async ()=>{
@@ -8864,24 +8900,25 @@ function _processImportFile(file){
     }
     // 無料会員の件数制限チェック（インポート後の合計件数でチェック）
     const totalAfterImport = imported.length;
-    if(!_isSupporterMember && totalAfterImport > FREE_LIMIT){
+    if(!_isUnlimited() && totalAfterImport > FREE_LIMIT){
       showDialog({
         icon:'',
         title:'インポートできません',
         msg:`<div style="text-align:center">
-          <div style="width:48px;height:48px;border-radius:50%;background:#FFF0F0;display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="#C06060"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+          <div style="width:48px;height:48px;border-radius:50%;background:rgba(240,173,78,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="#E09030"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.1-9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2H8.9z"/></svg>
           </div>
           <div style="font-size:13px;color:var(--ts);line-height:1.8;margin-bottom:14px">
             インポートデータは<strong style="color:var(--tx)">${imported.length}件</strong>ですが、<br>
             無料会員は<strong style="color:var(--tx)">${FREE_LIMIT}件まで</strong>の登録となります。
           </div>
-          <div style="background:var(--pl);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--pd);line-height:1.7;text-align:left">
-            <strong>応援会員</strong>になると登録数が無制限になり、<br>すべてのデータをインポートできます。
+          <div style="background:rgba(240,173,78,.06);border:1px solid rgba(240,173,78,.15);border-radius:10px;padding:12px 14px;font-size:12px;color:#8B6914;line-height:1.7;text-align:left;margin-bottom:8px">
+            <strong>Pro（¥980買い切り）</strong>または<strong>応援会員</strong>になると<br>登録数が無制限になり、すべてのデータをインポートできます。
           </div>
         </div>`,
         buttons:[
-          {label:'応援会員になる', cls:'ok', onClick:()=>{ setTimeout(_showPlanModal, 200); }},
+          {label:'¥980で無制限にする', cls:'ok', onClick:()=>{ setTimeout(_startProPurchase, 200); }},
+          {label:'応援会員プランを見る', cls:'cancel', onClick:()=>{ setTimeout(_showPlanModal, 200); }},
           {label:'閉じる', cls:'cancel'}
         ],
         btnColumn: true
@@ -9148,7 +9185,7 @@ async function init(){
   // _onAuthChanged → _loadFromFirestore で _isSupporterMember が復元された後にチェック
   if(onboarded){
     setTimeout(()=>{
-      if(!_isSupporterMember && subs.length > FREE_LIMIT){
+      if(!_isUnlimited() && subs.length > FREE_LIMIT){
         _showLimitPopup();
       }
     }, 5000); // Firestore読み込み完了を待つため十分な遅延
