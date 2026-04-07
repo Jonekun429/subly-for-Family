@@ -934,7 +934,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
     <!-- サポート -->
     <div class="hd-sec">サポート</div>
-    <button class="hd-row" onclick="closeHdrop();gaEvent('menu_tap',{item:'contact'});openExternalLink('https://docs.google.com/forms/d/e/1FAIpQLSecie4ubn9sDlzdoQUWvzcEoK0O46dmQhghSr3VmLpsS-Coww/viewform?usp=publish-editor')">
+    <button class="hd-row" onclick="closeHdrop();gaEvent('menu_tap',{item:'contact'});setTimeout(openContactDialog,150)">
       <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
       <div><div class="hd-lbl">お問い合わせ・機能リクエスト</div><div class="hd-sub">不具合・ご要望はこちら</div></div>
     </button>
@@ -968,9 +968,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   <div class="nb-divider"></div>
   <button class="nb nb-pc-only" id="nb-group" onclick="_onGroupMenuTap()">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>グループ
-  </button>
-  <button class="nb nb-pc-only" onclick="openExternalLink('https://docs.google.com/forms/d/e/1FAIpQLSecie4ubn9sDlzdoQUWvzcEoK0O46dmQhghSr3VmLpsS-Coww/viewform?usp=publish-editor')">
-    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>お問い合わせ
   </button>
   <!-- PC サイドバーのみ表示 -->
   <button class="nb nb-settings" onclick="openSettings()">
@@ -1170,11 +1167,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <div class="s-body"><div class="s-title">友達に紹介する</div><div class="s-sub">QRコード・LINE・URLコピー</div></div>
         <span class="s-arr">›</span>
       </div>
-      <div class="s-row" onclick="openExternalLink('https://docs.google.com/forms/d/e/1FAIpQLSecie4ubn9sDlzdoQUWvzcEoK0O46dmQhghSr3VmLpsS-Coww/viewform?usp=publish-editor')">
-        <div class="s-ico" style="background:#EEF6FF"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
-        <div class="s-body"><div class="s-title">お問い合わせ</div><div class="s-sub">不具合・ご要望はこちら</div></div>
-        <span class="s-arr">›</span>
-      </div>
       <div id="s-withdraw-link" class="s-row" onclick="deleteAccount()" style="display:flex;align-items:center">
         <div class="s-ico" style="background:var(--bg)"><svg width="18" height="18" viewBox="0 0 24 24" fill="var(--ts)"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></div>
         <div class="s-body"><div class="s-title" style="color:var(--ts)">アカウント削除</div><div class="s-sub">アカウントとデータを削除します</div></div>
@@ -1292,7 +1284,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <div class="faq-i" onclick="this.classList.toggle('open')"><div class="faq-q"><span class="faq-qi">Q</span><span class="faq-qt">ホーム画面にアプリを追加するには？</span><span class="faq-qa">▼</span></div><div class="faq-a"><strong>iPhone（Safari）：</strong>共有ボタン → 「ホーム画面に追加」<br><strong>Android（Chrome）：</strong>メニュー → 「ホーム画面に追加」<br><br>追加するとアプリのように起動できます。</div></div>
     </div>
 
-    <div style="text-align:center;padding:16px;font-size:12px;color:var(--ts);line-height:1.7">解決しない場合は<br><a onclick="closeFAQ();setTimeout(()=>openExternalLink('https://docs.google.com/forms/d/e/1FAIpQLSecie4ubn9sDlzdoQUWvzcEoK0O46dmQhghSr3VmLpsS-Coww/viewform?usp=publish-editor'),200)" style="color:var(--pd);font-weight:700;text-decoration:underline;cursor:pointer">お問い合わせ</a>からご連絡ください</div>
+    <div style="text-align:center;padding:16px;font-size:12px;color:var(--ts);line-height:1.7">解決しない場合は下記までご連絡ください<br><a href="mailto:jone.lab.app@gmail.com" style="color:var(--pd);font-weight:700;text-decoration:underline">jone.lab.app@gmail.com</a></div>
   </div>
 </div>
 
@@ -3982,26 +3974,42 @@ function openExternalLink(url){
    外部ページから戻ってきたとき、オーバーレイが残っていると
    操作不能になるため、全モーダルを閉じてリセットする
 ============================================================ */
+// 全オーバーレイをリセットする関数
+function _resetAllOverlays(){
+  [
+    'guide-ov','howto-ov','sat-popup-ov','nudge-ov',
+    'dlg-ov','auth-ov','limit-popup-ov',
+    'pro-signup-ov','supporter-signup-ov',
+    'terms-page-ov','tokushoho-ov',
+    'consent-ov','existing-consent-ov',
+    'plan-select-ov','plan-change-ov',
+    'group-ov','share-ov','saving-hints-ov','faq-ov',
+    'income-ov','member-type-ov','pro-nudge-ov',
+    'free-join-ov','group-intro-ov','nickname-ov',
+    'pro-upgrade-ov','ob-ov'
+  ].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.classList.add('hidden');
+  });
+  document.getElementById('settings-ov')?.classList.remove('open');
+  if(typeof closeHdrop === 'function') closeHdrop();
+}
+
 // visibilitychange: 外部ページから戻ったときオーバーレイをリセット
 document.addEventListener('visibilitychange', () => {
   if(document.visibilityState === 'visible'){
-    // すべてのオーバーレイ・モーダルをリセット
-    [
-      'guide-ov','howto-ov','sat-popup-ov','nudge-ov',
-      'dlg-ov','auth-ov','limit-popup-ov',
-      'pro-signup-ov','supporter-signup-ov',
-      'terms-page-ov','tokushoho-ov',
-      'consent-ov','existing-consent-ov',
-      'plan-modal-ov','plan-change-ov',
-      'group-modal-ov','share-ov','saving-hints-ov','faq-ov',
-      'income-modal-ov','member-type-ov','pro-nudge-ov'
-    ].forEach(id => {
-      const el = document.getElementById(id);
-      if(el) el.classList.add('hidden');
-    });
-    document.getElementById('settings-ov')?.classList.remove('open');
-    closeHdrop();
+    _resetAllOverlays();
   }
+});
+
+// pageshow: PWA再起動・bfcache復元時もリセット
+window.addEventListener('pageshow', (e) => {
+  _resetAllOverlays();
+});
+
+// focus: ウィンドウフォーカス時も念のためリセット
+window.addEventListener('focus', () => {
+  _resetAllOverlays();
 });
 
 /* ============================================================
@@ -8302,6 +8310,52 @@ function openLegalMenu(){
     ],
     btnColumn: true
   });
+}
+
+// お問い合わせダイアログ（外部リンクを使わずアプリ内で完結）
+function openContactDialog(){
+  const email = 'jone.lab.app@gmail.com';
+  showDialog({
+    icon:'',
+    title:'お問い合わせ',
+    msg:`<div style="text-align:center">
+      <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--pl),rgba(92,142,132,.18));display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="var(--pd)"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      </div>
+      <div style="font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:14px">不具合・ご要望は<br>下記のメールアドレスまでお願いします</div>
+      <div style="background:var(--bg);border:1.5px solid var(--bd);border-radius:12px;padding:12px;margin-bottom:12px">
+        <div style="font-size:10px;color:var(--ts);font-weight:600;margin-bottom:4px">メールアドレス</div>
+        <div style="font-size:14px;font-weight:800;color:var(--pd);font-family:'Courier New',monospace;word-break:break-all">${email}</div>
+      </div>
+      <div style="background:var(--pl);border:1px solid rgba(92,142,132,.2);border-radius:10px;padding:10px 12px;font-size:11px;color:var(--pd);line-height:1.7;text-align:left">
+        <div style="font-weight:700;margin-bottom:4px">お問い合わせの際は</div>
+        ・できるだけ詳しい状況<br>
+        ・ご利用の端末・OS（iPhone/Android/PCなど）<br>
+        ・会員IDをお伝えください
+      </div>
+    </div>`,
+    buttons:[
+      {label:'メールアドレスをコピー', cls:'ok', onClick: async ()=>{
+        try{
+          await navigator.clipboard.writeText(email);
+          showToast('メールアドレスをコピーしました');
+          gaEvent('contact_email_copied', {});
+        }catch(e){
+          showToast('コピーに失敗しました');
+        }
+        return false; // ダイアログを閉じない
+      }},
+      {label:'メールアプリで開く', cls:'ok', onClick:()=>{
+        const subject = encodeURIComponent('Subly お問い合わせ');
+        const body = encodeURIComponent('\n\n---\nご利用環境:\n会員ID: ');
+        window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+        gaEvent('contact_mailto_opened', {});
+      }},
+      {label:'閉じる', cls:'cancel'}
+    ],
+    btnColumn: true
+  });
+  gaEvent('contact_dialog_shown', {});
 }
 
 // ハンバーガーメニューから閲覧用
