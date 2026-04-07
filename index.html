@@ -729,6 +729,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     sendPasswordResetEmail,
+    fetchSignInMethodsForEmail,
     deleteUser,
     reauthenticateWithCredential,
     EmailAuthProvider,
@@ -762,6 +763,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     sendPasswordResetEmail,
+    fetchSignInMethodsForEmail,
     deleteUser,
     reauthenticateWithCredential,
     EmailAuthProvider,
@@ -4601,15 +4603,41 @@ async function sendPasswordReset(){
     _showAuthError('reset-no-email');
     return;
   }
+  // メアド形式チェック
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    _showAuthError('auth/invalid-email');
+    return;
+  }
   try{
-    const { sendPasswordResetEmail } = window._fbFns;
-    if(!sendPasswordResetEmail){
-      // fbFnsに未登録の場合はfirebase authから直接取得
-      const authMod = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js');
-      await authMod.sendPasswordResetEmail(window._fbAuth, email);
-    } else {
-      await sendPasswordResetEmail(window._fbAuth, email);
+    const { fetchSignInMethodsForEmail, sendPasswordResetEmail } = window._fbFns;
+    // 存在確認
+    let methods = [];
+    try{
+      methods = await fetchSignInMethodsForEmail(window._fbAuth, email);
+    }catch(fetchErr){
+      console.warn('fetchSignInMethodsForEmail failed:', fetchErr);
     }
+    if(methods.length === 0){
+      // メアド未登録 → 新規登録へ誘導
+      showDialog({
+        icon:'',
+        title:'アカウントが見つかりません',
+        msg:`<div style="text-align:center;font-size:13px;color:var(--ts);line-height:1.7">
+          <strong style="color:var(--tx)">${email}</strong><br>
+          このメールアドレスは登録されていません。<br><br>
+          新しくアカウントを作成しますか？
+        </div>`,
+        buttons:[
+          {label:'新規登録する', cls:'ok', onClick:()=>{ switchAuthTab('signup'); }},
+          {label:'キャンセル', cls:'cancel'}
+        ],
+        btnColumn: true
+      });
+      gaEvent('password_reset_email_not_found', {});
+      return;
+    }
+    // メアド存在 → リセットメール送信
+    await sendPasswordResetEmail(window._fbAuth, email);
     const el = document.getElementById('auth-error');
     el.style.color = 'var(--p)';
     el.textContent = `${email} にリセットメールを送りました`;
@@ -8537,6 +8565,34 @@ function _startCancelFlow(){
                 buttons:[{label:'OK', cls:'ok'}]
               });
             }, 200);
+          } else if(subs.length > FREE_LIMIT){
+            // Pro未購入 + 6件超過 → Proをおすすめ
+            setTimeout(()=>{
+              showDialog({
+                icon:'',
+                title:'応援会員を解約しました',
+                msg:`<div style="text-align:center;font-size:13px;color:var(--ts);line-height:1.8">
+                  <div style="background:#FFF0F0;border:1px solid #F5C5C5;border-radius:10px;padding:12px 14px;margin-bottom:12px;font-size:12px;color:#C06060;line-height:1.7;text-align:left">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="#C06060" style="vertical-align:middle;margin-right:3px"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                    現在 <strong>${subs.length}件</strong> 登録中です。<br>
+                    無料会員は<strong>${FREE_LIMIT}件まで</strong>のため、<br>
+                    ${subs.length - FREE_LIMIT}件が新規登録不可になります。
+                  </div>
+                  <div style="background:rgba(240,173,78,.06);border:1px solid rgba(240,173,78,.2);border-radius:10px;padding:12px 14px;margin-bottom:10px;text-align:left">
+                    <div style="font-size:12px;font-weight:700;color:#8B6914;margin-bottom:4px;display:flex;align-items:center;gap:5px">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="#E09030"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"/></svg>
+                      Subly Pro（¥980 買い切り）
+                    </div>
+                    <div style="font-size:11px;color:var(--ts);line-height:1.6">登録無制限・永久利用・月額なし<br>一度の購入で登録件数を気にせず使えます。</div>
+                  </div>
+                </div>`,
+                buttons:[
+                  {label:'¥980で無制限にする', cls:'ok', onClick:()=>{ setTimeout(_startProPurchase, 200); }},
+                  {label:'今は見送る', cls:'cancel'}
+                ],
+                btnColumn: true
+              });
+            }, 200);
           } else {
             showToast('応援会員を解約しました');
           }
@@ -9585,6 +9641,8 @@ async function _manualRefresh(){
     }
     renderDashboard();
     renderList();
+    showToast('データを更新しました');
+    gaEvent('manual_refresh', {});
   } finally {
     if(btn) btn.style.opacity = '1';
   }
