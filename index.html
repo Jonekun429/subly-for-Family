@@ -8182,7 +8182,14 @@ async function _obAgreeAndClose(){
 }
 
 function _closeTermsPage(){
-  document.getElementById('terms-page-ov').classList.add('hidden');
+  const ov = document.getElementById('terms-page-ov');
+  ov.classList.add('hidden');
+  ov.scrollTop = 0;
+  // フッター非表示＆状態リセット
+  const footer = document.getElementById('terms-page-footer');
+  if(footer) footer.style.display = 'none';
+  // 念のためdlg-ovも閉じる（残ってる場合に備えて）
+  closeDialog();
 }
 
 // ハンバーガーメニューから閲覧用
@@ -8193,8 +8200,8 @@ function openTermsPrivacy(){
     title:'利用規約・プライバシーポリシー',
     msg:'確認したい規約を選んでください。',
     buttons:[
-      {label:'利用規約', cls:'ok', onClick:()=>{ _viewDoc('terms'); }},
-      {label:'プライバシーポリシー', cls:'ok', onClick:()=>{ _viewDoc('privacy'); }},
+      {label:'利用規約', cls:'ok', onClick:()=>{ closeDialog(); setTimeout(()=>_viewDoc('terms'), 200); }},
+      {label:'プライバシーポリシー', cls:'ok', onClick:()=>{ closeDialog(); setTimeout(()=>_viewDoc('privacy'), 200); }},
       {label:'閉じる', cls:'cancel'}
     ],
     btnColumn: true
@@ -8206,30 +8213,12 @@ function _viewDoc(type){
   _consentMode = 'view';
   document.getElementById('terms-page-title').textContent = type === 'terms' ? '利用規約' : 'プライバシーポリシー';
   document.getElementById('terms-page-content').innerHTML = type === 'terms' ? _TERMS_TEXT : _PRIVACY_TEXT;
+  // 閲覧モードはフッター非表示（既に同意済みなので確認ボタン不要）
   const footer = document.getElementById('terms-page-footer');
-  const confirmBtn = footer.querySelector('button');
-  // 初期状態：フッター表示するが無効化
-  footer.style.display = 'block';
-  confirmBtn.disabled = true;
-  confirmBtn.style.opacity = '0.4';
-  confirmBtn.textContent = '↓ 最後までスクロールしてください';
-  confirmBtn.style.background = 'var(--ts)';
+  footer.style.display = 'none';
   const ov = document.getElementById('terms-page-ov');
   ov.classList.remove('hidden');
-  // スクロール監視
-  const _onScroll = ()=>{
-    const scrollTop = ov.scrollTop;
-    const scrollHeight = ov.scrollHeight;
-    const clientHeight = ov.clientHeight;
-    if(scrollTop + clientHeight >= scrollHeight - 60){
-      confirmBtn.disabled = false;
-      confirmBtn.style.opacity = '1';
-      confirmBtn.textContent = '確認しました';
-      confirmBtn.style.background = 'linear-gradient(135deg,var(--p),var(--pd))';
-      ov.removeEventListener('scroll', _onScroll);
-    }
-  };
-  ov.addEventListener('scroll', _onScroll);
+  requestAnimationFrame(()=>{ ov.scrollTop = 0; });
   gaEvent(type === 'terms' ? 'terms_viewed' : 'privacy_viewed', { mode: 'view' });
 }
 
