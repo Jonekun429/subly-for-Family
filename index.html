@@ -3973,20 +3973,30 @@ function openExternalLink(url){
    ページ可視性リカバリー
    外部ページから戻ってきたとき、オーバーレイが残っていると
    操作不能になるため、全モーダルを閉じてリセットする
+   ※起動時・初回ロード時は実行しない（同意・オンボーディングを保護）
 ============================================================ */
+// 初回ロード完了フラグ（これがtrueになるまでリセットしない）
+let _appReadyForReset = false;
+// 起動から少し経ったらリセットを有効化（同意・オンボーディングが表示される時間を確保）
+window.addEventListener('load', () => {
+  setTimeout(() => { _appReadyForReset = true; }, 3000);
+});
+
 // 全オーバーレイをリセットする関数
+// 注意: consent-ov / existing-consent-ov / ob-ov などの「初回必須UI」は除外
 function _resetAllOverlays(){
+  if(!_appReadyForReset) return; // 起動直後は何もしない
   [
     'guide-ov','howto-ov','sat-popup-ov','nudge-ov',
     'dlg-ov','auth-ov','limit-popup-ov',
     'pro-signup-ov','supporter-signup-ov',
     'terms-page-ov','tokushoho-ov',
-    'consent-ov','existing-consent-ov',
     'plan-select-ov','plan-change-ov',
     'group-ov','share-ov','saving-hints-ov','faq-ov',
     'income-ov','member-type-ov','pro-nudge-ov',
     'free-join-ov','group-intro-ov','nickname-ov',
-    'pro-upgrade-ov','ob-ov'
+    'pro-upgrade-ov'
+    // ↑ consent-ov / existing-consent-ov / ob-ov は除外（初回必須UI）
   ].forEach(id => {
     const el = document.getElementById(id);
     if(el) el.classList.add('hidden');
@@ -4002,12 +4012,14 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
-// pageshow: PWA再起動・bfcache復元時もリセット
+// pageshow: bfcache復元時のみリセット（初回ロードは無視）
 window.addEventListener('pageshow', (e) => {
-  _resetAllOverlays();
+  if(e.persisted){ // bfcacheから復元された場合のみ
+    _resetAllOverlays();
+  }
 });
 
-// focus: ウィンドウフォーカス時も念のためリセット
+// focus: 起動後のみ実行（初回は無視）
 window.addEventListener('focus', () => {
   _resetAllOverlays();
 });
