@@ -5158,7 +5158,7 @@ function _showSignupComplete(user){
   };
 
   window._proSlidePrev = function(){
-    if(_proSlide > 0){ _proSlide--; _renderProSlide(); }
+    if(_proSlide > 0){ _proSlide--; _renderProSlide(); gaEvent('signup_slide_prev', { slide: _proSlide }); }
   };
 
   _renderProSlide();
@@ -5289,13 +5289,14 @@ function openAuthModal(tab){
           現在<strong style="color:var(--tx)">無料会員</strong>です
         </div>`,
         buttons:[
-          {label:'¥980で無制限にする', cls:'ok', onClick:()=>{ setTimeout(_startProPurchase, 200); }},
-          {label:'応援会員プランを見る', cls:'cancel', onClick:()=>{ setTimeout(_showPlanModal, 200); }},
-          {label:'ログアウト', cls:'cancel', onClick:()=>{ logoutFirebase(); }},
+          {label:'¥980で無制限にする', cls:'ok', onClick:()=>{ gaEvent('account_menu_tap',{plan:'free',action:'buy_pro'}); setTimeout(_startProPurchase, 200); }},
+          {label:'応援会員プランを見る', cls:'cancel', onClick:()=>{ gaEvent('account_menu_tap',{plan:'free',action:'view_supporter'}); setTimeout(_showPlanModal, 200); }},
+          {label:'ログアウト', cls:'cancel', onClick:()=>{ gaEvent('account_menu_tap',{plan:'free',action:'logout'}); logoutFirebase(); }},
           {label:'閉じる', cls:'cancel'}
         ],
         btnColumn: true
       });
+      gaEvent('account_menu_open', { plan: 'free' });
     } else if(_proPurchased && !_isSupporterMember){
       // Pro会員（応援未加入）
       closeHdrop();
@@ -5306,12 +5307,13 @@ function openAuthModal(tab){
           現在<strong style="color:#E09030">Subly Pro</strong>（買い切り）
         </div>`,
         buttons:[
-          {label:'応援会員プランを見る', cls:'ok', onClick:()=>{ setTimeout(_showPlanModal, 200); }},
-          {label:'ログアウト', cls:'cancel', onClick:()=>{ logoutFirebase(); }},
+          {label:'応援会員プランを見る', cls:'ok', onClick:()=>{ gaEvent('account_menu_tap',{plan:'pro',action:'view_supporter'}); setTimeout(_showPlanModal, 200); }},
+          {label:'ログアウト', cls:'cancel', onClick:()=>{ gaEvent('account_menu_tap',{plan:'pro',action:'logout'}); logoutFirebase(); }},
           {label:'閉じる', cls:'cancel'}
         ],
         btnColumn: true
       });
+      gaEvent('account_menu_open', { plan: 'pro' });
     } else if(_isSupporterMember){
       // 応援会員
       closeHdrop();
@@ -5322,13 +5324,14 @@ function openAuthModal(tab){
           現在<strong style="color:var(--pd)">${_getPlanLabel()}</strong>（¥${_supporterPlanPrice.toLocaleString()}/月）
         </div>`,
         buttons:[
-          {label:'プラン変更', cls:'ok', onClick:()=>{ setTimeout(_openPlanChangeModal, 200); }},
-          {label:'応援会員を解約する', cls:'cancel', onClick:()=>{ setTimeout(_startCancelFlow, 200); }},
-          {label:'ログアウト', cls:'cancel', onClick:()=>{ logoutFirebase(); }},
+          {label:'プラン変更', cls:'ok', onClick:()=>{ gaEvent('account_menu_tap',{plan:'supporter',action:'change_plan'}); setTimeout(_openPlanChangeModal, 200); }},
+          {label:'応援会員を解約する', cls:'cancel', onClick:()=>{ gaEvent('account_menu_tap',{plan:'supporter',action:'cancel'}); setTimeout(_startCancelFlow, 200); }},
+          {label:'ログアウト', cls:'cancel', onClick:()=>{ gaEvent('account_menu_tap',{plan:'supporter',action:'logout'}); logoutFirebase(); }},
           {label:'閉じる', cls:'cancel'}
         ],
         btnColumn: true
       });
+      gaEvent('account_menu_open', { plan: 'supporter', supporter_plan: _supporterPlanName });
     } else {
       logoutFirebase();
     }
@@ -8587,11 +8590,12 @@ function _startCancelFlow(){
                   </div>
                 </div>`,
                 buttons:[
-                  {label:'¥980で無制限にする', cls:'ok', onClick:()=>{ setTimeout(_startProPurchase, 200); }},
-                  {label:'今は見送る', cls:'cancel'}
+                  {label:'¥980で無制限にする', cls:'ok', onClick:()=>{ gaEvent('post_cancel_pro_tap',{action:'buy'}); setTimeout(_startProPurchase, 200); }},
+                  {label:'今は見送る', cls:'cancel', onClick:()=>{ gaEvent('post_cancel_pro_tap',{action:'dismiss'}); }}
                 ],
                 btnColumn: true
               });
+              gaEvent('post_cancel_pro_shown', { subs_count: subs.length });
             }, 200);
           } else {
             showToast('応援会員を解約しました');
