@@ -3985,8 +3985,19 @@ function openExternalLink(url){
 // visibilitychange: 外部ページから戻ったときオーバーレイをリセット
 document.addEventListener('visibilitychange', () => {
   if(document.visibilityState === 'visible'){
-    ['guide-ov','howto-ov','sat-popup-ov','nudge-ov'].forEach(id => {
-      document.getElementById(id)?.classList.add('hidden');
+    // すべてのオーバーレイ・モーダルをリセット
+    [
+      'guide-ov','howto-ov','sat-popup-ov','nudge-ov',
+      'dlg-ov','auth-ov','limit-popup-ov',
+      'pro-signup-ov','supporter-signup-ov',
+      'terms-page-ov','tokushoho-ov',
+      'consent-ov','existing-consent-ov',
+      'plan-modal-ov','plan-change-ov',
+      'group-modal-ov','share-ov','saving-hints-ov','faq-ov',
+      'income-modal-ov','member-type-ov','pro-nudge-ov'
+    ].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.classList.add('hidden');
     });
     document.getElementById('settings-ov')?.classList.remove('open');
     closeHdrop();
