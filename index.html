@@ -9983,8 +9983,8 @@ async function init(){
   gaEvent('app_open', { open_count: appOpenCount, subs_count: subs.length });
 
   // Web版: 月初の見直しバナー表示（onboarding後に少し遅らせて表示）
-  _initChartSwipe();
-  _initPullToRefresh();
+  if(typeof _initChartSwipe === 'function') try{ _initChartSwipe(); }catch(e){}
+  if(typeof _initPullToRefresh === 'function') try{ _initPullToRefresh(); }catch(e){}
   if(onboarded) setTimeout(()=>checkUpcomingPayments(), 1200);
   // 応援会員プラン誘導（未ログイン・3件以上登録済みの場合）
   if(onboarded) setTimeout(()=>checkProNudge(), 2500);
