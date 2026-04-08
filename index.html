@@ -798,8 +798,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
     <!-- アプリヘッダー -->
     <div class="hdrop-header">
-      <div class="hdrop-logo" style="background:none;padding:0;overflow:hidden">
-        <img src="https://jonekun429.github.io/Subscription/icon-192.png" width="44" height="44" style="border-radius:12px;display:block;object-fit:cover" alt="Subly">
+      <div class="hdrop-logo" style="background:linear-gradient(135deg,#5C8E84,#3A6B60);padding:0;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.2)">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-9 3h2v2h-2V7zm0 4h2v6h-2v-6zM7 7h6v2H7V7zm0 4h6v2H7v-2zm0 4h6v2H7v-2zm10 2h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>
       </div>
       <div>
         <div class="hdrop-app-name">Subly</div>
@@ -1527,7 +1527,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <button onclick="_closeTermsPage()" style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.15);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button>
       <div style="font-size:16px;font-weight:800;color:#fff" id="terms-page-title">利用規約</div>
     </div>
-    <div id="terms-page-content" style="flex:1;padding:20px 24px 120px;font-size:13px;color:var(--tx);line-height:2;background:#fff"></div>
+    <div id="terms-page-content" style="flex:1;padding:20px 24px 120px;font-size:13px;color:#1a1a1a;line-height:2;background:#fff"></div>
     <div id="terms-page-footer" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--bd);padding:12px 24px calc(env(safe-area-inset-bottom,0px) + 16px);z-index:50">
       <button onclick="_confirmConsentDoc()" style="width:100%;max-width:440px;margin:0 auto;display:block;padding:15px;border-radius:12px;font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:inherit;background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;box-shadow:0 4px 12px rgba(92,142,132,.3)">確認しました</button>
     </div>
@@ -1541,15 +1541,15 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <button onclick="closeTokushoho()" style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.15);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button>
       <div style="font-size:16px;font-weight:800;color:#fff">特定商取引法に基づく表記</div>
     </div>
-    <div style="flex:1;padding:20px 24px 40px;font-size:13px;color:var(--tx);line-height:1.9;background:#fff">
-      <table style="width:100%;border-collapse:collapse;font-size:13px">
-        <tr><td style="padding:10px 0;border-bottom:1px solid var(--bd);font-weight:700;width:35%;vertical-align:top">販売事業者</td><td style="padding:10px 0;border-bottom:1px solid var(--bd)">Jone Lab</td></tr>
-        <tr><td style="padding:10px 0;border-bottom:1px solid var(--bd);font-weight:700;vertical-align:top">運営責任者</td><td style="padding:10px 0;border-bottom:1px solid var(--bd)">Jone</td></tr>
-        <tr><td style="padding:10px 0;border-bottom:1px solid var(--bd);font-weight:700;vertical-align:top">所在地</td><td style="padding:10px 0;border-bottom:1px solid var(--bd)">〒150-0043<br>東京都渋谷区道玄坂1丁目10番8号<br>渋谷道玄坂東急ビル2F-C</td></tr>
-        <tr><td style="padding:10px 0;border-bottom:1px solid var(--bd);font-weight:700;vertical-align:top">電話番号</td><td style="padding:10px 0;border-bottom:1px solid var(--bd)">請求があった場合、遅滞なく開示します<br><span style="font-size:11px;color:var(--ts)">お問い合わせはメールにてお願いいたします</span></td></tr>
-        <tr><td style="padding:10px 0;border-bottom:1px solid var(--bd);font-weight:700;vertical-align:top">メールアドレス</td><td style="padding:10px 0;border-bottom:1px solid var(--bd)"><a href="mailto:jone.lab.app@gmail.com" style="color:var(--p);text-decoration:none">jone.lab.app@gmail.com</a></td></tr>
-        <tr><td style="padding:10px 0;border-bottom:1px solid var(--bd);font-weight:700;vertical-align:top">サービス名</td><td style="padding:10px 0;border-bottom:1px solid var(--bd)">Subly（サブリー）</td></tr>
-        <tr><td style="padding:10px 0;border-bottom:1px solid var(--bd);font-weight:700;vertical-align:top">販売価格</td><td style="padding:10px 0;border-bottom:1px solid var(--bd)">
+    <div style="flex:1;padding:20px 24px 40px;font-size:13px;color:#1a1a1a;line-height:1.9;background:#fff">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;color:#1a1a1a">
+        <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;width:35%;vertical-align:top">販売事業者</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">Jone Lab</td></tr>
+        <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">運営責任者</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">Jone</td></tr>
+        <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">所在地</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">〒150-0043<br>東京都渋谷区道玄坂1丁目10番8号<br>渋谷道玄坂東急ビル2F-C</td></tr>
+        <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">電話番号</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">請求があった場合、遅滞なく開示します<br><span style="font-size:11px;color:#666">お問い合わせはメールにてお願いいたします</span></td></tr>
+        <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">メールアドレス</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0"><a href="mailto:jone.lab.app@gmail.com" style="color:#5C8E84;text-decoration:none">jone.lab.app@gmail.com</a></td></tr>
+        <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">サービス名</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">Subly（サブリー）</td></tr>
+        <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">販売価格</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">
           <strong>Subly Pro（買い切り）</strong>：980円（税込）<br>
           <strong>応援会員プラン（月額）</strong>：<br>
           ・どんぐり会員：300円（税込）/月<br>
@@ -1557,24 +1557,24 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
           ・もみじ会員：800円（税込）/月<br>
           ・もりのき会員：1,000円（税込）/月
         </td></tr>
-        <tr><td style="padding:10px 0;border-bottom:1px solid var(--bd);font-weight:700;vertical-align:top">商品代金以外の必要料金</td><td style="padding:10px 0;border-bottom:1px solid var(--bd)">インターネット接続料金、通信料はお客様のご負担となります</td></tr>
-        <tr><td style="padding:10px 0;border-bottom:1px solid var(--bd);font-weight:700;vertical-align:top">支払方法</td><td style="padding:10px 0;border-bottom:1px solid var(--bd)">クレジットカード決済（Stripe）<br><span style="font-size:11px;color:var(--ts)">VISA / Mastercard / JCB / American Express</span></td></tr>
-        <tr><td style="padding:10px 0;border-bottom:1px solid var(--bd);font-weight:700;vertical-align:top">支払時期</td><td style="padding:10px 0;border-bottom:1px solid var(--bd)">
+        <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">商品代金以外の必要料金</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">インターネット接続料金、通信料はお客様のご負担となります</td></tr>
+        <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">支払方法</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">クレジットカード決済（Stripe）<br><span style="font-size:11px;color:#666">VISA / Mastercard / JCB / American Express</span></td></tr>
+        <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">支払時期</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">
           <strong>買い切り</strong>：購入時に1回<br>
           <strong>月額プラン</strong>：毎月の課金日に自動引き落とし
         </td></tr>
-        <tr><td style="padding:10px 0;border-bottom:1px solid var(--bd);font-weight:700;vertical-align:top">サービス提供時期</td><td style="padding:10px 0;border-bottom:1px solid var(--bd)">決済完了後、即時ご利用いただけます</td></tr>
-        <tr><td style="padding:10px 0;border-bottom:1px solid var(--bd);font-weight:700;vertical-align:top">返品・キャンセル</td><td style="padding:10px 0;border-bottom:1px solid var(--bd)">
+        <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">サービス提供時期</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">決済完了後、即時ご利用いただけます</td></tr>
+        <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">返品・キャンセル</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">
           デジタルコンテンツの性質上、決済後の<strong>返金は原則として承っておりません</strong>。<br><br>
           <strong>月額プランの解約</strong>：いつでも可能です。解約後も次回更新日までは引き続きご利用いただけます。日割り返金は行いません。
         </td></tr>
-        <tr><td style="padding:10px 0;border-bottom:1px solid var(--bd);font-weight:700;vertical-align:top">動作環境</td><td style="padding:10px 0;border-bottom:1px solid var(--bd)">
+        <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">動作環境</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">
           ・モダンブラウザ（Chrome、Safari、Edge、Firefox の最新版）<br>
           ・JavaScript有効化必須<br>
           ・インターネット接続環境
         </td></tr>
       </table>
-      <div style="margin-top:20px;padding:14px;background:var(--bg);border-radius:10px;font-size:11px;color:var(--ts);line-height:1.8">
+      <div style="margin-top:20px;padding:14px;background:#f5f5f0;border-radius:10px;font-size:11px;color:#666;line-height:1.8">
         ※ 本表記内容について、ご不明な点がございましたらお問い合わせ先までご連絡ください。<br>
         ※ 本表記は予告なく変更する場合があります。
       </div>
@@ -3047,13 +3047,23 @@ const _CP={
   shield:  '<path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>',
   loan:    '<path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>',
   more:    '<path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>',
+  news:    '<path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/>',
+  heart:   '<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>',
+  food:    '<path d="M8.1 13.34l2.83-2.83L3.91 3.5a4.008 4.008 0 0 0 0 5.66l4.19 4.18zm6.78-1.81c1.53.71 3.68.21 5.27-1.38 1.91-1.91 2.28-4.65.81-6.12-1.46-1.46-4.20-1.10-6.12.81-1.59 1.59-2.09 3.74-1.38 5.27L3.7 19.87l1.41 1.41L12 14.41l6.88 6.88 1.41-1.41L13.41 13l1.47-1.47z"/>',
+  edu:     '<path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>',
+  life:    '<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>',
 };
 const catMap={
   "動画・配信":        {color:"#E05C5C",icon:(c,s)=>_catSvg(_CP.video,  c||"#E05C5C",s)},
   "音楽":              {color:"#2A9D8F",icon:(c,s)=>_catSvg(_CP.music,  c||"#2A9D8F",s)},
   "電子書籍・雑誌":    {color:"#E9A400",icon:(c,s)=>_catSvg(_CP.book,   c||"#E9A400",s)},
+  "ニュース・ビジネス":{color:"#3498DB",icon:(c,s)=>_catSvg(_CP.news,   c||"#3498DB",s)},
   "仕事・ツール":      {color:"#4A7EC8",icon:(c,s)=>_catSvg(_CP.pc,     c||"#4A7EC8",s)},
   "ゲーム":            {color:"#9B59B6",icon:(c,s)=>_catSvg(_CP.game,   c||"#9B59B6",s)},
+  "SNS・恋活":         {color:"#E91E63",icon:(c,s)=>_catSvg(_CP.heart,  c||"#E91E63",s)},
+  "フード・食品":      {color:"#FFA726",icon:(c,s)=>_catSvg(_CP.food,   c||"#FFA726",s)},
+  "教育・学習":        {color:"#66BB6A",icon:(c,s)=>_catSvg(_CP.edu,    c||"#66BB6A",s)},
+  "ライフスタイル":    {color:"#26C6DA",icon:(c,s)=>_catSvg(_CP.life,   c||"#26C6DA",s)},
   "健康・フィットネス":{color:"#27AE60",icon:(c,s)=>_catSvg(_CP.health, c||"#27AE60",s)},
   "金融・年会費":      {color:"#F39C12",icon:(c,s)=>_catSvg(_CP.card,   c||"#F39C12",s)},
   "習い事":            {color:"#16A085",icon:(c,s)=>_catSvg(_CP.school, c||"#16A085",s)},
@@ -3083,7 +3093,17 @@ const qData={
     {name:"Hulu",               price:1026, freq:"月額"},
     {name:"dアニメストア",       price:440,  freq:"月額"},
     {name:"ABEMA プレミアム",    price:960,  freq:"月額"},
-    {name:"DMM TV",             price:550,  freq:"月額"}
+    {name:"DMM TV",             price:550,  freq:"月額"},
+    {name:"DAZN",               price:4200, freq:"月額"},
+    {name:"WOWOW",              price:2530, freq:"月額"},
+    {name:"FODプレミアム",       price:976,  freq:"月額"},
+    {name:"Paravi",             price:1017, freq:"月額"},
+    {name:"TSUTAYA DISCAS",     price:2052, freq:"月額"},
+    {name:"スカパー！",          price:3960, freq:"月額"},
+    {name:"NBA Rakuten",        price:990,  freq:"月額"},
+    {name:"パ・リーグTV",        price:1595, freq:"月額"},
+    {name:"バンダイチャンネル",  price:1100, freq:"月額"},
+    {name:"ニコニコプレミアム",  price:790,  freq:"月額"}
   ],
   "音楽":[
     {name:"Spotify", plans:[
@@ -3098,7 +3118,9 @@ const qData={
     ], freq:"月額"},
     {name:"YouTube Music",      price:1080, freq:"月額"},
     {name:"Amazon Music UL",    price:980,  freq:"月額"},
-    {name:"LINE MUSIC",         price:980,  freq:"月額"}
+    {name:"LINE MUSIC",         price:980,  freq:"月額"},
+    {name:"AWA",                price:980,  freq:"月額"},
+    {name:"dヒッツ",             price:550,  freq:"月額"}
   ],
   "電子書籍・雑誌":[
     {name:"Kindle Unlimited",   price:980,  freq:"月額"},
@@ -3106,7 +3128,23 @@ const qData={
     {name:"dマガジン",           price:580,  freq:"月額"},
     {name:"コミックシーモア",    price:980,  freq:"月額"},
     {name:"楽天Kobo読み放題",   price:693,  freq:"月額"},
-    {name:"ebook japan",        price:693,  freq:"月額"}
+    {name:"ebook japan",        price:693,  freq:"月額"},
+    {name:"Audible",            price:1500, freq:"月額"},
+    {name:"audiobook.jp",       price:1330, freq:"月額"},
+    {name:"BOOK WALKER",        price:836,  freq:"月額"},
+    {name:"少年ジャンプ＋",      price:980,  freq:"月額"},
+    {name:"めちゃコミック",      price:1100, freq:"月額"},
+    {name:"コミックDAYS",        price:720,  freq:"月額"},
+    {name:"flier（フライヤー）", price:2200, freq:"月額"}
+  ],
+  "ニュース・ビジネス":[
+    {name:"NewsPicks",          price:1850, freq:"月額"},
+    {name:"日経電子版",          price:4277, freq:"月額"},
+    {name:"朝日新聞デジタル",    price:3800, freq:"月額"},
+    {name:"毎日新聞デジタル",    price:3520, freq:"月額"},
+    {name:"The New York Times", price:1680, freq:"月額"},
+    {name:"テレ東BIZ",           price:550,  freq:"月額"},
+    {name:"COURRIER JAPON",     price:1078, freq:"月額"}
   ],
   "仕事・ツール":[
     {name:"ChatGPT Plus",       price:3000, freq:"月額"},
@@ -3133,7 +3171,51 @@ const qData={
     {name:"Dropbox", plans:[
       {label:"Plus",             price:1200},
       {label:"Professional",    price:2000}
-    ], freq:"月額"}
+    ], freq:"月額"},
+    {name:"1Password",          price:450,  freq:"月額"},
+    {name:"Evernote",           price:1100, freq:"月額"},
+    {name:"GitHub Pro",         price:600,  freq:"月額"},
+    {name:"Zoom Pro",           price:2000, freq:"月額"},
+    {name:"freee",              price:1180, freq:"月額"},
+    {name:"ノートン",            price:550,  freq:"月額"},
+    {name:"ESET",               price:440,  freq:"月額"},
+    {name:"Zaim プレミアム",     price:480,  freq:"月額"},
+    {name:"JetBrains",          price:1500, freq:"月額"},
+    {name:"Chatwork",           price:840,  freq:"月額"}
+  ],
+  "SNS・恋活":[
+    {name:"Pairs（ペアーズ）",   price:4100, freq:"月額"},
+    {name:"タップル（tapple）", price:3700, freq:"月額"},
+    {name:"with（ウィズ）",      price:3600, freq:"月額"},
+    {name:"Omiai",              price:4800, freq:"月額"},
+    {name:"Tinder Plus",        price:2200, freq:"月額"},
+    {name:"mixiプレミアム",      price:320,  freq:"月額"},
+    {name:"pixivプレミアム",     price:550,  freq:"月額"}
+  ],
+  "フード・食品":[
+    {name:"nosh（ナッシュ）",    price:5990, freq:"月額"},
+    {name:"Oisix",              price:4800, freq:"月額"},
+    {name:"Uber Eats パス",     price:498,  freq:"月額"},
+    {name:"snaq.me",            price:1980, freq:"月額"},
+    {name:"クックパッド",        price:308,  freq:"月額"},
+    {name:"DELISH KITCHEN",     price:480,  freq:"月額"}
+  ],
+  "教育・学習":[
+    {name:"スタディサプリ",      price:2178, freq:"月額"},
+    {name:"スタディサプリ ENGLISH", price:3278, freq:"月額"},
+    {name:"ネイティブキャンプ",  price:6480, freq:"月額"},
+    {name:"レアジョブ英会話",    price:7980, freq:"月額"},
+    {name:"Cambly",             price:14390, freq:"月額"},
+    {name:"Progate Plus",       price:990,  freq:"月額"},
+    {name:"Schoo",              price:980,  freq:"月額"}
+  ],
+  "ライフスタイル":[
+    {name:"airCloset",          price:10780, freq:"月額"},
+    {name:"メチャカリ",          price:3278, freq:"月額"},
+    {name:"ブルーミー（bloomee）", price:880, freq:"月額"},
+    {name:"あすけん",            price:480,  freq:"月額"},
+    {name:"ルナルナ",            price:300,  freq:"月額"},
+    {name:"エニタイムフィットネス", price:7480, freq:"月額"}
   ],
   "ゲーム":[
     {name:"Nintendo Switch Online", plans:[
@@ -5305,8 +5387,8 @@ async function _ensureUserDoc(user){
       const data = snap.data();
       if(data.nickname){ _nickname = data.nickname; _updateNicknameDisplay(); }
       _isSupporterMember = !!(data.supporterPlan && data.supporterPlan !== 'free');
-      // Pro買い切りフラグ復元
-      if(data.proPurchased) _proPurchased = true;
+      // Pro買い切りフラグ復元（Firestoreの値を正として完全同期）
+      _proPurchased = data.proPurchased === true;
       _memberId = data.memberId || '';
       // 既存ユーザーでmemberIdがない場合は生成して保存
       if(!_memberId){
@@ -5349,8 +5431,8 @@ async function _loadFromFirestore(uid){
       _isSupporterMember = !!(data.supporterPlan && data.supporterPlan !== 'free');
       _supporterPlanName = (data.supporterPlan && data.supporterPlan !== 'free') ? data.supporterPlan : '';
       _supporterPlanPrice = data.supporterPrice || 0;
-      // Pro買い切りフラグ復元（永久フラグ）
-      if(data.proPurchased) _proPurchased = true;
+      // Pro買い切りフラグ復元（Firestoreの値を正として完全同期）
+      _proPurchased = data.proPurchased === true;
     }
     // サブスクデータ
     const subsSnap = await getDocs(collection(window._fbDb, 'users', uid, 'subs'));
@@ -8139,9 +8221,9 @@ async function _toggleGroupPublic(id){
 // ============================================================
 //   利用規約・プライバシーポリシー同意フロー
 // ============================================================
-const _TERMS_TEXT = `<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:0 0 6px">第1条（サービスの内容）</h3>Subly（以下「本サービス」）は、サブスクリプションの支出管理を目的としたWebアプリケーションです。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">第2条（利用条件）</h3>本サービスは無料でご利用いただけます。応援会員プランは月額課金制です。未成年の方は保護者の同意を得たうえでご利用ください。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">第3条（アカウント・パスワードの管理）</h3>ユーザーは自己の責任においてメールアドレスおよびパスワードを適切に管理するものとします。パスワードを第三者に譲渡・貸与することはできません。第三者による不正利用から生じた損害について、運営者は責任を負いません。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">第4条（データの取り扱い）</h3>未ログイン時のデータは端末のLocalStorageに保存されます。アカウント登録時はFirebase（Google Cloud Platform）上に保存されます。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">第5条（禁止事項）</h3>不正アクセス、リバースエンジニアリング、商用目的での無断利用、他のユーザーへの迷惑行為、法令に違反する行為を禁止します。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">第6条（サービスの停止・中断）</h3>運営者は、システムの保守点検、天災、通信障害等の理由により、事前の通知なくサービスの全部または一部を停止・中断できるものとします。これによりユーザーに生じた損害について一切の責任を負いません。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">第7条（利用制限・登録抹消）</h3>運営者は、本規約に違反した場合、虚偽の登録情報が判明した場合、その他運営者が不適切と判断した場合に、事前の通知なくサービスの利用制限または登録抹消を行うことができます。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">第8条（知的財産権）</h3>本サービスに関する著作権、商標権その他の知的財産権は運営者に帰属します。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">第9条（免責事項）</h3>本サービスの利用により生じた損害について、運営者は一切の責任を負いません。データのバックアップはユーザーの責任で行ってください。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">第10条（規約の変更）</h3>本規約は予告なく変更する場合があります。変更後の利用をもって同意とみなします。<div style="margin-top:20px;padding-top:14px;border-top:1px solid var(--bd);font-size:12px;color:var(--ts)">制定日：2026年4月4日</div>`;
+const _TERMS_TEXT = `<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:0 0 6px">第1条（サービスの内容）</h3>Subly（以下「本サービス」）は、サブスクリプションの支出管理を目的としたWebアプリケーションです。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第2条（利用条件）</h3>本サービスは無料でご利用いただけます。応援会員プランは月額課金制です。未成年の方は保護者の同意を得たうえでご利用ください。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第3条（アカウント・パスワードの管理）</h3>ユーザーは自己の責任においてメールアドレスおよびパスワードを適切に管理するものとします。パスワードを第三者に譲渡・貸与することはできません。第三者による不正利用から生じた損害について、運営者は責任を負いません。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第4条（データの取り扱い）</h3>未ログイン時のデータは端末のLocalStorageに保存されます。アカウント登録時はFirebase（Google Cloud Platform）上に保存されます。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第5条（禁止事項）</h3>不正アクセス、リバースエンジニアリング、商用目的での無断利用、他のユーザーへの迷惑行為、法令に違反する行為を禁止します。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第6条（サービスの停止・中断）</h3>運営者は、システムの保守点検、天災、通信障害等の理由により、事前の通知なくサービスの全部または一部を停止・中断できるものとします。これによりユーザーに生じた損害について一切の責任を負いません。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第7条（利用制限・登録抹消）</h3>運営者は、本規約に違反した場合、虚偽の登録情報が判明した場合、その他運営者が不適切と判断した場合に、事前の通知なくサービスの利用制限または登録抹消を行うことができます。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第8条（知的財産権）</h3>本サービスに関する著作権、商標権その他の知的財産権は運営者に帰属します。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第9条（免責事項）</h3>本サービスの利用により生じた損害について、運営者は一切の責任を負いません。データのバックアップはユーザーの責任で行ってください。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第10条（規約の変更）</h3>本規約は予告なく変更する場合があります。変更後の利用をもって同意とみなします。<div style="margin-top:20px;padding-top:14px;border-top:1px solid #e0e0e0;font-size:12px;color:#666">制定日：2026年4月4日</div>`;
 
-const _PRIVACY_TEXT = `<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:0 0 6px">1. 収集する情報</h3><b>アカウント情報：</b>メールアドレス、ニックネーム、年齢層・職業（任意）<br><b>サービス利用情報：</b>サブスクリプション情報（サービス名・金額・更新日等）、満足度、グループ情報<br><b>利用状況データ：</b>Google Analytics 4（Firebase Analytics）による匿名の利用統計（画面遷移、ボタンタップ等の操作ログ）<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">2. 利用目的</h3>サービスの提供・運営・改善、ユーザーサポート、利用状況の分析・統計、新機能の開発・検討。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">3. 第三者への提供</h3>収集した個人情報を第三者に提供・販売することはありません。ただし以下の場合を除きます。<br>・法令に基づく場合<br>・サービス運営に必要な業務委託先（Firebase / Google Cloud Platform）<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">4. 利用状況解析</h3>本サービスではGoogle Analytics 4（Firebase Analytics）を使用して利用状況データを収集しています。取得する情報はGoogleプライバシーポリシーに準拠します。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">5. データの保管</h3>Firebase（Google Cloud Platform）のサーバーに保存されます。未ログイン時は端末のLocalStorageに保存されサーバーには送信されません。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">6. データの開示・訂正・削除</h3>ユーザーは自己の個人情報の開示・訂正・削除を求めることができます。アプリ内の「お問い合わせ」または退会機能よりご連絡ください。退会時にすべてのデータが削除されます。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">7. セキュリティ</h3>Firebase Authenticationによる認証、Firestoreセキュリティルールによるアクセス制御を実施しています。ただしインターネット上の通信において完全なセキュリティを保証するものではありません。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">8. ポリシーの変更</h3>本ポリシーは予告なく変更する場合があります。変更後の本サービスの利用をもって同意とみなします。<h3 style="font-size:14px;font-weight:700;color:var(--pd);margin:16px 0 6px;padding-top:10px;border-top:1px solid var(--bd)">9. お問い合わせ</h3>プライバシーに関するお問い合わせはアプリ内の「お問い合わせ」からお願いいたします。<div style="margin-top:20px;padding-top:14px;border-top:1px solid var(--bd);font-size:12px;color:var(--ts)">制定日：2026年4月4日</div>`;
+const _PRIVACY_TEXT = `<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:0 0 6px">1. 収集する情報</h3><b>アカウント情報：</b>メールアドレス、ニックネーム、年齢層・職業（任意）<br><b>サービス利用情報：</b>サブスクリプション情報（サービス名・金額・更新日等）、満足度、グループ情報<br><b>利用状況データ：</b>Google Analytics 4（Firebase Analytics）による匿名の利用統計（画面遷移、ボタンタップ等の操作ログ）<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">2. 利用目的</h3>サービスの提供・運営・改善、ユーザーサポート、利用状況の分析・統計、新機能の開発・検討。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">3. 第三者への提供</h3>収集した個人情報を第三者に提供・販売することはありません。ただし以下の場合を除きます。<br>・法令に基づく場合<br>・サービス運営に必要な業務委託先（Firebase / Google Cloud Platform）<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">4. 利用状況解析</h3>本サービスではGoogle Analytics 4（Firebase Analytics）を使用して利用状況データを収集しています。取得する情報はGoogleプライバシーポリシーに準拠します。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">5. データの保管</h3>Firebase（Google Cloud Platform）のサーバーに保存されます。未ログイン時は端末のLocalStorageに保存されサーバーには送信されません。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">6. データの開示・訂正・削除</h3>ユーザーは自己の個人情報の開示・訂正・削除を求めることができます。アプリ内の「お問い合わせ」または退会機能よりご連絡ください。退会時にすべてのデータが削除されます。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">7. セキュリティ</h3>Firebase Authenticationによる認証、Firestoreセキュリティルールによるアクセス制御を実施しています。ただしインターネット上の通信において完全なセキュリティを保証するものではありません。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">8. ポリシーの変更</h3>本ポリシーは予告なく変更する場合があります。変更後の本サービスの利用をもって同意とみなします。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">9. お問い合わせ</h3>プライバシーに関するお問い合わせはアプリ内の「お問い合わせ」からお願いいたします。<div style="margin-top:20px;padding-top:14px;border-top:1px solid #e0e0e0;font-size:12px;color:#666">制定日：2026年4月4日</div>`;
 
 let _consentConfirmed = { terms: false, privacy: false };
 let _consentCurrentDoc = '';
@@ -8786,9 +8868,13 @@ async function _executeCancelSupporter(reason){
     if(window._fbUser && window._fbDb && window._fbFns){
       const { doc, setDoc, getDoc } = window._fbFns;
       const userRef = doc(window._fbDb, 'users', window._fbUser.uid);
-      // 解約前にproPurchasedを再確認（安全策）
+      // 解約前にFirestoreのproPurchasedを正として再同期（両方向）
       const snap = await getDoc(userRef);
-      if(snap.exists() && snap.data().proPurchased) _proPurchased = true;
+      if(snap.exists()){
+        _proPurchased = snap.data().proPurchased === true;
+      } else {
+        _proPurchased = false;
+      }
       console.log('[Cancel] proPurchased from Firestore:', snap.exists() ? snap.data().proPurchased : 'no doc');
       console.log('[Cancel] _proPurchased variable:', _proPurchased);
       await setDoc(userRef, {
@@ -9494,12 +9580,26 @@ async function exportCSV(){
 async function importCSVPicker(){
   const input = document.createElement('input');
   input.type = 'file';
-  // iOS/Android対応: MIMEを広めに指定（application/octet-streamも許容）
-  input.accept = '.csv,.txt,text/csv,text/plain,application/csv,application/octet-stream,*/*';
+  // CSVとテキストのみに制限（写真ライブラリを除外）
+  input.accept = '.csv,text/csv';
   input.style.cssText = 'position:fixed;opacity:0;width:1px;height:1px;top:0;left:0';
   input.onchange = e => {
     const file = e.target.files[0];
-    if(file) _processImportFile(file);
+    if(file){
+      // ファイル名で最終チェック
+      const fileName = (file.name || '').toLowerCase();
+      if(!fileName.endsWith('.csv') && !fileName.endsWith('.txt')){
+        showDialog({
+          icon:'',
+          title:'ファイル形式が違います',
+          msg:'CSVファイル（.csv）を選択してください。<br><br>SublyでエクスポートしたCSVをお使いください。',
+          buttons:[{label:'OK', cls:'ok'}]
+        });
+        if(document.body.contains(input)) document.body.removeChild(input);
+        return;
+      }
+      _processImportFile(file);
+    }
     if(document.body.contains(input)) document.body.removeChild(input);
   };
   document.body.appendChild(input);
