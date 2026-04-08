@@ -741,6 +741,10 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     doc, getDoc, setDoc, deleteDoc, collection,
     writeBatch, getDocs, query, where, onSnapshot
   } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+  import {
+    getFunctions,
+    httpsCallable
+  } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-functions.js';
 
   const firebaseConfig = {
     apiKey: "AIzaSyDKK_VzcumaMK9tvpt8-xsW_xXsQc-Eq7c",
@@ -756,9 +760,13 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   const auth = getAuth(app);
   auth.languageCode = 'ja'; // パスワードリセットメールを日本語に
   const db = getFirestore(app);
+  // Firebase Functions (asia-northeast1)
+  const functions = getFunctions(app, 'asia-northeast1');
   // グローバルに公開
   window._fbAuth = auth;
   window._fbDb = db;
+  window._fbFunctions = functions;
+  window._fbHttpsCallable = httpsCallable;
   window._fbFns = {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
@@ -1284,7 +1292,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <div class="faq-i" onclick="this.classList.toggle('open')"><div class="faq-q"><span class="faq-qi">Q</span><span class="faq-qt">ホーム画面にアプリを追加するには？</span><span class="faq-qa">▼</span></div><div class="faq-a"><strong>iPhone（Safari）：</strong>共有ボタン → 「ホーム画面に追加」<br><strong>Android（Chrome）：</strong>メニュー → 「ホーム画面に追加」<br><br>追加するとアプリのように起動できます。</div></div>
     </div>
 
-    <div style="text-align:center;padding:16px;font-size:12px;color:var(--ts);line-height:1.7">解決しない場合は下記までご連絡ください<br><a href="mailto:jone.lab.app@gmail.com" style="color:var(--pd);font-weight:700;text-decoration:underline">jone.lab.app@gmail.com</a></div>
+    <div style="text-align:center;padding:16px;font-size:12px;color:var(--ts);line-height:1.7">解決しない場合は下記までご連絡ください<br><a href="/cdn-cgi/l/email-protection#4b2124252e65272a29652a3b3b0b2c262a222765282426" style="color:var(--pd);font-weight:700;text-decoration:underline"><span class="__cf_email__" data-cfemail="1d7772737833717c7f337c6d6d5d7a707c7471337e7270">[email&#160;protected]</span></a></div>
   </div>
 </div>
 
@@ -1547,7 +1555,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">運営責任者</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">Jone</td></tr>
         <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">所在地</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">〒150-0043<br>東京都渋谷区道玄坂1丁目10番8号<br>渋谷道玄坂東急ビル2F-C</td></tr>
         <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">電話番号</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">請求があった場合、遅滞なく開示します<br><span style="font-size:11px;color:#666">お問い合わせはメールにてお願いいたします</span></td></tr>
-        <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">メールアドレス</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0"><a href="mailto:jone.lab.app@gmail.com" style="color:#5C8E84;text-decoration:none">jone.lab.app@gmail.com</a></td></tr>
+        <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">メールアドレス</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0"><a href="/cdn-cgi/l/email-protection#aac0c5c4cf84c6cbc884cbdadaeacdc7cbc3c684c9c5c7" style="color:#5C8E84;text-decoration:none"><span class="__cf_email__" data-cfemail="5c3633323972303d3e723d2c2c1c3b313d3530723f3331">[email&#160;protected]</span></a></td></tr>
         <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">サービス名</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">Subly（サブリー）</td></tr>
         <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">販売価格</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">
           <strong>Subly Pro（買い切り）</strong>：980円（税込）<br>
@@ -2838,7 +2846,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
 </div><!-- /wrap -->
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ============================================================
    Store: Capacitor Preferences API / localStorage fallback
 ============================================================ */
@@ -4547,39 +4555,15 @@ window._onAuthChanged = async (user) => {
             <div style="width:48px;height:48px;border-radius:14px;background:rgba(240,173,78,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 10px">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="#E09030"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.1-9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2H8.9z"/></svg>
             </div>
-            <strong style="color:var(--tx);font-size:15px">¥980（税込・買い切り）</strong><br><br>
+            <strong style="color:var(--tx);font-size:15px">¥980(税込・買い切り)</strong><br><br>
             登録数が無制限になります。<br>一度の購入でずっと使えます。
           </div>
           <div style="background:rgba(240,173,78,.08);border:1px solid rgba(240,173,78,.2);border-radius:10px;padding:10px 14px;font-size:12px;color:#8B6914;line-height:1.7;text-align:center">
-            決済機能は現在準備中です。<br>本番ではここでStripe決済画面が表示されます。
+            次の画面でクレジットカード情報を<br>入力していただきます(Stripe決済)
           </div>`,
           buttons:[
-            {label:'購入する（テスト）', cls:'ok', onClick: async ()=>{
-              try{
-                _proPurchased = true;
-                const { doc, setDoc } = window._fbFns;
-                await setDoc(doc(window._fbDb, 'users', user.uid), {
-                  proPurchased: true,
-                  proPurchasedAt: new Date().toISOString()
-                }, { merge: true });
-                _updateAuthUI(user);
-                gaEvent('pro_purchased', { price: 980, source: 'pending' });
-                setTimeout(()=>{
-                  showDialog({
-                    icon:'',
-                    title:'Subly Pro を購入しました！',
-                    msg:`<div style="text-align:center">
-                      <div style="width:56px;height:56px;border-radius:50%;background:rgba(240,173,78,.12);display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="#E09030"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.1-9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2H8.9z"/></svg>
-                      </div>
-                      <div style="font-size:15px;font-weight:700;color:var(--tx);margin-bottom:8px">登録数が無制限になりました</div>
-                      <div style="font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:14px">サブスクをいくつでも登録できます。<br>この購入はずっとお使いいただけます。</div>
-                      <div style="background:rgba(240,173,78,.08);border:1px solid rgba(240,173,78,.2);border-radius:10px;padding:10px 14px;font-size:12px;color:#8B6914;line-height:1.7;text-align:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="#E09030" style="vertical-align:middle;margin-right:4px"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>クラウドに自動保存済み</div>
-                    </div>`,
-                    buttons:[{label:'OK', cls:'ok'}]
-                  });
-                }, 200);
-              }catch(e){ showToast('購入に失敗しました: ' + e.message); }
+            {label:'決済ページへ進む', cls:'ok', onClick: async ()=>{
+              await _callStripeProCheckout();
             }},
             {label:'キャンセル', cls:'cancel'}
           ]
@@ -8865,10 +8849,14 @@ function _selectCancelReason(btn, reason){
 // 解約実行
 async function _executeCancelSupporter(reason){
   try{
-    if(window._fbUser && window._fbDb && window._fbFns){
-      const { doc, setDoc, getDoc } = window._fbFns;
+    if(!window._fbUser){
+      showToast('ログインが必要です');
+      return;
+    }
+    // Firestoreから現在のproPurchased状態を取得(表示切り替え用)
+    if(window._fbDb && window._fbFns){
+      const { doc, getDoc } = window._fbFns;
       const userRef = doc(window._fbDb, 'users', window._fbUser.uid);
-      // 解約前にFirestoreのproPurchasedを正として再同期（両方向）
       const snap = await getDoc(userRef);
       if(snap.exists()){
         _proPurchased = snap.data().proPurchased === true;
@@ -8876,13 +8864,25 @@ async function _executeCancelSupporter(reason){
         _proPurchased = false;
       }
       console.log('[Cancel] proPurchased from Firestore:', snap.exists() ? snap.data().proPurchased : 'no doc');
-      console.log('[Cancel] _proPurchased variable:', _proPurchased);
-      await setDoc(userRef, {
-        supporterPlan: 'free',
-        supporterPrice: 0,
-        cancelReason: reason,
-        canceledAt: new Date().toISOString()
-      }, { merge: true });
+    }
+    // Firebase Functionsで解約処理(Stripeの期末解約 + Firestore更新)
+    try{
+      const result = await _callStripeCancelSupporter(reason);
+      console.log('[Cancel] Stripe cancel result:', result);
+    }catch(fnErr){
+      // Functions呼び出しが失敗した場合の救済
+      // (Stripe契約がない古いテストユーザーなど)
+      console.warn('[Cancel] Functions call failed, fallback to Firestore-only update:', fnErr);
+      if(window._fbDb && window._fbFns){
+        const { doc, setDoc } = window._fbFns;
+        await setDoc(doc(window._fbDb, 'users', window._fbUser.uid), {
+          supporterStatus: 'canceled',
+          supporterPlan: 'free',
+          supporterPrice: 0,
+          cancelReason: reason,
+          canceledAt: new Date().toISOString()
+        }, { merge: true });
+      }
     }
     _isSupporterMember = false;
     _supporterPlanName = '';
@@ -9010,6 +9010,99 @@ function _selectPlan(el, name, price){
   btn.style.opacity = '1';
   btn.style.background = 'linear-gradient(135deg,var(--p),var(--pd))';
 }
+// ==============================================================
+// Stripe Checkout ヘルパー関数
+// Firebase Functions を呼び出して Stripe 決済ページへリダイレクト
+// ==============================================================
+async function _callStripeProCheckout(){
+  try{
+    if(!window._fbFunctions || !window._fbHttpsCallable){
+      showToast('決済機能の読み込み中です。少し待ってから再度お試しください');
+      return false;
+    }
+    if(!window._fbUser){
+      showToast('ログインが必要です');
+      return false;
+    }
+    gaEvent('stripe_checkout_pro_start', {});
+    const createProCheckout = window._fbHttpsCallable(window._fbFunctions, 'createProCheckout');
+    const result = await createProCheckout({});
+    if(result.data && result.data.url){
+      // Stripe Checkout ページへリダイレクト
+      window.location.href = result.data.url;
+      return true;
+    }
+    throw new Error('決済URLの取得に失敗しました');
+  }catch(e){
+    console.error('[Stripe Pro Checkout] error:', e);
+    gaEvent('stripe_checkout_pro_error', { error: e.code || e.message });
+    // Firebase Functions のエラーハンドリング
+    if(e.code === 'functions/already-exists'){
+      showToast('既にProを購入済みです');
+    } else if(e.code === 'functions/unauthenticated'){
+      showToast('ログインが必要です');
+    } else {
+      showToast('決済ページの取得に失敗しました: ' + (e.message || 'エラー'));
+    }
+    return false;
+  }
+}
+async function _callStripeSupporterCheckout(planName){
+  try{
+    if(!window._fbFunctions || !window._fbHttpsCallable){
+      showToast('決済機能の読み込み中です。少し待ってから再度お試しください');
+      return false;
+    }
+    if(!window._fbUser){
+      showToast('ログインが必要です');
+      return false;
+    }
+    // プラン名 → plan ID にマッピング
+    const planIdMap = {
+      'どんぐり': 'donguri',
+      'くるみ': 'kurumi',
+      'もみじ': 'momiji',
+      'もりのき': 'morinoki'
+    };
+    const planId = planIdMap[planName];
+    if(!planId){
+      showToast('無効なプランです: ' + planName);
+      return false;
+    }
+    gaEvent('stripe_checkout_supporter_start', { plan: planName });
+    const createSupporterCheckout = window._fbHttpsCallable(window._fbFunctions, 'createSupporterCheckout');
+    const result = await createSupporterCheckout({ plan: planId });
+    if(result.data && result.data.url){
+      window.location.href = result.data.url;
+      return true;
+    }
+    throw new Error('決済URLの取得に失敗しました');
+  }catch(e){
+    console.error('[Stripe Supporter Checkout] error:', e);
+    gaEvent('stripe_checkout_supporter_error', { error: e.code || e.message, plan: planName });
+    if(e.code === 'functions/already-exists'){
+      showToast('既に応援会員に加入済みです');
+    } else if(e.code === 'functions/unauthenticated'){
+      showToast('ログインが必要です');
+    } else {
+      showToast('決済ページの取得に失敗しました: ' + (e.message || 'エラー'));
+    }
+    return false;
+  }
+}
+async function _callStripeCancelSupporter(reason){
+  try{
+    if(!window._fbFunctions || !window._fbHttpsCallable){
+      throw new Error('決済機能が読み込まれていません');
+    }
+    const cancelSupporter = window._fbHttpsCallable(window._fbFunctions, 'cancelSupporter');
+    const result = await cancelSupporter({ reason: reason || '' });
+    return result.data;
+  }catch(e){
+    console.error('[Stripe Cancel] error:', e);
+    throw e;
+  }
+}
 function _proceedPlan(){
   if(!_selectedPlan){ showToast('プランを選択してください'); return; }
   _closePlanModal();
@@ -9041,44 +9134,14 @@ function _proceedPlan(){
           登録数が無制限になります。<br>一度の購入でずっと使えます。
         </div>
         <div style="background:var(--pl);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--pd);line-height:1.7;text-align:center">
-          決済機能は現在準備中です。<br>本番ではここでStripe決済画面が表示されます。
+          次の画面でクレジットカード情報を<br>入力していただきます(Stripe決済)
         </div>`,
-        buttons:[{label:'購入する（テスト）', cls:'ok', onClick: async ()=>{
-          try{
-            _proPurchased = true;
-            if(window._fbUser && window._fbDb && window._fbFns){
-              const { doc, setDoc } = window._fbFns;
-              await setDoc(doc(window._fbDb, 'users', window._fbUser.uid), {
-                proPurchased: true,
-                proPurchasedAt: new Date().toISOString()
-              }, { merge: true });
-              console.log('[Pro Purchase] Firestore updated: proPurchased=true for', window._fbUser.uid);
-            } else {
-              console.warn('[Pro Purchase] Firestore not available, only local flag set');
-            }
-            _updateAuthUI(window._fbUser);
-            gaEvent('pro_purchased', { price: 980 });
-            setTimeout(()=>{
-              showDialog({
-                icon:'',
-                title:'Subly Pro を購入しました！',
-                msg:`<div style="text-align:center">
-                  <div style="width:56px;height:56px;border-radius:50%;background:rgba(240,173,78,.12);display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="#E09030"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.1-9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2H8.9z"/></svg>
-                  </div>
-                  <div style="font-size:15px;font-weight:700;color:var(--tx);margin-bottom:8px">登録数が無制限になりました</div>
-                  <div style="font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:14px">
-                    サブスクをいくつでも登録できます。<br>この購入はずっとお使いいただけます。
-                  </div>
-                  <div style="background:rgba(240,173,78,.08);border:1px solid rgba(240,173,78,.2);border-radius:10px;padding:10px 14px;font-size:12px;color:#8B6914;line-height:1.7;text-align:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="#E09030" style="vertical-align:middle;margin-right:4px"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>クラウドに自動保存済み</div>
-                </div>`,
-                buttons:[{label:'OK', cls:'ok'}]
-              });
-            }, 200);
-          }catch(e){
-            showToast('購入に失敗しました: ' + e.message);
-          }
-        }}]
+        buttons:[
+          {label:'決済ページへ進む', cls:'ok', onClick: async ()=>{
+            await _callStripeProCheckout();
+          }},
+          {label:'キャンセル', cls:'cancel'}
+        ]
       });
     }, 200);
     gaEvent('plan_selected', { plan: 'Pro', price: 980, type: 'buyout' });
@@ -9192,36 +9255,23 @@ async function _completeProSignup(){
       if(nickname) _nickname = nickname;
       await _ensureUserDoc(user);
     }
-    // Pro買い切りフラグ + Firestore更新（1ステップで完了）
-    _proPurchased = true;
-    const { doc, setDoc } = window._fbFns;
-    await setDoc(doc(window._fbDb, 'users', user.uid), {
-      proPurchased: true,
-      proPurchasedAt: new Date().toISOString(),
-      nickname: _nickname
-    }, { merge: true });
-    console.log('[Pro Purchase] Firestore updated: proPurchased=true for', user.uid);
+    // アカウント準備完了 → Stripe Checkoutへリダイレクト
     _updateNicknameDisplay();
     _updatePayerField();
     _updateAuthUI(user);
     _closeProSignup();
-    gaEvent('pro_purchased', { price: 980, was_free: !!existingUser });
-    // 即座に完了ダイアログ
-    setTimeout(()=>{
-      showDialog({
-        icon:'',
-        title:'Subly Pro を購入しました！',
-        msg:`<div style="text-align:center">
-          <div style="width:56px;height:56px;border-radius:50%;background:rgba(240,173,78,.12);display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="#E09030"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.1-9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2H8.9z"/></svg>
-          </div>
-          <div style="font-size:15px;font-weight:700;color:var(--tx);margin-bottom:8px">登録数が無制限になりました</div>
-          <div style="font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:14px">サブスクをいくつでも登録できます。<br>この購入はずっとお使いいただけます。</div>
-          <div style="background:rgba(240,173,78,.08);border:1px solid rgba(240,173,78,.2);border-radius:10px;padding:10px 14px;font-size:12px;color:#8B6914;line-height:1.7;text-align:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="#E09030" style="vertical-align:middle;margin-right:4px"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>クラウドに自動保存済み</div>
-        </div>`,
-        buttons:[{label:'OK', cls:'ok'}]
-      });
-    }, 300);
+    gaEvent('pro_signup_ready_for_checkout', { was_free: !!existingUser });
+    // nicknameも保存しておく(購入完了後にも残るように)
+    if(_nickname){
+      const { doc, setDoc } = window._fbFns;
+      await setDoc(doc(window._fbDb, 'users', user.uid), {
+        nickname: _nickname
+      }, { merge: true });
+    }
+    // Stripe Checkoutへリダイレクト(購入完了はwebhookで反映される)
+    await _callStripeProCheckout();
+    // ※ _callStripeProCheckoutが成功すればページ遷移するのでここには戻らない
+    // ※ 失敗時はshowToastで通知済み
   }catch(e){
     console.error('Pro signup error:', e);
     const msgs = {
@@ -9288,66 +9338,14 @@ async function _completeSupporterSignup(){
     _closeSupporterSignup();
     gaEvent('supporter_account_created', { plan: _selectedPlan.name, price: _selectedPlan.price, was_free: !!existingUser });
 
-    // STEP2: 決済画面（将来Stripe Checkout）
-    setTimeout(()=>{
-      showDialog({
-        icon:'',
-        title:'クレジットカード登録',
-        msg:`<div style="text-align:center;font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:10px">
-          <strong style="color:var(--tx)">${_selectedPlan.name}会員（¥${_selectedPlan.price.toLocaleString()}/月）</strong><br><br>
-          決済機能は現在準備中です。<br>
-          本番ではここでStripe決済画面が<br>表示されます。
-        </div>
-        <div style="background:#FFF8EE;border:1px solid #F5D9A8;border-radius:10px;padding:10px 14px;font-size:12px;color:#8B6914;line-height:1.7;text-align:center">
-          2週間の無料トライアル付き
-        </div>
-        <div style="font-size:10px;color:var(--ts);margin-top:8px;line-height:1.6;text-align:center">※ 登録月・解約月の日割り計算はありません</div>`,
-        buttons:[{label:'決済を完了する（テスト）', cls:'ok', onClick:()=>{
-          // STEP3: お礼画面（プランごとの絵文字＆メッセージ）
-          _isSupporterMember = true;
-          const planEmoji = PLAN_EMOJI[_selectedPlan.name] || '🌱';
-          // プランごとのメッセージ
-          const planMessages = {
-            'どんぐり': 'ちょこっと応援ありがとうございます',
-            'くるみ': 'しっかり応援ありがとうございます',
-            'もみじ': 'たっぷり応援ありがとうございます',
-            'もりのき': '全力応援ありがとうございます<br>心より感謝いたします'
-          };
-          const thankMessage = planMessages[_selectedPlan.name] || '応援ありがとうございます';
-          // 次回お支払い日（30日後）
-          const nextDate = new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('ja-JP');
-          setTimeout(()=>{
-            showDialog({
-              icon:'',
-              title:`${_selectedPlan.name} へようこそ！`,
-              msg:`<div style="text-align:center">
-                <div style="font-size:54px;line-height:1;margin:0 auto 12px">${planEmoji}</div>
-                <div style="font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:14px">${thankMessage}<br>これからもSublyをよろしくお願いします</div>
-                <div style="background:linear-gradient(135deg,#F0FAF6,#E1F5EE);border:1px solid rgba(92,142,132,.3);border-radius:12px;padding:12px 14px;margin-bottom:12px;text-align:left">
-                  <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0"><span style="color:var(--ts)">プラン</span><strong style="color:var(--pd)">${planEmoji} ${_selectedPlan.name}</strong></div>
-                  <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-top:1px solid rgba(0,0,0,.06)"><span style="color:var(--ts)">料金</span><strong>¥${_selectedPlan.price.toLocaleString()}/月（税込）</strong></div>
-                  <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-top:1px solid rgba(0,0,0,.06)"><span style="color:var(--ts)">次回お支払い</span><strong>${nextDate}</strong></div>
-                  <div style="display:flex;justify-content:space-between;font-size:11px;padding:5px 0;border-top:1px solid rgba(0,0,0,.06)"><span style="color:var(--ts)">解約</span><span style="color:var(--ts)">いつでも可能</span></div>
-                </div>
-                <div style="background:var(--pl);border:1px solid rgba(92,142,132,.2);border-radius:10px;padding:11px 13px;margin-bottom:10px;text-align:left">
-                  <div style="font-size:11px;font-weight:700;color:var(--pd);margin-bottom:6px;display:flex;align-items:center;gap:5px">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="var(--pd)"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                    応援会員特典
-                  </div>
-                  <div style="font-size:11px;line-height:1.8;color:var(--tx)">
-                    <div style="display:flex;align-items:center;gap:5px"><svg width="10" height="10" viewBox="0 0 24 24" fill="var(--pd)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>サブスク登録 無制限</div>
-                    <div style="display:flex;align-items:center;gap:5px"><svg width="10" height="10" viewBox="0 0 24 24" fill="var(--pd)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>グループ共有（家族で管理）</div>
-                    <div style="display:flex;align-items:center;gap:5px"><svg width="10" height="10" viewBox="0 0 24 24" fill="var(--pd)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>非表示・アーカイブ機能</div>
-                  </div>
-                </div>
-                <div style="background:rgba(92,142,132,.06);border-radius:8px;padding:8px;font-size:10px;color:var(--pd);text-align:center"><svg width="11" height="11" viewBox="0 0 24 24" fill="var(--pd)" style="vertical-align:middle;margin-right:3px"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/></svg>クラウドに自動保存済み</div>
-              </div>`,
-              buttons:[{label:'Subly を始める', cls:'ok', onClick:()=>{ goto('dashboard'); }}]
-            });
-          }, 200);
-          gaEvent('supporter_signup_complete', { plan: _selectedPlan.name, price: _selectedPlan.price });
-        }}]
-      });
+    // STEP2: Stripe Checkoutへリダイレクト
+    // ※ 購入完了後はwebhookでFirestoreが更新され、?session_id付きで戻ってくる
+    setTimeout(async ()=>{
+      const planName = _selectedPlan.name;
+      gaEvent('supporter_signup_redirect_to_stripe', { plan: planName, price: _selectedPlan.price });
+      await _callStripeSupporterCheckout(planName);
+      // _callStripeSupporterCheckoutが成功すればページ遷移するのでここには戻らない
+      // 失敗時はshowToastで通知済み
     }, 300);
 
   }catch(e){
@@ -9894,10 +9892,55 @@ async function init(){
   const sessionId = urlParams.get('session_id');
   const canceled = urlParams.get('canceled');
   const paymentType = urlParams.get('type');
+  const paymentPlan = urlParams.get('plan');
   if(sessionId && paymentType){
-    // 決済完了
+    // 決済完了 - Webhookの反映を待ってからFirestoreを読み直す
     window.history.replaceState({}, document.title, window.location.pathname);
-    setTimeout(()=> _showPaymentComplete(paymentType, sessionId), 800);
+    // Webhookは通常1-3秒以内に反映される。念のため2.5秒待ってから読み取り
+    setTimeout(async ()=>{
+      try{
+        // Firebase Authがまだ準備中の可能性があるので少し待つ
+        let waitCount = 0;
+        while(!window._fbUser && waitCount < 20){
+          await new Promise(r => setTimeout(r, 200));
+          waitCount++;
+        }
+        if(window._fbUser && window._fbDb && window._fbFns){
+          const { doc, getDoc } = window._fbFns;
+          // 最大3回まで再試行(Webhook反映遅延対策)
+          let userData = null;
+          for(let i = 0; i < 3; i++){
+            const snap = await getDoc(doc(window._fbDb, 'users', window._fbUser.uid));
+            if(snap.exists()){
+              userData = snap.data();
+              // 反映されていれば終了
+              if(paymentType === 'pro' && userData.proPurchased === true) break;
+              if(paymentType === 'supporter' && userData.supporterStatus === 'active') break;
+            }
+            // 未反映ならもう1秒待つ
+            if(i < 2) await new Promise(r => setTimeout(r, 1000));
+          }
+          // ローカル状態を更新
+          if(userData){
+            if(paymentType === 'pro' && userData.proPurchased === true){
+              _proPurchased = true;
+            }
+            if(paymentType === 'supporter' && userData.supporterStatus === 'active'){
+              _isSupporterMember = true;
+              _supporterPlanName = userData.supporterPlan ?
+                ({donguri:'どんぐり', kurumi:'くるみ', momiji:'もみじ', morinoki:'もりのき'}[userData.supporterPlan] || paymentPlan || '') : '';
+              const priceMap = { 'どんぐり':300, 'くるみ':500, 'もみじ':800, 'もりのき':1000 };
+              _supporterPlanPrice = priceMap[_supporterPlanName] || 0;
+            }
+            _updateAuthUI(window._fbUser);
+            if(typeof renderDashboard === 'function') renderDashboard();
+          }
+        }
+      }catch(e){
+        console.error('[Payment] Post-checkout sync error:', e);
+      }
+      _showPaymentComplete(paymentType, sessionId);
+    }, 1500);
   } else if(canceled === 'true'){
     // 決済キャンセル
     window.history.replaceState({}, document.title, window.location.pathname);
@@ -10165,10 +10208,4 @@ window.addEventListener('resize',()=>{
 });
 </script>
 <!-- 更新ボタン（iPhoneホーム画面追加時用） -->
-<button id="reload-btn" onclick="_manualRefresh()" style="position:fixed;bottom:calc(var(--nh) + env(safe-area-inset-bottom,0px) + 20px);right:16px;width:44px;height:44px;border-radius:50%;background:var(--card);border:1.5px solid var(--bd);box-shadow:0 2px 8px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:100;-webkit-tap-highlight-color:transparent">
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--ts)"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-</button>
-
-
-</body>
-</html>
+<button id="reload-btn" onclick="_manualRefresh()" style="position:fixed;bottom:calc(var(--nh) + env(safe-area-inset-bottom,0px) + 20px);right:16px;width:44px;height:44px;border-radius:50%;background:var(--card);border:1.5px solid var(--bd);box-shadow:0 2px 8px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:ce
