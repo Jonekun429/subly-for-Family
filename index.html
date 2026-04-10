@@ -4739,10 +4739,13 @@ function closeAuthModal(){
 function switchAuthTab(tab){
   _authMode = tab; // フラグ更新
   const isLogin = tab === 'login';
-  document.getElementById('auth-tab-login').style.color = isLogin ? 'var(--p)' : 'var(--ts)';
-  document.getElementById('auth-tab-login').style.borderBottomColor = isLogin ? 'var(--p)' : 'transparent';
-  document.getElementById('auth-tab-signup').style.color = !isLogin ? 'var(--p)' : 'var(--ts)';
-  document.getElementById('auth-tab-signup').style.borderBottomColor = !isLogin ? 'var(--p)' : 'transparent';
+  const tabLogin = document.getElementById('auth-tab-login');
+  const tabSignup = document.getElementById('auth-tab-signup');
+  if(!tabLogin || !tabSignup) return;
+  tabLogin.style.color = isLogin ? 'var(--p)' : 'var(--ts)';
+  tabLogin.style.borderBottomColor = isLogin ? 'var(--p)' : 'transparent';
+  tabSignup.style.color = !isLogin ? 'var(--p)' : 'var(--ts)';
+  tabSignup.style.borderBottomColor = !isLogin ? 'var(--p)' : 'transparent';
   document.getElementById('auth-signup-name').style.display = isLogin ? 'none' : 'block';
   document.getElementById('auth-submit-btn').textContent = isLogin ? 'ログイン' : '新規登録';
   document.getElementById('auth-error').style.display = 'none';
