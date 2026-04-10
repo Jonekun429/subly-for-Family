@@ -2962,7 +2962,7 @@ function _copyMemberId(){
 }
 let _supporterPlanName = ''; // プラン名（どんぐり/くるみ等）
 let _supporterPlanPrice = 0;
-const PLAN_EMOJI = {どんぐり:'🌰',くるみ:'🥜',もみじ:'🍁',もりのき:'🌳'};
+const PLAN_EMOJI = {どんぐり:'🌰',くるみ:'🥜',もみじ:'🍁',もりのき:'🌳'}; const PLAN_ID_TO_NAME = {donguri:'どんぐり',kurumi:'くるみ',momiji:'もみじ',morinoki:'もりのき'};
 function _getPlanLabel(){
   if(_isSupporterMember && _supporterPlanName) return (PLAN_EMOJI[_supporterPlanName]||'') + ' ' + _supporterPlanName + '会員';
   if(_proPurchased) return 'Subly Pro';
@@ -5416,7 +5416,7 @@ async function _loadFromFirestore(uid){
       if(data.nickname){ _nickname = data.nickname; _updateNicknameDisplay(); _updatePayerField(); }
       // 応援会員フラグ+プラン名を復元
       _isSupporterMember = !!(data.supporterPlan && data.supporterPlan !== 'free');
-      _supporterPlanName = (data.supporterPlan && data.supporterPlan !== 'free') ? data.supporterPlan : '';
+      _supporterPlanName = (data.supporterPlan && data.supporterPlan !== 'free') ? (PLAN_ID_TO_NAME[data.supporterPlan] || data.supporterPlan) : '';
       _supporterPlanPrice = data.supporterPrice || 0;
       // Pro買い切りフラグ復元（Firestoreの値を正として完全同期）
       _proPurchased = data.proPurchased === true;
