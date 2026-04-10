@@ -8652,25 +8652,12 @@ async function _confirmPlanChange(){
       buttons:[
         {label:'変更を確定する', cls:'ok', onClick: async ()=>{
           try{
-            if(window._fbUser && window._fbDb && window._fbFns){
-              const { doc, setDoc, getDoc, arrayUnion } = window._fbFns;
-              const userRef = doc(window._fbDb, 'users', window._fbUser.uid);
-              // 旧プランの終了日を記録し、新プランの開始を追加
-              const now = new Date().toISOString();
-              const snap = await getDoc(userRef);
-              let history = (snap.exists() && snap.data().planHistory) || [];
-              // 旧プランの終了日を設定
-              if(history.length > 0 && !history[history.length-1].endDate){
-                history[history.length-1].endDate = now;
-              }
-              // 新プランを追加
-              history.push({ plan: newPlan.name, price: newPlan.price, startDate: now, endDate: null });
-              await setDoc(userRef, {
-                supporterPlan: newPlan.name,
-                supporterPrice: newPlan.price,
-                planChangedAt: now,
-                planHistory: history
-              }, { merge: true });
+            // Stripe経由でプラン変更
+            const planIdMap = {'どんぐり':'donguri','くるみ':'kurumi','もみじ':'momiji','もりのき':'morinoki'};
+            const planId = planIdMap[newPlan.name];
+            if(planId && window._fbFunctions && window._fbHttpsCallable){
+              const changePlan = window._fbHttpsCallable(window._fbFunctions, 'changeSupporterPlan');
+              await changePlan({ plan: planId });
             }
             _supporterPlanName = newPlan.name;
             _supporterPlanPrice = newPlan.price;
@@ -10097,7 +10084,7 @@ function _showPaymentComplete(type, sessionId){
     const nextDate = new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('ja-JP');
     showDialog({
       icon:'',
-      title:`${_supporterPlanName || '応援会員'} へようこそ！`,
+      title:`${_supporterPlanName || '応援会員'} 会員へようこそ！`,
       msg:`<div style="text-align:center">
         <div style="font-size:54px;line-height:1;margin:0 auto 12px">${planEmoji}</div>
         <div style="font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:14px">応援ありがとうございます<br>これからもSublyをよろしくお願いします</div>
