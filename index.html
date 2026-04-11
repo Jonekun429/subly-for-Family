@@ -2296,7 +2296,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
       <div style="font-size:20px;font-weight:800;color:#fff;margin-bottom:4px">応援会員でもっと便利に</div>
       <div style="font-size:13px;color:rgba(255,255,255,.8);line-height:1.7">Proの全機能に加えて<br>グループ共有・非表示機能が使えます</div>
-      <div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;background:rgba(255,255,255,.2);border-radius:20px;padding:5px 16px;font-size:13px;font-weight:700;color:#fff">
+      <div id="trial-banner" style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;background:rgba(255,255,255,.2);border-radius:20px;padding:5px 16px;font-size:13p;font-weight:700;color:#fff">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2z"/></svg>
         応援会員は2週間トライアル無料
       </div>
@@ -8967,7 +8967,24 @@ function _showPlanModal(mode){
   if(proSection) proSection.style.display = showPro ? '' : 'none';
   if(proCardEl) proCardEl.style.display = showPro ? '' : 'none';
   if(divider) divider.style.display = showPro ? '' : 'none';
-  document.getElementById('plan-select-ov').classList.remove('hidden');
+  // 過去に応援会員だった人にはトライアルバナーを非表示
+const trialBanner = document.getElementById('trial-banner');
+if(trialBanner){
+  if(window._fbUser && window._fbDb){
+    const { doc, getDoc } = window._fbFns;
+    getDoc(doc(window._fbDb, 'users', window._fbUser.uid)).then(snap=>{
+      if(snap.exists()){
+        const d = snap.data();
+        if(d.supporterStartedAt || d.supporterCanceledAt){
+          trialBanner.style.display = 'none';
+        } else {
+          trialBanner.style.display = '';
+        }
+      }
+    }).catch(()=>{});
+  }
+}
+    document.getElementById('plan-select-ov').classList.remove('hidden');
   gaEvent('plan_modal_shown', { logged_in: !!window._fbUser, mode: showFull ? 'full' : 'supporter_only' });
 }
 function _closePlanModal(){
@@ -9071,7 +9088,7 @@ async function _callStripeSupporterCheckout(planName){
     console.error('[Stripe Supporter Checkout] error:', e);
     gaEvent('stripe_checkout_supporter_error', { error: e.code || e.message, plan: planName });
     if(e.code === 'functions/already-exists'){
-      showToast('既に応援会員に加入済みです');
+      if(window._fbUser && window._fbDb && window._fbFns){const { doc, getDoc } = window._fbFns;const snap = await getDoc(doc(window._fbDb, 'users', window._fbUser.uid));if(snap.exists() && snap.data().supporterCancelScheduled){showDialog({icon:'',title:'解約予約中です',msg:'<div style="text-align:center;font-size:13px;color:var(--ts);line-height:1.7">現在、応援会員の解約が予約されています。<br>解約を取り消して、継続しますか？</div>',buttons:[{label:'解約を取り消す', cls:'ok', onClick: async ()=>{try{const reactivate = window._fbHttpsCallable(window._fbFunctions, 'reactivateSupporter');await reactivate({});showToast('解約を取り消しました');setTimeout(()=>{ location.reload(); }, 1000);}catch(err){showToast('エラー: ' + (err.message || '失敗しました'));}}},{label:'閉じる', cls:'cancel'}],btnColumn: true});return false;}}showToast('既に応援会員に加入済みです');
     } else if(e.code === 'functions/unauthenticated'){
       showToast('ログインが必要です');
     } else {
