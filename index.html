@@ -10136,7 +10136,7 @@ function _showPaymentComplete(type, sessionId){
     gaEvent('payment_complete_shown', { type: 'pro', session_id: sessionId });
   } else if(type === 'supporter'){
     // 応援会員登録完了 - プラン詳細はFirestoreから取得
-    const planEmoji = PLAN_EMOJI[_supporterPlanName] || '🌱';
+    const planEmoji = ({donguri:'🌰',kurumi:'🥜',momiji:'🍁',morinoki:'🌳'}[_supporterPlanName]) || PLAN_EMOJI[_supporterPlanName] || '🌱';
     const planLabel = _getPlanLabel() || '応援会員';
     const planPrice = _supporterPlanPrice || 0;
     // 次回お支払い日を計算（30日後）
