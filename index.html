@@ -2962,9 +2962,11 @@ function _copyMemberId(){
 }
 let _supporterPlanName = ''; // プラン名（どんぐり/くるみ等）
 let _supporterPlanPrice = 0;
+let _supporterCancelScheduled = false;
+let _supporterCancelAt = null;
 const PLAN_EMOJI = {どんぐり:'🌰',くるみ:'🥜',もみじ:'🍁',もりのき:'🌳'}; const PLAN_ID_TO_NAME = {donguri:'どんぐり',kurumi:'くるみ',momiji:'もみじ',morinoki:'もりのき'};
 function _getPlanLabel(){
-  if(_isSupporterMember && _supporterPlanName) return (PLAN_EMOJI[_supporterPlanName]||'') + ' ' + _supporterPlanName + '会員';
+  if(_isSupporterMember && _supporterPlanName) return (PLAN_EMOJI[_supporterPlanName]||'') + ' ' + _supporterPlanName + '会員' + (_supporterCancelScheduled ? '（解約予約中）' : '');
   if(_proPurchased) return 'Subly Pro';
   return 'Subly Free';
 }
@@ -3998,13 +4000,34 @@ function openSettings(){
         const sub = document.getElementById('s-profile-sub');
         if(sub){
           const parts = [d.ageGroup, d.occupation].filter(Boolean);
-          sub.textContent = parts.join(' · ') || '未設定';
+          sub.textContent = parts.join(' · ') || '未設定'; _renderCancelStatusInSettings();
         }
       }
     }).catch(()=>{});
   }
 }
-function closeSettings(){document.getElementById('settings-ov').classList.remove('open');}
+function _renderCancelStatusInSettings(){
+      const planRow = document.getElementById('s-plan-change-row');
+      let cancelInfo = document.getElementById('s-cancel-info');
+      if(cancelInfo) cancelInfo.remove();
+      if(_isSupporterMember && _supporterCancelScheduled && planRow){
+        const cancelDate = _supporterCancelAt ? new Date(_supporterCancelAt * 1000).toLocaleDateString('ja-JP') : '';
+        const html = '<div id="s-cancel-info" style="background:#FFF8EC;border:1px solid #F5D9A8;border-radius:10px;padding:12px 14px;margin-top:8px;font-size:12px;color:#886914"><div style="font-weight:700;margin-bottom:4px">⚠️ 解約予約中</div><div style="margin-bottom:8px">' + (cancelDate ? cancelDate + 'まで利用可能です' : '期間満了まで利用可能です') + '</div><button onclick="_reactivateSupporter()" style="width:100%;padding:10px;border-radius:8px;border:none;background:var(--p);color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">解約を取り消す</button></div>';
+        planRow.insertAdjacentHTML('afterend', html);
+      }
+    }
+    async function _reactivateSupporter(){
+      try{
+        if(!window._fbHttpsCallable || !window._fbFunctions){ showToast('機能が読み込まれていません'); return; }
+        const reactivate = window._fbHttpsCallable(window._fbFunctions, 'reactivateSupporter');
+        await reactivate({});
+        showToast('解約を取り消しました');
+        setTimeout(()=>{ location.reload(); }, 1000);
+      }catch(err){
+        showToast('エラー: ' + (err.message || '失敗しました'));
+      }
+    }
+    function closeSettings(){document.getElementById('settings-ov').classList.remove('open');}
 
 let _hwPage = 0;
 function openHowto(){
@@ -5418,6 +5441,8 @@ async function _loadFromFirestore(uid){
       _isSupporterMember = !!(data.supporterPlan && data.supporterPlan !== 'free');
       _supporterPlanName = (data.supporterPlan && data.supporterPlan !== 'free') ? (PLAN_ID_TO_NAME[data.supporterPlan] || data.supporterPlan) : '';
       _supporterPlanPrice = data.supporterPrice || 0;
+        _supporterCancelScheduled = data.supporterCancelScheduled === true;
+        _supporterCancelAt = data.supporterCancelAt || null;
       // Pro買い切りフラグ復元（Firestoreの値を正として完全同期）
       _proPurchased = data.proPurchased === true;
     }
