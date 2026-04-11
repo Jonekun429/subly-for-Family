@@ -9648,6 +9648,13 @@ function _processImportFile(file){
       showDialog({icon:'',title:'読み込みエラー',msg:'有効なCSVデータが見つかりませんでした。<br>SublyでエクスポートしたCSVファイルを選択してください。',buttons:[{label:'OK',cls:'ok'}]});
       return;
     }
+    const headerCols = parseCSVLine(lines[0]).map(h=>h.trim().replace(/^\uFEFF/,''));
+    const requiredHeaders = ['ID','サービス名','カテゴリ','料金','頻度','更新日'];
+    const isValidSublyCSV = requiredHeaders.every(h => headerCols.includes(h));
+    if(!isValidSublyCSV){
+      showDialog({icon:'⚠️',title:'CSVファイルが正しくありません',msg:'SublyからエクスポートしたCSVファイルを選択してください。<br><br>必要な列: ' + requiredHeaders.join(', '),buttons:[{label:'OK',cls:'ok'}]});
+      return;
+    }
     const imported = [];
     lines.slice(1).forEach(line => {
       const cols = parseCSVLine(line);
