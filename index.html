@@ -5058,6 +5058,13 @@ function _withdrawStep3(user){
           if(!currentUser){ throw { code:'no-user', message:'ログインセッションが切れました。再ログインしてください。'}; }
           const credential = EmailAuthProvider.credential(email, pw);
           await reauthenticateWithCredential(currentUser, credential);
+          if(_isSupporterMember){
+            try{
+              const idToken = await currentUser.getIdToken();
+              const cancelRes = await fetch('https://asia-northeast1-subly-app-8316d.cloudfunctions.net/cancelSupporter', { method:'POST', headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+idToken }, body: JSON.stringify({ immediate: true }) });
+              if(!cancelRes.ok){ if(errEl){ errEl.textContent='サブスクリプションの解約に失敗しました。サポートにお問い合わせください。'; errEl.style.display='block'; } return false; }
+            }catch(stripeErr){ console.error('Stripe解約エラー:', stripeErr); if(errEl){ errEl.textContent='サブスクリプションの解約に失敗しました。ネットワークを確認してください。'; errEl.style.display='block'; } return false; }
+          }
 
           const uid = currentUser.uid;
 
