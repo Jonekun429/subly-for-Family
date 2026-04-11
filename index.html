@@ -2944,7 +2944,7 @@ let _proPurchased = false; // 買い切りProフラグ（永久・一度trueに�
 function _isUnlimited(){ return _proPurchased || _isSupporterMember; }
 /* 現在のプラン名を返す */
 function _currentPlanLabel(){
-  if(_isSupporterMember) return (_supporterPlanName||'応援') + '会員';
+  if(_isSupporterMember){ const planEmoji={donguri:'🌰',kurumi:'🥜',momiji:'🍁',morinoki:'🌳'}; const emoji=planEmoji[_supporterPlanName]||''; const name=(typeof PLAN_ID_TO_NAME!=='undefined'&&PLAN_ID_TO_NAME[_supporterPlanName])||_supporterPlanName||'応援'; const label=(emoji?emoji+' ':'')+name+'会員'; return _proPurchased?label+'（Pro）':label; }
   if(_proPurchased) return 'Subly Pro';
   return 'Subly Free';
 }
@@ -2966,7 +2966,7 @@ let _supporterCancelScheduled = false;
 let _supporterCancelAt = null;
 const PLAN_EMOJI = {どんぐり:'🌰',くるみ:'🥜',もみじ:'🍁',もりのき:'🌳'}; const PLAN_ID_TO_NAME = {donguri:'どんぐり',kurumi:'くるみ',momiji:'もみじ',morinoki:'もりのき'};
 function _getPlanLabel(){
-  if(_isSupporterMember && _supporterPlanName) return (PLAN_EMOJI[_supporterPlanName]||'') + ' ' + _supporterPlanName + '会員' + (_supporterCancelScheduled ? '（解約予約中）' : '');
+  if(_isSupporterMember && _supporterPlanName){ const _pe={donguri:'🌰',kurumi:'🥜',momiji:'🍁',morinoki:'🌳'}; const _emoji=(typeof PLAN_EMOJI!=='undefined'&&PLAN_EMOJI[_supporterPlanName])||_pe[_supporterPlanName]||''; const _name=(typeof PLAN_ID_TO_NAME!=='undefined'&&PLAN_ID_TO_NAME[_supporterPlanName])||_supporterPlanName; const _base=(_emoji?_emoji+' ':'')+_name+'会員'+(_proPurchased?'（Pro）':'')+(_supporterCancelScheduled?'（解約予約中）':''); return _base; }
   if(_proPurchased) return 'Subly Pro';
   return 'Subly Free';
 }
