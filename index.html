@@ -4202,7 +4202,7 @@ function _openEmailChangeModal(){
           const credential = window._fbFns.EmailAuthProvider.credential(currentEmail, currentPw);
           await window._fbFns.reauthenticateWithCredential(window._fbUser, credential);
           // メアド更新
-          await window._fbFns.updateEmail(window._fbUser, newEmail);
+          const { verifyBeforeUpdateEmail } = await import('https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js'); await verifyBeforeUpdateEmail(window._fbUser, newEmail); _updateAuthUI(window._fbUser); gaEvent('email_changed', {}); showDialog({ icon:'✉️', title:'確認メールを送信しました', msg:'<div style="text-align:center;font-size:13px;color:var(--ts);line-height:1.7">新しいメールアドレスに確認メールを送信しました。<br><br>メール内のリンクをクリックすると<br>変更が完了します。</div>', buttons:[{label:'OK', cls:'ok'}] }); return;
           // Firestoreにも反映
           if(window._fbDb && window._fbFns){
             const { doc, setDoc } = window._fbFns;
