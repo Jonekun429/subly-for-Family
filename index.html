@@ -10143,12 +10143,12 @@ function _showPaymentComplete(type, sessionId){
     const nextDate = new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('ja-JP');
     showDialog({
       icon:'',
-      title:`${_supporterPlanName || '応援会員'} 会員へようこそ！`,
+      title:`${(typeof PLAN_ID_TO_NAME!=='undefined'&&PLAN_ID_TO_NAME[_supporterPlanName])||_supporterPlanName||'応援'}会員へようこそ！`,
       msg:`<div style="text-align:center">
         <div style="font-size:54px;line-height:1;margin:0 auto 12px">${planEmoji}</div>
         <div style="font-size:13px;color:var(--ts);line-height:1.7;margin-bottom:14px">応援ありがとうございます<br>これからもSublyをよろしくお願いします</div>
         <div style="background:linear-gradient(135deg,#F0FAF6,#E1F5EE);border:1px solid rgba(92,142,132,.3);border-radius:12px;padding:12px 14px;margin-bottom:12px;text-align:left">
-          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0"><span style="color:var(--ts)">プラン</span><strong style="color:var(--pd)">${planEmoji} ${planLabel}</strong></div>
+          <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0"><span style="color:var(--ts)">プラン</span><strong style="color:var(--pd)">${planLabel}</strong></div>
           <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-top:1px solid rgba(0,0,0,.06)"><span style="color:var(--ts)">料金</span><strong>¥${planPrice.toLocaleString()}/月（税込）</strong></div>
           <div style="display:flex;justify-content:space-between;font-size:12px;padding:5px 0;border-top:1px solid rgba(0,0,0,.06)"><span style="color:var(--ts)">次回お支払い</span><strong>${nextDate}</strong></div>
           <div style="display:flex;justify-content:space-between;font-size:11px;padding:5px 0;border-top:1px solid rgba(0,0,0,.06)"><span style="color:var(--ts)">解約</span><span style="color:var(--ts)">いつでも可能</span></div>
