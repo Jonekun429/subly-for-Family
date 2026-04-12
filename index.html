@@ -5533,7 +5533,7 @@ function openAuthModal(tab){
         </div>`,
         buttons:[
           {label:'プラン変更', cls:'ok', onClick:()=>{ gaEvent('account_menu_tap',{plan:'supporter',action:'change_plan'}); setTimeout(_openPlanChangeModal, 200); }},
-          {label:'応援会員を解約する', cls:'cancel', onClick:()=>{ gaEvent('account_menu_tap',{plan:'supporter',action:'cancel'}); setTimeout(_startCancelFlow, 200); }},
+          ...(_supporterCancelScheduled ? [] : [{label:'応援会員を解約する', cls:'cancel', onClick:()=>{ gaEvent('account_menu_tap',{plan:'supporter',action:'cancel'}); setTimeout(_startCancelFlow, 200); }}]),
           {label:'ログアウト', cls:'cancel', onClick:()=>{ gaEvent('account_menu_tap',{plan:'supporter',action:'logout'}); logoutFirebase(); }},
           {label:'閉じる', cls:'cancel'}
         ],
