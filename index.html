@@ -1623,7 +1623,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <div class="ob-header">
         <div class="ob-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="rgba(255,255,255,.95)"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></div>
         <div class="ob-badge">STEP 1</div>
-        <div class="ob-ttl">登録は<em>タップするだけ</em></div>
+        <div class="ob-ttl">登録は<em style="white-space:nowrap">タップするだけ</em></div>
       </div>
       <div class="ob-body">
         <!-- 画面イメージ -->
@@ -5142,7 +5142,7 @@ function _withdrawStep3(user){
                 無料会員にて引き続き<br>サブスクの管理ができます。
               </div>
               <div style="background:var(--pl);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--pd);line-height:1.7">
-                またいつでも新規登録してご利用いただけます
+                またいつでも新規登録して<br>ご利用いただけます
               </div>
             </div>`,
             buttons:[{label:'アプリを続ける', cls:'ok'}]
@@ -7998,7 +7998,7 @@ async function submitForm(){
     showDialog({
       icon:'',
       title:`「${name}」を登録しました`,
-      msg:`現在 ${subs.length} 件登録中${saveLabel}`,
+      msg:`<div style="text-align:center">現在 ${subs.length} 件登録中<br>${saveLabel}</div>`,
       buttons:[
         {label:'続けて追加', cls:'ok', onClick:()=>{
           resetForm();
