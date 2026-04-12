@@ -3796,7 +3796,7 @@ function showDialog({icon='', title='', msg='', buttons=[], closable=false, onCl
   buttons.forEach(b=>{
     const el=document.createElement('button');
     el.className='dlg-btn '+(b.cls||'ok');
-    el.textContent=b.label;
+    if(b.style) el.style.cssText = b.style;     el.textContent=b.label;
     el.onclick=async ()=>{
       const seqBefore = _dlgSeq;
       if(b.onClick){
@@ -9711,7 +9711,7 @@ function _processImportFile(file){
           </div>
         </div>`,
         buttons:[
-          {label:'¥980で無制限にする', cls:'ok', onClick:()=>{ setTimeout(_startProPurchase, 200); }},
+          {label:'¥980で無制限にする', cls:'ok', style:'background:linear-gradient(135deg,#E8A04A,#FFD27A);color:#fff;border:none;box-shadow:0 4px 12px rgba(232,160,74,.3)', onClick:()=>{ setTimeout(_startProPurchase, 200); }},
           {label:'応援会員プランを見る', cls:'cancel', onClick:()=>{ setTimeout(_showPlanModal, 200); }},
           {label:'閉じる', cls:'cancel'}
         ],
