@@ -5497,7 +5497,7 @@ function openAuthModal(tab){
           現在<strong style="color:var(--tx)">無料会員</strong>です
         </div>`,
         buttons:[
-          {label:'¥980で無制限にする', cls:'ok', onClick:()=>{ gaEvent('account_menu_tap',{plan:'free',action:'buy_pro'}); setTimeout(_startProPurchase, 200); }},
+          {label:'¥980で無制限にする', cls:'ok', style:'background:linear-gradient(135deg,#E8A04A,#FFD27A);color:#fff;border:none;box-shadow:0 4px 12px rgba(232,160,74,.3)', onClick:()=>{ gaEvent('account_menu_tap',{plan:'free',action:'buy_pro'}); setTimeout(_startProPurchase, 200); }},
           {label:'応援会員プランを見る', cls:'cancel', onClick:()=>{ gaEvent('account_menu_tap',{plan:'free',action:'view_supporter'}); setTimeout(_showPlanModal, 200); }},
           {label:'ログアウト', cls:'cancel', onClick:()=>{ gaEvent('account_menu_tap',{plan:'free',action:'logout'}); logoutFirebase(); }},
           {label:'閉じる', cls:'cancel'}
@@ -8947,7 +8947,7 @@ async function _executeCancelSupporter(reason){
             </div>
           </div>`,
           buttons:[
-            {label:'¥980で無制限にする', cls:'ok', onClick:()=>{ gaEvent('post_cancel_pro_tap',{action:'buy'}); setTimeout(_startProPurchase, 200); }},
+            {label:'¥980で無制限にする', cls:'ok', style:'background:linear-gradient(135deg,#E8A04A,#FFD27A);color:#fff;border:none;box-shadow:0 4px 12px rgba(232,160,74,.3)', onClick:()=>{ gaEvent('post_cancel_pro_tap',{action:'buy'}); setTimeout(_startProPurchase, 200); }},
             {label:'今は見送る', cls:'cancel', onClick:()=>{ gaEvent('post_cancel_pro_tap',{action:'dismiss'}); }}
           ],
           btnColumn: true
