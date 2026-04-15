@@ -8580,7 +8580,7 @@ function _checkBeforePlanChange(){
             const reactivate = window._fbHttpsCallable(window._fbFunctions, 'reactivateSupporter');
             await reactivate({});
             showToast('解約を取り消しました');
-            _supporterCancelScheduled = false;
+            try{ await _loadFromFirestore(window._fbUser.uid); }catch(e){ console.error('reload error:', e); }
             _updateAuthUI(window._fbUser);
             setTimeout(_openPlanChangeModal, 800);
           }catch(err){
@@ -8723,6 +8723,7 @@ async function _confirmPlanChange(){
             }
             _supporterPlanName = newPlan.name;
             _supporterPlanPrice = newPlan.price;
+            try{ await _loadFromFirestore(window._fbUser.uid); }catch(e){ console.error('reload error:', e); }
             _updateAuthUI(window._fbUser);
             gaEvent('plan_changed', { from: oldPlan, to: newPlan.name, price: newPlan.price });
             // 完了画面を表示
@@ -8936,6 +8937,7 @@ async function _executeCancelSupporter(reason){
     _isSupporterMember = false;
     _supporterPlanName = '';
     _supporterPlanPrice = 0;
+    try{ await _loadFromFirestore(window._fbUser.uid); }catch(e){ console.error('reload error:', e); }
     _updateAuthUI(window._fbUser);
     if(_proPurchased){
       setTimeout(()=>{
