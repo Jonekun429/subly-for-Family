@@ -8581,6 +8581,7 @@ function _checkBeforePlanChange(){
             await reactivate({});
             showToast('解約を取り消しました');
             _supporterCancelScheduled = false;
+            _updateAuthUI(window._fbUser);
             setTimeout(_openPlanChangeModal, 800);
           }catch(err){
             showToast('エラー: ' + (err.message || '失敗しました'));
