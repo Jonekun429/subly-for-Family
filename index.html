@@ -835,7 +835,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 <body>
 <!-- ヘッダー（スマホ） -->
 <header class="hdr">
-  <span class="hdr-title" onclick="_refreshDashboard()" style="cursor:pointer">Subly</span>
+  <span class="hdr-title" onclick="gaEvent('header_title_tap',{});_refreshDashboard()" style="cursor:pointer">Subly</span>
   <button class="hdr-hamburger" id="hdr-hamburger" onclick="toggleHdrop(event)" aria-label="メニュー">
     <span></span><span></span><span></span>
   </button>
@@ -859,7 +859,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
     <!-- アカウント -->
     <div class="hd-sec">アカウント</div>
-    <button class="hd-row" onclick="openAuthModal()" id="hd-auth-row">
+    <button class="hd-row" onclick="gaEvent('menu_tap',{item:'auth'});openAuthModal()" id="hd-auth-row">
       <div id="hd-auth-ico" style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="rgba(255,255,255,.7)"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
       </div>
@@ -875,7 +875,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
     <!-- プロフィール -->
     <div class="hd-sec">プロフィール</div>
-    <button class="hd-row" onclick="closeHdrop();setTimeout(openNicknameModal,150)">
+    <button class="hd-row" onclick="closeHdrop();gaEvent('menu_tap',{item:'nickname'});setTimeout(openNicknameModal,150)">
       <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></div>
       <div style="flex:1;min-width:0">
         <div class="hd-lbl" id="hd-nickname-display">名前を設定</div>
@@ -888,7 +888,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
     <!-- グループ -->
     <div class="hd-sec">グループ</div>
-    <button class="hd-row" id="hd-group-btn" onclick="closeHdrop();setTimeout(_onGroupMenuTap,150)">
+    <button class="hd-row" id="hd-group-btn" onclick="closeHdrop();gaEvent('menu_tap',{item:'group'});setTimeout(_onGroupMenuTap,150)">
       <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
       <div style="flex:1;min-width:0">
         <div style="display:flex;align-items:center;gap:6px">
@@ -899,7 +899,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
     </button>
     <!-- Freeユーザー向け：招待コードで参加ボタン -->
-    <button class="hd-row" id="hd-group-join-btn" style="display:none" onclick="closeHdrop();setTimeout(_openFreeJoinModal,150)">
+    <button class="hd-row" id="hd-group-join-btn" style="display:none" onclick="closeHdrop();gaEvent('menu_tap',{item:'free_join'});setTimeout(_openFreeJoinModal,150)">
       <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
       <div style="flex:1;min-width:0">
         <div style="display:flex;align-items:center;gap:6px">
@@ -1002,16 +1002,16 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 <!-- ナビ -->
 <nav class="bnav">
   <div class="sidebar-logo">Subly</div>
-  <button class="nb on" id="nb-dashboard" onclick="goto('dashboard')">
+  <button class="nb on" id="nb-dashboard" onclick="gaEvent('nav_tap',{tab:'dashboard'});goto('dashboard')">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L2 12h3v8h5v-5h4v5h5v-8h3L12 3z"/></svg>ホーム
   </button>
-  <button class="nb" id="nb-add" onclick="gotoAdd()">
+  <button class="nb" id="nb-add" onclick="gaEvent('nav_tap',{tab:'add'});gotoAdd()">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>登録
   </button>
-  <button class="nb" id="nb-calendar" onclick="goto('calendar')">
+  <button class="nb" id="nb-calendar" onclick="gaEvent('nav_tap',{tab:'calendar'});goto('calendar')">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>カレンダー
   </button>
-  <button class="nb" id="nb-list" onclick="goto('list')">
+  <button class="nb" id="nb-list" onclick="gaEvent('nav_tap',{tab:'list'});goto('list')">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>明細一覧
   </button>
   <!-- PC サイドバー追加メニュー -->
@@ -1020,7 +1020,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>グループ
   </button>
   <!-- PC サイドバーのみ表示 -->
-  <button class="nb nb-settings" onclick="openSettings()">
+  <button class="nb nb-settings" onclick="gaEvent('nav_tap',{tab:'settings'});openSettings()">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.56-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.03-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>設定
   </button>
 </nav>
@@ -1040,10 +1040,10 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
     <div class="dlg-btns">
       <button class="dlg-btn cancel" onclick="closeIncomeModal()">キャンセル</button>
-      <button class="dlg-btn ok" onclick="saveIncome()">保存</button>
+      <button class="dlg-btn ok" onclick="gaEvent('income_save_tap',{});saveIncome()">保存</button>
     </div>
     <div style="text-align:center;margin-top:6px">
-      <button onclick="clearIncome()" style="background:none;border:none;font-size:11px;color:var(--dn);cursor:pointer;font-family:inherit;padding:4px">設定を解除する</button>
+      <button onclick="gaEvent('income_clear_tap',{});clearIncome()" style="background:none;border:none;font-size:11px;color:var(--dn);cursor:pointer;font-family:inherit;padding:4px">設定を解除する</button>
     </div>
   </div>
 </div>
@@ -1174,12 +1174,12 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
     <div class="s-sec">データ管理</div>
     <div class="s-grp">
-      <div class="s-row" onclick="exportCSV()">
+      <div class="s-row" onclick="gaEvent('settings_tap',{item:'csv_export'});exportCSV()">
         <div class="s-ico" style="background:#EDF4F2"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></div>
         <div class="s-body"><div class="s-title">CSVエクスポート</div><div class="s-sub">データをCSVファイルとして保存</div></div>
         <span class="s-arr">›</span>
       </div>
-      <div class="s-row" onclick="importCSVPicker()" style="cursor:pointer">
+      <div class="s-row" onclick="gaEvent('settings_tap',{item:'csv_import'});importCSVPicker()" style="cursor:pointer">
         <div class="s-ico" style="background:#FDF6EE"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg></div>
         <div class="s-body"><div class="s-title">CSVインポート</div><div class="s-sub">機種変更後のデータ引き継ぎに</div></div>
         <span class="s-arr">›</span>
@@ -1198,7 +1198,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <div class="s-body"><div class="s-title">使い方を見る</div><div class="s-sub">Sublyの基本的な使い方</div></div>
         <span class="s-arr">›</span>
       </div>
-      <div class="s-row" onclick="closeSettings();setTimeout(()=>showOnboarding(),200)">
+      <div class="s-row" onclick="gaEvent('settings_tap',{item:'onboarding'});closeSettings();setTimeout(()=>showOnboarding(),200)">
         <div class="s-ico" style="background:#FFF8EE"><svg width="18" height="18" viewBox="0 0 24 24" fill="#E8A04A"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg></div>
         <div class="s-body"><div class="s-title">はじめの説明を見る</div><div class="s-sub">初回チュートリアルを再表示</div></div>
         <span class="s-arr">›</span>
@@ -1207,12 +1207,12 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
     <div class="s-sec">その他</div>
     <div class="s-grp">
-      <div class="s-row" onclick="closeSettings();setTimeout(openSavingHints,150)">
+      <div class="s-row" onclick="gaEvent('settings_tap',{item:'saving_hints'});closeSettings();setTimeout(openSavingHints,150)">
         <div class="s-ico" style="background:#FFF8EE"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
         <div class="s-body"><div class="s-title">節約のヒント一覧</div><div class="s-sub">解約引き留めキャンペーン情報</div></div>
         <span class="s-arr">›</span>
       </div>
-      <div class="s-row" onclick="closeSettings();setTimeout(openShare,150)">
+      <div class="s-row" onclick="gaEvent('settings_tap',{item:'share'});closeSettings();setTimeout(openShare,150)">
         <div class="s-ico" style="background:#EEF6FF"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg></div>
         <div class="s-body"><div class="s-title">友達に紹介する</div><div class="s-sub">QRコード・LINE・URLコピー</div></div>
         <span class="s-arr">›</span>
@@ -1222,7 +1222,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <div class="s-body"><div class="s-title" style="color:var(--ts)">アカウント削除</div><div class="s-sub">アカウントとデータを削除します</div></div>
         <span class="s-arr">›</span>
       </div>
-      <div class="s-row" onclick="openPrivacy()">
+      <div class="s-row" onclick="gaEvent('settings_tap',{item:'privacy'});openPrivacy()">
         <div class="s-ico" style="background:#F0FDF4"><svg width="18" height="18" viewBox="0 0 24 24" fill="#5C8E84"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/></svg></div>
         <div class="s-body"><div class="s-title">プライバシーポリシー</div><div class="s-sub">データの取り扱いについて</div></div>
         <span class="s-arr">›</span>
@@ -1263,23 +1263,23 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <!-- URL表示 -->
       <div style="background:var(--bg);border:1.5px solid var(--bd);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:16px">
         <div style="font-size:12px;color:var(--ts);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">https://app.subly.jp/</div>
-        <button onclick="copyShareUrl()" style="flex-shrink:0;background:var(--p);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer" id="copy-btn">コピー</button>
+        <button onclick="gaEvent('share_tap',{method:'copy_url'});copyShareUrl()" style="flex-shrink:0;background:var(--p);color:#fff;border:none;border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer" id="copy-btn">コピー</button>
       </div>
 
       <!-- シェアボタン -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
         <!-- LINE -->
-        <button onclick="shareToLine()" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;background:#06C755;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">
+        <button onclick="gaEvent('share_tap',{method:'line'});shareToLine()" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;background:#06C755;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 5.98 2 10.85c0 2.93 1.56 5.54 4 7.19V22l3.67-2.01c.75.21 1.54.32 2.33.32 5.52 0 10-3.98 10-8.85S17.52 2 12 2zm1.05 11.88l-2.65-2.82-5.18 2.82 5.7-6.06 2.72 2.82 5.11-2.82-5.7 6.06z"/></svg>
           LINEで送る
         </button>
         <!-- X（Twitter） -->
-        <button onclick="shareToX()" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;background:#000;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">
+        <button onclick="gaEvent('share_tap',{method:'x'});shareToX()" style="display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;background:#000;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
           Xでシェア
         </button>
         <!-- Web Share API -->
-        <button onclick="nativeShare()" style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;background:var(--pl);color:var(--p);border:1.5px solid var(--p);border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">
+        <button onclick="gaEvent('share_tap',{method:'native'});nativeShare()" style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;background:var(--pl);color:var(--p);border:1.5px solid var(--p);border-radius:12px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
           その他の方法でシェア
         </button>
@@ -1453,10 +1453,10 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     <!-- フッター -->
     <div class="howto-footer">
       <div style="display:flex;gap:8px">
-        <button class="howto-btn-next" id="howto-btn-prev" onclick="howtoPrev()" style="flex:1;background:var(--bg);color:var(--ts)">← 戻る</button>
-        <button class="howto-btn-next" id="howto-btn-next" onclick="howtoNext()" style="flex:2">次へ</button>
+        <button class="howto-btn-next" id="howto-btn-prev" onclick="gaEvent('howto_prev',{});howtoPrev()" style="flex:1;background:var(--bg);color:var(--ts)">← 戻る</button>
+        <button class="howto-btn-next" id="howto-btn-next" onclick="gaEvent('howto_next',{});howtoNext()" style="flex:2">次へ</button>
       </div>
-      <button class="howto-btn-skip" onclick="closeHowto()">閉じる</button>
+      <button class="howto-btn-skip" onclick="gaEvent('howto_close',{});closeHowto()">閉じる</button>
     </div>
   </div>
 </div>
@@ -1656,7 +1656,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
       <div class="ob-footer">
         <button class="ob-btn-skip" onclick="gaEvent('onboarding_skip',{});closeOb()">スキップ</button>
-        <button class="ob-btn-next" onclick="obNext()">次へ</button>
+        <button class="ob-btn-next" onclick="gaEvent('onboarding_next',{});obNext()">次へ</button>
       </div>
     </div>
 
@@ -1690,7 +1690,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
       <div class="ob-footer">
         <button class="ob-btn-skip" onclick="obGoto(0)">← 戻る</button>
-        <button class="ob-btn-next" onclick="obNext()">次へ</button>
+        <button class="ob-btn-next" onclick="gaEvent('onboarding_next',{});obNext()">次へ</button>
       </div>
     </div>
 
@@ -1722,7 +1722,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
       <div class="ob-footer">
         <button class="ob-btn-skip" onclick="obGoto(1)">← 戻る</button>
-        <button class="ob-btn-next" onclick="obNext()">次へ</button>
+        <button class="ob-btn-next" onclick="gaEvent('onboarding_next',{});obNext()">次へ</button>
       </div>
     </div>
 
@@ -1770,8 +1770,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
     <!-- タブ -->
     <div style="display:flex;gap:0;margin-bottom:20px;border-bottom:2px solid var(--bd)">
-      <button id="auth-tab-login" onclick="switchAuthTab('login')" style="flex:1;padding:10px;background:none;border:none;border-bottom:2.5px solid var(--p);margin-bottom:-2px;font-size:14px;font-weight:700;color:var(--p);font-family:inherit;cursor:pointer">ログイン</button>
-      <button id="auth-tab-signup" onclick="switchAuthTab('signup')" style="flex:1;padding:10px;background:none;border:none;border-bottom:2.5px solid transparent;margin-bottom:-2px;font-size:14px;font-weight:700;color:var(--ts);font-family:inherit;cursor:pointer">新規登録</button>
+      <button id="auth-tab-login" onclick="gaEvent('auth_tab_switch',{tab:'login'});switchAuthTab('login')" style="flex:1;padding:10px;background:none;border:none;border-bottom:2.5px solid var(--p);margin-bottom:-2px;font-size:14px;font-weight:700;color:var(--p);font-family:inherit;cursor:pointer">ログイン</button>
+      <button id="auth-tab-signup" onclick="gaEvent('auth_tab_switch',{tab:'signup'});switchAuthTab('signup')" style="flex:1;padding:10px;background:none;border:none;border-bottom:2.5px solid transparent;margin-bottom:-2px;font-size:14px;font-weight:700;color:var(--ts);font-family:inherit;cursor:pointer">新規登録</button>
     </div>
 
     <!-- メール/パスワード -->
@@ -1800,9 +1800,9 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
     <!-- パスワードを忘れた（ログインタブのみ表示） -->
     <div id="auth-forgot-wrap" style="text-align:right;margin-bottom:14px">
-      <button onclick="sendPasswordReset()" style="background:none;border:none;font-size:12px;color:var(--ts);cursor:pointer;font-family:inherit;text-decoration:underline">パスワードを忘れた方はこちら</button>
+      <button onclick="gaEvent('password_reset_tap',{});sendPasswordReset()" style="background:none;border:none;font-size:12px;color:var(--ts);cursor:pointer;font-family:inherit;text-decoration:underline">パスワードを忘れた方はこちら</button>
     </div>
-    <button id="auth-submit-btn" onclick="submitAuth()" style="width:100%;padding:13px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer">ログイン</button>
+    <button id="auth-submit-btn" onclick="gaEvent('auth_submit_tap',{});submitAuth()" style="width:100%;padding:13px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer">ログイン</button>
     <div id="auth-error" style="display:none;margin-top:10px;font-size:13px;color:var(--dn);text-align:center"></div>
   </div>
 </div>
@@ -1819,7 +1819,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
           <div style="font-size:11px;font-weight:600;color:var(--ts)">あなたの会員ID</div>
           <div id="profile-member-id" style="font-size:16px;font-weight:800;color:var(--pd);font-family:'Courier New',monospace;letter-spacing:2px;margin-top:2px"></div>
         </div>
-        <button onclick="_copyMemberId()" id="member-id-copy-btn" style="background:var(--pl);border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;color:var(--pd);cursor:pointer;font-family:inherit;flex-shrink:0">コピー</button>
+        <button onclick="gaEvent('member_id_copy_tap',{});_copyMemberId()" id="member-id-copy-btn" style="background:var(--pl);border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;color:var(--pd);cursor:pointer;font-family:inherit;flex-shrink:0">コピー</button>
       </div>
       <div style="font-size:10px;color:var(--ts);margin-top:6px;line-height:1.5">お問い合わせ時の本人確認に使用します。メアドの代わりにIDをお伝えください。</div>
     </div>
@@ -1852,7 +1852,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
     <div style="display:flex;gap:10px">
       <button onclick="closeNicknameModal()" style="flex:1;padding:12px;background:var(--bg);color:var(--ts);border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">キャンセル</button>
-      <button onclick="saveNickname()" style="flex:1;padding:12px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">保存</button>
+      <button onclick="gaEvent('nickname_save_tap',{});saveNickname()" style="flex:1;padding:12px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">保存</button>
     </div>
   </div>
 </div>
@@ -1929,7 +1929,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <input type="text" id="group-invite-input" placeholder="招待コード（6桁）を入力" maxlength="6"
           style="width:100%;padding:13px 14px;border:none;border-radius:10px;font-size:18px;font-family:inherit;color:var(--tx);background:#fff;box-sizing:border-box;outline:none;letter-spacing:6px;text-align:center;text-transform:uppercase;font-weight:800;margin-bottom:10px"
           oninput="this.value=this.value.toUpperCase()">
-        <button onclick="joinGroupByCode()" style="width:100%;padding:14px;background:#fff;color:var(--p);border:none;border-radius:10px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer">
+        <button onclick="gaEvent('group_join_tap',{});joinGroupByCode()" style="width:100%;padding:14px;background:#fff;color:var(--p);border:none;border-radius:10px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer">
           参加する →
         </button>
       </div>
@@ -1944,7 +1944,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
           <div style="font-size:12px;color:var(--ts);margin-bottom:8px;line-height:1.6">グループを作成して招待コードをメンバーに共有しましょう。</div>
           <input type="text" id="group-name-input" placeholder="グループ名（例：田中家）" maxlength="20" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
             style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none;margin-bottom:8px">
-          <button onclick="createGroup()" style="width:100%;padding:13px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">グループを作成する</button>
+          <button onclick="gaEvent('group_create_tap',{});createGroup()" style="width:100%;padding:13px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">グループを作成する</button>
         </div>
         <button onclick="closeGroupModal()" style="width:100%;padding:10px;background:none;border:none;color:var(--ts);font-size:13px;font-family:inherit;cursor:pointer;margin-top:8px">閉じる</button>
       </div>
@@ -1958,7 +1958,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <div style="font-size:12px;font-weight:700;color:rgba(255,255,255,.7);letter-spacing:1px;margin-bottom:4px">グループ</div>
         <div style="display:flex;align-items:center;gap:8px">
           <div style="font-size:20px;font-weight:800;color:#fff" id="group-display-name">—</div>
-          <button onclick="editGroupName()" style="background:rgba(255,255,255,.2);border:none;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;color:#fff;cursor:pointer;font-family:inherit">変更</button>
+          <button onclick="gaEvent('group_name_edit_tap',{});editGroupName()" style="background:rgba(255,255,255,.2);border:none;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;color:#fff;cursor:pointer;font-family:inherit">変更</button>
         </div>
         <div style="font-size:12px;color:rgba(255,255,255,.6);margin-top:2px" id="group-member-count">メンバー —人</div>
       </div>
@@ -1974,15 +1974,15 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
           <div style="display:flex;align-items:center;gap:8px">
             <div style="flex:1;font-size:22px;font-weight:800;color:var(--p);letter-spacing:4px;text-align:center;background:var(--card);border-radius:8px;padding:8px" id="group-invite-code">——</div>
             <div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0">
-              <button onclick="copyCodeOnly()" style="background:var(--pl);color:var(--pd);border:1.5px solid var(--p);border-radius:8px;padding:6px 10px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer" id="copy-code-only-btn">コードだけコピー</button>
-              <button onclick="copyInviteCode()" style="background:var(--p);color:#fff;border:none;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer" id="copy-code-btn">招待文を共有</button>
+              <button onclick="gaEvent('invite_code_only_copy_tap',{});copyCodeOnly()" style="background:var(--pl);color:var(--pd);border:1.5px solid var(--p);border-radius:8px;padding:6px 10px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer" id="copy-code-only-btn">コードだけコピー</button>
+              <button onclick="gaEvent('invite_code_copy_tap',{});copyInviteCode()" style="background:var(--p);color:#fff;border:none;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer" id="copy-code-btn">招待文を共有</button>
             </div>
           </div>
           <div style="font-size:11px;color:var(--ts);margin-top:6px" id="invite-expire-hint">このコードをメンバーに共有してください</div>
         </div>
 
         <!-- 退出 -->
-        <button onclick="leaveGroup()" style="width:100%;padding:11px;background:none;border:1px solid var(--dn);border-radius:10px;color:var(--dn);font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">グループから退出する</button>
+        <button onclick="gaEvent('group_leave_tap',{});leaveGroup()" style="width:100%;padding:11px;background:none;border:1px solid var(--dn);border-radius:10px;color:var(--dn);font-size:13px;font-weight:700;font-family:inherit;cursor:pointer">グループから退出する</button>
       </div>
     </div>
 
@@ -2247,7 +2247,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
       <div style="font-size:10px;color:var(--ts);margin-top:4px">登録無制限・ずっと使える・月額なし</div>
     </div>
-    <button id="ps-submit-btn" onclick="_completeProSignup()" style="width:100%;padding:15px;border-radius:12px;font-size:16px;font-weight:700;border:none;cursor:pointer;font-family:inherit;margin-bottom:4px;background:linear-gradient(135deg,#E8A04A,#FFD27A);color:#fff;box-shadow:0 4px 12px rgba(224,144,48,.3)">アカウント登録して購入する</button>
+    <button id="ps-submit-btn" onclick="gaEvent('pro_signup_submit_tap',{});_completeProSignup()" style="width:100%;padding:15px;border-radius:12px;font-size:16px;font-weight:700;border:none;cursor:pointer;font-family:inherit;margin-bottom:4px;background:linear-gradient(135deg,#E8A04A,#FFD27A);color:#fff;box-shadow:0 4px 12px rgba(224,144,48,.3)">アカウント登録して購入する</button>
     <div style="font-size:10px;color:var(--ts);line-height:1.5;margin-bottom:8px">※ 決済機能は現在準備中です（テスト中）</div>
     <button id="ps-toggle-link" onclick="_toggleProMode()" style="width:100%;padding:8px;border:none;background:none;font-size:12px;color:#E8A04A;cursor:pointer;font-family:inherit;text-decoration:underline;margin-bottom:6px">既にアカウントをお持ちの方はこちら</button>
     <button onclick="_closeProSignup()" style="width:100%;padding:8px;border:none;background:none;font-size:12px;color:var(--ts);cursor:pointer;font-family:inherit">キャンセル</button>
@@ -2286,7 +2286,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         </button>
       </div>
     </div>
-    <button onclick="_completeSupporterSignup()" style="width:100%;padding:14px;border-radius:12px;font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:inherit;margin-bottom:4px;background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;box-shadow:0 4px 12px rgba(92,142,132,.3)">登録を行う</button>
+    <button onclick="gaEvent('supporter_signup_submit_tap',{});_completeSupporterSignup()" style="width:100%;padding:14px;border-radius:12px;font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:inherit;margin-bottom:4px;background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;box-shadow:0 4px 12px rgba(92,142,132,.3)">登録を行う</button>
     <div style="font-size:10px;color:var(--ts);line-height:1.6;margin-bottom:10px">※ 登録後に決済画面に移ります</div>
     <button onclick="_closeSupporterSignup();setTimeout(()=>{openAuthModal('login')},200)" style="width:100%;padding:8px;border:none;background:none;font-size:12px;color:var(--p);cursor:pointer;font-family:inherit;text-decoration:underline;margin-bottom:6px">既にアカウントをお持ちの方はログイン</button>
     <button onclick="_closeSupporterSignup();setTimeout(_showPlanModal,200)" style="width:100%;padding:10px;border:none;background:none;font-size:13px;color:var(--ts);cursor:pointer;font-family:inherit">プラン選択に戻る</button>
@@ -2320,7 +2320,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
     <div style="position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--bd);padding:8px 16px calc(env(safe-area-inset-bottom,0px) + 4px);z-index:50">
       <div style="max-width:440px;margin:0 auto">
-        <button id="pc-btn" onclick="_confirmPlanChange()" disabled style="width:100%;padding:15px;border-radius:12px;font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:inherit;background:var(--bd);color:var(--ts)">プランを選択してください</button>
+        <button id="pc-btn" onclick="gaEvent('plan_change_confirm_tap',{});_confirmPlanChange()" disabled style="width:100%;padding:15px;border-radius:12px;font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:inherit;background:var(--bd);color:var(--ts)">プランを選択してください</button>
         <button id="pc-cancel-btn" onclick="_closePlanChange();setTimeout(_startCancelFlow,200)" style="display:none;width:100%;text-align:center;margin-top:8px;background:none;border:none;font-size:12px;color:var(--dn);cursor:pointer;font-family:inherit;padding:4px;margin:0">応援会員を解約する</button>
       </div>
     </div>
@@ -2438,7 +2438,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
     <!-- 固定CTAバー -->
     <div style="position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--bd);padding:12px 16px calc(env(safe-area-inset-bottom,0px) + 12px);display:flex;flex-direction:column;gap:8px;align-items:center;z-index:9600">
-      <button id="ps-cta-btn" onclick="_proceedPlan()" style="width:100%;max-width:440px;padding:15px;background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;font-size:16px;font-weight:700;font-family:inherit;border:none;border-radius:14px;cursor:pointer;box-shadow:0 4px 16px rgba(92,142,132,.3);opacity:.5" disabled>プランを選択してください</button>
+      <button id="ps-cta-btn" onclick="gaEvent('plan_cta_tap',{});_proceedPlan()" style="width:100%;max-width:440px;padding:15px;background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;font-size:16px;font-weight:700;font-family:inherit;border:none;border-radius:14px;cursor:pointer;box-shadow:0 4px 16px rgba(92,142,132,.3);opacity:.5" disabled>プランを選択してください</button>
       <button onclick="_closePlanModal()" style="font-size:13px;color:var(--ts);background:none;border:none;cursor:pointer;font-family:inherit;padding:4px">まずは無料で使う</button>
     </div>
   </div>
@@ -2550,14 +2550,50 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
               <span style="font-size:11px;font-weight:600;color:var(--ts)">手取り</span>
               <span id="income-val" style="font-size:13px;font-weight:800;color:var(--pd)"></span>
             </div>
-            <button onclick="openIncomeModal()" style="background:none;border:none;font-size:11px;font-weight:600;color:var(--p);cursor:pointer;font-family:inherit;padding:2px 6px;border-radius:6px">変更</button>
+            <button onclick="gaEvent('income_open_tap',{});openIncomeModal()" style="background:none;border:none;font-size:11px;font-weight:600;color:var(--p);cursor:pointer;font-family:inherit;padding:2px 6px;border-radius:6px">変更</button>
           </div>
           <div style="background:var(--bg);border-radius:5px;overflow:hidden;height:7px;margin-bottom:5px"><div id="income-bar" style="height:100%;border-radius:5px;transition:width .8s ease"></div></div>
           <div id="income-msg" style="font-size:11px;color:var(--ts);text-align:center"></div>
         </div>
       </div>
     </div>
-    <div class="card">
+    
+      <!-- ★ 見直しカード -->
+      <div id="review-card" class="card" style="display:none;padding:0;overflow:hidden;border:1.5px solid #D4A84C;background:linear-gradient(135deg,#FFF9E8 0%,#FFF4D9 100%)">
+        <div id="review-head" onclick="_toggleReviewCard()" style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none">
+          <div style="display:flex;align-items:center;gap:10px;flex:1">
+            <div style="width:32px;height:32px;background:#D4A84C;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">💰</div>
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <span style="font-size:10px;font-weight:700;color:#B8912F;letter-spacing:.5px">見直しのヒント</span>
+              <span style="font-size:14px;font-weight:800;color:var(--tx)">年間 <span id="review-savings-head" style="color:#B8912F">¥0</span> 節約できます</span>
+            </div>
+          </div>
+          <div id="review-arrow" style="color:#B8912F;font-size:14px;font-weight:700;transition:transform .3s">▼</div>
+        </div>
+        <div id="review-body" style="display:none;padding:0 16px 16px;border-top:1px dashed rgba(212,168,76,.4);padding-top:14px">
+          <div style="background:rgba(255,255,255,.6);border-radius:10px;padding:10px 12px;margin-bottom:10px">
+            <div style="font-size:11px;color:#B8912F;font-weight:700;margin-bottom:8px;letter-spacing:.3px">カテゴリ別の内訳</div>
+            <div id="review-cat-list"></div>
+          </div>
+          <div style="display:flex;align-items:center;margin-bottom:10px">
+            <div style="flex:1;text-align:center">
+              <div style="font-size:10px;color:var(--ts);margin-bottom:3px">今</div>
+              <div id="review-now" style="font-size:19px;font-weight:800;color:var(--ts);text-decoration:line-through">¥0</div>
+            </div>
+            <div style="color:#D4A84C;font-weight:800;padding:0 6px;font-size:18px">→</div>
+            <div style="flex:1;text-align:center">
+              <div style="font-size:10px;color:var(--ts);margin-bottom:3px">見直し後</div>
+              <div id="review-after" style="font-size:19px;font-weight:800;color:#B8912F">¥0</div>
+            </div>
+          </div>
+          <div style="background:#fff;border:1px solid #D4A84C;border-radius:10px;padding:11px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <span style="font-size:11px;color:#B8912F;font-weight:700">年間で</span>
+            <span style="font-size:17px;font-weight:800"><span id="review-savings-body" style="color:var(--tx)">¥0</span> <span style="color:#B8912F;font-size:12px">お得</span></span>
+          </div>
+          <button onclick="gaEvent('review_card_cta_tap',{});goto('list');setTimeout(function(){ if(window._applySatFilter1){window._applySatFilter1();} },200)" style="width:100%;background:linear-gradient(135deg,#D4A84C 0%,#B8912F 100%);color:#fff;border:none;padding:12px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 2px 8px rgba(212,168,76,.3)">対象のサブスクを見る →</button>
+        </div>
+      </div>
+      <div class="card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
         <div class="card-ttl" id="chart-ttl" style="margin-bottom:0">カテゴリ別支出（月換算）</div>
         <div style="display:flex;background:var(--bg);border:1.5px solid var(--bd);border-radius:8px;overflow:hidden">
@@ -2771,11 +2807,11 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   <div id="pg-calendar" class="page">
     <!-- ヘッダー：月ナビ -->
     <div class="cal-hdr">
-      <button class="cal-nav" onclick="calMove(-1)" aria-label="前の月">
+      <button class="cal-nav" onclick="gaEvent('cal_nav',{dir:'prev'});calMove(-1)" aria-label="前の月">
         <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
       </button>
       <span class="cal-month" id="cal-label"></span>
-      <button class="cal-nav" onclick="calMove(1)" aria-label="次の月">
+      <button class="cal-nav" onclick="gaEvent('cal_nav',{dir:'next'});calMove(1)" aria-label="次の月">
         <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
       </button>
     </div>
@@ -2783,8 +2819,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     <div id="cal-group-tabs" style="display:none;gap:7px;margin-bottom:8px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch;scrollbar-width:none"></div>
     <!-- フィルター -->
     <div class="cal-filters">
-      <button class="cal-fb on" id="cf-all" onclick="setCalFilter('all')">全件</button>
-      <button class="cal-fb" id="cf-warn" onclick="setCalFilter('warn')">★1のサブスク</button>
+      <button class="cal-fb on" id="cf-all" onclick="gaEvent('cal_filter_tap',{filter:'all'});setCalFilter('all')">全件</button>
+      <button class="cal-fb" id="cf-warn" onclick="gaEvent('cal_filter_tap',{filter:'warn'});setCalFilter('warn')">★1のサブスク</button>
     </div>
     <!-- 月間サマリー -->
     <div class="cal-summary">
@@ -2821,7 +2857,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     <!-- サマリーカード -->
     <div class="ls-card" id="list-summary-card">
       <!-- 閉じた状態（常時表示） -->
-      <div class="ls-closed" onclick="toggleListSummary()">
+      <div class="ls-closed" onclick="gaEvent('list_summary_toggle_tap',{});toggleListSummary()">
         <div class="ls-closed-l">
           <div class="ls-closed-amt" id="ls-monthly"><sup>¥</sup>0</div>
           <div class="ls-closed-unit">/月</div>
@@ -2853,7 +2889,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
             </div>
           </div>
           <div id="ls-members"></div>
-          <button class="ls-sat-btn" onclick="openSatPopupReport()">
+          <button class="ls-sat-btn" onclick="gaEvent('sat_report_tap',{});openSatPopupReport()">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
             満足度を一括更新
           </button>
@@ -2881,7 +2917,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
     <div id="sat-filter-bar" style="display:none;background:var(--pl);border:1.5px solid var(--p);border-radius:10px;padding:8px 14px;margin-bottom:10px;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;color:var(--p)">
       <span id="sat-filter-label">★フィルター中</span>
-      <button onclick="clearSatFilter()" style="background:none;border:none;color:var(--ts);font-size:14px;cursor:pointer;font-weight:700;font-family:inherit;padding:0 4px">✕ 解除</button>
+      <button onclick="gaEvent('sat_filter_clear_tap',{});clearSatFilter()" style="background:none;border:none;color:var(--ts);font-size:14px;cursor:pointer;font-weight:700;font-family:inherit;padding:0 4px">✕ 解除</button>
     </div>
     <div id="list-items"></div>
   </div>
@@ -4025,7 +4061,7 @@ function openSavingHints(){
 function closeSavingHints(){ document.getElementById('saving-hints-ov').classList.add('hidden'); }
 
 // FAQ
-function openFAQ(){ document.getElementById('faq-ov').style.display='block'; gaEvent('faq_opened',{}); }
+function openFAQ(){ document.getElementById('faq-ov').style.display='block'; gaEvent('faq_opened',{}); document.querySelectorAll('.faq-i').forEach((el,i)=>{if(!el.dataset.gaAttached){el.dataset.gaAttached='1';el.addEventListener('click',()=>{const q=el.querySelector('.faq-qt');gaEvent('faq_item_tap',{index:i,question:q?q.textContent.substring(0,30):''});});}});}
 function closeFAQ(){ document.getElementById('faq-ov').style.display='none'; }
 
 function openSettings(){
@@ -4069,7 +4105,7 @@ function _renderCancelStatusInSettings(){
         showToast('エラー: ' + (err.message || '失敗しました'));
       }
     }
-    function closeSettings(){document.getElementById('settings-ov').classList.remove('open');}
+    function closeSettings(){gaEvent("settings_close",{});document.getElementById('settings-ov').classList.remove('open');}
 
 let _hwPage = 0;
 function openHowto(){
@@ -5918,7 +5954,7 @@ async function joinGroupByCode(codeArg){
   if(code.length !== 6){ showToast('6桁のコードを入力してください'); return; }
 
   // ボタンをローディング状態に
-  const joinBtn = document.querySelector('#group-panel-none button[onclick="joinGroupByCode()"]');
+  const joinBtn = document.querySelector('#group-panel-none button[onclick="gaEvent('group_join_tap',{});joinGroupByCode()"]');
   if(joinBtn){ joinBtn.textContent = '参加中...'; joinBtn.disabled = true; }
 
   try{
@@ -7412,7 +7448,7 @@ function showCalDetail(y,m,d,evs,dls){
   sheet.classList.add('open');
 }
 
-function closeCalSheet(){
+function closeCalSheet(){gaEvent("cal_sheet_close",{});
   const sheet=document.getElementById('cal-sheet');
   sheet.classList.remove('open');
   setTimeout(()=>sheet.classList.add('hidden'),260);
@@ -7966,7 +8002,7 @@ function onCatChange(){
   if(v==='その他')wrap.classList.remove('hidden');else wrap.classList.add('hidden');
 }
 
-async function submitForm(){
+async function submitForm(){gaEvent("form_submit",{});
   const name=document.getElementById('f-name').value.trim();
   const rawCat=document.getElementById('f-cat').value;
   const customCat=document.getElementById('f-custom-cat').value.trim();
@@ -10325,10 +10361,205 @@ window.addEventListener('resize',()=>{
 });
 </script>
 <!-- 更新ボタン（iPhoneホーム画面追加時用） -->
-<button id="reload-btn" onclick="_manualRefresh()" style="position:fixed;bottom:calc(var(--nh) + env(safe-area-inset-bottom,0px) + 20px);right:16px;width:44px;height:44px;border-radius:50%;background:var(--card);border:1.5px solid var(--bd);box-shadow:0 2px 8px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:100;-webkit-tap-highlight-color:transparent">
+<button id="reload-btn" onclick="gaEvent('reload_btn_tap',{});_manualRefresh()" style="position:fixed;bottom:calc(var(--nh) + env(safe-area-inset-bottom,0px) + 20px);right:16px;width:44px;height:44px;border-radius:50%;background:var(--card);border:1.5px solid var(--bd);box-shadow:0 2px 8px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:100;-webkit-tap-highlight-color:transparent">
   <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--ts)"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
 </button>
 
 
+<script>
+// === GA4 追加計測（addEventListener方式）===
+document.addEventListener('DOMContentLoaded', function(){
+  // ナビゲーションバー
+  var navMap = {
+    'nb-dashboard': 'dashboard',
+    'nb-calendar': 'calendar',
+    'nb-list': 'list',
+    'nb-add': 'add'
+  };
+  Object.keys(navMap).forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.addEventListener('click', function(){ gaEvent('nav_tap',{tab:navMap[id]}); });
+  });
+  // 設定ボタン
+  var settingsBtn = document.querySelector('.nb-settings');
+  if(settingsBtn) settingsBtn.addEventListener('click', function(){ gaEvent('nav_tap',{tab:'settings'}); });
+
+  // ハンバーガーメニュー
+  var hdrHamburger = document.getElementById('hdr-hamburger');
+  if(hdrHamburger) hdrHamburger.addEventListener('click', function(){ gaEvent('hamburger_tap',{}); });
+
+  // 認証ボタン（ハンバーガー内）
+  var authRow = document.getElementById('hd-auth-row');
+  if(authRow) authRow.addEventListener('click', function(){ gaEvent('menu_tap',{item:'auth'}); });
+
+  // グループボタン
+  var groupBtn = document.getElementById('hd-group-btn');
+  if(groupBtn) groupBtn.addEventListener('click', function(){ gaEvent('menu_tap',{item:'group'}); });
+
+  // 無料参加ボタン
+  var joinBtn = document.getElementById('hd-group-join-btn');
+  if(joinBtn) joinBtn.addEventListener('click', function(){ gaEvent('menu_tap',{item:'free_join'}); });
+
+  // 認証タブ切り替え
+  var loginTab = document.getElementById('auth-tab-login');
+  if(loginTab) loginTab.addEventListener('click', function(){ gaEvent('auth_tab_switch',{tab:'login'}); });
+  var signupTab = document.getElementById('auth-tab-signup');
+  if(signupTab) signupTab.addEventListener('click', function(){ gaEvent('auth_tab_switch',{tab:'signup'}); });
+
+  // 認証送信
+  var authSubmit = document.getElementById('auth-submit-btn');
+  if(authSubmit) authSubmit.addEventListener('click', function(){ gaEvent('auth_submit_tap',{}); });
+
+  // プラン選択CTA
+  var planCta = document.getElementById('ps-cta-btn');
+  if(planCta) planCta.addEventListener('click', function(){ gaEvent('plan_cta_tap',{}); });
+
+  // プラン変更確定
+  var pcBtn = document.getElementById('pc-btn');
+  if(pcBtn) pcBtn.addEventListener('click', function(){ gaEvent('plan_change_confirm_tap',{}); });
+
+  // Pro購入サインアップ
+  var psSubmit = document.getElementById('ps-submit-btn');
+  if(psSubmit) psSubmit.addEventListener('click', function(){ gaEvent('pro_signup_submit_tap',{}); });
+
+  // リロードボタン
+  var reloadBtn = document.getElementById('reload-btn');
+  if(reloadBtn) reloadBtn.addEventListener('click', function(){ gaEvent('reload_btn_tap',{}); });
+
+  // 使い方ガイド
+  var howtoNext = document.getElementById('howto-btn-next');
+  if(howtoNext) howtoNext.addEventListener('click', function(){ gaEvent('howto_next',{}); });
+  var howtoPrev = document.getElementById('howto-btn-prev');
+  if(howtoPrev) howtoPrev.addEventListener('click', function(){ gaEvent('howto_prev',{}); });
+
+  // カレンダーフィルタ
+  var cfAll = document.getElementById('cf-all');
+  if(cfAll) cfAll.addEventListener('click', function(){ gaEvent('cal_filter_tap',{filter:'all'}); });
+  var cfWarn = document.getElementById('cf-warn');
+  if(cfWarn) cfWarn.addEventListener('click', function(){ gaEvent('cal_filter_tap',{filter:'warn'}); });
+
+  // チャートモード切り替え
+  var chartMo = document.getElementById('chart-mo-btn');
+  if(chartMo) chartMo.addEventListener('click', function(){ gaEvent('chart_mode_tap',{mode:'month'}); });
+  var chartYr = document.getElementById('chart-yr-btn');
+  if(chartYr) chartYr.addEventListener('click', function(){ gaEvent('chart_mode_tap',{mode:'year'}); });
+
+  // 満足度トグル
+  var satToggle = document.getElementById('sat-toggle-btn');
+  if(satToggle) satToggle.addEventListener('click', function(){ gaEvent('sat_toggle_tap',{}); });
+
+  // FAQ項目タップ
+  document.querySelectorAll('.faq-i').forEach(function(el,i){
+    el.addEventListener('click', function(){
+      var q = el.querySelector('.faq-qt');
+      gaEvent('faq_item_tap',{index:i, question:q?q.textContent.substring(0,30):''});
+    });
+  });
+
+  // 設定画面の行タップ
+  document.querySelectorAll('.s-row').forEach(function(el){
+    el.addEventListener('click', function(){
+      var title = el.querySelector('.s-title');
+      if(title) gaEvent('settings_row_tap',{item:title.textContent});
+    });
+  });
+});
+</script>
+<script>
+// === 見直しカード ロジック ===
+function _updateReviewCard() {
+  try {
+    var card = document.getElementById('review-card');
+    if (!card) return;
+    if (typeof subs === 'undefined' || !Array.isArray(subs)) return;
+
+    var targetSubs = subs.filter(function(s){
+      if (s.archived) return false;
+      if (s.paused) return false;
+      if (s.satisfaction !== 1) return false;
+      return true;
+    });
+
+    if (targetSubs.length === 0) {
+      card.style.display = 'none';
+      return;
+    }
+
+    var monthlyNow = 0;
+    var catMap = {};
+    subs.forEach(function(s){
+      if (s.archived || s.paused) return;
+      var price = Number(s.price) || 0;
+      var monthly = s.freq === 'year' ? price / 12 : price;
+      monthlyNow += monthly;
+    });
+
+    var monthlySavings = 0;
+    targetSubs.forEach(function(s){
+      var price = Number(s.price) || 0;
+      var monthly = s.freq === 'year' ? price / 12 : price;
+      monthlySavings += monthly;
+      var cat = s.cat || 'その他';
+      if (!catMap[cat]) catMap[cat] = { count: 0, yearly: 0 };
+      catMap[cat].count++;
+      catMap[cat].yearly += monthly * 12;
+    });
+
+    var monthlyAfter = monthlyNow - monthlySavings;
+    var yearlySavings = Math.round(monthlySavings * 12);
+
+    var fmt = function(n){ return '¥' + Math.round(n).toLocaleString(); };
+    var headEl = document.getElementById('review-savings-head');
+    var bodyEl = document.getElementById('review-savings-body');
+    var nowEl = document.getElementById('review-now');
+    var afterEl = document.getElementById('review-after');
+    if (headEl) headEl.textContent = fmt(yearlySavings);
+    if (bodyEl) bodyEl.textContent = fmt(yearlySavings);
+    if (nowEl) nowEl.textContent = fmt(monthlyNow);
+    if (afterEl) afterEl.textContent = fmt(monthlyAfter);
+
+    var listEl = document.getElementById('review-cat-list');
+    if (listEl) {
+      var catIcons = {'エンタメ':'🎬','仕事・ツール':'💻','通信費':'📱','金融・年会費':'💳','学習・教育':'📚','生活・暮らし':'🏠','健康・美容':'💪','ローン・家賃':'🏡','趣味':'🎨','子ども':'👶','ペット':'🐾','その他':'📦'};
+      var html = '';
+      Object.keys(catMap).forEach(function(cat){
+        var icon = catIcons[cat] || '📦';
+        html += '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:12px;border-bottom:1px solid rgba(212,168,76,.15)">';
+        html += '<div style="display:flex;align-items:center;gap:6px;font-weight:700">' + icon + ' ' + cat + ' <span style="font-size:10px;color:var(--ts);background:rgba(212,168,76,.15);padding:1px 6px;border-radius:8px;font-weight:600">' + catMap[cat].count + '件</span></div>';
+        html += '<div style="color:#B8912F;font-weight:700">¥' + Math.round(catMap[cat].yearly).toLocaleString() + '/年</div>';
+        html += '</div>';
+      });
+      listEl.innerHTML = html;
+    }
+
+    card.style.display = 'block';
+  } catch(e) {
+    console.error('review card error:', e);
+  }
+}
+
+function _toggleReviewCard() {
+  var body = document.getElementById('review-body');
+  var arrow = document.getElementById('review-arrow');
+  if (!body || !arrow) return;
+  var isOpen = body.style.display === 'block';
+  body.style.display = isOpen ? 'none' : 'block';
+  arrow.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+  try { gaEvent('review_card_toggle', { action: isOpen ? 'close' : 'open' }); } catch(e){}
+}
+
+window._applySatFilter1 = function() {
+  try {
+    if (typeof filterBySat === 'function') {
+      filterBySat(1);
+    }
+  } catch(e) { console.error('filter error:', e); }
+};
+
+document.addEventListener('DOMContentLoaded', function(){
+  setTimeout(_updateReviewCard, 500);
+  setInterval(_updateReviewCard, 2000);
+});
+</script>
 </body>
 </html>
