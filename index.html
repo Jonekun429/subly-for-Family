@@ -5954,7 +5954,7 @@ async function joinGroupByCode(codeArg){
   if(code.length !== 6){ showToast('6桁のコードを入力してください'); return; }
 
   // ボタンをローディング状態に
-  const joinBtn = document.querySelector('#group-panel-none button[onclick="gaEvent('group_join_tap',{});joinGroupByCode()"]');
+  const joinBtn = document.querySelector('#group-panel-none button[onclick="gaEvent(\'group_join_tap\',{});joinGroupByCode()"]');
   if(joinBtn){ joinBtn.textContent = '参加中...'; joinBtn.disabled = true; }
 
   try{
