@@ -1805,7 +1805,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
     <!-- パスワードを忘れた（ログインタブのみ表示） -->
     <div id="auth-forgot-wrap" style="text-align:right;margin-bottom:14px">
-      <button onclick="gaEvent('password_reset_tap',{});sendPasswordReset()" style="background:none;border:none;font-size:12px;color:var(--ts);cursor:pointer;font-family:inherit;text-decoration:underline">パスワードを忘れた方はこちら</button>
+      <button onclick="gaEvent('password_reset_tap',{});sendPasswordReset()" style="background:none;border:none;font-size:13px;color:var(--p);cursor:pointer;font-family:inherit;text-decoration:underline;font-weight:600">パスワードを忘れた方はこちら</button>
     </div>
     <button id="auth-submit-btn" onclick="gaEvent('auth_submit_tap',{});submitAuth()" style="width:100%;padding:13px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer">ログイン</button>
     <div id="auth-error" style="display:none;margin-top:10px;font-size:13px;color:var(--dn);text-align:center"></div>
