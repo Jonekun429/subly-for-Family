@@ -4880,38 +4880,12 @@ async function sendPasswordReset(){
     return;
   }
   try{
-    const { fetchSignInMethodsForEmail, sendPasswordResetEmail } = window._fbFns;
-    // 存在確認
-    let methods = [];
-    try{
-      methods = await fetchSignInMethodsForEmail(window._fbAuth, email);
-    }catch(fetchErr){
-      console.warn('fetchSignInMethodsForEmail failed:', fetchErr);
-    }
-    if(methods.length === 0){
-      // メアド未登録 → 新規登録へ誘導
-      showDialog({
-        icon:'',
-        title:'アカウントが見つかりません',
-        msg:`<div style="text-align:center;font-size:13px;color:var(--ts);line-height:1.7">
-          <strong style="color:var(--tx)">${email}</strong><br>
-          このメールアドレスは登録されていません。<br><br>
-          新しくアカウントを作成しますか？
-        </div>`,
-        buttons:[
-          {label:'新規登録する', cls:'ok', onClick:()=>{ switchAuthTab('signup'); }},
-          {label:'キャンセル', cls:'cancel'}
-        ],
-        btnColumn: true
-      });
-      gaEvent('password_reset_email_not_found', {});
-      return;
-    }
-    // メアド存在 → リセットメール送信
+    const { sendPasswordResetEmail } = window._fbFns;
+    // 直接リセットメール送信(存在チェックはFirebase側で行うのでセキュリティ的にもベスト)
     await sendPasswordResetEmail(window._fbAuth, email);
     const el = document.getElementById('auth-error');
     el.style.color = 'var(--p)';
-    el.textContent = `${email} にリセットメールを送りました`;
+    el.textContent = `${email} 宛にリセットメールを送信しました。メールが届かない場合は迷惑メールフォルダもご確認ください。`;
     el.style.display = 'block';
     gaEvent('password_reset_sent', {});
   }catch(e){
