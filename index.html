@@ -9761,18 +9761,15 @@ function _processImportFile(file){
             インポートデータは<strong style="color:var(--tx)">${imported.length}件</strong>ですが、<br>
             無料会員は<strong style="color:var(--tx)">${FREE_LIMIT}件まで</strong>の登録となります。
           </div>
-          <div style="background:rgba(232,160,74,.06);border:1px solid rgba(232,160,74,.15);border-radius:10px;padding:12px 14px;font-size:12px;color:#8B6914;line-height:1.7;text-align:left;margin-bottom:8px">
-            <strong>Pro（¥980買い切り）</strong>または<strong>応援会員</strong>になると<br>登録数が無制限になり、すべてのデータをインポートできます。
-          </div>
         </div>`,
         buttons:[
-          {label:'¥980で無制限にする', cls:'ok', style:'background:linear-gradient(135deg,#E8A04A,#FFD27A);color:#fff;border:none;box-shadow:0 4px 12px rgba(232,160,74,.3)', onClick:()=>{ setTimeout(_startProPurchase, 200); }},
-          {label:'応援会員プランを見る', cls:'cancel', onClick:()=>{ setTimeout(_showPlanModal, 200); }},
           {label:'閉じる', cls:'cancel'}
         ],
         btnColumn: true
       });
       gaEvent('csv_import_blocked', { imported_count: imported.length, limit: FREE_LIMIT });
+      // ★リリース記念キャンペーン: 黄色バナー閉じた直後にキャンペーンポップアップを表示
+      setTimeout(function(){ if (typeof window._showCampaignPopup === 'function') window._showCampaignPopup(); }, 600);
       return;
     }
     showDialog({
