@@ -1749,16 +1749,17 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     </div>
 
     <!-- メール/パスワード -->
+    <form onsubmit="event.preventDefault();submitAuth();return false;" autocomplete="on" style="margin:0;padding:0">
     <div id="auth-signup-name" style="display:none;margin-bottom:10px">
-      <input type="text" id="auth-nickname" placeholder="ニックネーム（表示名）" maxlength="20"
+      <input type="text" id="auth-nickname" name="nickname" autocomplete="username" placeholder="ニックネーム（表示名）" maxlength="20"
         style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
     </div>
     <div style="margin-bottom:10px">
-      <input type="email" id="auth-email" placeholder="メールアドレス"
+      <input type="email" id="auth-email" name="email" autocomplete="email" placeholder="メールアドレス"
         style="width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
     </div>
     <div style="margin-bottom:6px;position:relative">
-      <input type="password" id="auth-password" placeholder="パスワード"
+      <input type="password" id="auth-password" name="password" autocomplete="current-password" placeholder="パスワード"
         style="width:100%;padding:11px 44px 11px 14px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;font-family:inherit;color:var(--tx);background:var(--bg);box-sizing:border-box;outline:none">
       <button type="button" onclick="togglePwVisibility('auth-password',this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;padding:0;color:var(--ts);display:flex;align-items:center">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
@@ -1776,8 +1777,9 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
     <div id="auth-forgot-wrap" style="text-align:right;margin-bottom:14px">
       <button onclick="gaEvent('password_reset_tap',{});sendPasswordReset()" style="background:none;border:none;font-size:13px;color:var(--p);cursor:pointer;font-family:inherit;text-decoration:underline;font-weight:600">パスワードを忘れた方はこちら</button>
     </div>
-    <button id="auth-submit-btn" onclick="gaEvent('auth_submit_tap',{});submitAuth()" style="width:100%;padding:13px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer">ログイン</button>
+    <button id="auth-submit-btn" type="submit" onclick="gaEvent('auth_submit_tap',{});" style="width:100%;padding:13px;background:var(--p);color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer">ログイン</button>
     <div id="auth-error" style="display:none;margin-top:10px;font-size:13px;color:var(--dn);text-align:center"></div>
+    </form>
   </div>
 </div>
 
@@ -10536,7 +10538,7 @@ document.addEventListener('DOMContentLoaded', function(){
 .campaign-popup-note{padding:4px 20px 16px;text-align:center;font-size:10px;color:#999;line-height:1.5}
 .campaign-popup-btns{padding:0 20px 20px}
 .campaign-popup-btn{width:100%;padding:14px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:10px}
-.campaign-popup-btn-google{background:#fff;border:1px solid #ddd;color:#333;margin-bottom:8px}
+.campaign-popup-btn-google{display:none!important}/* キャンペーン: Googleログイン無効化 */
 .campaign-popup-btn-mail{background:linear-gradient(135deg,#5C8E84 0%,#3D6259 100%);border:none;color:#fff;margin-bottom:12px}
 .campaign-popup-btn-skip{width:100%;padding:8px;background:none;border:none;color:#999;font-size:12px;cursor:pointer;font-family:inherit}
 /* リリース記念キャンペーン: 応援会員関連UIを強制非表示 */
