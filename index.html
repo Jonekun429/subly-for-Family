@@ -10620,15 +10620,33 @@ document.addEventListener('DOMContentLoaded', function(){
       
       window._campaignSignup = function(method){
         if (typeof gaEvent === 'function') gaEvent('campaign_popup_signup', { method: method });
+        console.log('[Campaign] _campaignSignup called with method:', method);
         // ポップアップを閉じてアカウント作成モーダルを開く
         _closeCampaignPopup();
         setTimeout(function(){
-          if (typeof openAuthModal === 'function') {
-            openAuthModal();
+          // window スコープから直接呼ぶ
+          var fn = window.openAuthModal || (typeof openAuthModal !== 'undefined' ? openAuthModal : null);
+          if (typeof fn === 'function') {
+            console.log('[Campaign] openAuthModal を呼び出し');
+            try {
+              fn('signup');
+            } catch(e) {
+              console.error('[Campaign] openAuthModal エラー:', e);
+              // 失敗時はメニューボタンをクリック
+              var authBtn = document.getElementById('hd-auth-row');
+              if (authBtn) authBtn.click();
+            }
           } else {
-            console.warn('[Campaign] openAuthModal が見つかりません');
+            console.warn('[Campaign] openAuthModal が見つかりません、メニュー経由で試行');
+            // ハンバーガーメニュー経由で認証モーダルを開く
+            var authBtn = document.getElementById('hd-auth-row');
+            if (authBtn) {
+              authBtn.click();
+            } else {
+              alert('ログイン画面が開けませんでした。メニューから「アカウント」をタップしてください。');
+            }
           }
-        }, 200);
+        }, 300);
       };
     }
     
