@@ -10692,7 +10692,68 @@ document.addEventListener('DOMContentLoaded', function(){
       window._startProPurchase_overridden = true;
     }
     
+    // 6. 応援会員関連UIの強制非表示(キャンペーン中)
+    overrideSupporterUI();
+
     console.log('[Campaign] 関数の上書き完了');
+  }
+
+  // 応援会員関連UIを強制的に非表示にする(動的非表示)
+  function overrideSupporterUI(){
+    // 設定画面の「プラン変更」行を非表示
+    var planChangeRow = document.querySelector('[onclick*="_checkBeforePlanChange"]');
+    if (planChangeRow) planChangeRow.style.display = 'none';
+
+    // showAccountMenu系の応援会員ボタンを差し替え
+    if (typeof window.showAccountMenu === 'function' && !window.showAccountMenu_overridden) {
+      var _origShowAccountMenu = window.showAccountMenu;
+      window.showAccountMenu = function(){
+        // 元関数を呼んだ後、応援会員関連ボタンをDOMから除去
+        var ret = _origShowAccountMenu.apply(this, arguments);
+        setTimeout(function(){
+          // ダイアログ内の「応援会員を解約する」「プラン変更」ボタンを除去
+          var dlgButtons = document.querySelectorAll('.dlg button, .dlg-ov button');
+          dlgButtons.forEach(function(btn){
+            var txt = (btn.textContent || '').trim();
+            if (txt === '応援会員を解約する' || txt === 'プラン変更') {
+              btn.style.display = 'none';
+              console.log('[Campaign] 応援会員ボタン非表示:', txt);
+            }
+          });
+        }, 50);
+        return ret;
+      };
+      window.showAccountMenu_overridden = true;
+    }
+
+    // プラン変更画面が開かれたら強制クローズ
+    var planChangeOv = document.getElementById('plan-change-ov');
+    if (planChangeOv) {
+      var observer = new MutationObserver(function(mutations){
+        mutations.forEach(function(m){
+          if (m.attributeName === 'class' && !planChangeOv.classList.contains('hidden')) {
+            planChangeOv.classList.add('hidden');
+            console.log('[Campaign] プラン変更画面を強制クローズ');
+            // 代わりにキャンペーンポップアップを表示
+            if (typeof window._showCampaignPopup === 'function') {
+              setTimeout(window._showCampaignPopup, 100);
+            }
+          }
+        });
+      });
+      observer.observe(planChangeOv, { attributes: true });
+    }
+
+    // リミットポップアップの「応援会員プランも見る」を非表示
+    var limitPopupBtns = document.querySelectorAll('[onclick*="_showPlanModal"]');
+    limitPopupBtns.forEach(function(btn){
+      var txt = (btn.textContent || '').trim();
+      if (txt === '応援会員プランも見る') {
+        btn.style.display = 'none';
+      }
+    });
+
+    console.log('[Campaign] 応援会員関連UI非表示化完了');
   }
 
   function applyDOMChanges(){
