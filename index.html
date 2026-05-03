@@ -10539,6 +10539,16 @@ document.addEventListener('DOMContentLoaded', function(){
 .campaign-popup-btn-google{background:#fff;border:1px solid #ddd;color:#333;margin-bottom:8px}
 .campaign-popup-btn-mail{background:linear-gradient(135deg,#5C8E84 0%,#3D6259 100%);border:none;color:#fff;margin-bottom:12px}
 .campaign-popup-btn-skip{width:100%;padding:8px;background:none;border:none;color:#999;font-size:12px;cursor:pointer;font-family:inherit}
+/* リリース記念キャンペーン: 応援会員関連UIを強制非表示 */
+[onclick*="_showPlanModal"],
+[onclick*="_startCancelFlow"],
+[onclick*="_checkBeforePlanChange"],
+[onclick*="_reactivateSupporter"],
+[onclick*="_showSupporterSignup"],
+[onclick*="action:'change_plan'"],
+[onclick*="action:'cancel'"],
+[onclick*="action:'view_supporter'"]{display:none!important}
+#plan-change-ov,#supporter-signup-ov,#plan-select-ov{display:none!important}
 </style>
 <script>
 (function(){
