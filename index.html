@@ -11003,6 +11003,8 @@ document.addEventListener('DOMContentLoaded', function(){
       // UI更新トリガー
       try {
         if (typeof renderDashboard === 'function') renderDashboard();
+        // ハンバーガーメニュー・プロフィールのプラン表示も更新
+        if (typeof _updateAuthUI === 'function') _updateAuthUI(user);
         if (typeof _updateNicknameDisplay === 'function') _updateNicknameDisplay();
       } catch(e) { console.error('[Campaign] UI更新エラー:', e); }
     }
