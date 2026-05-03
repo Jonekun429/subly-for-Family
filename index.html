@@ -10701,6 +10701,94 @@ document.addEventListener('DOMContentLoaded', function(){
   setTimeout(applyCampaignMode, 1500);
   setTimeout(applyCampaignMode, 3000);
   
+  // 5. キャンペーンバナー自動表示
+  function showCampaignBannerIfNeeded(){
+    // 既に表示済みならスキップ
+    if (document.getElementById('campaign-banner')) return;
+    
+    // 閉じた履歴チェック(24時間経過していれば再表示)
+    try {
+      var closedAt = localStorage.getItem('campaignBannerClosedAt');
+      if (closedAt) {
+        var elapsed = Date.now() - parseInt(closedAt, 10);
+        var oneDayMs = 24 * 60 * 60 * 1000;
+        if (elapsed < oneDayMs) {
+          var remainingHours = Math.ceil((oneDayMs - elapsed) / (60 * 60 * 1000));
+          console.log('[Campaign] バナー: 閉じてから' + remainingHours + '時間以内、表示しない');
+          return;
+        } else {
+          // 24時間経過したのでフラグクリア
+          localStorage.removeItem('campaignBannerClosedAt');
+          localStorage.removeItem('campaignBannerClosed');
+          console.log('[Campaign] バナー: 24時間経過、再表示');
+        }
+      }
+    } catch(e) {}
+    
+    // ログイン済みユーザーには表示しない
+    if (window._fbUser) {
+      console.log('[Campaign] バナー: ログイン済み、表示しない');
+      return;
+    }
+    
+    // 表示する場所を探す:「データを守りませんか?」(acct-banner)の上に置く
+    var anchor = document.getElementById('acct-banner') ||
+                 document.getElementById('alerts') ||
+                 document.querySelector('.dash-card');
+    if (!anchor) {
+      console.log('[Campaign] 適切な挿入位置が見つからないのでスキップ');
+      return;
+    }
+    
+    // バナーを作成(margin:0にして位置を親要素に任せる)
+    var banner = document.createElement('div');
+    banner.id = 'campaign-banner';
+    banner.style.cssText = 'background:linear-gradient(135deg,#5C8E84 0%,#3D6259 100%);border-radius:12px;padding:14px 16px;margin-bottom:12px;position:relative;color:#fff;box-shadow:0 4px 12px rgba(92,142,132,.25);animation:cmpFadeIn .3s ease';
+    banner.innerHTML = '<button onclick="_closeCampaignBanner()" style="position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.2);border:none;color:#fff;font-size:12px;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;font-family:inherit">✕</button>' +
+      '<div style="display:flex;align-items:center;gap:12px;padding-right:24px">' +
+        '<div style="width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px">🎉</div>' +
+        '<div style="flex:1;min-width:0">' +
+          '<div style="font-size:13px;font-weight:600;margin-bottom:2px;line-height:1.3">リリース記念キャンペーン中</div>' +
+          '<div style="font-size:11px;color:rgba(255,255,255,.85);line-height:1.4">期間限定で全機能を<strong style="color:#fff">無料公開中</strong></div>' +
+        '</div>' +
+        '<button onclick="_showCampaignPopup()" style="background:#fff;color:#3D6259;border:none;padding:6px 12px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;flex-shrink:0;font-family:inherit">詳細</button>' +
+      '</div>';
+    
+    // anchor (acct-banner) の直前に挿入
+    anchor.parentNode.insertBefore(banner, anchor);
+    
+    if (typeof gaEvent === 'function') gaEvent('campaign_banner_shown', {});
+    console.log('[Campaign] バナー表示');
+  }
+  
+  // バナー閉じる関数
+  window._closeCampaignBanner = function(){
+    var banner = document.getElementById('campaign-banner');
+    if (banner) banner.remove();
+    try { localStorage.setItem('campaignBannerClosedAt', String(Date.now())); } catch(e) {}
+    if (typeof gaEvent === 'function') gaEvent('campaign_banner_close', {});
+    console.log('[Campaign] バナー閉じる(24時間後に再表示)');
+  };
+  
+  // 初回表示+遅延実行
+  setTimeout(showCampaignBannerIfNeeded, 800);
+  setTimeout(showCampaignBannerIfNeeded, 2500);
+  
+  // ログイン状態が変わったらバナー再評価
+  if (typeof firebase !== 'undefined' && firebase.auth) {
+    firebase.auth().onAuthStateChanged(function(user){
+      var banner = document.getElementById('campaign-banner');
+      if (user && banner) {
+        // ログインしたらバナー削除
+        banner.remove();
+        console.log('[Campaign] ログイン検知、バナー非表示');
+      } else if (!user) {
+        // 未ログイン状態なら表示を試みる
+        setTimeout(showCampaignBannerIfNeeded, 500);
+      }
+    });
+  }
+
   // DOM変更を監視して動的に追加されたボタンも非表示に
   if (typeof MutationObserver !== 'undefined') {
     var observer = new MutationObserver(function(mutations) {
