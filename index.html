@@ -215,6 +215,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .nb-pc-only{display:none}
 .nb-divider{display:none}
 @media(min-width:768px){
+  body{font-size:16px}
   .hdr{display:none}
   .sidebar-logo{display:block;font-size:20px;font-weight:800;color:var(--p);letter-spacing:2px;padding:0 16px 18px;border-bottom:1px solid var(--bd);margin-bottom:8px}
   .bnav{position:fixed;left:0;top:0;bottom:0;width:220px;height:100vh;flex-direction:column;justify-content:flex-start;align-items:stretch;border-top:none;border-right:1px solid var(--bd);padding:22px 0;gap:2px;box-shadow:2px 0 12px rgba(0,0,0,.04)}
@@ -239,7 +240,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 /* ── カード ── */
 .dash-grid{display:block}
 .card{background:var(--card);border-radius:var(--r);padding:18px;margin-bottom:12px;box-shadow:var(--sh)}
-.card-ttl{font-size:14px;font-weight:700;color:var(--ts);letter-spacing:.7px;text-transform:uppercase;margin-bottom:12px}
+.card-ttl{font-size:clamp(14px, 1.1vw, 17px);font-weight:700;color:var(--ts);letter-spacing:.7px;text-transform:uppercase;margin-bottom:12px}
 
 /* ── サマリー ── */
 
@@ -249,9 +250,9 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .leg-row{display:flex;align-items:center;gap:9px;padding:7px 6px;border-radius:8px;cursor:pointer;transition:background .12s;-webkit-tap-highlight-color:transparent}
 .leg-row:active,.leg-row.active{background:var(--pl)}
 .leg-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
-.leg-name{flex:1;font-size:14px;font-weight:600;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.leg-pct{font-size:13px;color:var(--ts);min-width:34px;text-align:right}
-.leg-amt{font-size:14px;font-weight:700;color:var(--tx);min-width:70px;text-align:right;white-space:nowrap}
+.leg-name{flex:1;font-size:clamp(14px, 1.1vw, 17px);font-weight:600;color:var(--tx);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.leg-pct{font-size:clamp(13px, 1vw, 16px);color:var(--ts);min-width:34px;text-align:right}
+.leg-amt{font-size:clamp(14px, 1.1vw, 17px);font-weight:700;color:var(--tx);min-width:70px;text-align:right;white-space:nowrap}
 
 /* ── 満足度グラフ（折りたたみ） ── */
 .sat-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;-webkit-tap-highlight-color:transparent}
