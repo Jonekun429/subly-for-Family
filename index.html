@@ -5603,18 +5603,23 @@ async function openGroupModal(){
   closeHdrop();
   const user = window._fbUser;
   if(!user){
-    // 未ログイン：招待コード入力はできるが登録が必要と案内
-    showDialog({
-      icon:'', title:'グループに参加するには',
-      msg:`<div style="text-align:left;line-height:1.9;font-size:14px;color:var(--ts)">
-        招待コードで参加するには<b style="color:var(--tx)">アカウント登録</b>が必要です。<br><br>
-        無料で登録してグループ機能をお使いください。
-      </div>`,
-      buttons:[
-        {label:'閉じる', cls:'cancel'},
-        {label:'登録する', cls:'ok', onClick:()=>{ closeDialog(); setTimeout(()=> document.getElementById('auth-ov').classList.remove('hidden'), 150); }}
-      ]
-    });
+    // ★リリース記念キャンペーン: 未ログイン → キャンペーンポップアップ表示
+    if (typeof window._showCampaignPopup === 'function') {
+      window._showCampaignPopup();
+    } else {
+      // フォールバック: 元のダイアログ
+      showDialog({
+        icon:'', title:'グループに参加するには',
+        msg:`<div style="text-align:left;line-height:1.9;font-size:14px;color:var(--ts)">
+          招待コードで参加するには<b style="color:var(--tx)">アカウント登録</b>が必要です。<br><br>
+          無料で登録してグループ機能をお使いください。
+        </div>`,
+        buttons:[
+          {label:'閉じる', cls:'cancel'},
+          {label:'登録する', cls:'ok', onClick:()=>{ closeDialog(); setTimeout(()=> document.getElementById('auth-ov').classList.remove('hidden'), 150); }}
+        ]
+      });
+    }
     return;
   }
   // 入力欄をリセット
