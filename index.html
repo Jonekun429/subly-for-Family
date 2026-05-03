@@ -10961,6 +10961,22 @@ document.addEventListener('DOMContentLoaded', function(){
     if (typeof _prevOnAuthChanged === 'function') {
       try { await _prevOnAuthChanged(user); } catch(e) { console.error(e); }
     }
+    // ★ キャンペーン: ログイン済み = Pro会員 強制
+    if (user) {
+      window._proPurchased = true;
+      window._isSupporterMember = false;
+      try {
+        if (typeof _proPurchased !== 'undefined') _proPurchased = true;
+        if (typeof _isSupporterMember !== 'undefined') _isSupporterMember = false;
+      } catch(e) {}
+      console.log('[Campaign] ログイン検知、Pro会員に統一');
+
+      // UI更新トリガー
+      try {
+        if (typeof renderDashboard === 'function') renderDashboard();
+        if (typeof _updateNicknameDisplay === 'function') _updateNicknameDisplay();
+      } catch(e) { console.error('[Campaign] UI更新エラー:', e); }
+    }
     // バナー&ポップアップを即座に削除
     if (user) {
       var banner = document.getElementById('campaign-banner');
