@@ -10711,11 +10711,14 @@ document.addEventListener('DOMContentLoaded', function(){
         // 元関数を呼んだ後、応援会員関連ボタンをDOMから除去
         var ret = _origShowAccountMenu.apply(this, arguments);
         setTimeout(function(){
-          // ダイアログ内の「応援会員を解約する」「プラン変更」ボタンを除去
+          // ダイアログ内の応援会員関連ボタンを除去
           var dlgButtons = document.querySelectorAll('.dlg button, .dlg-ov button');
           dlgButtons.forEach(function(btn){
             var txt = (btn.textContent || '').trim();
-            if (txt === '応援会員を解約する' || txt === 'プラン変更') {
+            // 応援会員/プラン変更を含むボタンを全部非表示
+            if (txt.indexOf('応援会員') !== -1 ||
+                txt === 'プラン変更' ||
+                txt.indexOf('応援プラン') !== -1) {
               btn.style.display = 'none';
               console.log('[Campaign] 応援会員ボタン非表示:', txt);
             }
