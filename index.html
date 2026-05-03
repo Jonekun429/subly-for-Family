@@ -10867,20 +10867,41 @@ document.addEventListener('DOMContentLoaded', function(){
   setTimeout(showCampaignBannerIfNeeded, 800);
   setTimeout(showCampaignBannerIfNeeded, 2500);
   
-  // ログイン状態が変わったらバナー再評価
-  if (typeof firebase !== 'undefined' && firebase.auth) {
-    firebase.auth().onAuthStateChanged(function(user){
+  // ログイン状態が変わったらバナー再評価(v10 SDK対応・確実版)
+  // window._onAuthChanged は既存の認証ハンドラから呼ばれる
+  var _prevOnAuthChanged = window._onAuthChanged;
+  window._onAuthChanged = async function(user){
+    // 既存ハンドラを先に実行
+    if (typeof _prevOnAuthChanged === 'function') {
+      try { await _prevOnAuthChanged(user); } catch(e) { console.error(e); }
+    }
+    // バナー&ポップアップを即座に削除
+    if (user) {
       var banner = document.getElementById('campaign-banner');
-      if (user && banner) {
-        // ログインしたらバナー削除
+      if (banner) {
         banner.remove();
-        console.log('[Campaign] ログイン検知、バナー非表示');
-      } else if (!user) {
-        // 未ログイン状態なら表示を試みる
-        setTimeout(showCampaignBannerIfNeeded, 500);
+        console.log('[Campaign] ログイン検知、バナー削除');
       }
-    });
-  }
+      var popup = document.getElementById('campaign-popup-ov');
+      if (popup) {
+        popup.remove();
+        console.log('[Campaign] ログイン検知、ポップアップ削除');
+      }
+    }
+  };
+  // 念のためポーリングでもチェック(_fbUserフラグ監視・5秒間)
+  var _campaignAuthCheckCount = 0;
+  var _campaignAuthInterval = setInterval(function(){
+    _campaignAuthCheckCount++;
+    if (window._fbUser) {
+      var b = document.getElementById('campaign-banner');
+      if (b) { b.remove(); console.log('[Campaign] ポーリング検知、バナー削除'); }
+      var p = document.getElementById('campaign-popup-ov');
+      if (p) { p.remove(); console.log('[Campaign] ポーリング検知、ポップアップ削除'); }
+      clearInterval(_campaignAuthInterval);
+    }
+    if (_campaignAuthCheckCount > 50) clearInterval(_campaignAuthInterval); // 5秒で停止
+  }, 100);
 
   // DOM変更を監視して動的に追加されたボタンも非表示に
   if (typeof MutationObserver !== 'undefined') {
