@@ -2989,7 +2989,7 @@ let inclOt = false;
 let chartMode = 'month'; // 'month' or 'year'
 let satOpen=true;
 const MAX=200;
-const FREE_LIMIT=999; // ★リリース記念キャンペーン中：実質無制限（元: 6）
+const FREE_LIMIT=6; // ★リリース記念キャンペーン: 6件目でポップアップ表示しメール登録誘導
 let _isSupporterMember = false; // 応援会員フラグ（将来Stripe連携）
 let _proPurchased = false; // 買い切りProフラグ（永久・一度trueにしたら戻さない）
 /* プラン判定ヘルパー：無制限かどうか */
@@ -10510,9 +10510,34 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 <!-- ============================================ -->
-<!-- リリース記念キャンペーン: 応援会員プラン誘導の無効化 -->
+<!-- リリース記念キャンペーン: ポップアップ + 既存UI乗っ取り -->
 <!-- キャンペーン終了時はこのscriptブロック全体を削除すれば元通り -->
 <!-- ============================================ -->
+<style>
+.campaign-popup-ov{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:99999;padding:16px;animation:cmpFadeIn .2s ease}
+.campaign-popup-ov.hidden{display:none}
+@keyframes cmpFadeIn{from{opacity:0}to{opacity:1}}
+.campaign-popup{background:#fff;border-radius:16px;width:100%;max-width:340px;overflow:hidden;animation:cmpSlideUp .3s ease}
+@keyframes cmpSlideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.campaign-popup-hdr{background:linear-gradient(135deg,#5C8E84 0%,#3D6259 100%);padding:24px 20px 20px;text-align:center;position:relative}
+.campaign-popup-close{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.2);border:none;color:#fff;font-size:16px;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;font-family:inherit}
+.campaign-popup-badge{display:inline-block;background:rgba(255,255,255,.25);color:#fff;font-size:11px;font-weight:500;padding:6px 14px;border-radius:999px;margin-bottom:14px;letter-spacing:.05em}
+.campaign-popup-ttl{color:#fff;font-size:22px;font-weight:600;margin-bottom:6px;line-height:1.4}
+.campaign-popup-sub{color:rgba(255,255,255,.85);font-size:12px}
+.campaign-popup-price{padding:24px 20px 16px;text-align:center;border-bottom:0.5px solid #eee}
+.campaign-popup-price-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px}
+.campaign-popup-old{font-size:18px;color:#999;text-decoration:line-through;font-weight:400}
+.campaign-popup-new{font-size:28px;color:#5C8E84;font-weight:700}
+.campaign-popup-features{padding:16px 20px 8px;display:flex;flex-direction:column;gap:10px}
+.campaign-popup-feat{display:flex;align-items:center;gap:10px;font-size:13px;color:#333}
+.campaign-popup-feat-icon{width:18px;height:18px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#0F6E56;font-size:11px;font-weight:700}
+.campaign-popup-note{padding:4px 20px 16px;text-align:center;font-size:10px;color:#999;line-height:1.5}
+.campaign-popup-btns{padding:0 20px 20px}
+.campaign-popup-btn{width:100%;padding:14px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:10px}
+.campaign-popup-btn-google{background:#fff;border:1px solid #ddd;color:#333;margin-bottom:8px}
+.campaign-popup-btn-mail{background:linear-gradient(135deg,#5C8E84 0%,#3D6259 100%);border:none;color:#fff;margin-bottom:12px}
+.campaign-popup-btn-skip{width:100%;padding:8px;background:none;border:none;color:#999;font-size:12px;cursor:pointer;font-family:inherit}
+</style>
 <script>
 (function(){
   'use strict';
@@ -10538,6 +10563,101 @@ document.addEventListener('DOMContentLoaded', function(){
         return originalShowGroupIntro.call(this, true);
       };
       window._showGroupIntro_overridden = true;
+    }
+    
+    // 3. キャンペーンポップアップを表示する関数を追加
+    if (!window._showCampaignPopup) {
+      window._showCampaignPopup = function(){
+        // 既にDOMに存在しなければ作る
+        var ov = document.getElementById('campaign-popup-ov');
+        if (!ov) {
+          ov = document.createElement('div');
+          ov.id = 'campaign-popup-ov';
+          ov.className = 'campaign-popup-ov';
+          ov.innerHTML = '<div class="campaign-popup">' +
+            '<div class="campaign-popup-hdr">' +
+              '<button class="campaign-popup-close" onclick="_closeCampaignPopup()">✕</button>' +
+              '<div class="campaign-popup-badge">🎉 リリース記念キャンペーン</div>' +
+              '<div class="campaign-popup-ttl">Sublyを<br>もっと使いませんか？</div>' +
+              '<div class="campaign-popup-sub">期間限定で全機能を無料公開中</div>' +
+            '</div>' +
+            '<div class="campaign-popup-price">' +
+              '<div class="campaign-popup-price-row">' +
+                '<div style="text-align:center"><div style="font-size:10px;color:#999;margin-bottom:2px">定価</div><div class="campaign-popup-old">¥980</div></div>' +
+                '<div style="font-size:18px;color:#5C8E84">→</div>' +
+                '<div style="text-align:center"><div style="font-size:10px;color:#5C8E84;font-weight:600;margin-bottom:2px">今だけ</div><div class="campaign-popup-new">¥0</div></div>' +
+              '</div>' +
+              '<div style="font-size:11px;color:#666">アカウント作成だけで全機能使えます</div>' +
+            '</div>' +
+            '<div class="campaign-popup-features">' +
+              '<div class="campaign-popup-feat"><div class="campaign-popup-feat-icon">✓</div><span><strong>登録無制限</strong>(本来6件まで)</span></div>' +
+              '<div class="campaign-popup-feat"><div class="campaign-popup-feat-icon">✓</div><span>機種変更でもデータ引き継ぎ</span></div>' +
+              '<div class="campaign-popup-feat"><div class="campaign-popup-feat-icon">✓</div><span>家族とサブスクを共有</span></div>' +
+              '<div class="campaign-popup-feat"><div class="campaign-popup-feat-icon">✓</div><span>マルチデバイス対応</span></div>' +
+            '</div>' +
+            '<div class="campaign-popup-note">※キャンペーン終了後、Pro機能は¥980買い切りに移行します</div>' +
+            '<div class="campaign-popup-btns">' +
+              '<button class="campaign-popup-btn campaign-popup-btn-google" onclick="_campaignSignup(\'google\')">' +
+                '<svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>' +
+                'Googleで登録(無料)' +
+              '</button>' +
+              '<button class="campaign-popup-btn campaign-popup-btn-mail" onclick="_campaignSignup(\'mail\')">メールアドレスで登録(無料)</button>' +
+              '<button class="campaign-popup-btn-skip" onclick="_closeCampaignPopup()">あとで</button>' +
+            '</div>' +
+          '</div>';
+          
+          // オーバーレイクリックで閉じる
+          ov.addEventListener('click', function(e){ if(e.target === ov) _closeCampaignPopup(); });
+          document.body.appendChild(ov);
+        }
+        ov.classList.remove('hidden');
+        if (typeof gaEvent === 'function') gaEvent('campaign_popup_shown', {});
+        console.log('[Campaign] ポップアップ表示');
+      };
+      
+      window._closeCampaignPopup = function(){
+        var ov = document.getElementById('campaign-popup-ov');
+        if (ov) ov.classList.add('hidden');
+        if (typeof gaEvent === 'function') gaEvent('campaign_popup_close', {});
+      };
+      
+      window._campaignSignup = function(method){
+        if (typeof gaEvent === 'function') gaEvent('campaign_popup_signup', { method: method });
+        // ポップアップを閉じてアカウント作成モーダルを開く
+        _closeCampaignPopup();
+        setTimeout(function(){
+          if (typeof openAuthModal === 'function') {
+            openAuthModal();
+          } else {
+            console.warn('[Campaign] openAuthModal が見つかりません');
+          }
+        }, 200);
+      };
+    }
+    
+    // 4. 既存の制限ポップアップ・誘導をキャンペーンポップアップに乗っ取り
+    if (typeof window._showLimitPopup === 'function' && !window._showLimitPopup_overridden) {
+      window._showLimitPopup = function(){
+        console.log('[Campaign] _showLimitPopup intercepted');
+        window._showCampaignPopup();
+      };
+      window._showLimitPopup_overridden = true;
+    }
+    
+    if (typeof window._showPlanModal === 'function' && !window._showPlanModal_overridden) {
+      window._showPlanModal = function(mode){
+        console.log('[Campaign] _showPlanModal intercepted');
+        window._showCampaignPopup();
+      };
+      window._showPlanModal_overridden = true;
+    }
+    
+    if (typeof window._startProPurchase === 'function' && !window._startProPurchase_overridden) {
+      window._startProPurchase = function(){
+        console.log('[Campaign] _startProPurchase intercepted');
+        window._showCampaignPopup();
+      };
+      window._startProPurchase_overridden = true;
     }
     
     console.log('[Campaign] 関数の上書き完了');
