@@ -10551,7 +10551,19 @@ document.addEventListener('DOMContentLoaded', function(){
       window._showSupporterNudge = function(){ console.log('[Campaign] _showSupporterNudge disabled'); };
     }
     if (typeof window._showMemberTypeSelect === 'function') {
-      window._showMemberTypeSelect = function(){ console.log('[Campaign] _showMemberTypeSelect disabled'); };
+      window._showMemberTypeSelect = function(){
+        console.log('[Campaign] _showMemberTypeSelect → キャンペーンポップアップへ誘導');
+        if (typeof window._showCampaignPopup === 'function') {
+          window._showCampaignPopup();
+        } else {
+          // フォールバック: 直接認証モーダルを開く
+          var ov = document.getElementById('auth-ov');
+          if (ov) {
+            ov.classList.remove('hidden');
+            if (typeof switchAuthTab === 'function') switchAuthTab('signup');
+          }
+        }
+      };
     }
     if (typeof window._showProUpgradeModal === 'function') {
       window._showProUpgradeModal = function(){ console.log('[Campaign] _showProUpgradeModal disabled'); };
