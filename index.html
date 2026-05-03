@@ -1110,7 +1110,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         </div>
         <span class="s-arr">›</span>
       </div>
-      <!-- プラン変更（応援会員のみ表示） -->
+      
       <div id="s-plan-change-row" class="s-row" onclick="_checkBeforePlanChange()" style="align-items:center;display:none">
         <div class="s-ico" style="background:#FFF8EE">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="#E8A04A"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
@@ -1831,7 +1831,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   </div>
 </div>
 
-<!-- 応援会員プランアップグレードモーダル -->
+
 <div class="dlg-ov hidden" id="pro-upgrade-ov" onclick="if(event.target===this)_closeProUpgradeModal()">
   <div class="dlg" style="max-width:340px;width:92%;padding:0;overflow:hidden;border-radius:20px">
 
@@ -2139,7 +2139,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
       <span style="color:#E8A04A;font-size:16px">›</span>
     </div>
-    <!-- 応援会員 -->
+    
     <div onclick="_closeMemberType();setTimeout(_showPlanModal,200)" style="background:var(--card);border:1.5px solid var(--bd);border-radius:12px;padding:14px 16px;margin-bottom:14px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;-webkit-tap-highlight-color:transparent">
       <div style="width:40px;height:40px;border-radius:50%;background:var(--pl);display:flex;align-items:center;justify-content:center;flex-shrink:0">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--pd)"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
@@ -2154,7 +2154,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   </div>
 </div>
 
-<!-- グループ機能説明ポップアップ（応援会員/無料会員で切替） -->
+
 <div class="dlg-ov hidden" id="group-intro-ov" onclick="if(event.target===this)_closeGroupIntro()">
   <div class="dlg" style="max-width:340px;padding:28px 22px 22px;text-align:center">
     <div style="margin-bottom:10px"><svg width="36" height="36" viewBox="0 0 24 24" fill="var(--p)"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
@@ -2228,7 +2228,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   </div>
 </div>
 
-<!-- 応援会員 アカウント登録画面 -->
+
 <div class="dlg-ov hidden" id="supporter-signup-ov" onclick="if(event.target===this)_closeSupporterSignup()">
   <div class="dlg" style="max-width:360px;padding:28px 22px 22px;text-align:center;position:relative">
     <button onclick="_closeSupporterSignup()" style="position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;background:var(--bg);border:none;cursor:pointer;font-size:14px;color:var(--ts)">✕</button>
@@ -2318,7 +2318,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
     </div>
     <div style="padding:16px 16px 160px">
-      <!-- 比較表（4列: 機能名 / Free / Pro / 応援会員） -->
+      
       <div id="plan-cmp-table" style="background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--bd);margin-bottom:16px;box-shadow:var(--sh)">
         <div style="display:grid;grid-template-columns:1.2fr 0.9fr 0.9fr 0.9fr;background:var(--bg)">
           <div style="padding:8px 4px;font-size:10px;font-weight:700;text-align:center;color:var(--ts)"></div>
@@ -2361,7 +2361,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       <!-- 区切り -->
       <div id="plan-divider" style="display:flex;align-items:center;gap:10px;margin:20px 0 16px"><div style="flex:1;height:1px;background:var(--bd)"></div><span style="font-size:11px;color:var(--ts);font-weight:700">もっと便利に使うなら</span><div style="flex:1;height:1px;background:var(--bd)"></div></div>
 
-      <!-- 応援会員でできること（上に配置） -->
+      
       <div style="background:var(--card);border-radius:14px;padding:16px;box-shadow:var(--sh);margin-bottom:14px">
         <div style="font-size:14px;font-weight:800;color:var(--tx);margin-bottom:12px;display:flex;align-items:center;gap:6px"><svg width="16" height="16" viewBox="0 0 24 24" fill="var(--pd)"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>応援会員でできること</div>
         <div style="border-bottom:1px solid var(--bd);padding:8px 0;display:flex;align-items:flex-start;gap:10px"><div style="width:36px;height:36px;border-radius:10px;background:var(--pl);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="var(--pd)"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></div><div><div style="font-size:13px;font-weight:700">登録 無制限</div><div style="font-size:11px;color:var(--ts);line-height:1.5;margin-top:2px">サブスクをいくつでも登録できます</div></div></div>
@@ -2418,7 +2418,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   </div>
 </div>
 
-<!-- 応援会員プラン誘導ポップアップ -->
+
 <div class="nudge-ov hidden" id="pro-nudge-ov" onclick="if(event.target===this)closeProNudge()">
   <div class="nudge">
     <div class="nudge-hdr">
@@ -10509,5 +10509,94 @@ document.addEventListener('DOMContentLoaded', function(){
   setInterval(_updateReviewCard, 2000);
 });
 </script>
+<!-- ============================================ -->
+<!-- リリース記念キャンペーン: 応援会員プラン誘導の無効化 -->
+<!-- キャンペーン終了時はこのscriptブロック全体を削除すれば元通り -->
+<!-- ============================================ -->
+<script>
+(function(){
+  'use strict';
+  
+  // 関数の上書きを実行(関数定義後に呼び出される必要がある)
+  function overrideFunctions(){
+    // 1. 応援会員プラン誘導関連の関数を無効化
+    if (typeof window._showSupporterNudge === 'function') {
+      window._showSupporterNudge = function(){ console.log('[Campaign] _showSupporterNudge disabled'); };
+    }
+    if (typeof window._showMemberTypeSelect === 'function') {
+      window._showMemberTypeSelect = function(){ console.log('[Campaign] _showMemberTypeSelect disabled'); };
+    }
+    if (typeof window._showProUpgradeModal === 'function') {
+      window._showProUpgradeModal = function(){ console.log('[Campaign] _showProUpgradeModal disabled'); };
+    }
+    
+    // 2. _showGroupIntro を上書き(常に応援会員扱いで表示=グループ機能使えるUI)
+    if (typeof window._showGroupIntro === 'function' && !window._showGroupIntro_overridden) {
+      var originalShowGroupIntro = window._showGroupIntro;
+      window._showGroupIntro = function(isSupporter) {
+        console.log('[Campaign] _showGroupIntro forced to true (was: ' + isSupporter + ')');
+        return originalShowGroupIntro.call(this, true);
+      };
+      window._showGroupIntro_overridden = true;
+    }
+    
+    console.log('[Campaign] 関数の上書き完了');
+  }
+
+  function applyDOMChanges(){
+    // 1. オンボーディングの応援会員バッジを非表示
+    document.querySelectorAll('.ob-badge').forEach(function(el){
+      if (el.textContent.trim() === '応援会員') {
+        var card = el.closest('.ob-card') || el.closest('[class*="onboard"]') || el.parentElement;
+        if (card) card.style.display = 'none';
+      }
+    });
+
+    // 2. 応援会員系ボタンを非表示
+    document.querySelectorAll('button').forEach(function(btn){
+      var text = btn.textContent.trim();
+      if (text === '応援会員プランを見る' || text === '応援会員になる' || 
+          text === '応援会員ではじめる' || text === '応援会員を見る' ||
+          text === '応援会員プランも見る') {
+        btn.style.display = 'none';
+      }
+    });
+  }
+
+  function applyCampaignMode(){
+    overrideFunctions();
+    applyDOMChanges();
+    console.log('[Campaign] リリース記念キャンペーンモード有効');
+  }
+
+  // 初回実行
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyCampaignMode);
+  } else {
+    applyCampaignMode();
+  }
+  
+  // 関数定義の遅延に対応
+  setTimeout(applyCampaignMode, 500);
+  setTimeout(applyCampaignMode, 1500);
+  setTimeout(applyCampaignMode, 3000);
+  
+  // DOM変更を監視して動的に追加されたボタンも非表示に
+  if (typeof MutationObserver !== 'undefined') {
+    var observer = new MutationObserver(function(mutations) {
+      applyDOMChanges();
+    });
+    
+    if (document.body) {
+      observer.observe(document.body, { childList: true, subtree: true });
+    } else {
+      document.addEventListener('DOMContentLoaded', function(){
+        observer.observe(document.body, { childList: true, subtree: true });
+      });
+    }
+  }
+})();
+</script>
+
 </body>
 </html>
