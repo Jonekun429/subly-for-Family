@@ -10681,6 +10681,79 @@ document.addEventListener('DOMContentLoaded', function(){
         btn.style.display = 'none';
       }
     });
+
+    // 3. プラン名表示を「Pro会員」「無料会員」に統一
+    var supporterPlanNames = ['どんぐり会員', 'くるみ会員', 'もみじ会員', 'もりのき会員', 'どんぐり', 'くるみ', 'もみじ', 'もりのき'];
+    var supporterEmojis = ['🌰', '🥜', '🍁', '🌳'];
+    var freeUserLabels = ['ゲスト', 'ゲストユーザー', '未ログイン', '匿名ユーザー', '匿名'];
+    var elementsToCheck = document.querySelectorAll('div, span, p, h1, h2, h3, h4, h5, h6, td, th, label, b, strong');
+    elementsToCheck.forEach(function(el){
+      // 子要素を持つコンテナはスキップ
+      if (el.children.length > 0) return;
+      var text = el.textContent.trim();
+      var newText = text;
+      var changed = false;
+      
+      // プラン名置換: 応援会員系 → Pro会員
+      supporterPlanNames.forEach(function(name){
+        if (newText.indexOf(name) !== -1 && newText.length < 80) {
+          newText = newText.replace(new RegExp(name, 'g'), 'Pro会員');
+          changed = true;
+        }
+      });
+      
+      // 絵文字削除
+      supporterEmojis.forEach(function(emoji){
+        if (newText.indexOf(emoji) !== -1) {
+          newText = newText.replace(new RegExp(emoji, 'g'), '').trim();
+          changed = true;
+        }
+      });
+      
+      // 「Pro」(単独表記) → 「Pro会員」 (※ Pro会員自体や「Pro会員(Pro)」は除外)
+      if (newText.length < 80) {
+        // 単独の「Pro」を「Pro会員」に
+        if (newText === 'Pro') {
+          newText = 'Pro会員';
+          changed = true;
+        }
+      }
+      
+      // 余分な括弧・記号を整理(全角・半角両方対応)
+      if (changed) {
+        newText = newText
+          .replace(/Pro会員\s*[\(（]\s*Pro\s*[\)）]/g, 'Pro会員')   // Pro会員(Pro) → Pro会員
+          .replace(/Pro\s*[\(（]\s*Pro\s*[\)）]/g, 'Pro会員')      // Pro(Pro) → Pro会員
+          .replace(/[\(（]\s*Pro\s*[\)）]/g, '')                  // (Pro) や （Pro） を削除
+          .replace(/¥\d+(\.\d+)?\/月/g, '')                       // 価格削除
+          .replace(/[\(（][\s　]*[\)）]/g, '')                      // 空の () や （） や全角スペース入りも削除
+          .replace(/\s+/g, ' ')                                    // 連続スペースを1つに
+          .trim();
+        // 末尾の空括弧をもう一度確実に削除
+        newText = newText.replace(/\s*[\(（][\s　]*[\)）]\s*$/g, '').trim();
+        el.textContent = newText;
+        el.dataset.campaignReplaced = '1';
+      }
+      
+      // 未ログイン・ゲスト表記 → 「無料会員」
+      freeUserLabels.forEach(function(label){
+        if (text === label) {
+          el.textContent = '無料会員';
+          el.dataset.campaignReplaced = '1';
+        }
+      });
+    });
+    
+    // 4. 「プラン変更」セクションのサブタイトル「応援プランを変更・解約」を変える
+    document.querySelectorAll('.s-sub, [class*="sub"]').forEach(function(el){
+      if (el.children.length > 0) return;
+      var text = el.textContent.trim();
+      if (text === '応援プランを変更・解約') {
+        // ボタン自体を非表示
+        var row = el.closest('.s-row') || el.closest('[id*="plan"]');
+        if (row) row.style.display = 'none';
+      }
+    });
   }
 
   function applyCampaignMode(){
