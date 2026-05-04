@@ -4897,6 +4897,27 @@ async function submitAuth(){
   const email = document.getElementById('auth-email').value.trim();
   const password = document.getElementById('auth-password').value;
   if(!email || !password){ _showAuthError('empty'); return; }
+  
+  // ★ローディング表示(連打防止＋押した感)
+  const submitBtn = document.getElementById('auth-submit-btn');
+  if(submitBtn){
+    if(submitBtn.disabled) return; // 既に処理中なら無視
+    submitBtn.disabled = true;
+    submitBtn._originalText = submitBtn.textContent;
+    submitBtn.textContent = '⏳ 処理中...';
+    submitBtn.style.opacity = '0.7';
+    submitBtn.style.cursor = 'wait';
+  }
+  
+  // 完了/失敗時に必ず元に戻す関数
+  const _restoreBtn = () => {
+    if(submitBtn){
+      submitBtn.disabled = false;
+      submitBtn.textContent = submitBtn._originalText || 'ログイン';
+      submitBtn.style.opacity = '1';
+      submitBtn.style.cursor = 'pointer';
+    }
+  };
 
   try{
     // 新規登録時のパスワードバリデーション
@@ -4946,7 +4967,10 @@ async function submitAuth(){
     }
   }catch(e){
     _showAuthError(e.code);
+    _restoreBtn(); // ★エラー時もボタン復活
+    return;
   }
+  _restoreBtn(); // ★成功時もボタン復活
 }
 
 async function logoutFirebase(){
