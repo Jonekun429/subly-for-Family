@@ -10049,6 +10049,8 @@ async function init(){
   // 既存セッションがあれば一旦ログアウトして、必ずログインモーダルを表示
   const actionParam = urlParams.get('action');
   if(actionParam === 'login'){
+    // ★URL書き換え前にフラグを保存(後続のオンボーディング判定で使用)
+    window._isLoginAction = true;
     window.history.replaceState({}, document.title, window.location.pathname);
     setTimeout(async ()=>{
       try{
@@ -10134,7 +10136,7 @@ async function init(){
   if(inclOt) document.getElementById('ot-note').style.display='block';
 
   // ★action=login時はオンボーディングをスキップ(ログインモーダル優先)
-  const _skipOnboarding = (urlParams.get('action') === 'login');
+  const _skipOnboarding = (window._isLoginAction === true);
   if(!onboarded && !_skipOnboarding) showOnboarding();
   // 既存ユーザー向け：オンボーディング済みだがtermsAgreed未設定なら同意ポップアップ
   if(onboarded){
