@@ -4698,7 +4698,7 @@ window._onAuthChanged = async (user) => {
     const wdLink = document.getElementById('s-withdraw-link');
     if(wdLink){ wdLink.style.display='flex'; wdLink.style.opacity='0.35'; wdLink.style.pointerEvents='none'; }
     const emailChangeRow2 = document.getElementById('s-email-change-row');
-    if(emailChangeRow2) emailChangeRow2.style.display = 'none';
+    if(emailChangeRow2) emailChangeRow2.style.setProperty('display', 'none', 'important');
     // ログアウト操作時のみsubsをクリアしてダッシュボードを再描画
     // （_logoutCleanフラグが立っている場合のみ）
     if(window._logoutClean){
@@ -4784,7 +4784,7 @@ function _updateAuthUI(user){
     if(hdPlanLink) hdPlanLink.style.display = _isSupporterMember ? 'inline' : 'none';
     // メアド変更行の表示制御
     const emailChangeRow = document.getElementById('s-email-change-row');
-    if(emailChangeRow) emailChangeRow.style.display = 'flex';
+    if(emailChangeRow) emailChangeRow.style.setProperty('display', 'flex', 'important');
     const emailDisplay = document.getElementById('s-email-display');
     if(emailDisplay) emailDisplay.textContent = email || '登録メールアドレスを変更';
 
