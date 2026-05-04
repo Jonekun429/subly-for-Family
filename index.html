@@ -10045,6 +10045,27 @@ async function init(){
     setTimeout(()=> _showInviteConfirm(inviteCode), 800);
   }
 
+  // ★LP→アプリのログイン誘導 (?action=login)
+  // 既存セッションがあれば一旦ログアウトして、必ずログインモーダルを表示
+  const actionParam = urlParams.get('action');
+  if(actionParam === 'login'){
+    window.history.replaceState({}, document.title, window.location.pathname);
+    setTimeout(async ()=>{
+      try{
+        // 既にログイン済みなら一旦サインアウト(別アカウント混在防止)
+        if(window._fbAuth && window._fbAuth.currentUser){
+          await window._fbFns.signOut(window._fbAuth);
+        }
+      }catch(e){ console.warn('[ActionLogin] signOut warning:', e); }
+      // ログインモーダル表示
+      if(typeof openAuthModal === 'function'){
+        openAuthModal('login');
+      } else {
+        console.warn('[ActionLogin] openAuthModal not found');
+      }
+    }, 600);
+  }
+
   // 決済完了/キャンセルのチェック（Stripeから戻ってきた時）
   const sessionId = urlParams.get('session_id');
   const canceled = urlParams.get('canceled');
