@@ -5254,8 +5254,8 @@ function _withdrawStep3(user){
 function _showAuthError(code){
   const msgs = {
     'empty': 'メールとパスワードを入力してください',
-    'auth/user-not-found': 'メールアドレスが見つかりません',
-    'auth/wrong-password': 'パスワードが違います',
+    'auth/user-not-found': 'このメールアドレスは登録されていません',
+    'auth/wrong-password': 'パスワードが違います。確認してもう一度お試しください',
     'auth/email-already-in-use': 'すでに登録済みのメールアドレスです',
     'auth/invalid-email': 'メールアドレスの形式が正しくありません',
     'auth/weak-password': 'パスワードは英数字・大文字を含む8文字以上にしてください',
@@ -5276,12 +5276,12 @@ function _showAuthError(code){
 
   // no-account / already-exists / email-already-in-use / invalid-credential はボタン付きエラーに
   if(code === 'no-account' || code === 'auth/user-not-found'){
-    el.innerHTML = `${msg}<br><button onclick="switchAuthTab('signup')" style="margin-top:8px;font-size:12px;font-weight:700;color:var(--p);background:none;border:none;cursor:pointer;text-decoration:underline">新規登録はこちら →</button>`;
+    el.innerHTML = `<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:6px"><span style="font-size:16px">⚠️</span><div style="flex:1"><div style="font-size:13px;font-weight:700;color:#A32D2D;line-height:1.5">アカウントが見つかりません</div><div style="font-size:11px;color:#791F1F;line-height:1.6;margin-top:4px">このメールアドレスは登録されていません。<br>新規登録するか、メールアドレスをご確認ください。</div></div></div><button onclick="switchAuthTab('signup')" style="margin-top:8px;font-size:12px;font-weight:700;color:var(--p);background:none;border:none;cursor:pointer;text-decoration:underline">新規登録はこちら →</button>`;
   } else if(code === 'already-exists' || code === 'auth/email-already-in-use'){
     el.innerHTML = `このメールアドレスは登録済みです。<br><button onclick="switchAuthTab('login')" style="margin-top:8px;font-size:12px;font-weight:700;color:var(--p);background:none;border:none;cursor:pointer;text-decoration:underline">ログインはこちら →</button>`;
   } else if(code === 'auth/invalid-credential'){
     const isLogin = _authMode === 'login';
-    el.innerHTML = `メールアドレスまたはパスワードが違います。<br><button onclick="switchAuthTab('${isLogin?'signup':'login'}')" style="margin-top:8px;font-size:12px;font-weight:700;color:var(--p);background:none;border:none;cursor:pointer;text-decoration:underline">${isLogin?'新規登録はこちら →':'ログインはこちら →'}</button>`;
+    el.innerHTML = `<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:6px"><span style="font-size:16px">⚠️</span><div style="flex:1"><div style="font-size:13px;font-weight:700;color:#A32D2D;line-height:1.5">ログインできません</div><div style="font-size:11px;color:#791F1F;line-height:1.6;margin-top:4px">メールアドレスまたはパスワードが違います。<br>登録済みでない場合は新規登録してください。</div></div></div><button onclick="switchAuthTab('${isLogin?'signup':'login'}')" style="margin-top:8px;font-size:12px;font-weight:700;color:var(--p);background:none;border:none;cursor:pointer;text-decoration:underline">${isLogin?'新規登録はこちら →':'ログインはこちら →'}</button>`;
   } else {
     el.textContent = msg;
   }
