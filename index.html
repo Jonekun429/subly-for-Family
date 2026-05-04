@@ -881,6 +881,14 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       </div>
     </button>
 
+    <button class="hd-row" id="hd-email-row" onclick="closeHdrop();gaEvent('menu_tap',{item:'email_change'});setTimeout(_openEmailChangeModal,150)">
+      <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
+      <div style="flex:1;min-width:0">
+        <div class="hd-lbl">メールアドレス変更</div>
+        <div class="hd-sub" style="margin-top:3px">登録メアドを変更</div>
+      </div>
+    </button>
+
     <!-- グループ -->
     <div class="hd-sec">グループ</div>
     <button class="hd-row" id="hd-group-btn" onclick="closeHdrop();gaEvent('menu_tap',{item:'group'});setTimeout(_onGroupMenuTap,150)">
@@ -939,16 +947,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 
     <!-- データ管理 -->
     <div class="hd-sec">データ管理</div>
-    <button class="hd-row" id="hd-email-change-btn" onclick="closeHdrop();gaEvent('menu_tap',{item:'email_change'});setTimeout(_openEmailChangeModal,150)">
-          <div style="width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="rgba(255,255,255,.95)"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-          </div>
-          <div style="flex:1;text-align:left;min-width:0">
-            <div class="hd-lbl">メールアドレス変更</div>
-            <div class="hd-sub">登録メアドを変更</div>
-          </div>
-        </button>
-        <button class="hd-row" onclick="closeHdrop();gaEvent('menu_tap',{item:'csv_export'});setTimeout(exportCSV,150)">
+    <button class="hd-row" onclick="closeHdrop();gaEvent('menu_tap',{item:'csv_export'});setTimeout(exportCSV,150)">
       <div class="hd-ico" style="background:rgba(255,255,255,.15)"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></div>
       <div><div class="hd-lbl">CSVエクスポート</div><div class="hd-sub">データをCSVとして保存</div></div>
     </button>
@@ -1131,13 +1130,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         </div>
         <span class="s-arr">›</span>
       </div>
-
-    </div>
-
-    <!-- ★メールアドレス変更（独立セクション・絶対表示） -->
-    <div class="s-sec" id="s-email-section" style="display:block !important">アカウント</div>
-    <div class="s-grp" id="s-email-grp" style="display:block !important">
-      <div id="s-email-change-row" class="s-row" onclick="_openEmailChangeModal()" style="align-items:center;display:flex !important;visibility:visible !important;opacity:1 !important">
+      <!-- メールアドレス変更（ログイン時のみ表示） -->
+      <div id="s-email-change-row" class="s-row" onclick="_openEmailChangeModal()" style="align-items:center;display:flex !important">
         <div class="s-ico" style="background:#EEF2FF">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="#5B7FC0"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
         </div>
@@ -4918,7 +4912,7 @@ async function submitAuth(){
     if(submitBtn.disabled) return; // 既に処理中なら無視
     submitBtn.disabled = true;
     submitBtn._originalText = submitBtn.textContent;
-    submitBtn.textContent = '処理中...';
+    submitBtn.textContent = '⏳ 処理中...';
     submitBtn.style.opacity = '0.7';
     submitBtn.style.cursor = 'wait';
   }
