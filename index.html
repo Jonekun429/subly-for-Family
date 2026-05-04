@@ -734,8 +734,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   import {
     getAuth,
     onAuthStateChanged,
-    setPersistence,
-    browserLocalPersistence,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     sendPasswordResetEmail,
@@ -769,10 +767,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   auth.languageCode = 'ja'; // パスワードリセットメールを日本語に
-  // ★ログイン状態をブラウザを閉じても保持する設定
-  setPersistence(auth, browserLocalPersistence)
-    .then(()=> console.log('[Firebase] persistence: LOCAL'))
-    .catch((e)=> console.error('[Firebase] setPersistence error:', e));
   const db = getFirestore(app);
   // Firebase Functions (asia-northeast1)
   const functions = getFunctions(app, 'asia-northeast1');
@@ -1129,7 +1123,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <span class="s-arr">›</span>
       </div>
       <!-- メールアドレス変更（ログイン時のみ表示） -->
-      <div id="s-email-change-row" class="s-row" onclick="_openEmailChangeModal()" style="align-items:center;display:flex !important">
+      <div id="s-email-change-row-DISABLED" hidden class="s-row" onclick="_openEmailChangeModal()" style="align-items:center;display:none !important">
         <div class="s-ico" style="background:#EEF2FF">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="#5B7FC0"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
         </div>
@@ -4704,7 +4698,7 @@ window._onAuthChanged = async (user) => {
     const wdLink = document.getElementById('s-withdraw-link');
     if(wdLink){ wdLink.style.display='flex'; wdLink.style.opacity='0.35'; wdLink.style.pointerEvents='none'; }
     const emailChangeRow2 = document.getElementById('s-email-change-row');
-    if(emailChangeRow2) emailChangeRow2.style.setProperty('display', 'none', 'important');
+    if(emailChangeRow2) emailChangeRow2.style.display = 'none';
     // ログアウト操作時のみsubsをクリアしてダッシュボードを再描画
     // （_logoutCleanフラグが立っている場合のみ）
     if(window._logoutClean){
@@ -4790,7 +4784,7 @@ function _updateAuthUI(user){
     if(hdPlanLink) hdPlanLink.style.display = _isSupporterMember ? 'inline' : 'none';
     // メアド変更行の表示制御
     const emailChangeRow = document.getElementById('s-email-change-row');
-    if(emailChangeRow) emailChangeRow.style.setProperty('display', 'flex', 'important');
+    if(emailChangeRow) emailChangeRow.style.display = 'flex';
     const emailDisplay = document.getElementById('s-email-display');
     if(emailDisplay) emailDisplay.textContent = email || '登録メールアドレスを変更';
 
@@ -4910,7 +4904,7 @@ async function submitAuth(){
     if(submitBtn.disabled) return; // 既に処理中なら無視
     submitBtn.disabled = true;
     submitBtn._originalText = submitBtn.textContent;
-    submitBtn.textContent = '処理中...';
+    submitBtn.textContent = '⏳ 処理中...';
     submitBtn.style.opacity = '0.7';
     submitBtn.style.cursor = 'wait';
   }
@@ -10055,8 +10049,6 @@ async function init(){
   // 既存セッションがあれば一旦ログアウトして、必ずログインモーダルを表示
   const actionParam = urlParams.get('action');
   if(actionParam === 'login'){
-    // ★URL書き換え前にフラグを保存(後続のオンボーディング判定で使用)
-    window._isLoginAction = true;
     window.history.replaceState({}, document.title, window.location.pathname);
     setTimeout(async ()=>{
       try{
@@ -10142,7 +10134,7 @@ async function init(){
   if(inclOt) document.getElementById('ot-note').style.display='block';
 
   // ★action=login時はオンボーディングをスキップ(ログインモーダル優先)
-  const _skipOnboarding = (window._isLoginAction === true);
+  const _skipOnboarding = (urlParams.get('action') === 'login');
   if(!onboarded && !_skipOnboarding) showOnboarding();
   // 既存ユーザー向け：オンボーディング済みだがtermsAgreed未設定なら同意ポップアップ
   if(onboarded){
