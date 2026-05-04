@@ -1,1 +1,284 @@
-Start-Process "https://github.com/Jonekun429/subly-for-Family/edit/main/index.html"
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> Get-Content "C:\Users\AkahaKeita\subly\index.html" -Raw -Encoding UTF8 | Set-Clipboard
+PS C:\WINDOWS\system32> Start-Process "https://github.com/Jonekun429/subly-for-Family/edit/main/index.html"
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> $timestamp = [DateTimeOffset]::Now.ToUnixTimeSeconds()
+PS C:\WINDOWS\system32> $url = "https://app.subly.jp/?nocache=$timestamp"
+PS C:\WINDOWS\system32> $response = Invoke-WebRequest -Uri $url -UseBasicParsing
+PS C:\WINDOWS\system32> $content = $response.Content
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> Write-Host "=== 本番に何が反映されてるか確認 ===" -ForegroundColor Cyan
+=== 本番に何が反映されてるか確認 ===
+PS C:\WINDOWS\system32> Write-Host ""
+
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> if ($content -match 'hd-email-row') {
+>>     Write-Host "  本番にハンバーガー追加が残ってる(壊れた版がまだ本番)" -ForegroundColor Red
+>> } else {
+>>     Write-Host "  本番にハンバーガー追加なし" -ForegroundColor Green
+>> }
+  本番にハンバーガー追加なし
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> if ($content -match 'data-force-show') {
+>>     Write-Host "  本番に強制表示モードが残ってる" -ForegroundColor Red
+>> }
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> Write-Host ""
+
+PS C:\WINDOWS\system32> Write-Host "本番ファイルサイズ: $($content.Length) bytes"
+本番ファイルサイズ: 695171 bytes
+PS C:\WINDOWS\system32> Write-Host "ローカルファイルサイズ: $((Get-Item 'C:\Users\AkahaKeita\subly\index.html').Length) bytes"
+ローカルファイルサイズ: 763474 bytes
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> $file = "C:\Users\AkahaKeita\subly\index.html"
+PS C:\WINDOWS\system32> $content = Get-Content $file -Raw -Encoding UTF8
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> Write-Host "=== 現在のローカルファイルの状態 ===" -ForegroundColor Cyan
+=== 現在のローカルファイルの状態 ===
+PS C:\WINDOWS\system32> Write-Host ""
+
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> if ($content -match '⏳') {
+>>     Write-Host "  砂時計絵文字: あり" -ForegroundColor Yellow
+>> } else {
+>>     Write-Host "  砂時計絵文字: なし(削除済み)" -ForegroundColor Green
+>> }
+  砂時計絵文字: あり
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> if ($content -match 's-email-change-row') {
+>>     Write-Host "  メアド変更ボタン(設定画面): あり" -ForegroundColor Green
+>> } else {
+>>     Write-Host "  メアド変更ボタン(設定画面): なし" -ForegroundColor Red
+>> }
+  メアド変更ボタン(設定画面): あり
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> if ($content -match 'hd-email') {
+>>     Write-Host "  メアド変更ボタン(ハンバーガー): あり" -ForegroundColor Green
+>> } else {
+>>     Write-Host "  メアド変更ボタン(ハンバーガー): なし" -ForegroundColor Yellow
+>> }
+  メアド変更ボタン(ハンバーガー): なし
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> Write-Host ""
+
+PS C:\WINDOWS\system32> Write-Host "ファイルサイズ: $($content.Length) bytes"
+ファイルサイズ: 695171 bytes
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> # 最新の良いバックアップを使う
+PS C:\WINDOWS\system32> $bak = "C:\Users\AkahaKeita\subly\index.html.bak_emoji_*"
+PS C:\WINDOWS\system32> $file = "C:\Users\AkahaKeita\subly\index.html"
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> $latest = Get-ChildItem $bak | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> if ($latest) {
+>>     Write-Host "復元元: $($latest.Name)" -ForegroundColor Cyan
+>>     Write-Host "サイズ: $($latest.Length) bytes" -ForegroundColor Cyan
+>>
+>>     # 念のため現在のファイルもバックアップ
+>>     Copy-Item $file "C:\Users\AkahaKeita\subly\index.html.bak_BROKEN_$(Get-Date -Format 'yyyyMMdd_HHmmss')"
+>>
+>>     # 復元
+>>     Copy-Item $latest.FullName $file -Force
+>>     Write-Host "復元完了！" -ForegroundColor Green
+>>
+>>     $newSize = (Get-Item $file).Length
+>>     Write-Host "  復元後サイズ: $newSize bytes"
+>> }
+復元元: index.html.bak_emoji_20260504_190851
+サイズ: 763474 bytes
+復元完了！
+  復元後サイズ: 763474 bytes
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> # 確認
+PS C:\WINDOWS\system32> $content = Get-Content $file -Raw -Encoding UTF8
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> Write-Host ""
+
+PS C:\WINDOWS\system32> Write-Host "=== 復元後の状態 ===" -ForegroundColor Cyan
+=== 復元後の状態 ===
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> if ($content -match '⏳') {
+>>     Write-Host "  砂時計: まだ残ってる" -ForegroundColor Yellow
+>> } else {
+>>     Write-Host "  砂時計: 削除済み" -ForegroundColor Green
+>> }
+  砂時計: まだ残ってる
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> if ($content -match 's-email-change-row') {
+>>     Write-Host "  メアド変更ボタン: あり" -ForegroundColor Green
+>> }
+  メアド変更ボタン: あり
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> # クリップボードコピー
+PS C:\WINDOWS\system32> Get-Content $file -Raw -Encoding UTF8 | Set-Clipboard
+PS C:\WINDOWS\system32> Write-Host ""
+
+PS C:\WINDOWS\system32> Write-Host "クリップボードにコピー完了" -ForegroundColor Green
+クリップボードにコピー完了
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> Start-Process "https://github.com/Jonekun429/subly-for-Family/edit/main/index.html"
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> Start-Process "https://github.com/Jonekun429/subly-for-Family/edit/main/index.html"
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> $bak = "C:\Users\AkahaKeita\subly\index.html.bak_emoji_*"
+PS C:\WINDOWS\system32> $file = "C:\Users\AkahaKeita\subly\index.html"
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> $latest = Get-ChildItem $bak | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> # 復元
+PS C:\WINDOWS\system32> Copy-Item $latest.FullName $file -Force
+PS C:\WINDOWS\system32> Write-Host "復元完了" -ForegroundColor Green
+復元完了
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> # サイズ確認
+PS C:\WINDOWS\system32> $size = (Get-Item $file).Length
+PS C:\WINDOWS\system32> Write-Host "  サイズ: $size bytes (期待: 763474)"
+  サイズ: 763474 bytes (期待: 763474)
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> # 構文チェック
+PS C:\WINDOWS\system32> $content = Get-Content $file -Raw -Encoding UTF8
+PS C:\WINDOWS\system32> $openBrace = ([regex]::Matches($content, '\{')).Count
+PS C:\WINDOWS\system32> $closeBrace = ([regex]::Matches($content, '\}')).Count
+PS C:\WINDOWS\system32> Write-Host "  波括弧: $openBrace / $closeBrace"
+  波括弧: 2982 / 2982
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> # クリップボードコピー
+PS C:\WINDOWS\system32> Get-Content $file -Raw -Encoding UTF8 | Set-Clipboard
+PS C:\WINDOWS\system32> Write-Host "クリップボードにコピー完了" -ForegroundColor Green
+クリップボードにコピー完了
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32> Write-Host ""
+
+PS C:\WINDOWS\system32> Write-Host "次：GitHubで Ctrl+A → Delete → Ctrl+V → Commit changes" -ForegroundColor Cyan
+次：GitHubで Ctrl+A → Delete → Ctrl+V → Commit changes
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
+PS C:\WINDOWS\system32>
