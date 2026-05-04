@@ -10133,7 +10133,9 @@ async function init(){
   document.getElementById('sw-ot').checked = inclOt;
   if(inclOt) document.getElementById('ot-note').style.display='block';
 
-  if(!onboarded) showOnboarding();
+  // ★action=login時はオンボーディングをスキップ(ログインモーダル優先)
+  const _skipOnboarding = (urlParams.get('action') === 'login');
+  if(!onboarded && !_skipOnboarding) showOnboarding();
   // 既存ユーザー向け：オンボーディング済みだがtermsAgreed未設定なら同意ポップアップ
   if(onboarded){
     const termsAgreed = await Store.get('termsAgreed');
