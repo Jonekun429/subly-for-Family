@@ -5442,7 +5442,7 @@ async function _ensureUserDoc(user){
       // 新規：Firestoreにユーザードキュメントを作成
       const userData = {
         nickname: _nickname || user.displayName || '',
-        plan: 'free',
+        plan: 'pro', // ★キャンペーン中: 新規登録 = Pro会員
         supporterPlan: _isSupporterMember ? (_selectedPlan?.name || 'free') : 'free',
         createdAt: new Date().toISOString(),
         email: user.email || '',
