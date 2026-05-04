@@ -827,20 +827,26 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 }
 </script>
 <style>
-/* メアド変更行の強制表示（スマホ対応） */
-#s-email-change-row {
+/* メアド変更行の強制表示（最終手段：絶対に表示） */
+#s-email-change-row,
+#s-email-change-row[data-hidden],
+#s-email-change-row[hidden] {
   display: flex !important;
   align-items: center !important;
   visibility: visible !important;
   opacity: 1 !important;
-}
-#s-email-change-row[data-hidden="true"] {
-  display: none !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
 }
 @media screen and (max-width: 768px) {
   #s-email-change-row {
     display: flex !important;
-    align-items: center !important;
+  }
+}
+@media screen and (min-width: 769px) {
+  #s-email-change-row {
+    display: flex !important;
   }
 }
 </style>
@@ -1141,7 +1147,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
         <span class="s-arr">›</span>
       </div>
       <!-- メールアドレス変更（ログイン時のみ表示） -->
-      <div id="s-email-change-row" class="s-row" onclick="_openEmailChangeModal()" style="align-items:center;display:flex !important">
+      <div id="s-email-change-row" class="s-row" data-force-show="true" onclick="_openEmailChangeModal()" style="align-items:center;display:flex !important">
         <div class="s-ico" style="background:#EEF2FF">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="#5B7FC0"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
         </div>
@@ -4716,7 +4722,7 @@ window._onAuthChanged = async (user) => {
     const wdLink = document.getElementById('s-withdraw-link');
     if(wdLink){ wdLink.style.display='flex'; wdLink.style.opacity='0.35'; wdLink.style.pointerEvents='none'; }
     const emailChangeRow2 = document.getElementById('s-email-change-row');
-    if(emailChangeRow2) emailChangeRow2.setAttribute('data-hidden', 'true');
+    // 強制表示モード: if(emailChangeRow2) emailChangeRow2.setAttribute('data-hidden', 'true');
     // ログアウト操作時のみsubsをクリアしてダッシュボードを再描画
     // （_logoutCleanフラグが立っている場合のみ）
     if(window._logoutClean){
@@ -4802,7 +4808,7 @@ function _updateAuthUI(user){
     if(hdPlanLink) hdPlanLink.style.display = _isSupporterMember ? 'inline' : 'none';
     // メアド変更行の表示制御
     const emailChangeRow = document.getElementById('s-email-change-row');
-    if(emailChangeRow) emailChangeRow.removeAttribute('data-hidden');
+    if(emailChangeRow) emailChangeRow.removeAttribute('data-hidden'); // 強制表示
     const emailDisplay = document.getElementById('s-email-display');
     if(emailDisplay) emailDisplay.textContent = email || '登録メールアドレスを変更';
 
