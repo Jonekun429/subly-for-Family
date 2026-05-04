@@ -734,6 +734,8 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   import {
     getAuth,
     onAuthStateChanged,
+    setPersistence,
+    browserLocalPersistence,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     sendPasswordResetEmail,
@@ -767,6 +769,10 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   auth.languageCode = 'ja'; // パスワードリセットメールを日本語に
+  // ★ログイン状態をブラウザを閉じても保持する設定
+  setPersistence(auth, browserLocalPersistence)
+    .then(()=> console.log('[Firebase] persistence: LOCAL'))
+    .catch((e)=> console.error('[Firebase] setPersistence error:', e));
   const db = getFirestore(app);
   // Firebase Functions (asia-northeast1)
   const functions = getFunctions(app, 'asia-northeast1');
