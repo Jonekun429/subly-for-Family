@@ -4904,7 +4904,7 @@ async function submitAuth(){
     if(submitBtn.disabled) return; // 既に処理中なら無視
     submitBtn.disabled = true;
     submitBtn._originalText = submitBtn.textContent;
-    submitBtn.textContent = '⏳ 処理中...';
+    submitBtn.textContent = '処理中...';
     submitBtn.style.opacity = '0.7';
     submitBtn.style.cursor = 'wait';
   }
