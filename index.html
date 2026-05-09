@@ -1009,6 +1009,10 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   <button class="nb" id="nb-list" onclick="gaEvent('nav_tap',{tab:'list'});goto('list')">
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>明細一覧
   </button>
+  <button class="nb" id="nb-otherapps" onclick="gaEvent('nav_tap',{tab:'otherapps'});window.open('https://subly.jp/apps.html','_blank')" style="position:relative">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 0h6v6h-6v-6z"/></svg>他のアプリ
+    <span style="position:absolute;top:6px;right:8px;width:8px;height:8px;background:#E24B4A;border-radius:50%;border:1.5px solid #fff;display:none" class="new-dot-mobile"></span>
+  </button>
   <!-- PC サイドバー追加メニュー -->
   <div class="nb-divider"></div>
   <button class="nb nb-pc-only" id="nb-group" onclick="_onGroupMenuTap()">
