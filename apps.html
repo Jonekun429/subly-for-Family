@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Jone Lab Apps - Sublyを作った開発者の他のアプリ</title>
+<meta name="description" content="Sublyを作った開発者(Jone Lab)が手がける他のアプリをご紹介。占い、健康、投資、電卓など、無料で楽しめるWebアプリです。">
+<link rel="icon" type="image/png" href="https://subly.jp/icon.png">
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8YLL4H8GYL"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-8YLL4H8GYL', {
+    page_title: 'Jone Lab Apps',
+    page_location: window.location.href
+  });
+  function gaEvent(eventName, params) {
+    if (typeof gtag !== 'function') return;
+    gtag('event', eventName, params || {});
+  }
+  // ページ読み込み時にLPビューイベント送信
+  gaEvent('apps_lp_view', {});
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Hiragino Kaku Gothic ProN','Hiragino Sans','Noto Sans JP','Yu Gothic UI','Meiryo',sans-serif;background:#F5F5F0;color:#2B3830;-webkit-font-smoothing:antialiased;line-height:1.6}
+a{text-decoration:none;color:inherit}
+
+/* Header */
+.lp-header{position:sticky;top:0;background:rgba(245,245,240,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(0,0,0,.05);z-index:100}
+.lp-logo{font-size:22px;font-weight:800;color:#5C8E84;letter-spacing:2px}
+.lp-cta-sm{background:#5C8E84;color:#fff;border-radius:10px;padding:9px 18px;font-size:13px;font-weight:700;transition:transform .2s}
+.lp-cta-sm:hover{transform:translateY(-1px);background:#3D6259}
+
+/* Hero */
+.hero{padding:80px 24px 60px;text-align:center;background:linear-gradient(180deg,#E8F0ED 0%,#EDF2EF 40%,#F5F5F0 100%);position:relative;overflow:hidden}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1.5px solid #D8E0DC;border-radius:30px;padding:8px 20px;font-size:12px;font-weight:700;color:#5C8E84;margin-bottom:24px;letter-spacing:1.5px;text-transform:uppercase}
+.hero-dot{width:6px;height:6px;background:#5C8E84;border-radius:50%}
+.hero h1{font-size:42px;font-weight:800;line-height:1.3;letter-spacing:-1px;color:#2B3830;margin-bottom:16px}
+.hero h1 em{font-style:normal;color:#5C8E84}
+.hero-sub{font-size:15px;color:#6E847C;line-height:1.8;max-width:580px;margin:0 auto}
+
+/* Apps Section */
+.apps-section{padding:60px 24px;background:#fff;max-width:720px;margin:0 auto;position:relative}
+.app-card{background:#FCFAF7;border:1px solid #EDE5D8;border-radius:20px;padding:24px;margin-bottom:16px;display:flex;gap:18px;align-items:flex-start;cursor:pointer;transition:all .2s;text-decoration:none;color:inherit;box-shadow:0 2px 8px rgba(74,60,40,.05)}
+.app-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(74,60,40,.12);background:#fff}
+.app-icon{width:64px;height:64px;border-radius:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:32px}
+.app-content{flex:1;min-width:0}
+.app-name{font-size:17px;font-weight:700;color:#2B3830;margin-bottom:6px}
+.app-desc{font-size:13px;color:#6E847C;line-height:1.7;margin-bottom:14px}
+.app-link{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700}
+.app-link .arrow{transition:transform .2s}
+.app-card:hover .app-link .arrow{transform:translateX(4px)}
+
+/* Card Color Themes */
+.theme-pink .app-icon{background:#FBEAF0;color:#993556}
+.theme-pink .app-card{border-color:#f0e0e8}
+.theme-pink .app-link{color:#993556}
+.theme-green .app-icon{background:#EAF3DE;color:#3B6D11}
+.theme-green .app-card{border-color:#d0e8c8}
+.theme-green .app-link{color:#3B6D11}
+.theme-blue .app-icon{background:#E6F1FB;color:#185FA5}
+.theme-blue .app-card{border-color:#c8d8e8}
+.theme-blue .app-link{color:#185FA5}
+.theme-amber .app-icon{background:#FAEEDA;color:#854F0B}
+.theme-amber .app-card{border-color:#e8d8b8}
+.theme-amber .app-link{color:#854F0B}
+
+/* Subly CTA */
+.subly-cta{background:#F9FAF9;padding:60px 24px;text-align:center}
+.subly-cta-title{font-size:20px;font-weight:700;margin-bottom:8px}
+.subly-cta-sub{font-size:14px;color:#6E847C;margin-bottom:24px}
+.subly-cta-btn{display:inline-block;background:linear-gradient(135deg,#5C8E84,#3D6259);color:#fff;font-size:15px;font-weight:700;padding:14px 36px;border-radius:14px;transition:transform .2s}
+.subly-cta-btn:hover{transform:translateY(-2px)}
+
+/* Footer */
+.lp-footer{padding:40px 24px;text-align:center;font-size:11px;color:#6E847C;border-top:1px solid #D8E0DC;background:#F5F5F0}
+.lp-footer-logo{font-size:18px;font-weight:800;color:#5C8E84;letter-spacing:2px;margin-bottom:12px}
+.lp-footer-links{margin-top:16px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.lp-footer-links a{color:#6E847C;font-size:11px}
+.lp-footer-links a:hover{color:#5C8E84}
+
+/* Mobile */
+@media(max-width:600px){
+  .hero{padding:60px 20px 40px}
+  .hero h1{font-size:32px}
+  .hero-sub{font-size:14px}
+  .apps-section{padding:40px 16px}
+  .app-card{padding:18px;gap:14px}
+  .app-icon{width:52px;height:52px;font-size:26px;border-radius:13px}
+  .app-name{font-size:15px}
+  .app-desc{font-size:12px}
+  .subly-cta{padding:40px 20px}
+  .subly-cta-title{font-size:17px}
+}
+</style>
+</head>
+<body>
+
+<header class="lp-header">
+  <div class="lp-logo">Subly</div>
+  <a href="https://app.subly.jp" class="lp-cta-sm" onclick="gaEvent('subly_cta_click',{location:'header'})">アプリを開く</a>
+</header>
+
+<section class="hero">
+  <div class="hero-badge"><div class="hero-dot"></div>Jone Lab Apps</div>
+  <h1>Sublyを作った開発者の<br><em>他のアプリ</em></h1>
+  <p class="hero-sub">気軽に楽しめる無料アプリを、Jone Labからお届けします。<br>どれもブラウザですぐ使えます。</p>
+</section>
+
+<section class="apps-section">
+
+  <a href="https://jonekun429.github.io/uranai/" target="_blank" rel="noopener" class="app-card theme-pink" onclick="gaEvent('app_click',{app_id:'uranai',app_name:'自己診断アプリ'})">
+    <div class="app-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5L12 2zm7 11l.8 2.7L22 16l-2.2.8L19 19l-.8-2.2L16 16l2.2-.8L19 13zM5 13l.8 2.7L8 16l-2.2.8L5 19l-.8-2.2L2 16l2.2-.8L5 13z"/></svg></div>
+    <div class="app-content">
+      <div class="app-name">自己診断アプリ</div>
+      <div class="app-desc">気軽に楽しめる占い・診断ツール。あなたの隠れた一面を発見できます。</div>
+      <span class="app-link">使ってみる <span class="arrow">→</span></span>
+    </div>
+  </a>
+
+  <a href="https://jonekun429.github.io/health-dashboard/" target="_blank" rel="noopener" class="app-card theme-green" onclick="gaEvent('app_click',{app_id:'time',app_name:'TIME寿命チェック'})">
+    <div class="app-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+    <div class="app-content">
+      <div class="app-name">TIME(寿命チェック)</div>
+      <div class="app-desc">健康習慣をチェックして、あなたの寿命を予測。未来をより良く変えるヒントに。</div>
+      <span class="app-link">使ってみる <span class="arrow">→</span></span>
+    </div>
+  </a>
+
+  <a href="https://jonekun429.github.io/my-simulation/" target="_blank" rel="noopener" class="app-card theme-blue" onclick="gaEvent('app_click',{app_id:'simulation',app_name:'投資シミュレーションナビ'})">
+    <div class="app-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M5 9.2h3V19H5V9.2zM10.6 5h2.8v14h-2.8V5zm5.6 8H19v6h-2.8v-6z"/></svg></div>
+    <div class="app-content">
+      <div class="app-name">投資シミュレーションナビ</div>
+      <div class="app-desc">資産運用の未来を計算。長期投資の効果が一目でわかります。</div>
+      <span class="app-link">使ってみる <span class="arrow">→</span></span>
+    </div>
+  </a>
+
+  <a href="https://jonekun429.github.io/webcalculator/" target="_blank" rel="noopener" class="app-card theme-amber" onclick="gaEvent('app_click',{app_id:'calculator',app_name:'集める電卓アプリ'})">
+    <div class="app-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM8 20H6v-2h2v2zm0-4H6v-2h2v2zm0-4H6v-2h2v2zm5 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2v-2h2v2zm5 8h-2v-6h2v6zm0-8h-2V8h2v2zm0-4H6V5h12v2z"/></svg></div>
+    <div class="app-content">
+      <div class="app-name">集める電卓アプリ</div>
+      <div class="app-desc">計算履歴を記録して合計を出せる電卓。旅行の出費や割り勘の精算に便利。</div>
+      <span class="app-link">使ってみる <span class="arrow">→</span></span>
+    </div>
+  </a>
+
+</section>
+
+<section class="subly-cta">
+  <div class="subly-cta-title">サブスク管理ならSubly</div>
+  <div class="subly-cta-sub">毎月いくら払っているか、全部言えますか？</div>
+  <a href="https://app.subly.jp" class="subly-cta-btn" onclick="gaEvent('subly_cta_click',{location:'bottom'})">Sublyを使う</a>
+</section>
+
+<footer class="lp-footer">
+  <div class="lp-footer-logo">Jone Lab</div>
+  <div>&copy; 2026 Jone Lab. All rights reserved.</div>
+  <div class="lp-footer-links">
+    <a href="https://subly.jp/">Subly LP</a>
+    <a href="https://subly.jp/tokusho.html">特定商取引法</a>
+    <a href="https://subly.jp/privacy.html">プライバシーポリシー</a>
+  </div>
+</footer>
+
+</body>
+</html>
