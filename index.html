@@ -5691,8 +5691,44 @@ async function openGroupModal(){
   const createBtn = document.querySelector('#group-panel-none button[onclick*="group-create-area"]');
   if(createBtn) createBtn.style.display = '';
 
+  // 両パネル隠して、ローディング表示
+  const panelNone = document.getElementById('group-panel-none');
+  const panelJoined = document.getElementById('group-panel-joined');
+  if(panelNone) panelNone.style.display = 'none';
+  if(panelJoined) panelJoined.style.display = 'none';
+  
+  // ローディングパネルを表示(なければ作成)
+  let loadingPanel = document.getElementById('group-panel-loading');
+  if(!loadingPanel){
+    loadingPanel = document.createElement('div');
+    loadingPanel.id = 'group-panel-loading';
+    loadingPanel.style.cssText = 'padding:60px 20px;text-align:center;color:var(--ts);font-size:13px';
+    loadingPanel.innerHTML = '<div style="display:inline-block;width:32px;height:32px;border:3px solid #f0f0f0;border-top-color:var(--p);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:12px"></div><div>グループ情報を読み込み中...</div><style>@keyframes spin{to{transform:rotate(360deg)}}</style>';
+    document.querySelector('#group-ov .dlg').appendChild(loadingPanel);
+  }
+  loadingPanel.style.display = 'block';
+  
   document.getElementById('group-ov').classList.remove('hidden');
-  await _loadGroupState();
+  
+  // データ読み込み(リトライ付き)
+  let attempts = 0;
+  const maxAttempts = 3;
+  while(attempts < maxAttempts){
+    try {
+      await _loadGroupState();
+      break; // 成功したら抜ける
+    } catch(e){
+      console.warn('Group load attempt ' + (attempts+1) + ' failed:', e);
+      attempts++;
+      if(attempts < maxAttempts){
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+    }
+  }
+  
+  // ローディング非表示
+  if(loadingPanel) loadingPanel.style.display = 'none';
+  
   gaEvent('group_modal_open', {});
 }
 
