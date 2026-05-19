@@ -11143,5 +11143,50 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
+
+<!-- ▼ Service Worker 登録(PWA オフライン対応) ▼ -->
+<script>
+(function(){
+  // Capacitor環境では Service Worker は不要
+  if (window.Capacitor) return;
+  
+  // Service Worker 対応ブラウザのみ
+  if (!('serviceWorker' in navigator)) {
+    console.log('[SW] Service Worker not supported');
+    return;
+  }
+  
+  // ローカルファイル(file://)では動かないのでスキップ
+  if (location.protocol === 'file:') {
+    console.log('[SW] Skipping registration on file:// protocol');
+    return;
+  }
+  
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
+      .then(function(registration) {
+        console.log('[SW] Registered, scope:', registration.scope);
+        
+        // 新しいバージョンが利用可能になった時の処理
+        registration.addEventListener('updatefound', function() {
+          const newWorker = registration.installing;
+          if (!newWorker) return;
+          
+          newWorker.addEventListener('statechange', function() {
+            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+              console.log('[SW] New version available');
+              // ここで「再読み込みを促す通知」を出すこともできる(今はサイレントで)
+            }
+          });
+        });
+      })
+      .catch(function(error) {
+        console.warn('[SW] Registration failed:', error);
+      });
+  });
+})();
+</script>
+
 </body>
+
 </html>
