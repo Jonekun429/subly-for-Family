@@ -831,9 +831,15 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 <!-- ヘッダー（スマホ） -->
 <header class="hdr">
   <span class="hdr-title" onclick="gaEvent('header_title_tap',{});_refreshDashboard()" style="cursor:pointer">Subly</span>
-  <button class="hdr-hamburger" id="hdr-hamburger" onclick="toggleHdrop(event)" aria-label="メニュー">
-    <span></span><span></span><span></span>
-  </button>
+  <div style="display:flex;gap:10px;align-items:center;margin-left:auto;position:relative;z-index:1">
+    <button id="hdr-signup-btn" class="hdr-signup-btn" onclick="_openSignupFromHeader()" aria-label="無料登録" style="display:none;background:#fff;color:var(--p);border:none;padding:8px 14px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;align-items:center;gap:4px;transition:opacity .2s;box-shadow:0 2px 8px rgba(0,0,0,.08)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      無料登録
+    </button>
+    <button class="hdr-hamburger" id="hdr-hamburger" onclick="toggleHdrop(event)" aria-label="メニュー">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </header>
 
 <!-- 左ドロワーメニュー -->
@@ -11187,6 +11193,44 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
+
+<!-- ▼ ヘッダー無料登録ボタンの表示制御 ▼ -->
+<script>
+(function(){
+  // ヘッダー登録ボタンを開く
+  window._openSignupFromHeader = function() {
+    gaEvent('header_signup_tap', {});
+    const ov = document.getElementById('auth-ov');
+    if(ov) {
+      ov.classList.remove('hidden');
+      // 新規登録モードに切り替え(タブがある場合)
+      const signupTab = document.querySelector('#auth-ov [data-mode="signup"]');
+      if(signupTab) signupTab.click();
+    }
+  };
+  
+  // 認証状態に応じて表示・非表示を切り替え
+  function _updateHeaderSignupBtn() {
+    const btn = document.getElementById('hdr-signup-btn');
+    if(!btn) return;
+    
+    const isLoggedIn = !!(window._fbUser);
+    btn.style.display = isLoggedIn ? 'none' : 'flex';
+  }
+  
+  // 起動時&認証状態変化時に更新
+  window.addEventListener('load', function() {
+    setTimeout(_updateHeaderSignupBtn, 500);
+    setTimeout(_updateHeaderSignupBtn, 2000);
+    setTimeout(_updateHeaderSignupBtn, 5000);
+  });
+  
+  // 認証状態が変わったタイミングで更新(既存コードから呼ばれる)
+  window._updateHeaderSignupBtn = _updateHeaderSignupBtn;
+})();
+</script>
+
 </body>
+
 
 </html>
