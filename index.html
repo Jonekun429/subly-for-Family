@@ -41,19 +41,19 @@
 
 /* ── ライト（デフォルト） ── */
 :root, .theme-light {
-  --p:    #5C8E84;
-  --pd:   #3A6B60;
-  --pl:   #E8F0ED;
-  --bg:   #F5F5F0;
+  --p:    #417B6D;
+  --pd:   #2E5D51;
+  --pl:   #E9F2EE;
+  --bg:   #F6F8F7;
   --card: #FFFFFF;
-  --tx:   #2B3830;
-  --ts:   #6E847C;
-  --bd:   #D8E0DC;
-  --dn:   #C06060;
-  --wbg:  #FDF8F0;
-  --wtx:  #8A6838;
-  --sh:   0 2px 10px rgba(0,0,0,.05);
-  --shl:  0 6px 20px rgba(0,0,0,.10);
+  --tx:   #1C2723;
+  --ts:   #64756E;
+  --bd:   #E3E9E6;
+  --dn:   #C05B5B;
+  --wbg:  #FBF6EB;
+  --wtx:  #86683B;
+  --sh:   0 1px 2px rgba(18,38,31,.05);
+  --shl:  0 10px 28px rgba(18,38,31,.12);
 }
 
 /* ── オーシャン ── */
@@ -516,7 +516,7 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
 .f-row input:focus,.f-row select:focus{outline:none;border-color:var(--p);background:var(--card)}
 .f-row input::placeholder{color:var(--ts);font-style:italic}
 /* 必須項目：薄い背景色 */
-.f-row input.f-required,.f-row select.f-required{background:#FAFAF5}
+.f-row input.f-required,.f-row select.f-required{background:#F3F8F6}
 .f-row input.f-required.f-filled,.f-row select.f-required.f-filled{background:var(--card)}
 .f-row select{background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%237E928C"><path d="M7 10l5 5 5-5z"/></svg>');background-repeat:no-repeat;background-position:right 9px center;padding-right:28px}
 .f-2col{display:grid;grid-template-columns:3fr 2fr;gap:9px}
@@ -826,6 +826,219 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
   }
 }
 </script>
+<style id="ui-remake">
+/* ============================================================
+   Subly UI Remake — デザイン層のみの刷新（クラス名・JSは不変更）
+   方針: ボーダーファーストのフラット設計 / 余白と階層の整理 /
+         タップ領域48px / 選択状態の明確化
+   ============================================================ */
+
+:root{ --r:16px }
+
+body{
+  font-size:15px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+/* ── ヘッダー: フラットに ── */
+.hdr{ box-shadow:none }
+.hdr-title{ font-size:16px; letter-spacing:1.8px }
+
+/* ── ボトムナビ: 「今どこにいるか」を明確に ── */
+.bnav{ box-shadow:none; border-top:1px solid var(--bd) }
+.nb{ gap:4px; font-size:12px; font-weight:600 }
+.nb svg{
+  width:23px; height:23px;
+  padding:5px 15px;
+  border-radius:999px;
+  box-sizing:content-box;
+  transition:background .18s, color .18s;
+}
+.nb.on{ color:var(--pd); font-weight:700 }
+.nb.on svg{ background:var(--pl); color:var(--p) }
+/* 回転ピンクの「New!」バッジを静かに */
+.new-badge-otherapps{
+  transform:none !important;
+  background:var(--dn) !important;
+  box-shadow:none !important;
+  font-size:9px !important;
+  padding:2px 6px !important;
+  top:2px !important;
+}
+
+/* ── カード: 影ではなく境界線で区切る ── */
+.card, .dash-grid>.card{
+  border:1px solid var(--bd);
+  border-radius:var(--r);
+  box-shadow:none;
+}
+.card-ttl{
+  font-size:13px;
+  letter-spacing:.4px;
+  text-transform:none;
+  margin-bottom:14px;
+}
+.sec-lbl{ font-size:13px; letter-spacing:.4px; text-transform:none }
+
+/* ── お知らせ・アラート: 柔らかく ── */
+.alert-box{
+  background:var(--wbg);
+  border:1px solid #EDDDBB;
+  border-left:3px solid #D4923A;
+  border-radius:12px;
+  padding:12px 36px 12px 14px;
+  font-size:14px;
+}
+#campaign-banner{
+  background:var(--pd) !important;
+  box-shadow:none !important;
+  border-radius:var(--r) !important;
+}
+
+/* ── 明細一覧: 行を静かに・数字を主役に ── */
+.ls-card{ border:1px solid var(--bd); border-radius:var(--r); box-shadow:none }
+.ls-closed{ padding:15px 16px }
+.ls-stats{ gap:8px }
+.ls-stat{ background:var(--bg); border-radius:12px; padding:12px 8px }
+.list-ctrl{ gap:8px }
+.list-ctrl select{
+  min-height:42px;
+  border:1px solid var(--bd);
+  border-radius:11px;
+  background:var(--card);
+  font-size:13px;
+}
+.sub-row{
+  border:1px solid var(--bd);
+  border-radius:14px;
+  box-shadow:none;
+  padding:13px 14px;
+  gap:12px;
+  margin-bottom:8px;
+}
+.sub-icon{ width:40px; height:40px; border-radius:12px; font-size:18px }
+.sub-name{ font-size:15px }
+.sub-price{ font-size:16px; color:var(--tx) }
+.badge{ font-weight:600; font-size:11px; padding:3px 9px; border-radius:999px }
+.act-btn{
+  background:var(--card);
+  border:1px solid var(--bd);
+  color:var(--ts);
+  border-radius:10px;
+  padding:8px 12px;
+  min-height:36px;
+}
+.act-btn.edit{ color:var(--pd); border-color:var(--bd) }
+.act-btn.delete-direct{
+  background:#FAECEB !important;
+  color:#B4443F !important;
+  border-color:transparent;
+}
+.sub-actions{ gap:8px; padding-top:10px; margin-top:10px }
+.act-more{ width:36px; height:36px; background:var(--bg) }
+
+/* ── 追加画面: 選ぶ→押すが迷わない ── */
+.cat-tab{
+  background:var(--card);
+  color:var(--tx);
+  border:1px solid var(--bd);
+  opacity:1;
+  padding:13px 4px 10px;
+  border-radius:13px;
+}
+.cat-tab::after{
+  content:"";
+  display:block;
+  width:7px; height:7px;
+  border-radius:50%;
+  background:var(--tab-color, var(--p));
+  margin:6px auto 0;
+}
+.cat-tab.on{
+  background:var(--tab-color, var(--p));
+  color:#fff;
+  border-color:transparent;
+  transform:none;
+  box-shadow:none;
+}
+.cat-tab.on::after{ background:rgba(255,255,255,.85) }
+.q-btn{
+  border:1px solid var(--bd);
+  border-radius:14px;
+  box-shadow:none;
+  padding:12px 12px 12px 15px;
+}
+.q-btn:active{ transform:scale(.98) }
+.btn-manual-add{ border-width:1.5px; border-radius:var(--r) }
+
+/* ── フォーム: 迷わない入力 ── */
+.f-row label{ font-size:13px; font-weight:700; color:var(--tx) }
+.f-row input, .f-row select{
+  min-height:48px;
+  padding:12px 14px;
+  border:1px solid var(--bd);
+  border-radius:12px;
+  font-size:16px; /* iOSの自動ズームを防止 */
+}
+.f-row input:focus, .f-row select:focus{
+  border-color:var(--p);
+  box-shadow:0 0 0 3px var(--pl);
+}
+.btn-submit{
+  background:var(--p);
+  box-shadow:none;
+  border-radius:14px;
+  letter-spacing:.3px;
+  min-height:52px;
+}
+.btn-submit::after{ display:none }
+.btn-submit:hover{ background:var(--pd) }
+.btn-submit:active{ transform:scale(.985); background:var(--pd) }
+
+/* ── カレンダー ── */
+.cal-fb{ border-width:1px; font-weight:600; padding:8px 16px; min-height:38px }
+.cal-fb.on{ font-weight:700 }
+.cal-grid{ border-radius:14px; overflow:hidden }
+
+/* ── ダイアログ / シート ── */
+.dlg{ border-radius:20px; box-shadow:var(--shl) }
+.dlg-btn{ min-height:46px; border-radius:12px; font-size:15px }
+.sheet{ border-radius:20px 20px 0 0 }
+.sheet::before{
+  content:"";
+  display:block;
+  width:36px; height:4px;
+  border-radius:2px;
+  background:var(--bd);
+  margin:10px auto 0;
+}
+.s-grp{ border:1px solid var(--bd); border-radius:14px; box-shadow:none }
+.s-row{ min-height:56px }
+.hd-row{ min-height:52px }
+
+/* ── 数値: 桁が揃うと読みやすい ── */
+#ttl-m, #ttl-y, .sub-price, .ls-closed-amt, .ls-stat-val,
+.cal-summary-val, .cal-detail-price, .q-price{
+  font-variant-numeric:tabular-nums;
+}
+
+/* ── トースト ── */
+.toast{ background:var(--tx); border-radius:14px; font-size:14px }
+
+/* ── アクセシビリティ ── */
+:where(button, [role="button"], input, select, a):focus-visible{
+  outline:2px solid var(--p);
+  outline-offset:2px;
+}
+@media (prefers-reduced-motion:reduce){
+  *, *::before, *::after{
+    animation-duration:.01ms !important;
+    transition-duration:.01ms !important;
+  }
+}
+</style>
 </head>
 <body>
 <!-- ヘッダー（スマホ） -->
