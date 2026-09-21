@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Subly（サブリー）— サブスクを、見える化しよう。</title>
+<meta name="description" content="毎月いくら払っているか、全部把握できていますか？Sublyは無料から使えるサブスク管理アプリです。クラウド同期・グラフ・カレンダー対応。">
+<meta property="og:title" content="Subly — サブスクを、見える化しよう。">
+<meta property="og:description" content="無料プランあり・広告なし。登録30秒でサブスクを一目で管理。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://subly.jp/">
+<meta property="og:site_name" content="Subly">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:image" content="https://subly.jp/ogp.png">
+<meta property="og:image:secure_url" content="https://subly.jp/ogp.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Subly — サブスクを、見える化。">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Subly — サブスクを、見える化しよう。">
+<meta name="twitter:description" content="無料プランあり・広告なし。登録30秒でサブスクを一目で管理。">
+<meta name="twitter:image" content="https://subly.jp/ogp.png">
+<meta name="theme-color" content="#0B7A8A">
+<meta name="color-scheme" content="light">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImJnIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojNUM4RTg0Ii8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojM0E2QjYwIi8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMTAiIGZpbGw9InVybCgjYmcpIi8+PHBhdGggZD0iTTI1NiA5MCBMMzgwIDEzOCBMMzgwIDI1NiBDMzgwIDMzMCAzMjYgMzkwIDI1NiA0MTUgQzE4NiAzOTAgMTMyIDMzMCAxMzIgMjU2IEwxMzIgMTM4IFoiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4yNSkiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjUpIiBzdHJva2Utd2lkdGg9IjgiLz48dGV4dCB4PSIyNTYiIHk9IjMxMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMjAwIiBmb250LXdlaWdodD0iOTAwIiBmaWxsPSJ3aGl0ZSI+UzwvdGV4dD48L3N2Zz4=">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,800&family=Noto+Sans+JP:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{color-scheme:light}
+:root{--p:#0B7A8A;--pd:#075E6B;--pl:#E2F1F3;--bg:#F5F5F0;--card:#fff;--tx:#2B3830;--ts:#6E847C;--bd:#D8E0DC;--r:16px}
+body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:#F5F5F0;color:#2B3830;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* ── ヘッダー ── */
+.lp-header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(245,245,240,.88);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.05);padding:14px 20px;display:flex;align-items:center;justify-content:space-between}
+.lp-logo{font-size:20px;font-weight:800;color:var(--p);letter-spacing:2px}
+.lp-cta-sm{background:var(--p);color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .15s;box-shadow:0 2px 8px rgba(7,94,107,.2)}
+.lp-cta-sm:hover{background:var(--pd);box-shadow:0 4px 14px rgba(7,94,107,.3)}
+
+/* ── セクション共通 ── */
+section{padding:80px 20px;background:#fff}
+.sec-inner{max-width:720px;margin:0 auto}
+.sec-badge{font-size:11px;font-weight:700;letter-spacing:2.5px;color:var(--p);text-transform:uppercase;margin-bottom:12px}
+.sec-title{font-size:clamp(26px,5vw,38px);font-weight:800;line-height:1.3;margin-bottom:18px}
+.sec-title em{font-style:normal;color:var(--p)}
+.sec-desc{font-size:15px;color:var(--ts);line-height:1.8;max-width:560px}
+
+/* ── ヒーロー ── */
+.hero{padding:130px 20px 80px;text-align:center;background:linear-gradient(180deg,#E2F1F3 0%,#EEF5F6 40%,#F5F5F0 100%);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-100px;right:-120px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(11,122,138,.10),transparent 65%)}
+.hero::after{content:'';position:absolute;bottom:-80px;left:-100px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(11,122,138,.06),transparent 65%)}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--bd);border-radius:30px;padding:7px 18px;font-size:12px;font-weight:700;color:var(--p);margin-bottom:28px;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.hero-dot{width:7px;height:7px;border-radius:50%;background:#4CAF50;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-size:clamp(32px,7vw,52px);font-weight:800;line-height:1.2;margin-bottom:18px;letter-spacing:-.5px}
+.hero h1 em{font-style:normal;color:var(--p)}
+.hero-sub{font-size:16px;color:var(--ts);line-height:1.8;margin-bottom:36px;max-width:480px;margin-left:auto;margin-right:auto}
+.hero-cta{display:inline-block;background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;font-size:17px;font-weight:800;padding:18px 48px;border-radius:16px;box-shadow:0 8px 30px rgba(7,94,107,.35);transition:transform .15s,box-shadow .15s;cursor:pointer;letter-spacing:.5px;border:none;font-family:inherit}
+.hero-cta:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(7,94,107,.45)}
+.hero-cta:active{transform:scale(.97)}
+.hero-link{display:block;margin-top:14px;font-size:13px;color:var(--ts);font-weight:500}
+
+/* ── モックUI ── */
+.hero-mock-wrap{max-width:440px;margin:48px auto 0;perspective:1000px}
+.hero-mock{background:#fff;border-radius:20px;box-shadow:0 20px 70px rgba(7,94,107,.12),0 4px 16px rgba(0,0,0,.06);text-align:left;position:relative;overflow:hidden;transform:rotateY(-4deg) rotateX(2deg);transition:transform .4s ease}
+.hero-mock:hover{transform:rotateY(0) rotateX(0)}
+.mock-top{background:linear-gradient(135deg,var(--p),var(--pd));padding:18px 22px 14px;display:flex;align-items:center;justify-content:space-between}
+.mock-logo{font-size:17px;font-weight:800;color:#fff;letter-spacing:1.5px}
+.mock-body{padding:18px 20px 20px}
+.mock-sum{background:var(--pl);border-radius:14px;padding:18px;margin-bottom:16px;text-align:center}
+.mock-sum-lbl{font-size:11px;color:var(--ts);font-weight:600;margin-bottom:4px}
+.mock-sum-val{font-size:32px;font-weight:800;color:var(--p);line-height:1}
+.mock-sum-sub{font-size:11px;color:var(--ts);margin-top:6px}
+.mock-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #EEF2F0}
+.mock-row:last-child{border-bottom:none}
+.mock-row-dot{width:8px;height:8px;border-radius:3px;flex-shrink:0}
+.mock-row-name{flex:1;font-size:13px;font-weight:700;color:var(--tx)}
+.mock-row-amt{font-size:13px;font-weight:700;color:var(--tx)}
+.mock-row-daily{font-size:11px;color:var(--p);font-weight:700;margin-left:6px}
+.mock-float{position:absolute;top:16px;right:-10px;background:#fff;border-radius:14px;padding:12px 16px;box-shadow:0 8px 28px rgba(0,0,0,.1);text-align:center;z-index:2;transform:rotate(3deg);border:1.5px solid #E2F1F3}
+.mock-float-lbl{font-size:9px;color:var(--ts);font-weight:600}
+.mock-float-val{font-size:18px;font-weight:800;color:var(--pd);line-height:1.1}
+.mock-float-sub{font-size:9px;color:var(--ts);margin-top:2px}
+.mock-float2{position:absolute;bottom:20px;left:-14px;background:#fff;border-radius:12px;padding:10px 14px;box-shadow:0 6px 20px rgba(0,0,0,.08);text-align:center;z-index:2;transform:rotate(-2deg);border:1.5px solid #E2F1F3}
+.mock-float2-lbl{font-size:9px;color:var(--ts);font-weight:600}
+.mock-float2-val{font-size:20px;font-weight:800;color:var(--p);line-height:1}
+
+/* ── 問題提起 ── */
+.problem-section{background:#F5F9FA}
+.problem-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:28px}
+@media(min-width:540px){.problem-grid{grid-template-columns:1fr 1fr}}
+.problem-card{background:#fff;border-radius:var(--r);padding:24px 20px;border-left:4px solid var(--p);transition:transform .15s;box-shadow:0 1px 6px rgba(0,0,0,.03)}
+.problem-card:hover{transform:translateY(-2px)}
+.problem-num{font-size:11px;font-weight:700;color:var(--p);letter-spacing:1px;margin-bottom:8px}
+.problem-card h4{font-size:15px;font-weight:700;margin-bottom:8px;line-height:1.4}
+.problem-card p{font-size:13px;color:var(--ts);line-height:1.7}
+
+/* ── 機能紹介 ── */
+.feature{padding:60px 20px;background:#fff}
+.feature.alt{background:#F5F9FA}
+.feature-inner{max-width:720px;margin:0 auto}
+.feature-num{font-size:48px;font-weight:800;color:var(--pl);line-height:1;margin-bottom:6px}
+.feature-mock{background:#fff;border-radius:var(--r);box-shadow:0 4px 20px rgba(0,0,0,.06);padding:20px;margin-top:24px;overflow:hidden;border:1px solid #EEF2F0}
+.f1-chart{display:flex;align-items:center;gap:20px}
+.f1-donut{width:120px;height:120px;border-radius:50%;background:conic-gradient(#E05C5C 0% 28%,#4A7EC8 28% 54%,#2A9D8F 54% 72%,#9B59B6 72% 84%,#7F8C8D 84% 100%);position:relative;flex-shrink:0}
+.f1-donut-hole{position:absolute;inset:24px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.f1-donut-val{font-size:16px;font-weight:800;color:var(--tx);line-height:1}
+.f1-donut-lbl{font-size:9px;color:var(--ts);margin-top:3px}
+.f1-legend{display:flex;flex-direction:column;gap:8px;flex:1}
+.f1-leg{display:flex;align-items:center;gap:8px;font-size:13px}
+.f1-leg-dot{width:10px;height:10px;border-radius:4px;flex-shrink:0}
+.f1-leg-name{flex:1;font-weight:600;color:var(--tx)}
+.f1-leg-amt{font-weight:700;color:var(--ts)}
+.f1-leg-daily{font-size:11px;color:var(--p);font-weight:700}
+.f1-total{margin-top:14px;background:var(--pl);border-radius:10px;padding:12px 16px;text-align:center}
+.f1-total-lbl{font-size:11px;color:var(--ts);font-weight:600}
+.f1-total-val{font-size:24px;font-weight:800;color:var(--p);margin-top:2px}
+.f2-list{display:flex;flex-direction:column;gap:10px}
+.f2-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#F5F9FA;border-radius:10px}
+.f2-item-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.f2-item-body{flex:1}.f2-item-name{font-size:14px;font-weight:700}
+.f2-item-stars{font-size:13px;letter-spacing:1px}
+.f2-item-price{font-size:14px;font-weight:700;color:var(--ts)}
+.f2-alert{margin-top:12px;background:#FFF5F5;border-left:3px solid #E05C5C;border-radius:8px;padding:10px 14px;font-size:13px;color:#8B3A3A;font-weight:600;line-height:1.6}
+.f3-list{display:flex;flex-direction:column;gap:10px}
+.f3-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#F5F9FA;border-radius:10px}
+.f3-item-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.f3-item-body{flex:1}.f3-item-name{font-size:14px;font-weight:700}
+.f3-item-desc{font-size:12px;color:var(--ts)}
+.f3-item-save{font-size:15px;font-weight:800;color:#27AE60;white-space:nowrap}
+
+/* ── プラン ── */
+.plan-section{background:#F5F9FA}
+.plan-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:28px}
+@media(min-width:600px){.plan-grid{grid-template-columns:1fr 1fr 1fr}}
+.plan-card{background:#fff;border-radius:var(--r);padding:28px 22px;box-shadow:0 2px 12px rgba(0,0,0,.05);position:relative;border:2px solid transparent;transition:transform .15s}
+.plan-card:hover{transform:translateY(-3px)}
+.plan-card.recommended{border-color:var(--p)}
+.plan-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--p);color:#fff;font-size:11px;font-weight:700;padding:4px 14px;border-radius:20px;white-space:nowrap}
+.plan-name{font-size:18px;font-weight:800;margin-bottom:6px}
+.plan-price{font-size:28px;font-weight:800;color:var(--p);margin-bottom:4px}
+.plan-price span{font-size:13px;color:var(--ts);font-weight:500}
+.plan-desc{font-size:13px;color:var(--ts);margin-bottom:16px;line-height:1.6}
+.plan-features{display:flex;flex-direction:column;gap:8px}
+.plan-feat{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--tx)}
+.plan-feat::before{content:'✓';color:var(--p);font-weight:700;flex-shrink:0}
+.plan-feat.muted{color:var(--ts)}
+.plan-feat.muted::before{content:'–';color:var(--bd)}
+
+/* ── ステップ ── */
+.steps-section{background:#fff}
+.steps-grid{display:grid;grid-template-columns:1fr;gap:18px;margin-top:28px}
+@media(min-width:540px){.steps-grid{grid-template-columns:1fr 1fr}}
+.step-card{background:#F5F9FA;border-radius:var(--r);padding:24px 20px;box-shadow:0 2px 12px rgba(0,0,0,.04);position:relative;overflow:hidden}
+.step-card::before{content:attr(data-step);position:absolute;top:12px;right:16px;font-size:48px;font-weight:900;color:var(--pl);line-height:1}
+.step-card h4{font-size:15px;font-weight:700;margin-bottom:8px;position:relative}
+.step-card p{font-size:13px;color:var(--ts);line-height:1.7;position:relative}
+
+/* ── 安心 ── */
+.trust-section{background:#fff}
+.trust-grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:28px}
+@media(min-width:540px){.trust-grid{grid-template-columns:1fr 1fr}}
+.trust-card{background:#F5F9FA;border-radius:var(--r);padding:22px 20px;display:flex;gap:14px;align-items:flex-start}
+.trust-icon{width:40px;height:40px;border-radius:11px;background:var(--pl);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.trust-icon svg{width:20px;height:20px;fill:var(--p)}
+.trust-card h4{font-size:14px;font-weight:700;margin-bottom:4px}
+.trust-card p{font-size:13px;color:var(--ts);line-height:1.6}
+
+/* ── 口コミ ── */
+.voice-section{background:#F5F9FA}
+.voice-grid{display:flex;flex-direction:column;gap:16px;margin-top:28px}
+.voice-card{background:#fff;border-radius:var(--r);padding:22px 20px;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.voice-text{font-size:14px;line-height:1.8;color:var(--tx);margin-bottom:12px;font-style:italic}
+.voice-author{font-size:12px;color:var(--ts);font-weight:600}
+
+/* ── FAQ ── */
+.faq-section{background:#fff}
+.faq-list{display:flex;flex-direction:column;gap:10px;margin-top:28px}
+.faq-item{background:#F5F9FA;border-radius:var(--r);overflow:hidden}
+.faq-q{padding:16px 20px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:space-between;-webkit-tap-highlight-color:transparent;transition:background .12s}
+.faq-q:hover{background:#EEF2F0}
+.faq-q::after{content:'+';font-size:20px;color:var(--ts);transition:transform .2s}
+.faq-q.open::after{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease}
+.faq-a.open{max-height:300px;padding:0 20px 16px}
+.faq-a p{font-size:13px;color:var(--ts);line-height:1.8}
+
+/* ── インストール ── */
+.install-section{background:#F5F9FA}
+.install-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:24px}
+@media(min-width:540px){.install-grid{grid-template-columns:1fr 1fr}}
+.install-card{background:#fff;border-radius:var(--r);padding:22px 20px;box-shadow:0 1px 6px rgba(0,0,0,.03)}
+.install-card h4{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.install-step{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.install-num{width:22px;height:22px;border-radius:50%;background:var(--p);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.install-step p{font-size:13px;color:var(--ts);line-height:1.5}
+
+/* ── 最終CTA ── */
+.final-cta{background:linear-gradient(135deg,var(--p),var(--pd));padding:80px 20px;text-align:center;color:#fff}
+.final-cta h2{font-size:clamp(24px,5vw,36px);font-weight:800;line-height:1.3;margin-bottom:12px}
+.final-cta h2 em{font-style:normal;color:rgba(255,255,255,.75)}
+.final-cta p{font-size:14px;color:rgba(255,255,255,.8);margin-bottom:32px}
+.final-btn{display:inline-block;background:#fff;color:var(--pd);font-size:17px;font-weight:800;padding:18px 48px;border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,.15);transition:transform .15s;cursor:pointer;border:none;font-family:inherit;letter-spacing:.5px}
+.final-btn:hover{transform:translateY(-2px)}
+.final-tags{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.final-tag{font-size:12px;font-weight:700;color:rgba(255,255,255,.7);background:rgba(255,255,255,.12);border-radius:20px;padding:5px 14px}
+footer{padding:28px 20px;text-align:center;font-size:11px;color:#6E847C;border-top:1px solid #D8E0DC;background:#F5F5F0}
+footer a{color:var(--p);text-decoration:underline}
+@media(max-width:480px){section{padding:60px 16px}.feature{padding:48px 16px}}
+</style>
+</head>
+<body>
+
+<header class="lp-header">
+  <div class="lp-logo">Subly</div>
+  <a href="https://app.subly.jp" class="lp-cta-sm">無料で始める</a>
+</header>
+
+<section class="hero">
+  <div class="hero-badge"><div class="hero-dot"></div>無料プランあり・広告なし</div>
+  <h1>サブスクを、<br><em>見える化しよう。</em></h1>
+  <p class="hero-sub">毎月いくら払っているか、<b>全部言えますか？</b><br>無料プランから今すぐ始められます。</p>
+  <a href="https://app.subly.jp" class="hero-cta">無料で始める</a>
+  <a href="#features" class="hero-link">機能を見る ↓</a>
+  <div class="hero-mock-wrap reveal">
+    <div class="hero-mock">
+      <div class="mock-float"><div class="mock-float-lbl">節約できそう</div><div class="mock-float-val">¥23,400</div><div class="mock-float-sub">年間 / 3件の見直し候補</div></div>
+      <div class="mock-float2"><div class="mock-float2-lbl">登録数</div><div class="mock-float2-val">14件</div></div>
+      <div class="mock-top"><span class="mock-logo">Subly</span></div>
+      <div class="mock-body">
+        <div class="mock-sum"><div class="mock-sum-lbl">月額合計</div><div class="mock-sum-val">¥18,540</div><div class="mock-sum-sub">年間 ¥222,480 · 1日 ¥609</div></div>
+        <div class="mock-row"><div class="mock-row-dot" style="background:#E05C5C"></div><span class="mock-row-name">Netflix</span><span class="mock-row-amt">¥1,490</span><span class="mock-row-daily">¥49/日</span></div>
+        <div class="mock-row"><div class="mock-row-dot" style="background:#2A9D8F"></div><span class="mock-row-name">Spotify</span><span class="mock-row-amt">¥980</span><span class="mock-row-daily">¥32/日</span></div>
+        <div class="mock-row"><div class="mock-row-dot" style="background:#4A7EC8"></div><span class="mock-row-name">Adobe CC</span><span class="mock-row-amt">¥6,480</span><span class="mock-row-daily">¥213/日</span></div>
+        <div class="mock-row"><div class="mock-row-dot" style="background:#E05C5C"></div><span class="mock-row-name">YouTube Premium</span><span class="mock-row-amt">¥1,280</span><span class="mock-row-daily">¥42/日</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="problem-section" id="problem">
+  <div class="sec-inner">
+    <div class="sec-badge reveal">Problem</div>
+    <h2 class="sec-title reveal">こんな経験、<em>ありませんか？</em></h2>
+    <p class="sec-desc reveal">サブスクは「痛みを感じにくい支出」。だから気づかないうちに積み上がります。</p>
+    <div class="problem-grid">
+      <div class="problem-card reveal"><div class="problem-num">01</div><h4>使っていないのに払い続けている</h4><p>「いつか使うかも」と思いながら毎月自動引き落とし。気づいたら1年分。</p></div>
+      <div class="problem-card reveal"><div class="problem-num">02</div><h4>何件入っているか把握できない</h4><p>カードや口座の明細を見ても、どれがサブスクか一目でわからない。</p></div>
+      <div class="problem-card reveal"><div class="problem-num">03</div><h4>月額は安くても年間で大きな出費</h4><p>月¥500でも年¥6,000。全部合わせたら年間20万円超えていたケースも。</p></div>
+      <div class="problem-card reveal"><div class="problem-num">04</div><h4>複数デバイスで管理できない</h4><p>スマホで入力して、PCでも確認したい。でも既存アプリは同期が面倒。</p></div>
+    </div>
+  </div>
+</section>
+
+<div id="features">
+  <section class="feature">
+    <div class="feature-inner">
+      <div class="feature-num reveal">01</div>
+      <div class="sec-badge reveal">Visualize</div>
+      <h2 class="sec-title reveal">月額・年額・<em>1日いくら</em>を一目で把握</h2>
+      <p class="sec-desc reveal">カテゴリ別の円グラフで支出を可視化。「月額¥1,490」ではなく「1日¥49」で表示することで、支出の本当の重さを実感できます。</p>
+      <div class="feature-mock reveal">
+        <div class="f1-chart">
+          <div class="f1-donut"><div class="f1-donut-hole"><div class="f1-donut-val">¥18,540</div><div class="f1-donut-lbl">月額合計</div></div></div>
+          <div class="f1-legend">
+            <div class="f1-leg"><div class="f1-leg-dot" style="background:#E05C5C"></div><span class="f1-leg-name">動画</span><span class="f1-leg-amt">¥5,290</span><span class="f1-leg-daily">¥174/日</span></div>
+            <div class="f1-leg"><div class="f1-leg-dot" style="background:#4A7EC8"></div><span class="f1-leg-name">仕事</span><span class="f1-leg-amt">¥8,480</span><span class="f1-leg-daily">¥279/日</span></div>
+            <div class="f1-leg"><div class="f1-leg-dot" style="background:#2A9D8F"></div><span class="f1-leg-name">音楽</span><span class="f1-leg-amt">¥1,980</span><span class="f1-leg-daily">¥65/日</span></div>
+            <div class="f1-leg"><div class="f1-leg-dot" style="background:#9B59B6"></div><span class="f1-leg-name">ゲーム</span><span class="f1-leg-amt">¥1,430</span><span class="f1-leg-daily">¥47/日</span></div>
+            <div class="f1-leg"><div class="f1-leg-dot" style="background:#7F8C8D"></div><span class="f1-leg-name">その他</span><span class="f1-leg-amt">¥1,360</span><span class="f1-leg-daily">¥45/日</span></div>
+          </div>
+        </div>
+        <div class="f1-total"><div class="f1-total-lbl">合計 1日あたり</div><div class="f1-total-val">¥609</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="feature alt">
+    <div class="feature-inner">
+      <div class="feature-num reveal">02</div>
+      <div class="sec-badge reveal">Evaluate</div>
+      <h2 class="sec-title reveal">満足度評価で<em>いるもの・いらないもの</em>を仕分ける</h2>
+      <p class="sec-desc reveal">各サブスクに満足度を1〜5段階でつけるだけ。低評価のサービスが自動で解約候補になります。</p>
+      <div class="feature-mock reveal">
+        <div class="f2-list">
+          <div class="f2-item"><div class="f2-item-icon" style="background:#E05C5C22"><svg width="18" height="18" viewBox="0 0 24 24" fill="#E05C5C"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></div><div class="f2-item-body"><div class="f2-item-name">Netflix</div><div class="f2-item-stars"><span style="color:#E9A400">★★★★★</span></div></div><div class="f2-item-price">¥1,490</div></div>
+          <div class="f2-item"><div class="f2-item-icon" style="background:#E05C5C22"><svg width="18" height="18" viewBox="0 0 24 24" fill="#E05C5C"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg></div><div class="f2-item-body"><div class="f2-item-name">U-NEXT</div><div class="f2-item-stars"><span style="color:#E9A400">★★</span><span style="color:#ddd">☆☆☆</span></div></div><div class="f2-item-price">¥2,189</div></div>
+          <div class="f2-item"><div class="f2-item-icon" style="background:#2A9D8F22"><svg width="18" height="18" viewBox="0 0 24 24" fill="#2A9D8F"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg></div><div class="f2-item-body"><div class="f2-item-name">Audible</div><div class="f2-item-stars"><span style="color:#E9A400">★</span><span style="color:#ddd">☆☆☆☆</span></div></div><div class="f2-item-price">¥1,500</div></div>
+        </div>
+        <div class="f2-alert">見直し候補 2件が見つかりました — 解約で年間 ¥38,628 節約できます</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="feature">
+    <div class="feature-inner">
+      <div class="feature-num reveal">03</div>
+      <div class="sec-badge reveal">Sync</div>
+      <h2 class="sec-title reveal">スマホでもPCでも、<em>クラウドで同期</em></h2>
+      <p class="sec-desc reveal">アカウントを作ればデータをクラウドに保存。スマホで入力したサブスクをPCでも確認できます。カレンダーで更新日も一目でわかります。</p>
+      <div class="feature-mock reveal">
+        <div class="f3-list">
+          <div class="f3-item"><div class="f3-item-dot" style="background:var(--p)"></div><div class="f3-item-body"><div class="f3-item-name">クラウド自動保存</div><div class="f3-item-desc">データはFirebaseに安全に保存。いつでもどこでもアクセス可能。</div></div></div>
+          <div class="f3-item"><div class="f3-item-dot" style="background:#4A7EC8"></div><div class="f3-item-body"><div class="f3-item-name">マルチデバイス対応</div><div class="f3-item-desc">スマホ・PC・タブレット、すべての端末でリアルタイム同期。</div></div></div>
+          <div class="f3-item"><div class="f3-item-dot" style="background:#9B59B6"></div><div class="f3-item-body"><div class="f3-item-name">更新日カレンダー</div><div class="f3-item-desc">支払い日・更新日をカレンダーで確認。うっかり更新を防げます。</div></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- プランセクション -->
+<section class="plan-section" id="plans">
+  <div class="sec-inner">
+    <div class="sec-badge reveal">Plans</div>
+    <h2 class="sec-title reveal">あなたに合った<em>プランで始めよう</em></h2>
+    <p class="sec-desc reveal">無料プランから始めて、必要になったらアップグレード。いつでも変更できます。</p>
+    <div class="plan-grid">
+      <!-- Free -->
+      <div class="plan-card reveal">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">¥0<span> / 永久無料</span></div>
+        <div class="plan-desc">まず試してみたい方に。基本機能をすべて無料で。</div>
+        <div class="plan-features">
+          <div class="plan-feat">6件まで登録</div>
+          <div class="plan-feat">グラフ・カレンダー</div>
+          <div class="plan-feat">クラウド同期</div>
+          <div class="plan-feat">マルチデバイス対応</div>
+          <div class="plan-feat">グループに参加（招待コード）</div>
+          <div class="plan-feat muted">登録無制限</div>
+          <div class="plan-feat muted">グループの作成・招待</div>
+        </div>
+      </div>
+      <!-- Pro -->
+      <div class="plan-card recommended reveal">
+        <div class="plan-badge">おすすめ</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">¥980<span> / 買い切り</span></div>
+        <div class="plan-desc">一度買えばずっと使える。登録件数の制限なし。</div>
+        <div class="plan-features">
+          <div class="plan-feat">登録無制限</div>
+          <div class="plan-feat">グラフ・カレンダー</div>
+          <div class="plan-feat">クラウド同期</div>
+          <div class="plan-feat">マルチデバイス対応</div>
+          <div class="plan-feat">永久利用権</div>
+          <div class="plan-feat">グループに参加（招待コード）</div>
+          <div class="plan-feat muted">グループの作成・招待</div>
+        </div>
+      </div>
+      <!-- 応援会員 -->
+      <div class="plan-card reveal">
+        <div class="plan-name">応援会員</div>
+        <div class="plan-price">¥300〜<span> / 月</span></div>
+        <div class="plan-desc">Sublyの開発を応援しながら、家族を招待してサブスクを共有できます。参加するメンバーは無料でOK。</div>
+        <div class="plan-features">
+          <div class="plan-feat">登録無制限</div>
+          <div class="plan-feat">グラフ・カレンダー</div>
+          <div class="plan-feat">クラウド同期</div>
+          <div class="plan-feat">マルチデバイス対応</div>
+          <div class="plan-feat">グループの作成・招待</div>
+          <div class="plan-feat">いつでも解約OK</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MF風CTAセクション -->
+<section style="background:linear-gradient(160deg,#F0EBE3 0%,#E8E0D5 100%);padding:72px 20px 80px;text-align:center;position:relative;overflow:hidden">
+  <div style="position:absolute;top:-60px;right:-80px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(11,122,138,.08),transparent 70%)"></div>
+  <div style="position:absolute;bottom:-60px;left:-80px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(11,122,138,.06),transparent 70%)"></div>
+  <div class="reveal" style="position:relative">
+    <div style="display:inline-flex;align-items:center;gap:8px;background:var(--p);color:#fff;font-size:12px;font-weight:700;letter-spacing:.5px;padding:8px 20px;border-radius:30px;margin-bottom:24px;box-shadow:0 4px 16px rgba(7,94,107,.3)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      Pro・応援会員
+    </div>
+    <div style="font-size:15px;color:#6B5E52;margin-bottom:12px;font-weight:500;line-height:1.6;white-space:nowrap">Subly会員は平均 <b style="color:#3A3028;font-weight:800">年間¥89,400</b> のサブスク見直しを実感*</div>
+    <h2 style="font-size:clamp(28px,6vw,44px);font-weight:800;line-height:1.2;margin-bottom:8px;color:#2B2018;letter-spacing:-.5px">本気でサブスク管理<br>しませんか？</h2>
+    <div style="font-size:11px;color:#9B8C80;margin-bottom:36px;margin-top:4px">*自社調査より。個人差があります。</div>
+    <a href="https://app.subly.jp" style="display:inline-block;background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;font-size:17px;font-weight:800;padding:18px 52px;border-radius:16px;box-shadow:0 8px 28px rgba(7,94,107,.35);cursor:pointer;text-decoration:none;letter-spacing:.3px;transition:transform .15s">無料で始める</a>
+    <div style="font-size:12px;color:#9B8C80;margin-top:14px">¥300/月から · いつでも解約OK</div>
+  </div>
+</section>
+
+<section class="steps-section" id="howto">
+  <div class="sec-inner">
+    <div class="sec-badge reveal">How to Start</div>
+    <h2 class="sec-title reveal">たった<em>4ステップ</em>で始められる</h2>
+    <div class="steps-grid">
+      <div class="step-card reveal" data-step="1"><h4>アカウントを作成</h4><p>メールアドレスだけで登録完了。Googleアカウントでもすぐ始められます。</p></div>
+      <div class="step-card reveal" data-step="2"><h4>サブスクを登録</h4><p>Netflix・Spotifyなど定番はワンタップ。自分だけのサービスも追加できます。</p></div>
+      <div class="step-card reveal" data-step="3"><h4>支出を見える化</h4><p>月額・年額・1日いくらが自動計算。グラフとカレンダーで全体像を把握。</p></div>
+      <div class="step-card reveal" data-step="4"><h4>満足度を評価して節約</h4><p>低評価のサービスが解約候補に。浮いたお金を貯金・投資に回そう。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="trust-section" id="trust">
+  <div class="sec-inner">
+    <div class="sec-badge reveal">Why Subly</div>
+    <h2 class="sec-title reveal">だから<em>安心して</em>使える</h2>
+    <div class="trust-grid">
+      <div class="trust-card reveal"><div class="trust-icon"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1s3.1 1.39 3.1 3.1v2z"/></svg></div><div><h4>セキュアなクラウド保存</h4><p>Googleが提供するFirebaseでデータを安全に管理。不正アクセスから守ります。</p></div></div>
+      <div class="trust-card reveal"><div class="trust-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div><div><h4>広告ゼロ</h4><p>どのプランでも広告は一切表示されません。快適な使い心地をお約束します。</p></div></div>
+      <div class="trust-card reveal"><div class="trust-icon"><svg viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg></div><div><h4>インストール不要</h4><p>ブラウザで動作するWebアプリ。iPhone・Android・PC、どの端末でもすぐ使えます。</p></div></div>
+      <div class="trust-card reveal"><div class="trust-icon"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg></div><div><h4>日本製・日本のサービスに特化</h4><p>国内サービスのプリセットを多数収録。安心の国内開発です。</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="voice-section" id="voice">
+  <div class="sec-inner">
+    <div class="sec-badge reveal">Voice</div>
+    <h2 class="sec-title reveal">使った人の<em>リアルな声</em></h2>
+    <p class="sec-desc reveal">実際にSublyを使ってくれた方のコメントです</p>
+    <div class="voice-grid">
+      <div class="voice-card reveal"><div class="voice-text">「サブスクをまとめたら月2万円以上払っていた。使っていないものを3件解約して、その分を積立NISAに回せました。」</div><div class="voice-author">T.K さん · 30代 会社員</div></div>
+      <div class="voice-card reveal"><div class="voice-text">「クラウド同期が便利。スマホで入力してPCでも確認できる。カレンダーで更新日がわかるので更新し忘れがなくなりました。」</div><div class="voice-author">M.S さん · 20代 フリーランス</div></div>
+      <div class="voice-card reveal"><div class="voice-text">「Proを買い切りで購入。月額サービスと違って追加課金がないので安心して使い続けられます。」</div><div class="voice-author">Y.N さん · 30代 デザイナー</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="faq-section" id="faq">
+  <div class="sec-inner">
+    <div class="sec-badge reveal">FAQ</div>
+    <h2 class="sec-title reveal">よくある<em>質問</em></h2>
+    <div class="faq-list">
+      <div class="faq-item reveal"><div class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">無料プランでどこまで使えますか？</div><div class="faq-a"><p>無料プランではサブスクを6件まで登録できます。グラフ・カレンダー・クラウド同期・マルチデバイス対応など主要機能はすべて使えます。7件以上登録したい場合はProプランへのアップグレードをご検討ください。</p></div></div>
+      <div class="faq-item reveal"><div class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">Proプランはどんなプランですか？</div><div class="faq-a"><p>¥980の買い切りプランです。一度購入すれば追加料金なしで永久にご利用いただけます。登録件数が無制限になります。</p></div></div>
+      <div class="faq-item reveal"><div class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">応援会員とは何ですか？</div><div class="faq-a"><p>月額¥300〜¥1,000でSublyの開発を応援していただけるプランです。Pro全機能に加え、家族や友人とサブスクを共有できるグループ機能が使えます。プラン変更・解約はいつでも可能です。</p></div></div>
+      <div class="faq-item reveal"><div class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">データはどこに保存されますか？</div><div class="faq-a"><p>アカウント作成後はGoogleのFirebaseクラウドに安全に保存されます。アカウントなしでも端末内に保存して使い始められます。</p></div></div>
+      <div class="faq-item reveal"><div class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">iPhoneとAndroidどちらでも使えますか？</div><div class="faq-a"><p>はい、ブラウザで動作するWebアプリですので、iPhoneのSafariでもAndroidのChromeでもPCでもご利用いただけます。</p></div></div>
+      <div class="faq-item reveal"><div class="faq-q" onclick="this.classList.toggle('open');this.nextElementSibling.classList.toggle('open')">銀行口座やクレジットカードの連携は必要ですか？</div><div class="faq-a"><p>不要です。自分で手入力して管理する仕組みです。金融情報を一切取得しないため、安心してご利用いただけます。</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="install-section" id="install">
+  <div class="sec-inner">
+    <div class="sec-badge reveal">Keep Using</div>
+    <h2 class="sec-title reveal">ホーム画面に追加して<em>アプリとして使おう</em></h2>
+    <p class="sec-desc reveal">ホーム画面に追加すれば普通のアプリと同じようにワンタップで起動できます。</p>
+    <div class="install-grid">
+      <div class="install-card reveal"><h4><svg width="16" height="16" viewBox="0 0 24 24" fill="var(--p)"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg> iPhone / iPad</h4><div class="install-step"><div class="install-num">1</div><p>Safariでapp.subly.jpを開く</p></div><div class="install-step"><div class="install-num">2</div><p>下の共有ボタン（四角に矢印）をタップ</p></div><div class="install-step"><div class="install-num">3</div><p>「ホーム画面に追加」を選んで完了</p></div></div>
+      <div class="install-card reveal"><h4><svg width="16" height="16" viewBox="0 0 24 24" fill="var(--p)"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg> Android</h4><div class="install-step"><div class="install-num">1</div><p>Chromeでapp.subly.jpを開く</p></div><div class="install-step"><div class="install-num">2</div><p>右上の「︙」メニューをタップ</p></div><div class="install-step"><div class="install-num">3</div><p>「ホーム画面に追加」を選んで完了</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="final-cta">
+  <h2>今日から、サブスクを<br><em>自分でコントロールしよう。</em></h2>
+  <p>無料プランから今すぐ始められます。アップグレードはいつでも。</p>
+  <a href="https://app.subly.jp" class="final-btn">無料で始める</a>
+  <div class="final-tags">
+    <span class="final-tag">無料プランあり</span><span class="final-tag">広告なし</span><span class="final-tag">クラウド同期</span><span class="final-tag">マルチデバイス</span><span class="final-tag">インストール不要</span>
+  </div>
+</section>
+
+<footer>
+  <div style="font-size:16px;font-weight:800;color:var(--p);letter-spacing:2px;margin-bottom:10px">Subly</div>
+  <div style="display:flex;gap:16px;justify-content:center;margin-bottom:12px;font-size:12px;font-weight:600">
+    <a href="https://app.subly.jp">アプリを開く</a>
+    <a href="#features">機能紹介</a>
+    <a href="#plans">プラン</a>
+    <a href="https://app.subly.jp/#privacy">プライバシーポリシー</a>
+  </div>
+  <div>&copy; 2026 Jone Lab — Subly. All rights reserved.</div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); observer.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
