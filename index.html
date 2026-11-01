@@ -814,12 +814,6 @@ body{font-family:'DM Sans','Noto Sans JP',sans-serif;background:var(--bg);color:
       "price": "0",
       "priceCurrency": "JPY",
       "name": "無料プラン"
-    },
-    {
-      "@type": "Offer",
-      "price": "980",
-      "priceCurrency": "JPY",
-      "name": "Subly Pro（買い切り）"
     }
   ],
   "author": {
@@ -1527,11 +1521,9 @@ body{
     <!-- 料金・プラン -->
     <div style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--ts);padding:8px 6px 6px"><div style="width:22px;height:22px;border-radius:6px;background:rgba(232,160,74,.1);display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="#E8A04A"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>料金・プランについて</div>
     <div style="background:var(--card);border-radius:14px;overflow:hidden;box-shadow:var(--sh);margin-bottom:16px" id="faq-g1">
-      <div class="faq-i" onclick="this.classList.toggle('open')"><div class="faq-q"><span class="faq-qi">Q</span><span class="faq-qt">無料で何件まで登録できますか？</span><span class="faq-qa">▼</span></div><div class="faq-a"><strong>6件</strong>まで無料で登録できます。カレンダー、グラフ、クラウド同期、テーマ変更など基本機能はすべて無料でお使いいただけます。</div></div>
-      
-      <div class="faq-i" onclick="this.classList.toggle('open')"><div class="faq-q"><span class="faq-qi">Q</span><span class="faq-qt">買い切りは一度買えばずっと使えますか？</span><span class="faq-qa">▼</span></div><div class="faq-a"><strong style="color:var(--pd)">はい、ずっとお使いいただけます。</strong>月額料金は発生しません。アカウントにログインしている限り、どの端末からでも無制限でご利用いただけます。</div></div>
-      
-                    <div class="faq-i" onclick="this.classList.toggle('open')"><div class="faq-q"><span class="faq-qi">Q</span><span class="faq-qt">プランをダウングレードした場合、差額は返金されますか？</span><span class="faq-qa">▼</span></div><div class="faq-a">日割り返金は行っておりません。<br><br>ダウングレードしても今月分は引き続き旧プランとしてご利用いただけ、<strong style="color:var(--pd)">翌月の更新日から</strong>新プランの料金が適用されます。</div></div>
+      <div class="faq-i" onclick="this.classList.toggle('open')"><div class="faq-q"><span class="faq-qi">Q</span><span class="faq-qt">料金はかかりますか？</span><span class="faq-qa">▼</span></div><div class="faq-a"><strong style="color:var(--pd)">すべての機能を無料でご利用いただけます。</strong>アカウント登録（無料）をすると、登録件数の上限なし・クラウド同期・家族とのグループ共有がすべて使えます。</div></div>
+      <div class="faq-i" onclick="this.classList.toggle('open')"><div class="faq-q"><span class="faq-qi">Q</span><span class="faq-qt">アカウントなしで何件まで登録できますか？</span><span class="faq-qa">▼</span></div><div class="faq-a">アカウントなしでも<strong>6件</strong>まで登録できます。7件以上はアカウント登録（無料）で無制限になります。</div></div>
+      <div class="faq-i" onclick="this.classList.toggle('open')"><div class="faq-q"><span class="faq-qi">Q</span><span class="faq-qt">今後、有料になることはありますか？</span><span class="faq-qa">▼</span></div><div class="faq-a">将来、有料プランの導入や広告の掲載を行う可能性があります。その場合は、内容と開始時期をアプリ内またはWebサイトで<strong style="color:var(--pd)">事前にお知らせします</strong>。</div></div>
     </div>
 
     <!-- アカウント -->
@@ -1539,7 +1531,6 @@ body{
     <div style="background:var(--card);border-radius:14px;overflow:hidden;box-shadow:var(--sh);margin-bottom:16px">
       <div class="faq-i" onclick="this.classList.toggle('open')"><div class="faq-q"><span class="faq-qi">Q</span><span class="faq-qt">アカウント登録は必要ですか？</span><span class="faq-qa">▼</span></div><div class="faq-a">登録なしでも6件まで無料で使えます。ただし、クラウド保存や機種変更時のデータ引き継ぎにはアカウント登録が必要です。</div></div>
       <div class="faq-i" onclick="this.classList.toggle('open')"><div class="faq-q"><span class="faq-qi">Q</span><span class="faq-qt">アカウントを削除（退会）するとどうなりますか？</span><span class="faq-qa">▼</span></div><div class="faq-a">アカウントに紐づくすべてのデータが<strong style="color:#C06060">完全に削除</strong>されます。<div style="background:#FFF0F0;border:1px solid #F5C5C5;border-radius:8px;padding:8px 12px;margin-top:8px;font-size:11px;color:#C06060;line-height:1.6">・登録したサブスクデータ<br>・クラウドに保存されたデータ<br>・グループ情報<br>・買い切り（Pro）の購入履歴<br><br><strong>削除後は復元できません。</strong></div></div></div>
-      <div class="faq-i" onclick="this.classList.toggle('open')"><div class="faq-q"><span class="faq-qi">Q</span><span class="faq-qt">買い切り済みでアカウント削除するとどうなりますか？</span><span class="faq-qa">▼</span></div><div class="faq-a">買い切り（Pro）の購入履歴も<strong style="color:#C06060">削除されます</strong>。再度アカウントを作成しても復元されません。<div style="background:#FFF0F0;border:1px solid #F5C5C5;border-radius:8px;padding:8px 12px;margin-top:8px;font-size:11px;color:#C06060">退会前にCSVエクスポートでデータをバックアップすることをおすすめします。</div></div></div>
       <div class="faq-i" onclick="this.classList.toggle('open')"><div class="faq-q"><span class="faq-qi">Q</span><span class="faq-qt">メールアドレスを変更できますか？</span><span class="faq-qa">▼</span></div><div class="faq-a"><strong style="color:var(--pd)">はい、変更できます。</strong>設定画面の「メールアドレス変更」から変更可能です。セキュリティのため、現在のパスワードの再入力が必要です。</div></div>
     </div>
 
@@ -1806,17 +1797,17 @@ body{
         <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">メールアドレス</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0"><a href="mailto:jone.lab.app&#64;gmail.com" style="color:#0B7A8A;text-decoration:none">jone.lab.app&#64;gmail.com</a></td></tr>
         <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">サービス名</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">Subly（サブリー）</td></tr>
         <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">販売価格</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">
-          <strong>Subly Pro（買い切り）</strong>：980円（税込）<br>
-          <span style="font-size:12px;color:#666">※リリース記念キャンペーン期間中は、すべての機能を無料でご利用いただけます。</span>
+          無料<br>
+          <span style="font-size:12px;color:#666">※現在、有料の商品・サービスの販売は行っていません。有料プランを導入する場合は、事前にお知らせし本表記を更新します。</span>
         </td></tr>
         <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">商品代金以外の必要料金</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">インターネット接続料金、通信料はお客様のご負担となります</td></tr>
-        <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">支払方法</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">クレジットカード決済（Stripe）<br><span style="font-size:11px;color:#666">VISA / Mastercard / JCB / American Express</span></td></tr>
+        <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">支払方法</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">該当なし（有料販売なし）</td></tr>
         <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">支払時期</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">
-          購入時に1回（買い切り）
+          該当なし（有料販売なし）
         </td></tr>
-        <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">サービス提供時期</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">決済完了後、即時ご利用いただけます</td></tr>
+        <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">サービス提供時期</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">アカウント登録後、即時ご利用いただけます</td></tr>
         <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">返品・キャンセル</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">
-          デジタルコンテンツの性質上、決済後の<strong>返金は原則として承っておりません</strong>。
+          該当なし（有料販売なし）
         </td></tr>
         <tr><td style="padding:10px 0;border-bottom:1px solid #e0e0e0;font-weight:700;vertical-align:top">動作環境</td><td style="padding:10px 0;border-bottom:1px solid #e0e0e0">
           ・モダンブラウザ（Chrome、Safari、Edge、Firefox の最新版）<br>
@@ -3262,7 +3253,7 @@ let _proPurchased = false; // 買い切りProフラグ（永久・一度trueに�
    版数（運用標準 v1.0「版数をフッターに表示」）
    リリースのたびに BUILD.version / BUILD.date を更新する。
 ============================================================ */
-const BUILD = { version: '1.3.0', date: '2026-09-21' };
+const BUILD = { version: '1.3.1', date: '2026-11-01' };
 window.SUBLY_BUILD = BUILD;
 (function(){
   const label = 'Subly v' + BUILD.version + ' (' + BUILD.date + ')';
@@ -6287,11 +6278,11 @@ function _onCreateGroupBtnTap(btn){
     closeGroupModal();
     showDialog({
       icon:'',
-      title:'グループの作成は応援会員限定です',
+      title:'グループの作成にはアカウント登録が必要です',
       msg:`<div style="text-align:left;line-height:1.9;font-size:14px;color:var(--ts)">
         グループへの<b style="color:var(--tx)">参加は無料</b>ですが、<br>
-        グループの<b style="color:var(--tx)">作成は応援会員（¥300〜/月）限定</b>です。<br><br>
-        家族の中でおひとりが応援会員になれば、全員でサブスクを共有できます。
+        グループの<b style="color:var(--tx)">作成もアカウント登録（無料）で</b>できます。<br><br>
+        家族の中でおひとりがグループを作れば、全員でサブスクを共有できます。
       </div>`,
       buttons:[
         {label:'閉じる', cls:'cancel'},
@@ -8755,7 +8746,7 @@ async function _toggleGroupPublic(id){
 // ============================================================
 //   利用規約・プライバシーポリシー同意フロー
 // ============================================================
-const _TERMS_TEXT = `<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:0 0 6px">第1条（サービスの内容）</h3>Subly（以下「本サービス」）は、サブスクリプションの支出管理を目的としたWebアプリケーションです。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第2条（利用条件）</h3>本サービスは無料でご利用いただけます。応援会員プランは月額課金制です。未成年の方は保護者の同意を得たうえでご利用ください。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第3条（アカウント・パスワードの管理）</h3>ユーザーは自己の責任においてメールアドレスおよびパスワードを適切に管理するものとします。パスワードを第三者に譲渡・貸与することはできません。第三者による不正利用から生じた損害について、運営者は責任を負いません。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第4条（データの取り扱い）</h3>未ログイン時のデータは端末のLocalStorageに保存されます。アカウント登録時はFirebase（Google Cloud Platform）上に保存されます。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第5条（禁止事項）</h3>不正アクセス、リバースエンジニアリング、商用目的での無断利用、他のユーザーへの迷惑行為、法令に違反する行為を禁止します。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第6条（サービスの停止・中断）</h3>運営者は、システムの保守点検、天災、通信障害等の理由により、事前の通知なくサービスの全部または一部を停止・中断できるものとします。これによりユーザーに生じた損害について一切の責任を負いません。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第7条（利用制限・登録抹消）</h3>運営者は、本規約に違反した場合、虚偽の登録情報が判明した場合、その他運営者が不適切と判断した場合に、事前の通知なくサービスの利用制限または登録抹消を行うことができます。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第8条（知的財産権）</h3>本サービスに関する著作権、商標権その他の知的財産権は運営者に帰属します。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第9条（免責事項）</h3>本サービスの利用により生じた損害について、運営者は一切の責任を負いません。データのバックアップはユーザーの責任で行ってください。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第10条（規約の変更）</h3>本規約は予告なく変更する場合があります。変更後の利用をもって同意とみなします。<div style="margin-top:20px;padding-top:14px;border-top:1px solid #e0e0e0;font-size:12px;color:#666">制定日：2026年4月4日</div>`;
+const _TERMS_TEXT = `<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:0 0 6px">第1条（サービスの内容）</h3>Subly（以下「本サービス」）は、サブスクリプションの支出管理を目的としたWebアプリケーションです。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第2条（利用条件）</h3>未成年の方は保護者の同意を得たうえでご利用ください。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第3条（料金）</h3>1. 本サービスは、現在無料で提供しています。<br>2. 運営者は、将来、本サービスの一部または全部について有料プランを導入し、または本サービス内に広告を掲載することがあります。<br>3. 前項の変更を行う場合、運営者は、変更の内容および開始時期を、本サービス内または運営者のWebサイトで事前にお知らせします。<br>4. 有料プランの導入後も、それまで無料で利用できた機能を、利用者の同意なく有料に切り替えることはありません。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第4条（アカウント・パスワードの管理）</h3>ユーザーは自己の責任においてメールアドレスおよびパスワードを適切に管理するものとします。パスワードを第三者に譲渡・貸与することはできません。第三者による不正利用から生じた損害について、運営者は責任を負いません。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第5条（データの取り扱い）</h3>未ログイン時のデータは端末のLocalStorageに保存されます。アカウント登録時はFirebase（Google Cloud Platform）上に保存されます。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第6条（禁止事項）</h3>不正アクセス、リバースエンジニアリング、商用目的での無断利用、他のユーザーへの迷惑行為、法令に違反する行為を禁止します。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第7条（サービスの停止・中断）</h3>運営者は、システムの保守点検、天災、通信障害等の理由により、事前の通知なくサービスの全部または一部を停止・中断できるものとします。これによりユーザーに生じた損害について一切の責任を負いません。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第8条（利用制限・登録抹消）</h3>運営者は、本規約に違反した場合、虚偽の登録情報が判明した場合、その他運営者が不適切と判断した場合に、事前の通知なくサービスの利用制限または登録抹消を行うことができます。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第9条（知的財産権）</h3>本サービスに関する著作権、商標権その他の知的財産権は運営者に帰属します。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第10条（免責事項）</h3>本サービスの利用により生じた損害について、運営者は一切の責任を負いません。データのバックアップはユーザーの責任で行ってください。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">第11条（規約の変更）</h3>本規約は予告なく変更する場合があります。変更後の利用をもって同意とみなします。<div style="margin-top:20px;padding-top:14px;border-top:1px solid #e0e0e0;font-size:12px;color:#666">制定日：2026年4月4日<br>改定日：2026年11月1日</div>`;
 
 const _PRIVACY_TEXT = `<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:0 0 6px">1. 収集する情報</h3><b>アカウント情報：</b>メールアドレス、ニックネーム、年齢層・職業（任意）<br><b>サービス利用情報：</b>サブスクリプション情報（サービス名・金額・更新日等）、満足度、グループ情報<br><b>利用状況データ：</b>Google Analytics 4（Firebase Analytics）による匿名の利用統計（画面遷移、ボタンタップ等の操作ログ）<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">2. 利用目的</h3>サービスの提供・運営・改善、ユーザーサポート、利用状況の分析・統計、新機能の開発・検討。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">3. 第三者への提供</h3>収集した個人情報を第三者に提供・販売することはありません。ただし以下の場合を除きます。<br>・法令に基づく場合<br>・サービス運営に必要な業務委託先（Firebase / Google Cloud Platform）<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">4. 利用状況解析</h3>本サービスではGoogle Analytics 4（Firebase Analytics）を使用して利用状況データを収集しています。取得する情報はGoogleプライバシーポリシーに準拠します。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">5. データの保管</h3>Firebase（Google Cloud Platform）のサーバーに保存されます。未ログイン時は端末のLocalStorageに保存されサーバーには送信されません。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">6. データの開示・訂正・削除</h3>ユーザーは自己の個人情報の開示・訂正・削除を求めることができます。アプリ内の「お問い合わせ」または退会機能よりご連絡ください。退会時にすべてのデータが削除されます。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">7. セキュリティ</h3>Firebase Authenticationによる認証、Firestoreセキュリティルールによるアクセス制御を実施しています。ただしインターネット上の通信において完全なセキュリティを保証するものではありません。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">8. ポリシーの変更</h3>本ポリシーは予告なく変更する場合があります。変更後の本サービスの利用をもって同意とみなします。<h3 style="font-size:14px;font-weight:700;color:#4A7A70;margin:16px 0 6px;padding-top:10px;border-top:1px solid #e0e0e0">9. お問い合わせ</h3>プライバシーに関するお問い合わせはアプリ内の「お問い合わせ」からお願いいたします。<div style="margin-top:20px;padding-top:14px;border-top:1px solid #e0e0e0;font-size:12px;color:#666">制定日：2026年4月4日</div>`;
 
@@ -10580,7 +10571,7 @@ async function init(){
   // 既存ユーザー向け：オンボーディング済みだがtermsAgreed未設定なら同意ポップアップ
   if(onboarded){
     const termsAgreed = await Store.get('termsAgreed');
-    if(!termsAgreed) setTimeout(_showExistingConsentPopup, 500);
+    if(!termsAgreed || String(termsAgreed) < '2026-11-01') setTimeout(_showExistingConsentPopup, 500);
   }
   // 初期ページ表示（renderDashboardはFirebase Auth完了後に1回だけ呼ぶ）
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
@@ -11119,25 +11110,21 @@ document.addEventListener('DOMContentLoaded', function(){
           ov.innerHTML = '<div class="campaign-popup">' +
             '<div class="campaign-popup-hdr">' +
               '<button class="campaign-popup-close" onclick="_closeCampaignPopup()">✕</button>' +
-              '<div class="campaign-popup-badge">🎉 リリース記念キャンペーン</div>' +
+              '<div class="campaign-popup-badge">✨ すべて無料</div>' +
               '<div class="campaign-popup-ttl">Sublyを<br>もっと使いませんか？</div>' +
-              '<div class="campaign-popup-sub">期間限定で全機能を無料公開中</div>' +
+              '<div class="campaign-popup-sub">アカウント登録で全機能が使えます</div>' +
             '</div>' +
             '<div class="campaign-popup-price">' +
-              '<div class="campaign-popup-price-row">' +
-                '<div style="text-align:center"><div style="font-size:10px;color:#999;margin-bottom:2px">定価</div><div class="campaign-popup-old">¥980</div></div>' +
-                '<div style="font-size:18px;color:#0B7A8A">→</div>' +
-                '<div style="text-align:center"><div style="font-size:10px;color:#0B7A8A;font-weight:600;margin-bottom:2px">今だけ</div><div class="campaign-popup-new">¥0</div></div>' +
-              '</div>' +
-              '<div style="font-size:11px;color:#666">アカウント作成だけで全機能使えます</div>' +
+              '<div class="campaign-popup-price-row"><div class="campaign-popup-new">¥0</div></div>' +
+              '<div style="font-size:11px;color:#666">アカウント登録（無料）だけで全機能使えます</div>' +
             '</div>' +
             '<div class="campaign-popup-features">' +
-              '<div class="campaign-popup-feat"><div class="campaign-popup-feat-icon">✓</div><span><strong>登録無制限</strong>(本来6件まで)</span></div>' +
+              '<div class="campaign-popup-feat"><div class="campaign-popup-feat-icon">✓</div><span><strong>登録無制限</strong>(未登録は6件まで)</span></div>' +
               '<div class="campaign-popup-feat"><div class="campaign-popup-feat-icon">✓</div><span>機種変更でもデータ引き継ぎ</span></div>' +
               '<div class="campaign-popup-feat"><div class="campaign-popup-feat-icon">✓</div><span>家族とサブスクを共有</span></div>' +
               '<div class="campaign-popup-feat"><div class="campaign-popup-feat-icon">✓</div><span>マルチデバイス対応</span></div>' +
             '</div>' +
-            '<div class="campaign-popup-note">※キャンペーン終了後、Pro機能は¥980買い切りに移行します</div>' +
+            '<div class="campaign-popup-note">※ずっと無料で使えます。料金が発生する場合は事前にお知らせします</div>' +
             '<div class="campaign-popup-btns">' +
               '<button class="campaign-popup-btn campaign-popup-btn-google" onclick="_campaignSignup(\'google\')">' +
                 '<svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>' +
