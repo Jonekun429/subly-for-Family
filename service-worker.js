@@ -46,7 +46,7 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
   
-  // Firebase / Stripe / GA など外部APIはキャッシュしない(常に最新)
+  // Firebase / GA など外部APIはキャッシュしない(常に最新)
   if (
     url.hostname.includes('firebaseio.com') ||
     url.hostname.includes('googleapis.com') ||
